@@ -28,6 +28,7 @@
 
         <!-- The language used by the administrator -->
         <module>language</module>
+        <module>controller</module>
 
     </modules>
 
