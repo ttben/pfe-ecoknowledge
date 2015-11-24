@@ -8,12 +8,17 @@ public class SymbolicName implements Operand {
 	private String name;
 
 	@JsonCreator
-	public SymbolicName(@JsonProperty("symbolicName") String name) {
+	public SymbolicName(@JsonProperty(value = "symbolicName", required = true) String name) {
 		this.name = name;
 	}
 
 	@Override
 	public boolean isRequired() {
 		return true;
+	}
+
+	@Override
+	public String getValue() {
+		return this.name;
 	}
 }

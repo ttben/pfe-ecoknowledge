@@ -1,11 +1,11 @@
 package fr.unice.polytech.ecoknowledge.business;
 
-import fr.unice.polytech.ecoknowledge.business.improve.ImproveChallenge;
-import fr.unice.polytech.ecoknowledge.business.overall.StandardChallenge;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import fr.unice.polytech.ecoknowledge.business.improve.ImproveChallenge;
+import fr.unice.polytech.ecoknowledge.business.overall.StandardChallenge;
 
 
 @JsonTypeInfo(
@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonSubTypes({
 		@JsonSubTypes.Type(value = ImproveChallenge.class, name = "improve"),
-		@JsonSubTypes.Type(value = StandardChallenge.class, name = "overall") }
+		@JsonSubTypes.Type(value = StandardChallenge.class, name = "overall")}
 )
-public	abstract class Challenge {
+public abstract class Challenge {
 
 
 	private Badge badge;
@@ -26,8 +26,9 @@ public	abstract class Challenge {
 
 
 	@JsonCreator
-	public Challenge(@JsonProperty("badge")Badge badge, @JsonProperty("lifeSpan")TimeBox timeBox,
-					 @JsonProperty("recurrence")String recurrence) {
+	public Challenge(@JsonProperty(value = "badge", required = true) Badge badge,
+					 @JsonProperty(value = "lifeSpan", required = true) TimeBox timeBox,
+					 @JsonProperty(value = "recurrence", required = true) String recurrence) {
 		this.badge = badge;
 		this.timeSpan = timeBox;
 		this.recurrence = recurrence;

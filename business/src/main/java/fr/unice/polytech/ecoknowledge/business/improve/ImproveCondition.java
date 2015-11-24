@@ -10,7 +10,8 @@ public class ImproveCondition {
 	private Double threshold;
 
 	@JsonCreator
-	public ImproveCondition(@JsonProperty("referencePeriod")TimeBox comparedPeriod, @JsonProperty("threshold")Double threshold) {
+	public ImproveCondition(@JsonProperty(value = "referencePeriod", required = true) TimeBox comparedPeriod,
+							@JsonProperty(value = "threshold", required = true) Double threshold) {
 		this.comparedPeriod = comparedPeriod;
 		this.threshold = threshold;
 	}
