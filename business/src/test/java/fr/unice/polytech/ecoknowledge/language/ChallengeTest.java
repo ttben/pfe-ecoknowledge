@@ -1,12 +1,19 @@
 package fr.unice.polytech.ecoknowledge.language;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import fr.unice.polytech.ecoknowledge.language.improve.ImproveChallenge;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 public class ChallengeTest {
 
@@ -37,6 +44,25 @@ public class ChallengeTest {
 	public void basicTest() throws IOException {
 		ObjectMapper m = new ObjectMapper();
 		challenge = m.readValue(challengeJsonObject.toString(), Challenge.class);
-		System.out.println("LOL ::: " + challenge.getTimeSpan().getEnd());
+	}
+
+	@Test
+	public void test() throws IOException {
+		org.codehaus.jackson.map.ObjectMapper mapper = new org.codehaus.jackson.map.ObjectMapper();
+		//There are other configuration options you can set.  This is the one I needed.
+		mapper.configure(SerializationConfig.Feature.AUTO_DETECT_GETTERS, true);
+
+		org.codehaus.jackson.schema.JsonSchema schema = mapper.generateJsonSchema(Challenge.class);
+		System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schema));
+	}
+
+	@Test
+	public void test2() throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+		mapper.acceptJsonFormatVisitor(ImproveChallenge.class, visitor);
+		com.fasterxml.jackson.module.jsonSchema.JsonSchema schema = visitor.finalSchema();
+		System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schema));
+
 	}
 }
