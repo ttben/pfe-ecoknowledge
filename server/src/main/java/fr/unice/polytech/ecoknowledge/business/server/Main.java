@@ -1,6 +1,7 @@
 package fr.unice.polytech.ecoknowledge.business.server;
 
 import fr.unice.polytech.ecoknowledge.business.server.config.PortReacher;
+import fr.unice.polytech.ecoknowledge.server.BadgeService;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -30,8 +31,7 @@ public class Main {
 
         servlet.setInitParameter(
                 "jersey.config.server.provider.classnames",
-                MyExampleService.class.getCanonicalName() + ","  + ChallengeService.class.getCanonicalName());
-
+                MyExampleService.class.getCanonicalName() + ","  + ChallengeService.class.getCanonicalName() +","+  BadgeService.class.getCanonicalName());
 
         System.out.println("// ------- Server starting on port " + port + " ------- //");
 
