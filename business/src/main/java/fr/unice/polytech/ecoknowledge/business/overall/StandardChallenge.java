@@ -1,6 +1,5 @@
 package fr.unice.polytech.ecoknowledge.business.overall;
 
-import business.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.unice.polytech.ecoknowledge.business.Badge;
 import fr.unice.polytech.ecoknowledge.business.Challenge;

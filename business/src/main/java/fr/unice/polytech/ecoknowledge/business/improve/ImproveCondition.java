@@ -1,6 +1,5 @@
 package fr.unice.polytech.ecoknowledge.business.improve;
 
-import business.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.unice.polytech.ecoknowledge.business.TimeBox;
