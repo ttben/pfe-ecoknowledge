@@ -1,6 +1,7 @@
 package fr.unice.polytech.ecoknowledge.language;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +28,9 @@ public class ChallengeTest {
 		badgeJsonObject.addProperty("image", "http://www.google.com");
 		badgeJsonObject.addProperty("reward",69);
 		challengeJsonObject.add("badge", badgeJsonObject);
+
+		JsonArray conditions = new JsonArray();
+		challengeJsonObject.add("conditions", conditions);
 	}
 
 	@Test
