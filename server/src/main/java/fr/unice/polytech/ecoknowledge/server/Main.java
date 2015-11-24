@@ -26,7 +26,7 @@ public class Main {
 
         // Tells the Jersey Servlet which REST service/class to load.
 
-        ChallengeService s = new ChallengeService("BITE");
+        ChallengeService s = new ChallengeService();
 
         servlet.setInitParameter(
                 "jersey.config.server.provider.classnames",
