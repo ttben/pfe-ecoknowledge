@@ -1,6 +1,6 @@
 package fr.unice.polytech.ecoknowledge.server;
 
-import fr.unice.polytech.ecoknowledge.Controller;
+import fr.unice.polytech.ecoknowledge.controller.Controller;
 import org.json.JSONObject;
 
 import javax.ws.rs.*;

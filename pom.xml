@@ -21,7 +21,7 @@
         <!-- The component that allow us to evaluate an challenge -->
         <module>evaluation</module>
 
-        <!-- The business model of our application -->
+        <!-- The language model of our application -->
         <module>business</module>
         <!-- The access to the storage -->
         <module>data</module>
