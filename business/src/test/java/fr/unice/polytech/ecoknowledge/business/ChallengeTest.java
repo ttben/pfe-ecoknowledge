@@ -7,49 +7,32 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertNotNull;
-
-/**
- * Created by Benjamin on 23/11/2015.
- */
 public class ChallengeTest {
 
 	private Challenge challenge;
+	JsonObject challengeJsonObject = new JsonObject();
+	JsonObject lifeSpanJsonObject = new JsonObject();
+	JsonObject badgeJsonObject = new JsonObject();
 
 	@Before
 	public void setUp() {
-
-	}
-
-	@Test
-	public void basicTest() {
-		JsonObject challengeJsonObject = new JsonObject();
 		challengeJsonObject.addProperty("recurrence", "oui récurent ma gueuele");
 		challengeJsonObject.addProperty("type", "overall");
 
-		JsonObject lifeSpanJsonObject = new JsonObject();
 		lifeSpanJsonObject.addProperty("start", "2001-07-04T12:08:56.235-0700");
-		lifeSpanJsonObject.addProperty("start", "2001-11-04T02:08:56.235-0700");
+		lifeSpanJsonObject.addProperty("end", "2001-11-04T02:08:56.235-0700");
 		challengeJsonObject.add("lifeSpan", lifeSpanJsonObject);
 
-		JsonObject badgeJsonObject = new JsonObject();
 		badgeJsonObject.addProperty("name", "Yeti master !");
 		badgeJsonObject.addProperty("image", "http://www.google.com");
 		badgeJsonObject.addProperty("reward",69);
 		challengeJsonObject.add("badge", badgeJsonObject);
-
-
-		ObjectMapper m = new ObjectMapper();
-		Object result = null;
-
-		try {
-			result = m.readValue(challengeJsonObject.toString(), Challenge.class);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		assertNotNull(result);
-
 	}
 
+	@Test
+	public void basicTest() throws IOException {
+		ObjectMapper m = new ObjectMapper();
+		challenge = m.readValue(challengeJsonObject.toString(), Challenge.class);
+		System.out.println("LOL ::: " + challenge.getTimeSpan().getEnd());
+	}
 }
