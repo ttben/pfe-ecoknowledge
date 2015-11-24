@@ -17,7 +17,7 @@ public class Model {
 	 * 
 	 * @param data
 	 */
-	public void createChallenge(Object data) {
+	public void createChallenge(Challenge challenge) {
 		// TODO - implement language.createChallenge
 		throw new UnsupportedOperationException();
 	}
