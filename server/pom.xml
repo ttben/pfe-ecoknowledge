@@ -23,17 +23,7 @@
         <!-- Other modules -->
         <dependency>
             <groupId>fr.unice.polytech.ecoknowledge</groupId>
-            <artifactId>business</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.unice.polytech.ecoknowledge</groupId>
-            <artifactId>data</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.unice.polytech.ecoknowledge</groupId>
-            <artifactId>evaluation</artifactId>
+            <artifactId>controller</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
