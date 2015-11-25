@@ -37,6 +37,7 @@ public class Controller {
 
     public JsonObject createChallenge(JsonObject jsonObject) {
         JsonObject result = new JsonObject();
+        result.addProperty("valid","no");
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -62,7 +63,7 @@ public class Controller {
 
     }
 
-    public JSONObject searchBadge() {
+    public JSONObject searchBadge(String challengeId) {
         return new JSONObject();
     }
 
