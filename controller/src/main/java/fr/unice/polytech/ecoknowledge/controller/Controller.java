@@ -35,7 +35,7 @@ public class Controller {
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            Challenge challenge = objectMapper.readValue(jsonObject.toString(), Challenge.class);
+            Challenge challenge = (Challenge)objectMapper.readValue(jsonObject.toString(), Challenge.class);
             result = ChallengePersistance.store(jsonObject);
         } catch (IOException e) {
             e.printStackTrace();
