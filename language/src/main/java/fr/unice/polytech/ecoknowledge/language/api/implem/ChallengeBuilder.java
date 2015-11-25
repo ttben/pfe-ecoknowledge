@@ -1,5 +1,6 @@
-package fr.unice.polytech.ecoknowledge.language.api;
+package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IBuildable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IChallengeable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionsable;
@@ -10,6 +11,9 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDurationnable;
  */
 public class ChallengeBuilder implements IBuildable, IChallengeable {
 
+    private Period p;
+
+    ChallengeBuilder(){}
 
     @Override
     public void build() {
@@ -18,21 +22,31 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
 
     @Override
     public IChallengeable during(Integer value, DURATION_TYPE type) {
-        return null;
+
+        return this;
     }
 
     @Override
     public IChallengeable isWorth(Integer points) {
-        return null;
+
+        return this;
     }
 
     @Override
     public IDurationnable from(String date) {
-        return null;
+
+        Period p = new Period(this);
+        return p;
     }
 
     @Override
     public IConditionsable onConditionThat() {
-        return null;
+        Conditions c = new Conditions(this);
+        return c;
+    }
+
+
+    void addPeriod(Period period) {
+        p = period;
     }
 }

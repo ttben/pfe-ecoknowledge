@@ -1,6 +1,6 @@
-package fr.unice.polytech.ecoknowledge.language.api.interfaces;
+package fr.unice.polytech.ecoknowledge.language.api.implem;
 
-import fr.unice.polytech.ecoknowledge.language.api.ChallengeBuilder;
+import fr.unice.polytech.ecoknowledge.language.api.implem.ChallengeBuilder;
 
 /**
  * Created by Sébastien on 25/11/2015.
