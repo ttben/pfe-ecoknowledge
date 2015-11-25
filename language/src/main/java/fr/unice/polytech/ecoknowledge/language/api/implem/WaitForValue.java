@@ -11,6 +11,8 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurat
  */
 public class WaitForValue extends ChallengeBuilderGettable implements IActiveDurationnableAndConditionsable {
 
+    // TODO not finished yet
+
     private Condition condition;
 
     public WaitForValue(Condition condition) {
@@ -19,6 +21,7 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
 
     @Override
     public ISecondActiveDurationnableAndAndable on(WEEK_PERIOD period, DAY_MOMENT moment) {
+        // HERE USE THE CURRENT CONDITION TOO
         return new WaitAfterOn(this);
     }
 
@@ -35,12 +38,16 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
 
     @Override
     public IConditionable averageOf(String sensor) {
-        return null;
+        Condition c = new Condition(this.getCondition().getConditions(), ConditionType.AVERAGE, sensor);
+        getChallengeBuilder().addCondition(c);
+        return c;
     }
 
     @Override
     public IConditionable valueOf(String sensor) {
-        return null;
+        Condition c = new Condition(this.getCondition().getConditions(), ConditionType.VALUE_OF, sensor);
+        getChallengeBuilder().addCondition(c);
+        return c;
     }
 
     @Override

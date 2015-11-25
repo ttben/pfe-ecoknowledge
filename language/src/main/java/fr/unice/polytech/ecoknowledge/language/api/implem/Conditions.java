@@ -20,14 +20,17 @@ public class Conditions extends ChallengeBuilderGettable implements IConditionsa
 
     @Override
     public IConditionable averageOf(String sensor) {
-        Condition c = new Condition(this);
+        // MAYBE USE A CURRENT CONDITION TO CHANGE IT WITH THE VALUE
+        // HERE AND IN THE WAITFORVALUE PART TOO
+        Condition c = new Condition(this, ConditionType.AVERAGE, sensor);
         cb.addCondition(c);
         return c;
     }
 
     @Override
     public IConditionable valueOf(String sensor) {
-        Condition c = new Condition(this);
+        Condition c = new Condition(this, ConditionType.VALUE_OF, sensor);
+        cb.addCondition(c);
         return c;
     }
 }

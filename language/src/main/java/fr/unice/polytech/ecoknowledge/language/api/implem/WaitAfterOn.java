@@ -11,6 +11,8 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurat
  */
 public class WaitAfterOn extends ChallengeBuilderGettable implements ISecondActiveDurationnableAndAndable {
 
+    // TODO not finished yet
+
     private WaitForValue wfv;
 
     WaitAfterOn(WaitForValue waitForValue) {

@@ -55,12 +55,13 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
         return c;
     }
 
-
     void addPeriod(Period period) {
         p = period;
     }
 
-    void addCondition(Condition c) { conditions.add(c);}
+    public void addCondition(Condition c) {
+        conditions.add(c);
+    }
 
     @Override
     public String toString() {
@@ -71,5 +72,25 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
                 ", points=" + points +
                 ", conditions=" + conditions +
                 '}';
+    }
+
+    Period getP() {
+        return p;
+    }
+
+    Integer getTime() {
+        return time;
+    }
+
+    DURATION_TYPE getType() {
+        return type;
+    }
+
+    Integer getPoints() {
+        return points;
+    }
+
+    List<Condition> getConditions() {
+        return conditions;
     }
 }

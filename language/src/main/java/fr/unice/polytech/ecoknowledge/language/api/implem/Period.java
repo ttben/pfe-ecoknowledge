@@ -4,7 +4,6 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.IChallengeable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDurationnable;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Sébastien on 25/11/2015.
@@ -64,5 +63,13 @@ public class Period extends ChallengeBuilder implements IDurationnable {
                 ", start=" + start.getTime().toString() +
                 ", end=" + end.getTime().toString() +
                 '}';
+    }
+
+    Calendar getStart() {
+        return start;
+    }
+
+    Calendar getEnd() {
+        return end;
     }
 }

@@ -8,6 +8,8 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurat
  */
 public class ConditionLeast extends ChallengeBuilderGettable implements IAtLeastable {
 
+    // TODO not finished yet
+
     private WaitAfterOn wao;
 
     public ConditionLeast(WaitAfterOn waitAfterOn) {
