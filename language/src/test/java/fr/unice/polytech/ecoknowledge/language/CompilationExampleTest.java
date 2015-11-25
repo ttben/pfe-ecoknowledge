@@ -28,6 +28,8 @@ public class CompilationExampleTest {
                         .averageOf("TEMP_AMB").greaterThan(15).on(WEEK_DAYS, MORNING).andOn(WEEK_DAYS, AFTERNOON)
                     .and()
                         .valueOf("TEMP_AMB").lowerThan(20).on(WEEK_DAYS, NIGHT).atLeast(80).percent()
+                    .and()
+                        .valueOf("OTHER_TEMP").greaterThan(15)
                 .build();
     }
 
