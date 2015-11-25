@@ -30,7 +30,10 @@ public class Main {
 
         servlet.setInitParameter(
                 "jersey.config.server.provider.classnames",
-                MyExampleService.class.getCanonicalName() + ","  + ChallengeService.class.getCanonicalName());
+
+                MyExampleService.class.getCanonicalName() + ","
+                        +  ChallengeService.class.getCanonicalName() +","
+                        +  TestService.class.getCanonicalName());
 
         System.out.println("// ------- Server starting on port " + port + " ------- //");
 

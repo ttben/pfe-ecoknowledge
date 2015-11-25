@@ -1,9 +1,9 @@
 package fr.unice.polytech.ecoknowledge.language;
 
-import fr.unice.polytech.ecoknowledge.language.overall.expression.Comparator;
-import fr.unice.polytech.ecoknowledge.language.overall.expression.Expression;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
+import fr.unice.polytech.ecoknowledge.business.conditions.basic.expression.Comparator;
+import fr.unice.polytech.ecoknowledge.business.conditions.basic.expression.Expression;
 import org.junit.Before;
 import org.junit.Test;
 
