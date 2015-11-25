@@ -29,6 +29,7 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
 
     @Override
     public void build() {
+        getChallengeBuilder().build();
 
     }
 

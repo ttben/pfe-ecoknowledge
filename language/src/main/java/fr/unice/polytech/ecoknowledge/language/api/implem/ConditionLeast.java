@@ -23,4 +23,6 @@ public class ConditionLeast extends ChallengeBuilderGettable implements IAtLeast
     public ISecondActiveDurationnableAndAndable percent() {
         return wao;
     }
+
+
 }

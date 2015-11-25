@@ -21,6 +21,7 @@ public class Conditions extends ChallengeBuilderGettable implements IConditionsa
     @Override
     public IConditionable averageOf(String sensor) {
         Condition c = new Condition(this);
+        cb.addCondition(c);
         return c;
     }
 
