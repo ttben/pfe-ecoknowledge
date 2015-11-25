@@ -63,4 +63,20 @@ public class TestService {
 		}
 		return Response.ok().entity(json.toString()).build();
 	}
+
+	@Path("/challengeTest")
+	@POST
+	@Consumes("application/json")
+	public Response buildChallenge(String object) {
+		JsonObject json = new JsonParser().parse(object).getAsJsonObject();
+		try {
+			Controller.getInstance().createChallenge(json);
+		} catch (InvalidParameterException e) {
+			return Response.status(403).entity(e.getMessage()).build();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		}
+		return Response.ok().entity(json.toString()).build();
+	}
 }

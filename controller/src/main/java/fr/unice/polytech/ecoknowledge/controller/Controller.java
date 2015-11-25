@@ -35,16 +35,16 @@ public class Controller {
     }
 
 
-    public JsonObject createChallenge(JsonObject jsonObject) {
+    public JsonObject createChallenge(JsonObject jsonObject)throws InvalidParameterException, IOException {
         JsonObject result = new JsonObject();
-        result.addProperty("valid","no");
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            Challenge challenge = (Challenge)objectMapper.readValue(jsonObject.toString(), Challenge.class);
-            result = ChallengePersistance.store(jsonObject);
-        } catch (IOException e) {
+            Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
+            //result = ChallengePersistance.store(jsonObject);
+        } catch (JsonMappingException | JsonParseException e) {
             e.printStackTrace();
+            throw new InvalidParameterException("Can not build condition with specified parameters :\n " + e.getMessage());
         }
 
         return result;

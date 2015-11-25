@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 
 @Path("/challenge")
 public class ChallengeService {
@@ -16,7 +17,12 @@ public class ChallengeService {
 	@Consumes("application/json")
 	public Response addChallenge(String object) {
 		JsonObject json = new JsonParser().parse(object).getAsJsonObject();
-		JsonObject id = Controller.getInstance().createChallenge(json);
+		JsonObject id = null;
+		try {
+			id = Controller.getInstance().createChallenge(json);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return Response.ok().entity(id.toString()).build();
 	}
 
