@@ -1,27 +1,38 @@
 package fr.unice.polytech.ecoknowledge.language.api;
 
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IBuildable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IChallengeable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionsable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDurationnable;
+
 /**
  * Created by Sébastien on 25/11/2015.
  */
-public class ChallengeBuilder {
+public class ChallengeBuilder implements IBuildable, IChallengeable {
 
-    public ChallengeBuilder(){
+
+    @Override
+    public void build() {
 
     }
 
-    public DurationBuilder from(String date){
-        return  new DurationBuilder(this);
+    @Override
+    public IChallengeable during(Integer value, DURATION_TYPE type) {
+        return null;
     }
 
-    public ChallengeBuilder during(Integer value, DURATION_TYPE type){
-        return this;
+    @Override
+    public IChallengeable isWorth(Integer points) {
+        return null;
     }
 
-    public ChallengeBuilder isWorth(Integer points){
-        return this;
+    @Override
+    public IDurationnable from(String date) {
+        return null;
     }
 
-    public ConditionsBuilder onConditionThat(){
-        return new ConditionsBuilder(this);
+    @Override
+    public IConditionsable onConditionThat() {
+        return null;
     }
 }
