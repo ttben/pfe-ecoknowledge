@@ -50,7 +50,7 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
 
     @Override
     public IConditionsable onConditionThat() {
-        conditions = new ArrayList<Condition>();
+        conditions = new ArrayList<>();
         Conditions c = new Conditions(this);
         return c;
     }

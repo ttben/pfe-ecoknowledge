@@ -11,9 +11,11 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurat
  */
 public class WaitAfterOn extends ChallengeBuilderGettable implements ISecondActiveDurationnableAndAndable {
 
-    // TODO not finished yet
-
     private WaitForValue wfv;
+    private WEEK_PERIOD period = null;
+    private DAY_MOMENT moment = null;
+    private Integer atLeast = null;
+    private AT_LEAST_TYPE type = null;
 
     WaitAfterOn(WaitForValue waitForValue) {
         wfv = waitForValue;
@@ -31,19 +33,30 @@ public class WaitAfterOn extends ChallengeBuilderGettable implements ISecondActi
 
     @Override
     public ISecondActiveDurationnableAndAndable andOn(WEEK_PERIOD period, DAY_MOMENT moment) {
-        // TODO Add duration in a collection FIRST
-
-
+        WaitAfterOn next = new WaitAfterOn(wfv);
+        next.period = period;
+        next.moment = moment;
+        getWfv().addWaitAfterOn(next);
         return this;
     }
 
     @Override
     public IAtLeastable atLeast(Integer value) {
+        this.atLeast = value;
         return new ConditionLeast(this);
     }
 
     @Override
     ChallengeBuilder getChallengeBuilder() {
         return wfv.getChallengeBuilder();
+    }
+
+
+    WaitForValue getWfv() {
+        return wfv;
+    }
+
+    void setType(AT_LEAST_TYPE type) {
+        this.type = type;
     }
 }

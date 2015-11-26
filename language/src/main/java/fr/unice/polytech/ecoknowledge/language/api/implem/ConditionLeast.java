@@ -8,8 +8,6 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurat
  */
 public class ConditionLeast extends ChallengeBuilderGettable implements IAtLeastable {
 
-    // TODO not finished yet
-
     private WaitAfterOn wao;
 
     public ConditionLeast(WaitAfterOn waitAfterOn) {
@@ -23,8 +21,8 @@ public class ConditionLeast extends ChallengeBuilderGettable implements IAtLeast
 
     @Override
     public ISecondActiveDurationnableAndAndable percent() {
+        wao.setType(AT_LEAST_TYPE.PERCENT);
         return wao;
     }
-
 
 }

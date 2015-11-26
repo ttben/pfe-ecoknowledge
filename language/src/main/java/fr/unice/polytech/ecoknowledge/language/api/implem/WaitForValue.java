@@ -11,9 +11,10 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurat
  */
 public class WaitForValue extends ChallengeBuilderGettable implements IActiveDurationnableAndConditionsable {
 
-    // TODO not finished yet
-
     private Condition condition;
+    private WEEK_PERIOD period = null;
+    private DAY_MOMENT moment = null;
+    private WaitAfterOn wao = null;
 
     public WaitForValue(Condition condition) {
         this.condition = condition;
@@ -21,12 +22,16 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
 
     @Override
     public ISecondActiveDurationnableAndAndable on(WEEK_PERIOD period, DAY_MOMENT moment) {
-        // HERE USE THE CURRENT CONDITION TOO
+        this.period = period;
+        this.moment = moment;
+        getCondition().addWaitForValue(this);
         return new WaitAfterOn(this);
     }
 
     @Override
     public ISecondActiveDurationnableAndAndable on(WEEK_PERIOD period) {
+        this.period = period;
+        getCondition().addWaitForValue(this);
         return new WaitAfterOn(this);
     }
 
@@ -55,7 +60,20 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
         return condition.getChallengeBuilder();
     }
 
+    void addWaitAfterOn(WaitAfterOn wao){
+        this.wao = wao;
+    }
+
     Condition getCondition(){
         return condition;
+    }
+
+    @Override
+    public String toString() {
+        return "WaitForValue{" +
+                "wao=" + wao +
+                ", moment=" + moment +
+                ", period=" + period +
+                '}';
     }
 }
