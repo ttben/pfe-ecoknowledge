@@ -18,18 +18,10 @@
     <modules>
         <!-- The jetty server where we'll have our service (server API) -->
         <module>server</module>
-        <!-- The component that allow us to evaluate an challenge -->
-        <module>evaluation</module>
-
-        <!-- The language model of our application -->
-        <module>business</module>
-        <!-- The access to the storage -->
+        <module>domain</module>
         <module>data</module>
-
-        <!-- The language used by the administrator -->
         <module>language</module>
         <module>controller</module>
-
     </modules>
 
     <build>
