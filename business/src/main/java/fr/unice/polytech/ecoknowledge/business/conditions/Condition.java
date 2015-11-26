@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import fr.unice.polytech.ecoknowledge.business.conditions.basic.OverallCondition;
 import fr.unice.polytech.ecoknowledge.business.conditions.basic.StandardCondition;
 import fr.unice.polytech.ecoknowledge.business.conditions.improve.ImproveCondition;
+import fr.unice.polytech.ecoknowledge.evaluation.Calculator;
 
 @JsonTypeInfo(
 		use = JsonTypeInfo.Id.NAME,
@@ -17,5 +18,5 @@ import fr.unice.polytech.ecoknowledge.business.conditions.improve.ImproveConditi
 		@JsonSubTypes.Type(value = StandardCondition.class, name = "standard") }
 )
 public interface Condition {
-
+	void accept(Calculator t);
 }

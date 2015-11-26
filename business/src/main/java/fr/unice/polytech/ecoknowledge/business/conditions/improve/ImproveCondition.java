@@ -3,8 +3,10 @@ package fr.unice.polytech.ecoknowledge.business.conditions.improve;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.unice.polytech.ecoknowledge.business.TimeBox;
+import fr.unice.polytech.ecoknowledge.business.conditions.Condition;
+import fr.unice.polytech.ecoknowledge.evaluation.Calculator;
 
-public class ImproveCondition {
+public class ImproveCondition implements Condition{
 
 	private TimeBox comparedPeriod;
 	private Double threshold;
@@ -30,5 +32,10 @@ public class ImproveCondition {
 
 	public void setThreshold(Double threshold) {
 		this.threshold = threshold;
+	}
+
+	@Override
+	public void accept(Calculator t) {
+		t.evaluateCondition(this);
 	}
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.unice.polytech.ecoknowledge.business.conditions.Day;
 import fr.unice.polytech.ecoknowledge.business.conditions.basic.expression.Expression;
+import fr.unice.polytech.ecoknowledge.evaluation.Calculator;
 
 import java.util.List;
 
@@ -30,5 +31,10 @@ public class StandardCondition extends BasicCondition {
 
 	public void setCounter(Counter counter) {
 		this.counter = counter;
+	}
+
+	@Override
+	public void accept(Calculator t) {
+		t.evaluateCondition(this);
 	}
 }
