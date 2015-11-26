@@ -2,6 +2,7 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.joda.time.DateTime;
 
 public class Goal {
 
@@ -37,5 +38,17 @@ public class Goal {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public DateTime getStart() {
+		return this.timeSpan.getStart();
+	}
+
+	public DateTime getEnd() {
+		return this.timeSpan.getEnd();
+	}
+
+	public String getSensorNameForGivenSymbolicName(String symbolicName) {
+		return this.user.getSymbolicNameToSensorNameMap().get(symbolicName);
 	}
 }

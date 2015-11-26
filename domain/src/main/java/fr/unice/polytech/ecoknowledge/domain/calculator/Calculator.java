@@ -11,7 +11,7 @@ import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCon
 import java.util.ArrayList;
 import java.util.List;
 
-public class Calculator implements ICalculator {
+public class Calculator {
 
 	private Cache cache;
 
@@ -50,14 +50,17 @@ public class Calculator implements ICalculator {
 	public LevelResult evaluateLevel(Level level, Goal goal) {
 		List<Condition> conditions = level.getConditionList();
 
+		ConditionVisitor conditionVisitor = new ConditionVisitorImpl(this.cache, goal);
+
 		List<ConditionResult> conditionResults = new ArrayList<>();
 		boolean achieved = true;
 		int numberAchieved = 0;
 
-		for (Condition c : conditions) {
-			c.accept(this, goal, conditionResults);
-			ConditionResult conditionResult = conditionResults.get(conditionResults.size() - 1);
+		for (Condition currentCondition : conditions) {
+			ConditionResult conditionResult = currentCondition.accept(conditionVisitor);
+
 			achieved &= conditionResult.isAchieved();
+
 			if (conditionResult.isAchieved()) {
 				numberAchieved++;
 			}
@@ -68,43 +71,5 @@ public class Calculator implements ICalculator {
 		LevelResult levelResult = new LevelResult(achieved, correctRate, level.getName(), conditionResults);
 
 		return levelResult;
-	}
-
-	public ConditionResult evaluateCondition(StandardCondition condition, Goal goal, List<ConditionResult> conditionResults) {
-		//	Retrieve symbolic names for condition
-		Operand requiredOperand = condition.getRequiredOperand();
-
-		//	Retrieves sensor bound for symbolic names
-		String symbolicName = requiredOperand.getValue().toString();
-		String sensorBound = this.getSensorNameForGivenGoal(symbolicName, goal);
-
-		//	Retrieves values of sensors
-		List<Data> data = this.cache.getDataOfSensorBetweenDate(sensorBound, goal.getTimeSpan().getStart(), goal.getTimeSpan().getEnd());
-
-		//	Compute evaluation of condition
-		int numberOfCorrectValues = 0;
-
-		for (Data currentData : data) {
-			if (condition.compareWith(currentData.getValue())) {
-				numberOfCorrectValues++;
-			}
-		}
-
-		double correctRate = (numberOfCorrectValues * 100) / data.size();
-		boolean achieved = correctRate >= condition.getCounter().getThreshold();
-
-		//	Process conditionResult
-		ConditionResult conditionResult = new ConditionResult(achieved, correctRate, condition.getDescription());
-		conditionResults.add(conditionResult);
-
-		return conditionResult;
-	}
-
-	public void evaluateCondition(ImproveCondition condition, Goal goal, List<ConditionResult> conditionResults) {
-
-	}
-
-	private String getSensorNameForGivenGoal(String symbolicName, Goal goal) {
-		return goal.getUser().getSymbolicNameToSensorNameMap().get(symbolicName);
 	}
 }

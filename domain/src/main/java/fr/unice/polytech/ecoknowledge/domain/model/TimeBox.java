@@ -1,34 +1,34 @@
 package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.joda.time.DateTime;
 
-import java.util.Date;
 
 public class TimeBox {
 
 
-	private Date start;
-	private Date end;
+	private DateTime start;
+	private DateTime end;
 
-	public TimeBox(@JsonProperty(value = "start", required = true) Date start,
-				   @JsonProperty(value = "end", required = true) Date end) {
+	public TimeBox(@JsonProperty(value = "start", required = true) DateTime start,
+				   @JsonProperty(value = "end", required = true) DateTime end) {
 		this.start = start;
 		this.end = end;
 	}
 
-	public Date getStart() {
+	public DateTime getStart() {
 		return start;
 	}
 
-	public void setStart(Date start) {
+	public void setStart(DateTime start) {
 		this.start = start;
 	}
 
-	public Date getEnd() {
+	public DateTime getEnd() {
 		return end;
 	}
 
-	public void setEnd(Date end) {
+	public void setEnd(DateTime end) {
 		this.end = end;
 	}
 }

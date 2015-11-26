@@ -1,13 +1,13 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
-import java.util.Date;
+import org.joda.time.DateTime;
 
 public class Data {
 
 	private Double value;
-	private Date date;
+	private DateTime date;
 
-	public Data(Double value, Date date) {
+	public Data(Double value, DateTime date) {
 		this.value = value;
 		this.date = date;
 	}
@@ -21,11 +21,11 @@ public class Data {
 		this.value = value;
 	}
 
-	public Date getDate() {
+	public DateTime getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(DateTime date) {
 		this.date = date;
 	}
 }

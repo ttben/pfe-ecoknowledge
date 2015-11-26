@@ -1,5 +1,7 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
+import org.joda.time.DateTime;
+
 import java.util.*;
 
 /**
@@ -14,7 +16,7 @@ public class Cache {
 	}
 
 	public List<Data> getDataOfSensorBetweenDate(String sensorName,
-												 Date start, Date end) {
+												 DateTime start, DateTime end) {
 		return this.getDataOf(sensorName); // FIXME: 26/11/2015
 	}
 

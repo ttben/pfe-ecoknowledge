@@ -3,13 +3,10 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import fr.unice.polytech.ecoknowledge.domain.calculator.ConditionResult;
-import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.calculator.ConditionVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.OverallCondition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.StandardCondition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCondition;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
-
-import java.util.List;
 
 @JsonTypeInfo(
 		use = JsonTypeInfo.Id.NAME,
@@ -22,5 +19,5 @@ import java.util.List;
 		@JsonSubTypes.Type(value = StandardCondition.class, name = "standard") }
 )
 public interface Condition {
-	void accept(Calculator t, Goal goal, List<ConditionResult> conditionResults);
+	ConditionResult accept(ConditionVisitor conditionVisitor);
 }
