@@ -4,12 +4,11 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.ChallengePersistance;
-import fr.unice.polytech.ecoknowledge.business.Challenge;
-import fr.unice.polytech.ecoknowledge.business.Level;
-import fr.unice.polytech.ecoknowledge.business.Model;
-import fr.unice.polytech.ecoknowledge.business.conditions.Condition;
-import fr.unice.polytech.ecoknowledge.business.conditions.basic.expression.Expression;
+import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.model.Level;
+import fr.unice.polytech.ecoknowledge.domain.model.Model;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
 import org.json.JSONObject;
 
 import java.io.IOException;
