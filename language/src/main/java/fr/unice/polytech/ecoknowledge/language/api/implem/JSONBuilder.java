@@ -62,11 +62,20 @@ public class JSONBuilder {
         JSONObject level = new JSONObject();
 
         level.put("name", cb.getName());
-        level.put("reward", cb.getPoints());
-        level.put("image", "https://drive.google.com/file/d/0B_K7OPwZvrgHaXFUTk94SE1ndHc/view?usp=sharing");
+        level.put("badge", createBadge(cb));
         level.put("conditions", parseConditions(cb.getConditions()));
 
         return level;
+    }
+
+    private static JSONObject createBadge(ChallengeBuilder cb) {
+        JSONObject badge = new JSONObject();
+
+        badge.put("name", cb.getName());
+        badge.put("reward", cb.getPoints());
+        badge.put("image", "https://drive.google.com/file/d/0B_K7OPwZvrgHaXFUTk94SE1ndHc/view?usp=sharing");
+
+        return badge;
     }
 
     private static JSONArray parseConditions(List<Condition> conditions) {
