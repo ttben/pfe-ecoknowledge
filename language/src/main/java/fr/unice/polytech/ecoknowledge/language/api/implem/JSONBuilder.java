@@ -43,7 +43,7 @@ public class JSONBuilder {
         String dayS = day.format(d);
         String hourS = hour.format(d);
 
-        return dayS + "T " + hourS + "Z";
+        return dayS + "T" + hourS + "Z";
     }
 
 
