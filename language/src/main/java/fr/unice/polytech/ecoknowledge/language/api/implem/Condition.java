@@ -15,6 +15,7 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
     private ConditionType type = null;
     private String sensor = null;
     private Integer value = null;
+    private String comparator = null;
     private List<WaitForValue> waitForValues = new ArrayList<>();
 
     public Condition(Conditions conditions, ConditionType type, String sensor) {
@@ -25,13 +26,15 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
 
     @Override
     public IActiveDurationnableAndConditionsable lowerThan(Integer value) {
-
+        this.comparator = "<";
+        this.value = value;
         return new WaitForValue(this);
     }
 
     @Override
     public IActiveDurationnableAndConditionsable greaterThan(Integer value) {
-
+        this.comparator = ">";
+        this.value = value;
         return new WaitForValue(this);
     }
 
@@ -68,5 +71,9 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
                 ", value=" + value +
                 ", waitForValues=" + waitForValues +
                 '}';
+    }
+
+    String getComparator() {
+        return comparator;
     }
 }

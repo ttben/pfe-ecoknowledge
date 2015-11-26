@@ -17,18 +17,12 @@ public class CompilationExampleTest {
     @Test
     public void compilationTest(){
 
-        Challenge.create("How to heat")
-                .from("1/11").to("1/12")
-                .during(2, WEEK)
-                .isWorth(1000)
+        Challenge.create("DSL done")
+                .from("23/11/2015").to("7/03/2016")
+                .during(1, WEEK)
+                .isWorth(2)
                 .onConditionThat()
-                        .averageOf("TEMP_AMB").lowerThan(25).on(WEEK_DAYS, MORNING).andOn(WEEK_DAYS, AFTERNOON)
-                    .and()
-                        .averageOf("TEMP_AMB").greaterThan(15).on(WEEK_DAYS, MORNING).andOn(WEEK_DAYS, AFTERNOON)
-                    .and()
-                        .valueOf("TEMP_AMB").lowerThan(20).on(WEEK_DAYS, NIGHT).atLeast(80).percent()
-                    .and()
-                        .valueOf("OTHER_TEMP").greaterThan(15)
+                        .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
                 .build();
     }
 

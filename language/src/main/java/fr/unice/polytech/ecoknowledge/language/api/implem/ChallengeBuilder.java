@@ -7,6 +7,7 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionsable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDurationnable;
 
 import java.util.ArrayList;
+import org.json.JSONObject;
 import java.util.List;
 
 /**
@@ -14,18 +15,23 @@ import java.util.List;
  */
 public class ChallengeBuilder implements IBuildable, IChallengeable {
 
+    private String name;
     private Period p = null;
     private Integer time = null;
     private DURATION_TYPE type = null;
     private Integer points = null;
     private List<Condition> conditions = null;
 
-    ChallengeBuilder(){}
+    private JSONObject description = null;
+
+    ChallengeBuilder(String name){
+        this.name = name;
+    }
 
     @Override
     public void build() {
-        // Just show it for now
-        System.out.println(this);
+        description = JSONBuilder.parse(this);
+        System.out.println(description.toString(5));
     }
 
     @Override
@@ -43,7 +49,6 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
 
     @Override
     public IDurationnable from(String date) {
-
         Period p = new Period(this, date);
         return p;
     }
@@ -92,5 +97,9 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
 
     List<Condition> getConditions() {
         return conditions;
+    }
+
+    String getName() {
+        return name;
     }
 }

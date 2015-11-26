@@ -9,7 +9,7 @@ public class Challenge {
     }
 
     public static ChallengeBuilder create(String name){
-        return new ChallengeBuilder();
+        return new ChallengeBuilder(name);
     }
 
 }

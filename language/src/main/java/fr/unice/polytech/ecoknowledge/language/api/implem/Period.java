@@ -8,7 +8,7 @@ import java.util.Calendar;
 /**
  * Created by Sébastien on 25/11/2015.
  */
-public class Period extends ChallengeBuilder implements IDurationnable {
+public class Period implements IDurationnable {
 
     private ChallengeBuilder cb;
 
@@ -20,7 +20,6 @@ public class Period extends ChallengeBuilder implements IDurationnable {
         cb = challengeBuilder;
         challengeBuilder.addPeriod(this);
     }
-
 
     @Override
     public IChallengeable to(String date) {
@@ -49,7 +48,7 @@ public class Period extends ChallengeBuilder implements IDurationnable {
                 date.set(Calendar.HOUR, 0);
                 date.set(Calendar.MINUTE, 0);
                 date.set(Calendar.SECOND, 0);
-                date.set(Calendar.MILLISECOND, 0);
+                date.set(Calendar.MILLISECOND, 1);
             }
         }catch (Throwable t){
             return null;
