@@ -1,6 +1,6 @@
 package fr.unice.polytech.ecoknowledge.domain.model;
 
-import java.util.DateTime;
+import org.joda.time.DateTime;
 
 public class Recurrence {
 
