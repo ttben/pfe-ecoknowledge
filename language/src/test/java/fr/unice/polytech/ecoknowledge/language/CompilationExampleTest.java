@@ -31,7 +31,7 @@ public class CompilationExampleTest {
         ChallengeBuilder cb = Challenge.create("DSL done");
 
             cb
-                .from("23/11/2015").to("7/03/2016")
+                .from(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
                 .rewards(2)
                 .withConditions()
@@ -93,7 +93,7 @@ public class CompilationExampleTest {
     public void structureCheck(){
 
         Challenge.create("Arbitrary complex challenge")
-                .from("2/11").to("1/4/16")
+                .from(2,11).to(1,4,16)
                 .during(9, DAY)
                 .rewards(30)
                 .withConditions()

@@ -22,8 +22,18 @@ public class Period implements IDurationnable {
     }
 
     @Override
-    public IChallengeable to(String date) {
-        end = parseDate(date, true);
+    public IChallengeable to(int day) {
+        end = parseDate("" + day, true);
+        return cb;
+    }
+    @Override
+    public IChallengeable to(int day, int month) {
+        end = parseDate(day + "/" + month, true);
+        return cb;
+    }
+    @Override
+    public IChallengeable to(int day, int month, int year) {
+        end = parseDate(day + "/" + month + "/" + year, true);
         return cb;
     }
 

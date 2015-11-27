@@ -9,7 +9,9 @@ public interface IChallengeable extends IBuildable {
 
     public IChallengeable during(Integer value, DURATION_TYPE type);
     public IChallengeable rewards(Integer points);
-    public IDurationnable from(String date);
+    public IDurationnable from(int day);
+    public IDurationnable from(int day, int month);
+    public IDurationnable from(int day, int month, int year);
     public IConditionsable withConditions();
 
 }

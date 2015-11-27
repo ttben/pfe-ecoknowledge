@@ -47,10 +47,21 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
     }
 
     @Override
-    public IDurationnable from(String date) {
-        Period p = new Period(this, date);
+    public IDurationnable from(int day) {
+        Period p = new Period(this, "" + day);
         return p;
     }
+    @Override
+    public IDurationnable from(int day, int month) {
+        Period p = new Period(this, day + "/" + month);
+        return p;
+    }
+    @Override
+    public IDurationnable from(int day, int month, int year) {
+        Period p = new Period(this, day + "/" + month + "/" + year);
+        return p;
+    }
+
 
     @Override
     public IConditionsable withConditions() {
