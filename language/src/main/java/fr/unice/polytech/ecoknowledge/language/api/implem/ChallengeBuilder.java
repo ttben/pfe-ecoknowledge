@@ -13,14 +13,14 @@ import java.util.List;
 /**
  * Created by Sébastien on 25/11/2015.
  */
-public class ChallengeBuilder implements IBuildable, IChallengeable {
+public class ChallengeBuilder implements IChallengeable {
 
     private String name;
     private Period p = null;
     private Integer time = null;
     private DURATION_TYPE type = null;
     private Integer points = null;
-    private List<Condition> conditions = null;
+    private List<Condition> conditions = new ArrayList<>();
 
     private JSONObject description = null;
 
@@ -28,22 +28,8 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
         this.name = name;
     }
 
-    @Override
-    public void end() {
+    void end() {
         description = JSONBuilder.parse(this);
-    }
-
-    @Override
-    public IChallengeable during(Integer value, DURATION_TYPE type) {
-        this.time = value;
-        this.type = type;
-        return this;
-    }
-
-    @Override
-    public IChallengeable rewards(Integer points) {
-        this.points = points;
-        return this;
     }
 
     @Override
@@ -62,19 +48,11 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
         return p;
     }
 
-
-    @Override
-    public IConditionsable withConditions() {
-        conditions = new ArrayList<>();
-        Conditions c = new Conditions(this);
-        return c;
-    }
-
     void addPeriod(Period period) {
         p = period;
     }
 
-    public void addCondition(Condition c) {
+    void addCondition(Condition c) {
         conditions.add(c);
     }
 
@@ -115,5 +93,17 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
 
     public JSONObject getDescription() {
         return description;
+    }
+
+    void setTime(Integer time) {
+        this.time = time;
+    }
+
+    void setType(DURATION_TYPE type) {
+        this.type = type;
+    }
+
+    void setPoints(Integer points) {
+        this.points = points;
     }
 }

@@ -1,23 +1,19 @@
 package fr.unice.polytech.ecoknowledge.language;
 
-/**
- * Created by Sébastien on 25/11/2015.
- */
-
 import fr.unice.polytech.ecoknowledge.language.api.implem.Challenge;
 import fr.unice.polytech.ecoknowledge.language.api.implem.ChallengeBuilder;
-import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
-import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
 import junit.framework.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.DAY;
 import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.WEEK;
 
-public class CompilationExampleTest {
+/**
+ * Created by Sébastien on 27/11/2015.
+ */
+public class GenerationTest {
 
     JSONObject description;
 
@@ -30,16 +26,18 @@ public class CompilationExampleTest {
 
         ChallengeBuilder cb = Challenge.create("DSL done");
 
-            cb
+        cb
                 .from(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
                 .rewards(2)
                 .withConditions()
-                        .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
+                .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
                 .end();
 
         description = cb.getDescription();
-       // System.out.println(description.toString(5));
+
+
+        // System.out.println(description.toString(5));
     }
 
     @Test
@@ -48,7 +46,7 @@ public class CompilationExampleTest {
 
         Assert.assertEquals("oui", description.get("recurrence"));
         Assert.assertNotNull(description.getJSONObject("lifeSpan"));
-        Assert.assertEquals("2015-11-23T00:00:00Z", description.getJSONObject("lifeSpan").getString("start"));
+        Assert.assertEquals("2015-11-23T00:00:01Z", description.getJSONObject("lifeSpan").getString("start"));
         Assert.assertEquals("2016-03-07T23:59:59Z", description.getJSONObject("lifeSpan").getString("end"));
         Assert.assertNotNull(description.getString("name"));
 
@@ -88,22 +86,4 @@ public class CompilationExampleTest {
         Assert.assertNotNull(expression.getJSONObject("rightOperand").getInt("value"));
 
     }
-
-    @Test
-    public void structureCheck(){
-
-        Challenge.create("Arbitrary complex challenge")
-                .from(2,11).to(1,4,16)
-                .during(9, DAY)
-                .rewards(30)
-                .withConditions()
-                    .averageOf("SOMETHING").greaterThan(30).on(WEEK_PERIOD.WEEK_DAYS, DAY_MOMENT.AFTERNOON)
-                .and()
-                    .valueOf("SOMETHING_ELSE").lowerThan(2)
-                .and()
-                    .valueOf("SOMETHING_ELSE_AGAIN").lowerThan(30).on(WEEK_PERIOD.WEEK_DAYS).atLeast(3).percent()
-                .end();
-
-    }
-
 }
