@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Challenge {
 
-
+	private UUID id;
 	private String name;
 	private List<Level> levels = new ArrayList<>();
 	private TimeBox timeSpan;
@@ -16,10 +17,13 @@ public class Challenge {
 
 
 	@JsonCreator
-	public Challenge(@JsonProperty(value = "name", required = true) String name,
+	public Challenge(@JsonProperty(value = "id", required = false) String id,
+					 @JsonProperty(value = "name", required = true) String name,
 					 @JsonProperty(value = "levels", required = true) List<Level> levels,
 					 @JsonProperty(value = "lifeSpan", required = true) TimeBox timeBox,
 					 @JsonProperty(value = "recurrence", required = true) String recurrence) {
+
+		this.id = (id == null || id.isEmpty()) ? UUID.randomUUID() : UUID.fromString(id);
 		this.name = name;
 		this.levels = levels;
 		this.timeSpan = timeBox;
@@ -56,5 +60,13 @@ public class Challenge {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
 	}
 }

@@ -4,6 +4,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class Comparator {
 
+	public String getComparator() {
+		return comparator;
+	}
+
+	public void setComparator(String comparator) {
+		this.comparator = comparator;
+	}
+
 	private String comparator;
 
 	@JsonCreator

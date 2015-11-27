@@ -17,13 +17,13 @@ public class ChallengeService {
 	@Consumes("application/json")
 	public Response addChallenge(String object) {
 		JsonObject json = new JsonParser().parse(object).getAsJsonObject();
-		JsonObject id = null;
+		JsonObject result = null;
 		try {
-			id = Controller.getInstance().createChallenge(json);
+			result = Controller.getInstance().createChallenge(json);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return Response.ok().entity(id.toString()).build();
+		return Response.ok().entity(result.toString()).build();
 	}
 
 

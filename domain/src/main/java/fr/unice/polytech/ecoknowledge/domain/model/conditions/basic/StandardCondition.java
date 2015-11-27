@@ -59,6 +59,8 @@ public class StandardCondition extends BasicCondition {
 	}
 
 	public String getDescription() {
-		return expression.getDescription() + " " + counter.toString();
+		String result = expression.getDescription();
+		result = result.concat(counter.toString());
+		return result;
 	}
 }
