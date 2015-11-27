@@ -2,11 +2,10 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fr.unice.polytech.ecoknowledge.Utils;
 import fr.unice.polytech.ecoknowledge.controller.Controller;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.security.InvalidParameterException;
@@ -78,5 +77,11 @@ public class TestService {
 			return Response.status(500).entity(e.getMessage()).build();
 		}
 		return Response.ok().entity(json.toString()).build();
+	}
+
+	@Path("/db/names")
+	@GET
+	public Response getDBNames() {
+		return Response.ok().entity(new Utils().displayTableNames()).build();
 	}
 }
