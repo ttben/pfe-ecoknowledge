@@ -4,6 +4,7 @@ import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IActiveDurationnableAndConditionsable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionsable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurationnableAndAndable;
 
 /**
@@ -75,5 +76,10 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
                 ", moment=" + moment +
                 ", period=" + period +
                 '}';
+    }
+
+    @Override
+    public IConditionsable and() {
+        return getCondition().getConditions();
     }
 }
