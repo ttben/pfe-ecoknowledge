@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
+import fr.unice.polytech.ecoknowledge.ChallengePersistance;
 import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.Model;
@@ -40,7 +41,7 @@ public class Controller {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
-            //result = ChallengePersistance.store(jsonObject);
+            result = ChallengePersistance.store(jsonObject);
         } catch (JsonMappingException | JsonParseException e) {
             e.printStackTrace();
             throw new InvalidParameterException("Can not build condition with specified parameters :\n " + e.getMessage());
@@ -121,5 +122,9 @@ public class Controller {
         }
 
         return result;
+    }
+
+    public JsonObject getAllChallenges() {
+        return null;
     }
 }

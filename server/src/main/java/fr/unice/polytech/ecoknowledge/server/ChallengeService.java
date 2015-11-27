@@ -39,4 +39,10 @@ public class ChallengeService {
 		return Response.status(Response.Status.NOT_FOUND).build();
 
 	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllChallenges() {
+		return Response.ok().entity(Controller.getInstance().getAllChallenges().toString()).build();
+	}
 }
