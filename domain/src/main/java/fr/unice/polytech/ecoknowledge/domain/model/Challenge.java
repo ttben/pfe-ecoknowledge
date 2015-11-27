@@ -69,7 +69,7 @@ public class Challenge implements VisitableComponent {
 	public void setId(UUID id) {
 		this.id = id;
 	}
-	
+
 	@Override
 	public void accept(GoalVisitor goalVisitor) {
 		for(VisitableComponent visitableComponent : levels) {

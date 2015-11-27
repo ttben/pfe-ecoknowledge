@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import fr.unice.polytech.ecoknowledge.ChallengePersistance;
 import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
@@ -13,6 +14,7 @@ import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 
@@ -41,10 +43,14 @@ public class Controller {
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
+
             Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
-            String jsonResult = objectMapper.writeValueAsString(challenge);
-            JsonObject objToPersist = new JsonParser().parse(jsonResult).getAsJsonObject();
-            result = ChallengePersistance.store(objToPersist);
+
+            jsonObject.addProperty("id",""+challenge.getId());
+            result = ChallengePersistance.store(jsonObject);
+
+            Challenge newChallenge = (Challenge)objectMapper.readValue(result.toString(), Challenge.class);
+
         } catch (JsonMappingException | JsonParseException e) {
             e.printStackTrace();
             throw new InvalidParameterException("Can not build condition with specified parameters :\n " + e.getMessage());

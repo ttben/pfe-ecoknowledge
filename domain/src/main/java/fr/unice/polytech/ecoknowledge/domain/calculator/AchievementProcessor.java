@@ -77,7 +77,7 @@ public class AchievementProcessor implements GoalVisitor {
 		Operand requiredOperand = condition.getRequiredOperand();
 
 		//	Retrieves sensor bound for symbolic names
-		String symbolicName = requiredOperand.getValue().toString();
+		String symbolicName = requiredOperand.getSymbolicName().toString();
 		String sensorBound = goal.getSensorNameForGivenSymbolicName(symbolicName);
 
 		//	Retrieves values of sensors

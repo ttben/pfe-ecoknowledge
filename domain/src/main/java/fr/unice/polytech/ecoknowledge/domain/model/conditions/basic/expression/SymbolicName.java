@@ -18,7 +18,7 @@ public class SymbolicName implements Operand {
 	}
 
 	@Override
-	public String getValue() {
+	public String getSymbolicName() {
 		return this.name;
 	}
 }

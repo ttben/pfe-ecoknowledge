@@ -45,11 +45,11 @@ public class Expression {
 
 	public boolean compareWith(Double value) {
 		return (getLeftOperand().isRequired()) ?
-				this.comparator.compare(value, getRightOperand().getValue())
-				: this.comparator.compare(getRightOperand().getValue(), value);
+				this.comparator.compare(value, getRightOperand().getSymbolicName())
+				: this.comparator.compare(getRightOperand().getSymbolicName(), value);
 	}
 
 	public String getDescription() {
-		return "" + leftOperand.getValue() + " " + comparator.toString() + " " + rightOperand.getValue();
+		return "" + leftOperand.getSymbolicName() + " " + comparator.toString() + " " + rightOperand.getSymbolicName();
 	}
 }

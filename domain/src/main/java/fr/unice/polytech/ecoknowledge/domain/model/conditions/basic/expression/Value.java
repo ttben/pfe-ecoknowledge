@@ -18,7 +18,7 @@ public class Value implements Operand {
 	}
 
 	@Override
-	public Double getValue() {
+	public Double getSymbolicName() {
 		return this.value;
 	}
 }
