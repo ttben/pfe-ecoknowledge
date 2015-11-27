@@ -2,14 +2,10 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.improve;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.unice.polytech.ecoknowledge.domain.calculator.ConditionVisitor;
-import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
 import fr.unice.polytech.ecoknowledge.domain.calculator.ConditionResult;
-
-import java.util.List;
 
 public class ImproveCondition implements Condition{
 
@@ -40,7 +36,7 @@ public class ImproveCondition implements Condition{
 	}
 
 	@Override
-	public ConditionResult accept(ConditionVisitor conditionVisitor) {
-		return conditionVisitor.evaluateCondition(this);
+	public void accept(GoalVisitor goalVisitor) {
+		goalVisitor.visit(this);
 	}
 }

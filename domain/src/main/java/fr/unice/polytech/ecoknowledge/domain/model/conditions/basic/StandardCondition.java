@@ -2,12 +2,10 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.unice.polytech.ecoknowledge.domain.calculator.ConditionVisitor;
-import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Day;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Operand;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
 import fr.unice.polytech.ecoknowledge.domain.calculator.ConditionResult;
 
 import java.util.List;
@@ -53,12 +51,12 @@ public class StandardCondition extends BasicCondition {
 		return this.expression.compareWith(value);
 	}
 
-	@Override
-	public ConditionResult accept(ConditionVisitor conditionVisitor) {
-		return conditionVisitor.evaluateCondition(this);
-	}
-
 	public String getDescription() {
 		return expression.getDescription() + " " + counter.toString();
+	}
+
+	@Override
+	public void accept(GoalVisitor goalVisitor) {
+		goalVisitor.visit(this);
 	}
 }
