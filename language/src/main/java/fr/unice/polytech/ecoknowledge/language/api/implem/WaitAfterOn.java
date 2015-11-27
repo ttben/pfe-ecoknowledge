@@ -28,8 +28,8 @@ public class WaitAfterOn extends ChallengeBuilderGettable implements ISecondActi
     }
 
     @Override
-    public void end() {
-        getChallengeBuilder().end();
+    public void sendTo(String IPAddress) {
+        getChallengeBuilder().end(IPAddress);
     }
 
     @Override

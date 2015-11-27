@@ -1,7 +1,5 @@
-package fr.unice.polytech.ecoknowledge.language;
+package fr.unice.polytech.ecoknowledge.language.api.implem;
 
-import fr.unice.polytech.ecoknowledge.language.api.implem.Challenge;
-import fr.unice.polytech.ecoknowledge.language.api.implem.ChallengeBuilder;
 import junit.framework.Assert;
 import org.joda.time.IllegalFieldValueException;
 import org.junit.Test;
@@ -18,15 +16,13 @@ public class FailureTest {
         IllegalFieldValueException exception = null;
 
         try {
-            ChallengeBuilder cb = Challenge.create("cb");
-            cb
+            Challenge.create("cb")
                     .from(48).to(2, 899, 2)
                     .during(3, DAY).rewards(-10)
                     .withConditions()
                     .valueOf("smth").greaterThan(30)
-                    .end();
+                    .sendTo(null);
 
-            System.out.println(cb.getDescription().toString(5));
         }catch (IllegalFieldValueException t){
             exception = t;
         }

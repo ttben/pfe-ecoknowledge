@@ -1,13 +1,13 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IBuildable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IChallengeable;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionsable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDurationnable;
-
-import java.util.ArrayList;
+import fr.unice.polytech.ecoknowledge.language.api.util.HTTPCall;
 import org.json.JSONObject;
+
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,6 +15,12 @@ import java.util.List;
  */
 public class ChallengeBuilder implements IChallengeable {
 
+    // ------- FIELDS ------- //
+
+    // Configs to sendTo the request
+    private static final String path = "challenge";
+
+    // Specific fields of the challenge builder
     private String name;
     private Period p = null;
     private Integer time = null;
@@ -22,24 +28,18 @@ public class ChallengeBuilder implements IChallengeable {
     private Integer points = null;
     private List<Condition> conditions = new ArrayList<>();
 
+    // Output
     private JSONObject description = null;
 
-    ChallengeBuilder(String name){
+
+    // ------- CONSTRUCTOR ------- //
+
+    public ChallengeBuilder(String name){
         this.name = name;
     }
 
-    void end() {
-        description = JSONBuilder.parse(this);
-    }
 
-    private void reinit(){
-        p = null;
-        time = null;
-        type = null;
-        points = null;
-        conditions = new ArrayList<>();
-        description = null;
-    }
+    // ------- API Methods ------- //
 
     @Override
     public IDurationnable from(int day) {
@@ -59,6 +59,17 @@ public class ChallengeBuilder implements IChallengeable {
         Period p = new Period(this, day, month, year);
         return p;
     }
+    void end(String IPAddress) {
+        description = JSONBuilder.parse(this);
+        if(IPAddress != null) {
+            Response r = HTTPCall.POST(IPAddress, path, description);
+            System.out.println(r.getStatus()==200?
+                    "Success sending the challenge"
+                    :"Challenge Failed : " + r.getStatusInfo());
+        }
+    }
+
+    // ------- Accessors ------- //
 
     void addPeriod(Period period) {
         p = period;
@@ -68,15 +79,13 @@ public class ChallengeBuilder implements IChallengeable {
         conditions.add(c);
     }
 
-    @Override
-    public String toString() {
-        return "ChallengeBuilder{" +
-                "p=" + p +
-                ", time=" + time +
-                ", type=" + type +
-                ", points=" + points +
-                ", conditions=" + conditions +
-                '}';
+    private void reinit(){
+        p = null;
+        time = null;
+        type = null;
+        points = null;
+        conditions = new ArrayList<>();
+        description = null;
     }
 
     Period getP() {
@@ -103,7 +112,7 @@ public class ChallengeBuilder implements IChallengeable {
         return name;
     }
 
-    public JSONObject getDescription() {
+    JSONObject getDescription() {
         return description;
     }
 
@@ -118,4 +127,16 @@ public class ChallengeBuilder implements IChallengeable {
     void setPoints(Integer points) {
         this.points = points;
     }
+
+    @Override
+    public String toString() {
+        return "ChallengeBuilder{" +
+                "p=" + p +
+                ", time=" + time +
+                ", type=" + type +
+                ", points=" + points +
+                ", conditions=" + conditions +
+                '}';
+    }
+
 }

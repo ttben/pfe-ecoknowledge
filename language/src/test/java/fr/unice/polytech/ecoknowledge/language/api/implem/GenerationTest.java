@@ -1,11 +1,10 @@
-package fr.unice.polytech.ecoknowledge.language;
+package fr.unice.polytech.ecoknowledge.language.api.implem;
 
-import fr.unice.polytech.ecoknowledge.language.api.implem.Challenge;
-import fr.unice.polytech.ecoknowledge.language.api.implem.ChallengeBuilder;
 import junit.framework.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.WEEK;
@@ -25,19 +24,31 @@ public class GenerationTest {
     public void simpleChallengeCreation(){
 
         ChallengeBuilder cb = Challenge.create("DSL done");
-
         cb
                 .from(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
                 .rewards(2)
                 .withConditions()
                 .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
-                .end();
+        .sendTo(null);
+        //.sendTo("http://localhost:8282/");
 
         description = cb.getDescription();
 
-
         // System.out.println(description.toString(5));
+    }
+
+    @Ignore
+    public void sendForReal(){
+
+        ChallengeBuilder cb = Challenge.create("DSL done");
+        cb
+                .from(23,11,2015).to(7,3,2016)
+                .during(1, WEEK)
+                .rewards(2)
+                .withConditions()
+                .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
+        .sendTo("http://localhost:8282/");
     }
 
     @Test
