@@ -2,12 +2,10 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.unice.polytech.ecoknowledge.domain.calculator.ConditionVisitor;
-import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Day;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Operand;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
 import fr.unice.polytech.ecoknowledge.domain.calculator.ConditionResult;
 
 import java.util.List;
@@ -23,7 +21,7 @@ public class StandardCondition extends BasicCondition {
 	@JsonCreator
 	public StandardCondition(@JsonProperty(value = "expression", required = true) Expression expression,
 							 @JsonProperty(value = "targetDays", required = false) List<Day> targetDays,    // FIXME: 25/11/2015 required must be true
-							 @JsonProperty(value = "counter", required = false) Counter counter) {      // FIXME: 25/11/2015 required must be true
+							 @JsonProperty(value = "counter", required = true) Counter counter) {      // FIXME: 25/11/2015 required must be true
 
 		super(expression, targetDays);
 		this.counter = counter;
@@ -53,14 +51,14 @@ public class StandardCondition extends BasicCondition {
 		return this.expression.compareWith(value);
 	}
 
-	@Override
-	public ConditionResult accept(ConditionVisitor conditionVisitor) {
-		return conditionVisitor.evaluateCondition(this);
-	}
-
 	public String getDescription() {
 		String result = expression.getDescription();
 		result = result.concat(counter.toString());
 		return result;
+	}
+
+	@Override
+	public void accept(GoalVisitor goalVisitor) {
+		goalVisitor.visit(this);
 	}
 }

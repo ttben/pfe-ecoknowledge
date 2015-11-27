@@ -2,19 +2,19 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Challenge {
+public class Challenge implements VisitableComponent {
 
 	private UUID id;
 	private String name;
 	private List<Level> levels = new ArrayList<>();
 	private TimeBox timeSpan;
 	private String recurrence;
-
 
 	@JsonCreator
 	public Challenge(@JsonProperty(value = "id", required = false) String id,
@@ -68,5 +68,14 @@ public class Challenge {
 
 	public void setId(UUID id) {
 		this.id = id;
+	}
+	
+	@Override
+	public void accept(GoalVisitor goalVisitor) {
+		for(VisitableComponent visitableComponent : levels) {
+			visitableComponent.accept(goalVisitor);
+		}
+
+		goalVisitor.visit(this);
 	}
 }

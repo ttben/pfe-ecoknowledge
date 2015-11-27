@@ -2,9 +2,10 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import org.joda.time.DateTime;
 
-public class Goal {
+public class Goal implements VisitableComponent {
 
 	private Challenge challengeDefinition;
 	private TimeBox timeSpan;
@@ -12,8 +13,11 @@ public class Goal {
 
 	@JsonCreator
 	public Goal(@JsonProperty("challenge") Challenge definition,
-				@JsonProperty("lifeSpan") TimeBox timeSpan) {
-
+				@JsonProperty("lifeSpan") TimeBox timeSpan,
+				User user) {
+		this.challengeDefinition = definition;
+		this.timeSpan = timeSpan;
+		this.user = user;
 	}
 
 	public Challenge getChallengeDefinition() {
@@ -50,5 +54,11 @@ public class Goal {
 
 	public String getSensorNameForGivenSymbolicName(String symbolicName) {
 		return this.user.getSymbolicNameToSensorNameMap().get(symbolicName);
+	}
+
+	@Override
+	public void accept(GoalVisitor goalVisitor) {
+		challengeDefinition.accept(goalVisitor);
+		goalVisitor.visit(this);
 	}
 }

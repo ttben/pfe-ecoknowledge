@@ -1,6 +1,7 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 
 public class Data {
 
@@ -27,5 +28,10 @@ public class Data {
 
 	public void setDate(DateTime date) {
 		this.date = date;
+	}
+
+	@Override
+	public String toString() {
+		return date.toString(DateTimeFormat.forPattern("dd/mm/yyyy HH:mm:ss")) + " - value : " + value ;
 	}
 }

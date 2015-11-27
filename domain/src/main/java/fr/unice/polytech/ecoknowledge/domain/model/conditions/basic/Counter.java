@@ -2,13 +2,16 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+@JsonDeserialize(using = CounterDeserializer.class)
 public class Counter {
 	private Double threshold;
 	private CounterType counterType;
 
 	@JsonCreator
-	public Counter(@JsonProperty(value = "threshold", required = true) Double threshold, @JsonProperty(value = "counterType", required = true) CounterType counterType) {
+	public Counter(@JsonProperty(value = "threshold", required = true) Double threshold,
+				   @JsonProperty(value = "type", required = true) CounterType counterType) {
 		this.threshold = threshold;
 		this.counterType = counterType;
 	}
