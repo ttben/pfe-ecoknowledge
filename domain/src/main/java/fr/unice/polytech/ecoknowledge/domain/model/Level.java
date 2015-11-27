@@ -49,7 +49,7 @@ public class Level implements VisitableComponent{
 	@Override
 	public void accept(GoalVisitor goalVisitor) {
 		for(VisitableComponent visitableComponent : conditionList) {
-
+			visitableComponent.accept(goalVisitor);
 		}
 
 		goalVisitor.visit(this);

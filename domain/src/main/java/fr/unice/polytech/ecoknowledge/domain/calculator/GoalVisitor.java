@@ -11,9 +11,9 @@ import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCon
  */
 public interface GoalVisitor {
 
-	Object visit(Goal goal);
-	Object visit(Challenge challenge);
-	Object visit(Level level);
-	Object visit(StandardCondition condition);
-	Object visit(ImproveCondition condition);
+	void visit(Goal goal);
+	void visit(Challenge challenge);
+	void visit(Level level);
+	void visit(StandardCondition condition);
+	void visit(ImproveCondition condition);
 }

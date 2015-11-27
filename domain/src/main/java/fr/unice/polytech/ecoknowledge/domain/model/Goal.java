@@ -13,8 +13,11 @@ public class Goal implements VisitableComponent {
 
 	@JsonCreator
 	public Goal(@JsonProperty("challenge") Challenge definition,
-				@JsonProperty("lifeSpan") TimeBox timeSpan) {
-
+				@JsonProperty("lifeSpan") TimeBox timeSpan,
+				User user) {
+		this.challengeDefinition = definition;
+		this.timeSpan = timeSpan;
+		this.user = user;
 	}
 
 	public Challenge getChallengeDefinition() {
@@ -55,6 +58,7 @@ public class Goal implements VisitableComponent {
 
 	@Override
 	public void accept(GoalVisitor goalVisitor) {
+		challengeDefinition.accept(goalVisitor);
 		goalVisitor.visit(this);
 	}
 }

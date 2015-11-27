@@ -21,7 +21,7 @@ public class StandardCondition extends BasicCondition {
 	@JsonCreator
 	public StandardCondition(@JsonProperty(value = "expression", required = true) Expression expression,
 							 @JsonProperty(value = "targetDays", required = false) List<Day> targetDays,    // FIXME: 25/11/2015 required must be true
-							 @JsonProperty(value = "counter", required = false) Counter counter) {      // FIXME: 25/11/2015 required must be true
+							 @JsonProperty(value = "counter", required = true) Counter counter) {      // FIXME: 25/11/2015 required must be true
 
 		super(expression, targetDays);
 		this.counter = counter;

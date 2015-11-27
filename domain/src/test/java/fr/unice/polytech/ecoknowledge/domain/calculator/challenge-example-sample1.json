@@ -2,7 +2,7 @@
   "name":"Baisse de la clim",
   "lifeSpan":{
     "start" :"2015-10-07T10:14:40Z",
-    "end":"2015-10-08T10:14:40Z"
+    "end":"2015-10-10T11:22:40Z"
   },
   "recurrence":"oui",
   "levels": [
@@ -27,6 +27,28 @@
               "value":27
             },
             "comparator": ">"
+          },
+          "counter": {
+            "threshold":50,
+            "type":"percent-of-time"
+          }
+        },
+        {
+          "type":"standard",
+          "expression":   {
+            "leftOperand": {
+              "type":"symbolicName",
+              "symbolicName":"TMP_AMB"
+            },
+            "rightOperand": {
+              "type":"value",
+              "value":44
+            },
+            "comparator": "<"
+          },
+          "counter": {
+            "threshold":2,
+            "type":"times"
           }
         }
       ]

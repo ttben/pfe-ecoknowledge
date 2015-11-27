@@ -14,76 +14,65 @@ import java.util.List;
  * Created by Benjamin on 26/11/2015.
  */
 public class AchievementProcessor implements GoalVisitor {
-	
+
+	private final Cache cache;
 	private Goal goal;
-	
+
+	private List<ConditionResult> currentConditionResult = new ArrayList<>();
+	private List<LevelResult> currentLevelResult = new ArrayList<>();
+	private GoalResult goalResult;
+
+	public AchievementProcessor(Goal goal, Cache cache) {
+		this.goal = goal;
+		this.cache = cache;
+	}
+
 	@Override
-	public GoalResult visit(Goal goal) {
+	public void visit(Goal goal) {
 		this.goal = goal;
 		Challenge challengeToEvaluate = goal.getChallengeDefinition();
-		return this.visit(challengeToEvaluate);
 	}
-	
+
 	@Override
-	public GoalResult visit(Challenge challenge) {
-		/*
-		List<Level> levels = challenge.getLevels();
+	public void visit(Challenge challenge) {
 
-		List<LevelResult> levelResults = new ArrayList<>();
+		double percentageAchieved = 0;
 		boolean achieved = true;
-		int numberAchieved = 0;
 
-		for (Level level : levels) {
-			LevelResult levelResult = evaluateLevel(level);
-			levelResults.add(levelResult);
-			achieved &= levelResult.isAchieved();
-			if (levelResult.isAchieved()) {
-				numberAchieved++;
+		for(LevelResult levelResult : currentLevelResult) {
+			if(!levelResult.isAchieved()) {
+				achieved = false;
+				percentageAchieved += levelResult.getCorrectRate();
 			}
 		}
 
-		double correctRate = (numberAchieved * 100) / levelResults.size();
+		double correctRate = percentageAchieved / currentLevelResult.size();
 
-		GoalResult goalResult = new GoalResult(challenge.getName(), achieved, correctRate, levelResults);
-
-		return goalResult;
-		*/
-		
-		return null;
+		goalResult = new GoalResult(challenge.getName(), achieved, correctRate, currentLevelResult);
+		currentLevelResult = new ArrayList<>();
 	}
 
 	@Override
-	public LevelResult visit(Level level) {
-		/*
-		List<Condition> conditions = level.getConditionList();
+	public void visit(Level level) {
+		double percentageAchieved = 0;
 
-		GoalVisitor goalVisitor = new AchievementProcessor(this.cache, goal);
-
-		List<ConditionResult> conditionResults = new ArrayList<>();
-		boolean achieved = true;
-		int numberAchieved = 0;
-
-		for (Condition currentCondition : conditions) {
-			ConditionResult conditionResult = currentCondition.accept(goalVisitor);
-
-			achieved &= conditionResult.isAchieved();
-
-			if (conditionResult.isAchieved()) {
-				numberAchieved++;
-			}
+		for(ConditionResult conditionResult : currentConditionResult) {
+			percentageAchieved += conditionResult.getCorrectRate();
 		}
 
-		double correctRate = (numberAchieved * 100) / conditionResults.size();
+		double correctRate = percentageAchieved / currentConditionResult.size();
 
-		LevelResult levelResult = new LevelResult(achieved, correctRate, level.getName(), conditionResults);
+		boolean achieved = correctRate >= 100.0;
 
-		return levelResult;
-		*/
-		return null;
+		LevelResult levelResult = new LevelResult(achieved, correctRate, level.getName(), currentConditionResult);
+		currentLevelResult.add(levelResult);
+
+		currentConditionResult = new ArrayList<>();
 	}
 
 	@Override
-	public ConditionResult visit(StandardCondition condition) {
+	public void visit(StandardCondition condition) {
+
 		//	Retrieve symbolic names for condition
 		Operand requiredOperand = condition.getRequiredOperand();
 
@@ -92,7 +81,7 @@ public class AchievementProcessor implements GoalVisitor {
 		String sensorBound = goal.getSensorNameForGivenSymbolicName(symbolicName);
 
 		//	Retrieves values of sensors
-		List<Data> data = new ArrayList<>(); // FIXME: 27/11/2015 this.cache.getDataOfSensorBetweenDate(sensorBound, goal.getStart(), goal.getEnd());
+		List<Data> data = this.cache.getDataOfSensorBetweenDate(sensorBound, goal.getStart(), goal.getEnd());
 
 		//	Compute evaluation of condition
 		int numberOfCorrectValues = 0;
@@ -105,17 +94,35 @@ public class AchievementProcessor implements GoalVisitor {
 		}
 
 		//	Compute percentage achieved and if achievement
-		double correctRate = (numberOfCorrectValues * 100) / data.size();
-		boolean achieved = correctRate >= condition.getCounter().getThreshold();
+		double correctRate =(data.size() > 0) ? (numberOfCorrectValues * 100) / data.size() : 0;
+
+		double achievedRate = 0.0;
+
+		switch(condition.getCounter().getCounterType()) {
+			case PERCENT_OF_TIME:
+				achievedRate = (correctRate * 100) / condition.getCounter().getThreshold();
+				break;
+			case TIMES:
+				achievedRate = (numberOfCorrectValues * 100) / condition.getCounter().getThreshold();
+				break;
+			default:
+				break;
+		}
+
+		boolean achieved = achievedRate >= 100.0;
 
 		//	Build conditionResult
-		ConditionResult conditionResult = new ConditionResult(achieved, correctRate, condition.getDescription());
+		ConditionResult conditionResult = new ConditionResult(achieved, achievedRate, condition.getDescription());
 
-		return conditionResult;
+		currentConditionResult.add(conditionResult);
 	}
 
+	// TODO: 27/11/2015  
 	@Override
-	public ConditionResult visit(ImproveCondition condition) {
-		return null;
+	public void visit(ImproveCondition condition) {
+	}
+
+	public GoalResult getGoalResult() {
+		return goalResult;
 	}
 }
