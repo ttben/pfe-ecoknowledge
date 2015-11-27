@@ -11,11 +11,12 @@ import org.bson.Document;
  * Created by Benjamin on 24/11/2015.
  */
 public class ChallengePersistance {
-	private static final String TABLE_NAME = "challenge";
+	private static final String COLLECTION_NAME = "challenge";
+	private static final String DB_NAME = "pfe";
 
 	public static JsonObject store(JsonObject json) {
 
-		MongoCollection<Document> collection = ConnexionManager.getInstance().getCollection(TABLE_NAME);
+		MongoCollection<Document> collection = ConnexionManager.getInstance().getCollection(COLLECTION_NAME);
 		collection.insertOne(Document.parse(json.toString()));
 
 		MongoCursor cursor = collection.find(Document.parse(json.toString())).iterator();
