@@ -84,4 +84,18 @@ public class TestService {
 	public Response getDBNames() {
 		return Response.ok().entity(new Utils().displayTableNames()).build();
 	}
+
+	@Path("/db/content")
+	@GET
+	public Response getDBContent() {
+		return Response.ok().entity(new Utils().displayAllContentInStr()).build();
+	}
+
+	@Path("/db/")
+	@POST
+	public Response addDB(String obj) {
+		JsonObject object = new JsonParser().parse(obj).getAsJsonObject();
+		String name = object.get("name").getAsString();
+		return Response.ok().entity(new Utils().createTable(name)).build();
+	}
 }
