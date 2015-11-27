@@ -29,7 +29,7 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
     }
 
     @Override
-    public void build() {
+    public void end() {
         description = JSONBuilder.parse(this);
     }
 
@@ -41,7 +41,7 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
     }
 
     @Override
-    public IChallengeable isWorth(Integer points) {
+    public IChallengeable rewards(Integer points) {
         this.points = points;
         return this;
     }
@@ -53,7 +53,7 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
     }
 
     @Override
-    public IConditionsable onConditionThat() {
+    public IConditionsable withConditions() {
         conditions = new ArrayList<>();
         Conditions c = new Conditions(this);
         return c;

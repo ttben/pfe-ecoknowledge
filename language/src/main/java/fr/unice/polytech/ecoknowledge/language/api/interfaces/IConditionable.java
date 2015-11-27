@@ -5,7 +5,7 @@ package fr.unice.polytech.ecoknowledge.language.api.interfaces;
  */
 public interface IConditionable {
 
-    public  IActiveDurationnableAndConditionsable lowerThan(Integer value);
-    public IActiveDurationnableAndConditionsable greaterThan(Integer value);
+    public  IActiveDurationnable lowerThan(Integer value);
+    public IActiveDurationnable greaterThan(Integer value);
 
 }

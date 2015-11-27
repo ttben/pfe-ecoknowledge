@@ -25,20 +25,20 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
     public ISecondActiveDurationnableAndAndable on(WEEK_PERIOD period, DAY_MOMENT moment) {
         this.period = period;
         this.moment = moment;
-        getCondition().addWaitForValue(this);
+        getCondition().setWaitForValue(this);
         return new WaitAfterOn(this);
     }
 
     @Override
     public ISecondActiveDurationnableAndAndable on(WEEK_PERIOD period) {
         this.period = period;
-        getCondition().addWaitForValue(this);
+        getCondition().setWaitForValue(this);
         return new WaitAfterOn(this);
     }
 
     @Override
-    public void build() {
-        getChallengeBuilder().build();
+    public void end() {
+        getChallengeBuilder().end();
 
     }
 

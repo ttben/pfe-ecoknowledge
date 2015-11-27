@@ -8,8 +8,8 @@ import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
 public interface IChallengeable extends IBuildable {
 
     public IChallengeable during(Integer value, DURATION_TYPE type);
-    public IChallengeable isWorth(Integer points);
+    public IChallengeable rewards(Integer points);
     public IDurationnable from(String date);
-    public IConditionsable onConditionThat();
+    public IConditionsable withConditions();
 
 }

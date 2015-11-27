@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.AT_LEAST_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IAtLeastable;
@@ -27,17 +28,8 @@ public class WaitAfterOn extends ChallengeBuilderGettable implements ISecondActi
     }
 
     @Override
-    public void build() {
-        getChallengeBuilder().build();
-    }
-
-    @Override
-    public ISecondActiveDurationnableAndAndable andOn(WEEK_PERIOD period, DAY_MOMENT moment) {
-        WaitAfterOn next = new WaitAfterOn(wfv);
-        next.period = period;
-        next.moment = moment;
-        getWfv().addWaitAfterOn(next);
-        return this;
+    public void end() {
+        getChallengeBuilder().end();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.AT_LEAST_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IAtLeastable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurationnableAndAndable;
 
