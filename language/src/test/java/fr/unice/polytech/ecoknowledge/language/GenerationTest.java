@@ -1,9 +1,5 @@
 package fr.unice.polytech.ecoknowledge.language;
 
-/**
- * Created by Sébastien on 25/11/2015.
- */
-
 import fr.unice.polytech.ecoknowledge.language.api.implem.Challenge;
 import fr.unice.polytech.ecoknowledge.language.api.implem.ChallengeBuilder;
 import junit.framework.Assert;
@@ -14,7 +10,10 @@ import org.junit.Test;
 
 import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.WEEK;
 
-public class CompilationExampleTest {
+/**
+ * Created by Sébastien on 27/11/2015.
+ */
+public class GenerationTest {
 
     JSONObject description;
 
@@ -27,16 +26,18 @@ public class CompilationExampleTest {
 
         ChallengeBuilder cb = Challenge.create("DSL done");
 
-            cb
-                .from("23/11/2015").to("7/03/2016")
+        cb
+                .from(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
-                .isWorth(2)
-                .onConditionThat()
-                        .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
-                .build();
+                .rewards(2)
+                .withConditions()
+                .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
+                .end();
 
         description = cb.getDescription();
-       // System.out.println(description.toString(5));
+
+
+        // System.out.println(description.toString(5));
     }
 
     @Test
@@ -45,7 +46,7 @@ public class CompilationExampleTest {
 
         Assert.assertEquals("oui", description.get("recurrence"));
         Assert.assertNotNull(description.getJSONObject("lifeSpan"));
-        Assert.assertEquals("2015-11-23T00:00:00Z", description.getJSONObject("lifeSpan").getString("start"));
+        Assert.assertEquals("2015-11-23T00:00:01Z", description.getJSONObject("lifeSpan").getString("start"));
         Assert.assertEquals("2016-03-07T23:59:59Z", description.getJSONObject("lifeSpan").getString("end"));
         Assert.assertNotNull(description.getString("name"));
 
@@ -85,5 +86,4 @@ public class CompilationExampleTest {
         Assert.assertNotNull(expression.getJSONObject("rightOperand").getInt("value"));
 
     }
-
 }

@@ -2,6 +2,7 @@ package fr.unice.polytech.ecoknowledge.language.api.implem;
 
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IChallengeable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDurationnable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDuringable;
 
 import java.util.Calendar;
 
@@ -22,9 +23,19 @@ public class Period implements IDurationnable {
     }
 
     @Override
-    public IChallengeable to(String date) {
-        end = parseDate(date, true);
-        return cb;
+    public IDuringable to(int day) {
+        end = parseDate("" + day, true);
+        return new During(cb);
+    }
+    @Override
+    public IDuringable to(int day, int month) {
+        end = parseDate(day + "/" + month, true);
+        return new During(cb);
+    }
+    @Override
+    public IDuringable to(int day, int month, int year) {
+        end = parseDate(day + "/" + month + "/" + year, true);
+        return new During(cb);
     }
 
 
@@ -39,16 +50,16 @@ public class Period implements IDurationnable {
             if(args.length > 2)
                 date.set(Calendar.YEAR, Integer.parseInt(args[2]));
             if(endDay) {
-                date.set(Calendar.HOUR, 23);
+                date.set(Calendar.HOUR_OF_DAY, 23);
                 date.set(Calendar.MINUTE, 59);
                 date.set(Calendar.SECOND, 59);
-                date.set(Calendar.MILLISECOND, 999);
+                date.set(Calendar.MILLISECOND, 0);
             }
             else{
-                date.set(Calendar.HOUR, 0);
+                date.set(Calendar.HOUR_OF_DAY, 0);
                 date.set(Calendar.MINUTE, 0);
-                date.set(Calendar.SECOND, 0);
-                date.set(Calendar.MILLISECOND, 1);
+                date.set(Calendar.SECOND, 1);
+                date.set(Calendar.MILLISECOND, 0);
             }
         }catch (Throwable t){
             return null;

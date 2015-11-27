@@ -9,7 +9,6 @@ import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
  */
 public interface ISecondActiveDurationnable {
 
-    public ISecondActiveDurationnableAndAndable andOn(WEEK_PERIOD period, DAY_MOMENT moment);
     public IAtLeastable atLeast(Integer value);
 
 }

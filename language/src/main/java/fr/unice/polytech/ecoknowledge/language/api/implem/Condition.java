@@ -16,7 +16,7 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
     private String sensor = null;
     private Integer value = null;
     private String comparator = null;
-    private List<WaitForValue> waitForValues = new ArrayList<>();
+    private WaitForValue waitForValue = null;
 
     public Condition(Conditions conditions, ConditionType type, String sensor) {
         this.conditions = conditions;
@@ -47,8 +47,8 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
         return conditions;
     }
 
-    void addWaitForValue(WaitForValue waitForValue) {
-        waitForValues.add(waitForValue);
+    void setWaitForValue(WaitForValue waitForValue) {
+        this.waitForValue = waitForValue;
     }
 
     ConditionType getType() {
@@ -69,7 +69,7 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
                 "type=" + type +
                 ", sensor='" + sensor + '\'' +
                 ", value=" + value +
-                ", waitForValues=" + waitForValues +
+                ", waitForValue=" + waitForValue +
                 '}';
     }
 
