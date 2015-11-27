@@ -9,6 +9,7 @@ import fr.unice.polytech.ecoknowledge.language.api.implem.ChallengeBuilder;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
 import junit.framework.Assert;
+import org.joda.time.IllegalFieldValueException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -34,6 +35,19 @@ public class CompilationTest {
                     .valueOf("SOMETHING_ELSE_AGAIN").lowerThan(30).on(WEEK_PERIOD.WEEK_DAYS).atLeast(3).percent()
                 .end();
 
+    }
+
+    @Test
+    public void franckWroteThisTest() {
+
+        Challenge.create("bite")
+                .from(1).to(2, 3)
+                .during(3, DAY).rewards(-10)
+                .withConditions()
+                .valueOf("bite_length").greaterThan(30)
+                .and()
+                .averageOf("caca_weight").lowerThan(10)
+                .end();
     }
 
 }

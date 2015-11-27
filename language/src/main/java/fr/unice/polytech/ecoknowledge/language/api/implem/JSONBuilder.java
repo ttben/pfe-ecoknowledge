@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,14 +27,15 @@ public class JSONBuilder {
     private static JSONObject parsePeriod(Period p) {
         JSONObject period = new JSONObject();
 
-        period.put("start", getStringFromCalendar(p.getStart()));
-        period.put("end", getStringFromCalendar(p.getEnd()));
+        period.put("start", getStringFromDateTime(p.getStart()));
+        period.put("end", getStringFromDateTime(p.getEnd()));
 
         return period;
     }
 
-    private static String getStringFromCalendar(Calendar calendar) {
-        Date d = new Date(calendar.getTimeInMillis());
+    private static String getStringFromDateTime(DateTime time) {
+
+        Date d = time.toDate();
 
         SimpleDateFormat day =
                 new SimpleDateFormat("YYYY-MM-dd");

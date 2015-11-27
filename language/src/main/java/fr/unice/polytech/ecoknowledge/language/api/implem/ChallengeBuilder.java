@@ -32,19 +32,31 @@ public class ChallengeBuilder implements IChallengeable {
         description = JSONBuilder.parse(this);
     }
 
+    private void reinit(){
+        p = null;
+        time = null;
+        type = null;
+        points = null;
+        conditions = new ArrayList<>();
+        description = null;
+    }
+
     @Override
     public IDurationnable from(int day) {
-        Period p = new Period(this, "" + day);
+        reinit();
+        Period p = new Period(this, day);
         return p;
     }
     @Override
     public IDurationnable from(int day, int month) {
-        Period p = new Period(this, day + "/" + month);
+        reinit();
+        Period p = new Period(this, day, month);
         return p;
     }
     @Override
     public IDurationnable from(int day, int month, int year) {
-        Period p = new Period(this, day + "/" + month + "/" + year);
+        reinit();
+        Period p = new Period(this, day, month, year);
         return p;
     }
 

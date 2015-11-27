@@ -46,7 +46,7 @@ public class GenerationTest {
 
         Assert.assertEquals("oui", description.get("recurrence"));
         Assert.assertNotNull(description.getJSONObject("lifeSpan"));
-        Assert.assertEquals("2015-11-23T00:00:01Z", description.getJSONObject("lifeSpan").getString("start"));
+        Assert.assertEquals("2015-11-23T00:00:00Z", description.getJSONObject("lifeSpan").getString("start"));
         Assert.assertEquals("2016-03-07T23:59:59Z", description.getJSONObject("lifeSpan").getString("end"));
         Assert.assertNotNull(description.getString("name"));
 
