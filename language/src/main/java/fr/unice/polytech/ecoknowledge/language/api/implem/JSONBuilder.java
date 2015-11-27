@@ -26,9 +26,6 @@ public class JSONBuilder {
     private static JSONObject parsePeriod(Period p) {
         JSONObject period = new JSONObject();
 
-        SimpleDateFormat format =
-                new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-
         period.put("start", getStringFromCalendar(p.getStart()));
         period.put("end", getStringFromCalendar(p.getEnd()));
 
@@ -46,7 +43,7 @@ public class JSONBuilder {
         String dayS = day.format(d);
         String hourS = hour.format(d);
 
-        return dayS + "T " + hourS + "Z";
+        return dayS + "T" + hourS + "Z";
     }
 
 

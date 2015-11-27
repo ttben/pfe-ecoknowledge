@@ -31,7 +31,6 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
     @Override
     public void build() {
         description = JSONBuilder.parse(this);
-        System.out.println(description.toString(5));
     }
 
     @Override
@@ -101,5 +100,9 @@ public class ChallengeBuilder implements IBuildable, IChallengeable {
 
     String getName() {
         return name;
+    }
+
+    public JSONObject getDescription() {
+        return description;
     }
 }
