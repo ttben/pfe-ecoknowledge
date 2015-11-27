@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.config.AddressReacher;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IChallengeable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDurationnable;
@@ -17,8 +18,9 @@ public class ChallengeBuilder implements IChallengeable {
 
     // ------- FIELDS ------- //
 
-    // Configs to sendTo the request
+    // Configs to end the request
     private static final String path = "challenge";
+    private boolean send = true;
 
     // Specific fields of the challenge builder
     private String name;
@@ -59,13 +61,16 @@ public class ChallengeBuilder implements IChallengeable {
         Period p = new Period(this, day, month, year);
         return p;
     }
-    void end(String IPAddress) {
+    void end() {
+        String IPAddress = AddressReacher.getAddress();
+        System.out.println("/----- Generating description -----/");
         description = JSONBuilder.parse(this);
-        if(IPAddress != null) {
+        if(IPAddress != null && send) {
             Response r = HTTPCall.POST(IPAddress, path, description);
             System.out.println(r.getStatus()==200?
-                    "Success sending the challenge"
-                    :"Challenge Failed : " + r.getStatusInfo());
+                    "\t---> Success sending the challenge" +
+                            "\nResult :\n" + r.readEntity(String.class)
+                    :"\t---> Challenge Failed : \n\t" + r.getStatusInfo());
         }
     }
 
@@ -78,6 +83,9 @@ public class ChallengeBuilder implements IChallengeable {
     void addCondition(Condition c) {
         conditions.add(c);
     }
+
+    // For tests
+    ChallengeBuilder dontSend(){send = false; return this;}
 
     private void reinit(){
         p = null;

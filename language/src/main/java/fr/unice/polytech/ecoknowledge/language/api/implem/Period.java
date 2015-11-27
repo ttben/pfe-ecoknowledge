@@ -64,7 +64,7 @@ public class Period implements IDurationnable {
     public String toString() {
         return "Period{" +
                 ", start=" + start.toString() +
-                ", sendTo=" + end.toString() +
+                ", end=" + end.toString() +
                 '}';
     }
 

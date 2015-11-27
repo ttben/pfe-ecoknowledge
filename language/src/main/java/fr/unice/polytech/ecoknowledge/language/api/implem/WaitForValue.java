@@ -37,8 +37,8 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
     }
 
     @Override
-    public void sendTo(String IPAddress) {
-        getChallengeBuilder().end(IPAddress);
+    public void end() {
+        getChallengeBuilder().end();
 
     }
 

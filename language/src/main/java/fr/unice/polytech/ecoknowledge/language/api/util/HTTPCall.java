@@ -17,10 +17,10 @@ public class HTTPCall {
         Client client = ClientBuilder.newClient();
         WebTarget resource = client.target(ipAddress + service);
         Invocation.Builder b = resource.request();
-        System.out.println("Sending request to '" + ipAddress+service + "' ...");
+        System.out.println("\t---> Sending request to '" + ipAddress+service + "'");
 
         Entity e = Entity.entity(media.toString(5), MediaType.APPLICATION_JSON);
-        System.out.println(media.toString(5));
+
         return b.post(e);
     }
 

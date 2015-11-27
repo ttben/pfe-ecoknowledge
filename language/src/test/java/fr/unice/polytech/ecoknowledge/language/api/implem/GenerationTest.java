@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.config.AddressReacher;
 import junit.framework.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,30 +26,15 @@ public class GenerationTest {
 
         ChallengeBuilder cb = Challenge.create("DSL done");
         cb
+                .dontSend() // Just because it's a test
                 .from(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
                 .rewards(2)
                 .withConditions()
                 .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
-        .sendTo(null);
-        //.sendTo("http://localhost:8282/");
+        .end();
 
         description = cb.getDescription();
-
-        // System.out.println(description.toString(5));
-    }
-
-    @Ignore
-    public void sendForReal(){
-
-        ChallengeBuilder cb = Challenge.create("DSL done");
-        cb
-                .from(23,11,2015).to(7,3,2016)
-                .during(1, WEEK)
-                .rewards(2)
-                .withConditions()
-                .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
-        .sendTo("http://localhost:8282/");
     }
 
     @Test
@@ -97,4 +83,26 @@ public class GenerationTest {
         Assert.assertNotNull(expression.getJSONObject("rightOperand").getInt("value"));
 
     }
+
+
+    @Ignore
+    @Test
+    public void sendForReal(){
+
+        ChallengeBuilder cb = Challenge.create("For real");
+        cb
+                .from(23,11,2015).to(7,3,2016)
+                .during(1, WEEK)
+                .rewards(2)
+                .withConditions()
+                .valueOf("We did it").greaterThan(9000)
+                .end();
+    }
+
+    @Test
+    public void address(){
+        Assert.assertNotNull(AddressReacher.getAddress());
+    }
+
+
 }
