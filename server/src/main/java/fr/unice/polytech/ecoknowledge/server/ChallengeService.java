@@ -29,7 +29,7 @@ public class ChallengeService {
 
 
 	@GET
-	@Path("/${challengeId}")
+	@Path("/{challengeId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getBadge(@PathParam("challengeId") String challengeId){
 
@@ -45,5 +45,16 @@ public class ChallengeService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllChallenges() {
 		return Response.ok().entity(Controller.getInstance().getAllChallenges().toString()).build();
+	}
+
+	@DELETE
+	public Response dropAllChallenges() {
+		return Response.ok().entity(Controller.getInstance().dropAllChallenges()).build();
+	}
+
+	@DELETE
+	@Path("/{challengeId}")
+	public Response dropAChallengeById(@PathParam("challengeId") String challengeId) {
+		return Response.ok().entity(Controller.getInstance().dropAChallenge(challengeId)).build();
 	}
 }

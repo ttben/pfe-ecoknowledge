@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongodb.MongoClient;
@@ -10,6 +11,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import fr.unice.polytech.ecoknowledge.connexion.ConnexionManager;
 import org.bson.Document;
+import org.json.JSONArray;
 
 /**
  * Created by Benjamin on 24/11/2015.
@@ -53,5 +55,45 @@ public class ChallengePersistence {
 		JsonObject persistedJsonObject = parser.parse(result.toJson()).getAsJsonObject();
 
 		return persistedJsonObject;
+	}
+
+	public static JsonArray readAll() {
+		JsonArray jsonArray = new JsonArray();
+
+		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
+		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(COLLECTION_NAME);
+
+		MongoCursor<Document> cursor = collection.find().projection(Projections.exclude("_id")).iterator();
+		try {
+			while (cursor.hasNext()) {
+				jsonArray.add(new JsonParser().parse(cursor.next().toJson()).getAsJsonObject());
+			}
+		} finally {
+			cursor.close();
+		}
+
+		return jsonArray;
+	}
+
+	public static void drop() {
+		JsonArray jsonArray = new JsonArray();
+
+		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
+		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(COLLECTION_NAME);
+		collection.drop();
+	}
+
+	public static void drop(String challengeProjectId) {
+		JsonArray jsonArray = new JsonArray();
+
+		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
+		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(COLLECTION_NAME);
+
+		Document result = collection.find(Filters.eq("id", challengeProjectId)).projection(Projections.exclude("_id")).first();
+
+		collection.deleteOne(result);
 	}
 }

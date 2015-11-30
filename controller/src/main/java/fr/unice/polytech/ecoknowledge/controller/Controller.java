@@ -3,6 +3,7 @@ package fr.unice.polytech.ecoknowledge.controller;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.ChallengePersistence;
 import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
@@ -130,7 +131,19 @@ public class Controller {
         return result;
     }
 
-    public JsonObject getAllChallenges() {
-        return null;
+    public JsonArray getAllChallenges() {
+        return ChallengePersistence.readAll();
+    }
+
+    public boolean dropAllChallenges() {
+        ChallengePersistence.drop();
+
+        return true;
+    }
+
+    public boolean dropAChallenge(String challengeId) {
+        ChallengePersistence.drop(challengeId);
+
+        return true;
     }
 }
