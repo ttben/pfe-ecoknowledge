@@ -19,29 +19,7 @@ public class ConnexionManager {
     }
 
     private ConnexionManager() {
-        System.err.println("BDD URL SET TO");
-        System.err.println(System.getenv("MONGOHQ_URL"));
-
-        //mongo ds059524.mongolab.com:59524/heroku_3jmsqjbq -u pfe -p ecoknowledge
-        //   mongodb://username:password@host1:port1/database
-
-
-        boolean local = false;
-        //  deployed
-        try {
-            mongo = new MongoClient(new MongoClientURI(System.getenv("MONGOHQ_URL")));
-            System.err.println("DEPLOYED MODE");
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            local = true;
-        }
-
-        //  local
-        if(local) {
-            System.err.println("LOCAL MODE");
-            mongo = new MongoClient(System.getenv("MONGOHQ_URL"));
-        }
+        mongo = new MongoClient(System.getenv("MONGOHQ_URL"), 27017);
     }
 
     public static ConnexionManager getInstance() {
