@@ -17,9 +17,10 @@ public class PortReacher {
         InputStream input = null;
         int res = 0;
         try {
-            input = new FileInputStream("classes/server.properties");
+            input = new FileInputStream("./server/target/classes/server.properties");
         }catch (Throwable t){
             System.err.println("Can't find server configs.");
+            System.err.println(t.getMessage());
         }
         try {
             prop.load(input);
