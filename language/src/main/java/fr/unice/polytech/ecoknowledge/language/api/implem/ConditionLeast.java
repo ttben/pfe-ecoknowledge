@@ -1,6 +1,7 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.AT_LEAST_TYPE;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IAndable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IAtLeastable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurationnableAndAndable;
 
@@ -23,6 +24,12 @@ public class ConditionLeast extends ChallengeBuilderGettable implements IAtLeast
     @Override
     public ISecondActiveDurationnableAndAndable percent() {
         wao.setType(AT_LEAST_TYPE.PERCENT);
+        return wao;
+    }
+
+    @Override
+    public ISecondActiveDurationnableAndAndable times() {
+        wao.setType(AT_LEAST_TYPE.TIMES);
         return wao;
     }
 
