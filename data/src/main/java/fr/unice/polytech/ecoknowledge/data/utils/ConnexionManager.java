@@ -18,7 +18,7 @@ public class ConnexionManager {
     }
 
     private ConnexionManager() {
-        mongo = new MongoClient(System.getenv("MONGOHQ_URL"), 27017);
+        mongo = new MongoClient(System.getenv("MONGOHQ_URL"));
     }
 
     public static ConnexionManager getInstance() {
