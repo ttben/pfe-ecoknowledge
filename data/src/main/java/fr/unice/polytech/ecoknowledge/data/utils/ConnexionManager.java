@@ -19,19 +19,21 @@ public class ConnexionManager {
     }
 
     private ConnexionManager() {
-        System.out.println("BDD URL is set to " + System.getenv("MONGOHQ_URL"));
+        System.err.println("BDD URL is set to " + System.getenv("MONGOHQ_URL"));
 
         boolean local = false;
         //  deployed
         try {
             mongo = new MongoClient(new MongoClientURI(System.getenv("MONGOHQ_URL")));
+            System.err.println("DEPLOYED MODE");
         }
         catch(Exception e) {
             local = true;
         }
-        
+
         //  local
         if(local) {
+            System.err.println("LOCAL MODE");
             mongo = new MongoClient(System.getenv("MONGOHQ_URL"));
         }
     }
