@@ -21,12 +21,17 @@ public class ConnexionManager {
     private ConnexionManager() {
         System.out.println("BDD URL is set to " + System.getenv("MONGOHQ_URL"));
 
+        boolean local = false;
         //  deployed
-        if(System.getenv("MONGOHQ_URL").startsWith("mongodb://")) {
+        try {
             mongo = new MongoClient(new MongoClientURI(System.getenv("MONGOHQ_URL")));
         }
+        catch(Exception e) {
+            local = true;
+        }
+        
         //  local
-        else {
+        if(local) {
             mongo = new MongoClient(System.getenv("MONGOHQ_URL"));
         }
     }
