@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.implem.util.JsonSearcher;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -39,11 +40,12 @@ public class GEN_ChallengeSimpleFieldsTest {
     public void checkRecurrence(){
 
         ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
-        wanted.add(new AbstractMap.SimpleEntry<>("recurrence", String.class));
+        wanted.add(new AbstractMap.SimpleEntry<>("recurrence", JSONObject.class));
 
         Object rec = JsonSearcher.lookFor(description, wanted);
-        String recurrence = (String) rec;
-        assertEquals("oui", recurrence);
+        JSONObject recurrence = (JSONObject) rec;
+        assertEquals(WEEK.toString(), recurrence.getString("type"));
+        assertEquals(1, recurrence.getInt("unit"));
     }
 
     @Test

@@ -19,10 +19,19 @@ public class JSONBuilder {
 
         challenge.put("name", cb.getName());
         challenge.put("lifeSpan", parsePeriod(cb.getP()));
-        challenge.put("recurrence", new String("oui"));
+        challenge.put("recurrence", parseRecurrence(cb));
         challenge.put("levels", createLevels(cb));
 
         return challenge;
+    }
+
+    private static JSONObject parseRecurrence(ChallengeBuilder cb) {
+        JSONObject period = new JSONObject();
+
+        period.put("type", cb.getType().toString());
+        period.put("unit", cb.getTime());
+
+        return period;
     }
 
     private static JSONObject parsePeriod(Period p) {
@@ -128,9 +137,6 @@ public class JSONBuilder {
         expression.put("rightOperand", rightOperand);
         expression.put("comparator", c.getComparator());
         expression.put("counter", parseAtLeast(c.getWfv()));
-
-        // For now we don't use the WaitForValue
-        // and the WaitAfterOn
 
         return expression;
     }
