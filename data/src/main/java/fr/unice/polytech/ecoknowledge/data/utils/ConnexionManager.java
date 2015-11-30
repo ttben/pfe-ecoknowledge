@@ -1,6 +1,7 @@
 package fr.unice.polytech.ecoknowledge.data.utils;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
@@ -20,7 +21,9 @@ public class ConnexionManager {
     private ConnexionManager() {
         System.out.println("BDD URL is set to " + System.getenv("MONGOHQ_URL"));
 
-        mongo = new MongoClient(System.getenv("MONGOHQ_URL"));
+
+
+        mongo = new MongoClient(new MongoClientURI(System.getenv("MONGOHQ_URL")));
     }
 
     public static ConnexionManager getInstance() {
