@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.DAY;
 
-public class CompilationTest {
+public class COMP_ComplexChallengeTest {
 
     @Test
     public void complexChallenge(){

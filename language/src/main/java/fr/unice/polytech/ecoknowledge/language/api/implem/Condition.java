@@ -92,4 +92,7 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
                 '}';
     }
 
+    WaitForValue getWfv() {
+        return waitForValue;
+    }
 }

@@ -1,16 +1,22 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.implem.util.JsonSearcher;
 import junit.framework.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Map;
+
 import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.WEEK;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Sébastien on 30/11/2015.
  */
-public class ComparatorsTest {
+public class GEN_ComparatorsTest {
 
     @Test
     public void comparatorLowerThan(){
@@ -84,20 +90,18 @@ public class ComparatorsTest {
     }
 
     private String getComparatorForSimpleChallenge(JSONObject json){
-        JSONArray levels = json.getJSONArray("levels");
-        Assert.assertNotNull(levels);
 
-        JSONObject level = levels.getJSONObject(0);
-        Assert.assertNotNull(level);
+        ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
+        wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
+        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
+        wanted.add(new AbstractMap.SimpleEntry<>("conditions", JSONArray.class));
+        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
+        wanted.add(new AbstractMap.SimpleEntry<>("expression", JSONObject.class));
+        wanted.add(new AbstractMap.SimpleEntry<>("comparator", String.class));
 
-        JSONArray conditions = level.getJSONArray("conditions");
-        Assert.assertNotNull(conditions);
 
-        JSONObject condition = conditions.getJSONObject(0);
-        Assert.assertNotNull(condition);
-
-        JSONObject expression = condition.getJSONObject("expression");
-        return expression.getString("comparator");
+        Object c = JsonSearcher.lookFor(json, wanted);
+        return (String) c;
     }
 
 }

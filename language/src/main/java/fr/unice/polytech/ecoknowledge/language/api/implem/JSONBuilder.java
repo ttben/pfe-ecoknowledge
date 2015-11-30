@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.AT_LEAST_TYPE;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -126,11 +127,26 @@ public class JSONBuilder {
         expression.put("leftOperand", leftOperand);
         expression.put("rightOperand", rightOperand);
         expression.put("comparator", c.getComparator());
+        expression.put("counter", parseAtLeast(c.getWfv()));
 
         // For now we don't use the WaitForValue
         // and the WaitAfterOn
 
         return expression;
+    }
+
+    private static JSONObject parseAtLeast(WaitForValue w) {
+        JSONObject counter = new JSONObject();
+
+        if(w == null) {
+            counter.put("threshold", 100);
+            counter.put("type", AT_LEAST_TYPE.PERCENT.toString());
+        } else {
+            counter.put("threshold", w.getAtLeast());
+            counter.put("type", w.getType().toString());
+        }
+
+        return counter;
     }
 
 }

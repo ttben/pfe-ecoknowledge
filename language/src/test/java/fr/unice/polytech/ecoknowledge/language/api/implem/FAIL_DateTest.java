@@ -9,7 +9,7 @@ import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_
 /**
  * Created by Sébastien on 27/11/2015.
  */
-public class FailureTest {
+public class FAIL_DateTest {
 
     @Test
     public void dateFailure() {

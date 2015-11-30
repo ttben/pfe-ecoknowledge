@@ -97,4 +97,12 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
     void setType(AT_LEAST_TYPE type) {
         this.type = type;
     }
+
+    Integer getAtLeast() {
+        return atLeast;
+    }
+
+    AT_LEAST_TYPE getType() {
+        return type;
+    }
 }
