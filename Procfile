@@ -1,1 +1,1 @@
-web: java -jar server/target/server-1.0-SNAPSHOT-shaded.jar	
+web: java $JAVA_OPTS -cp target/classes:target/dependency/* Main
