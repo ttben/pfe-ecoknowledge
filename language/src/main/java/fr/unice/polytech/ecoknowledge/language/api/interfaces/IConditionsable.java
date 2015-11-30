@@ -8,5 +8,6 @@ public interface IConditionsable {
 
     public IConditionable averageOf(String sensor);
     public IConditionable valueOf(String sensor);
+    public IImprovable improve(String sensor);
 
 }

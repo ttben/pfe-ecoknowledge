@@ -58,6 +58,12 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
     }
 
     @Override
+    public IImprovable improve(String sensor) {
+        Improvement i = new Improvement(condition.getConditions(), sensor);
+        return i;
+    }
+
+    @Override
     ChallengeBuilder getChallengeBuilder() {
         return condition.getChallengeBuilder();
     }
