@@ -29,6 +29,7 @@ public class ChallengeBuilder implements IChallengeable {
     private DURATION_TYPE type = null;
     private Integer points = null;
     private List<Condition> conditions = new ArrayList<>();
+    private List<Improvement> improvements = new ArrayList<>();
 
     // Output
     private JSONObject description = null;
@@ -83,6 +84,9 @@ public class ChallengeBuilder implements IChallengeable {
     void addCondition(Condition c) {
         conditions.add(c);
     }
+    void addImprovement(Improvement i) {
+        improvements.add(i);
+    }
 
     // For tests
     ChallengeBuilder dontSend(){send = false; return this;}
@@ -115,6 +119,8 @@ public class ChallengeBuilder implements IChallengeable {
     List<Condition> getConditions() {
         return conditions;
     }
+
+    List<Improvement> getImprovements() {return improvements;}
 
     String getName() {
         return name;

@@ -2,6 +2,7 @@ package fr.unice.polytech.ecoknowledge.language.api.implem;
 
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionsable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IImprovable;
 
 /**
  * Created by Sébastien on 25/11/2015.
@@ -30,5 +31,11 @@ public class Conditions extends ChallengeBuilderGettable implements IConditionsa
         Condition c = new Condition(this, ConditionType.VALUE_OF, sensor);
         cb.addCondition(c);
         return c;
+    }
+
+    @Override
+    public IImprovable improve(String sensor) {
+        Improvement i = new Improvement(this, sensor);
+        return i;
     }
 }
