@@ -1,11 +1,11 @@
-package fr.unice.polytech.ecoknowledge.language;
+package fr.unice.polytech.ecoknowledge.language.api.implem;
 
-import fr.unice.polytech.ecoknowledge.language.api.implem.Challenge;
-import fr.unice.polytech.ecoknowledge.language.api.implem.ChallengeBuilder;
+import fr.unice.polytech.ecoknowledge.language.api.config.AddressReacher;
 import junit.framework.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.WEEK;
@@ -25,19 +25,16 @@ public class GenerationTest {
     public void simpleChallengeCreation(){
 
         ChallengeBuilder cb = Challenge.create("DSL done");
-
         cb
+                .dontSend() // Just because it's a test
                 .from(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
                 .rewards(2)
                 .withConditions()
                 .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
-                .end();
+        .end();
 
         description = cb.getDescription();
-
-
-        // System.out.println(description.toString(5));
     }
 
     @Test
@@ -46,7 +43,7 @@ public class GenerationTest {
 
         Assert.assertEquals("oui", description.get("recurrence"));
         Assert.assertNotNull(description.getJSONObject("lifeSpan"));
-        Assert.assertEquals("2015-11-23T00:00:01Z", description.getJSONObject("lifeSpan").getString("start"));
+        Assert.assertEquals("2015-11-23T00:00:00Z", description.getJSONObject("lifeSpan").getString("start"));
         Assert.assertEquals("2016-03-07T23:59:59Z", description.getJSONObject("lifeSpan").getString("end"));
         Assert.assertNotNull(description.getString("name"));
 
@@ -86,4 +83,26 @@ public class GenerationTest {
         Assert.assertNotNull(expression.getJSONObject("rightOperand").getInt("value"));
 
     }
+
+
+    @Ignore
+    @Test
+    public void sendForReal(){
+
+        ChallengeBuilder cb = Challenge.create("For real");
+        cb
+                .from(23,11,2015).to(7,3,2016)
+                .during(1, WEEK)
+                .rewards(2)
+                .withConditions()
+                .valueOf("We did it").greaterThan(9000)
+                .end();
+    }
+
+    @Test
+    public void address(){
+        Assert.assertNotNull(AddressReacher.getAddress());
+    }
+
+
 }

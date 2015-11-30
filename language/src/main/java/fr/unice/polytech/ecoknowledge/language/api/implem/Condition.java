@@ -63,6 +63,10 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
         return value;
     }
 
+    String getComparator() {
+        return comparator;
+    }
+
     @Override
     public String toString() {
         return "Condition{" +
@@ -73,7 +77,4 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
                 '}';
     }
 
-    String getComparator() {
-        return comparator;
-    }
 }
