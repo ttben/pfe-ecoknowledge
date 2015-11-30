@@ -18,7 +18,7 @@ public class Challenge implements VisitableComponent {
 	private String icon;
 	private List<Level> levels = new ArrayList<>();
 	private TimeBox timeSpan;
-	private String recurrence;
+	private Recurrence recurrence;
 
 	@JsonCreator
 	public Challenge(@JsonProperty(value = "id", required = false) String id,
@@ -26,7 +26,7 @@ public class Challenge implements VisitableComponent {
 					 @JsonProperty(value = "icon", required = false) String icon,
 					 @JsonProperty(value = "levels", required = true) List<Level> levels,
 					 @JsonProperty(value = "lifeSpan", required = true) TimeBox timeBox,
-					 @JsonProperty(value = "recurrence", required = true) String recurrence) {
+					 @JsonProperty(value = "recurrence", required = true) Recurrence recurrence) {
 
 		this.id = (id == null || id.isEmpty()) ? UUID.randomUUID() : UUID.fromString(id);
 		this.name = name;
@@ -44,11 +44,11 @@ public class Challenge implements VisitableComponent {
 		this.timeSpan = timeSpan;
 	}
 
-	public String getRecurrence() {
+	public Recurrence getRecurrence() {
 		return recurrence;
 	}
 
-	public void setRecurrence(String recurrence) {
+	public void setRecurrence(Recurrence recurrence) {
 		this.recurrence = recurrence;
 	}
 

@@ -4,7 +4,10 @@
     "start" :"2015-10-07T10:14:40Z",
     "end":"2015-10-10T11:22:40Z"
   },
-  "recurrence":"oui",
+  "recurrence":{
+    "type":"day",
+    "unit":1
+  },
   "levels": [
     {
       "name":"Bronze - Love is all you need",
