@@ -27,7 +27,7 @@ public class GenerationTest {
         ChallengeBuilder cb = Challenge.create("DSL done");
         cb
                 .dontSend() // Just because it's a test
-                .from(23,11,2015).to(7,3,2016)
+                .avalaibleFrom(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
                 .rewards(2)
                 .withConditions()
@@ -90,7 +90,7 @@ public class GenerationTest {
 
         ChallengeBuilder cb = Challenge.create("For real");
         cb
-                .from(23,11,2015).to(7,3,2016)
+                .avalaibleFrom(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
                 .rewards(2)
                 .withConditions()

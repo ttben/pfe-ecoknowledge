@@ -17,7 +17,7 @@ public class CompilationTest {
 
         Challenge.create("Arbitrary complex challenge")
                 .dontSend() // Just because it's a test
-                .from(2,11).to(1,4,16)
+                .avalaibleFrom(2,11).to(1,4,16)
                 .during(9, DAY)
                 .rewards(30)
                 .withConditions()
@@ -35,7 +35,7 @@ public class CompilationTest {
 
         Challenge.create("bite")
                 .dontSend() // Just because it's a test
-                .from(1).to(2, 3)
+                .avalaibleFrom(1).to(2, 3)
                 .during(3, DAY).rewards(-10)
                 .withConditions()
                 .valueOf("bite_length").greaterThan(30)
