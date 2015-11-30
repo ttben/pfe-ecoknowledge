@@ -1,11 +1,9 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.AT_LEAST_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IActiveDurationnableAndConditionsable;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionable;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionsable;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurationnableAndAndable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.*;
 
 /**
  * Created by Sébastien on 25/11/2015.
@@ -16,6 +14,9 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
     private WEEK_PERIOD period = null;
     private DAY_MOMENT moment = null;
     private WaitAfterOn wao = null;
+
+    private Integer atLeast = null;
+    private AT_LEAST_TYPE type = null;
 
     public WaitForValue(Condition condition) {
         this.condition = condition;
@@ -81,5 +82,27 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
     @Override
     public IConditionsable and() {
         return getCondition().getConditions();
+    }
+
+    @Override
+    public IAtLeastable atLeast(Integer value) {
+        setAtLeast(value);
+        return new ConditionLeast(this);
+    }
+
+    void setAtLeast(Integer atLeast) {
+        this.atLeast = atLeast;
+    }
+
+    void setType(AT_LEAST_TYPE type) {
+        this.type = type;
+    }
+
+    Integer getAtLeast() {
+        return atLeast;
+    }
+
+    AT_LEAST_TYPE getType() {
+        return type;
     }
 }

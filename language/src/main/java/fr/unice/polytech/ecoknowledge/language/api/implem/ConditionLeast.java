@@ -9,21 +9,27 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurat
  */
 public class ConditionLeast extends ChallengeBuilderGettable implements IAtLeastable {
 
-    private WaitAfterOn wao;
+    private WaitForValue wfv;
 
-    public ConditionLeast(WaitAfterOn waitAfterOn) {
-        wao = waitAfterOn;
+    public ConditionLeast(WaitForValue waitAfterOn) {
+        wfv = waitAfterOn;
     }
 
     @Override
     ChallengeBuilder getChallengeBuilder() {
-        return wao.getChallengeBuilder();
+        return wfv.getChallengeBuilder();
     }
 
     @Override
     public ISecondActiveDurationnableAndAndable percent() {
-        wao.setType(AT_LEAST_TYPE.PERCENT);
-        return wao;
+        wfv.setType(AT_LEAST_TYPE.PERCENT);
+        return wfv;
+    }
+
+    @Override
+    public ISecondActiveDurationnableAndAndable times() {
+        wfv.setType(AT_LEAST_TYPE.TIMES);
+        return wfv;
     }
 
 }

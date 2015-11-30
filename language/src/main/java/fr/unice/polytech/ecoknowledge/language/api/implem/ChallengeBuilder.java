@@ -44,19 +44,19 @@ public class ChallengeBuilder implements IChallengeable {
     // ------- API Methods ------- //
 
     @Override
-    public IDurationnable from(int day) {
+    public IDurationnable availableFrom(int day) {
         reinit();
         Period p = new Period(this, day);
         return p;
     }
     @Override
-    public IDurationnable from(int day, int month) {
+    public IDurationnable availableFrom(int day, int month) {
         reinit();
         Period p = new Period(this, day, month);
         return p;
     }
     @Override
-    public IDurationnable from(int day, int month, int year) {
+    public IDurationnable availableFrom(int day, int month, int year) {
         reinit();
         Period p = new Period(this, day, month, year);
         return p;

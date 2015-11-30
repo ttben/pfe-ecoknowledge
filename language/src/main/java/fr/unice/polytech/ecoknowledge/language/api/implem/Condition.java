@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IActiveDurationnable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IActiveDurationnableAndConditionsable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionable;
 
@@ -22,6 +23,20 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
         this.conditions = conditions;
         this.type = type;
         this.sensor = sensor;
+    }
+
+    @Override
+    public IActiveDurationnable equalsTo(Integer value) {
+        this.comparator = "=";
+        this.value = value;
+        return new WaitForValue(this);
+    }
+
+    @Override
+    public IActiveDurationnable differentFrom(Integer value) {
+        this.comparator = "!=";
+        this.value = value;
+        return new WaitForValue(this);
     }
 
     @Override
@@ -77,4 +92,7 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
                 '}';
     }
 
+    WaitForValue getWfv() {
+        return waitForValue;
+    }
 }

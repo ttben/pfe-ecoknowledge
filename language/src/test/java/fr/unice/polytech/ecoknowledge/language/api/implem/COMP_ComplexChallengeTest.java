@@ -10,14 +10,14 @@ import org.junit.Test;
 
 import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.DAY;
 
-public class CompilationTest {
+public class COMP_ComplexChallengeTest {
 
     @Test
-    public void structureCheck(){
+    public void complexChallenge(){
 
         Challenge.create("Arbitrary complex challenge")
                 .dontSend() // Just because it's a test
-                .from(2,11).to(1,4,16)
+                .availableFrom(2,11).to(1,4,16)
                 .during(9, DAY)
                 .rewards(30)
                 .withConditions()
@@ -31,16 +31,15 @@ public class CompilationTest {
     }
 
     @Test
-    public void franckWroteThisTest() {
+    public void atLeastAfterCompare(){
 
-        Challenge.create("bite")
+        Challenge.create("lowerThan().atLeast()")
                 .dontSend() // Just because it's a test
-                .from(1).to(2, 3)
-                .during(3, DAY).rewards(-10)
+                .availableFrom(3).to(4)
+                .during(1, DAY)
+                .rewards(2)
                 .withConditions()
-                .valueOf("bite_length").greaterThan(30)
-                .and()
-                .averageOf("caca_weight").lowerThan(10)
+                .valueOf("SENSOR").lowerThan(5).atLeast(5).times()
                 .end();
     }
 

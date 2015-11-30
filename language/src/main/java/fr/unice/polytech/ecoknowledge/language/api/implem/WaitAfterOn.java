@@ -15,8 +15,6 @@ public class WaitAfterOn extends ChallengeBuilderGettable implements ISecondActi
     private WaitForValue wfv;
     private WEEK_PERIOD period = null;
     private DAY_MOMENT moment = null;
-    private Integer atLeast = null;
-    private AT_LEAST_TYPE type = null;
 
     WaitAfterOn(WaitForValue waitForValue) {
         wfv = waitForValue;
@@ -34,8 +32,8 @@ public class WaitAfterOn extends ChallengeBuilderGettable implements ISecondActi
 
     @Override
     public IAtLeastable atLeast(Integer value) {
-        this.atLeast = value;
-        return new ConditionLeast(this);
+        wfv.setAtLeast(value);
+        return new ConditionLeast(wfv);
     }
 
     @Override
@@ -49,6 +47,6 @@ public class WaitAfterOn extends ChallengeBuilderGettable implements ISecondActi
     }
 
     void setType(AT_LEAST_TYPE type) {
-        this.type = type;
+        wfv.setType(type);
     }
 }

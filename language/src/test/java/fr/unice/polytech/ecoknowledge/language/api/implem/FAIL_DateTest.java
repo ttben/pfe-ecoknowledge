@@ -9,7 +9,8 @@ import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_
 /**
  * Created by Sébastien on 27/11/2015.
  */
-public class FailureTest {
+public class FAIL_DateTest {
+
     @Test
     public void dateFailure() {
 
@@ -18,7 +19,7 @@ public class FailureTest {
         try {
             Challenge.create("cb")
                     .dontSend() // Just because it's a test
-                    .from(48).to(2, 899, 2)
+                    .availableFrom(48).to(2, 899, 2)
                     .during(3, DAY).rewards(-10)
                     .withConditions()
                     .valueOf("smth").greaterThan(30)
