@@ -22,6 +22,7 @@ public class ChallengeService {
 			result = Controller.getInstance().createChallenge(json);
 		} catch (IOException e) {
 			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
 		}
 		return Response.ok().entity(result.toString()).build();
 	}

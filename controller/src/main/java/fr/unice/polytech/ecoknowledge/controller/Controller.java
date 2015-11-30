@@ -40,16 +40,13 @@ public class Controller {
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-
             Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
 
             jsonObject.addProperty("id",""+challenge.getId());
-            result = ChallengePersistence.store(jsonObject);
+            ChallengePersistence.store(jsonObject);
 
+            result = ChallengePersistence.read(challenge.getId().toString());
             Challenge newChallenge = (Challenge)objectMapper.readValue(result.toString(), Challenge.class);
-
-            System.out.println("OLD CHALLENGE : " + challenge.toString() + "\n\nNEW CHALLENGE : " + newChallenge.toString());
-
 
         } catch (JsonMappingException | JsonParseException e) {
             e.printStackTrace();
