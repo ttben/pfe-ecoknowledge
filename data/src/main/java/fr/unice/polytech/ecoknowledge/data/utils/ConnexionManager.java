@@ -18,6 +18,8 @@ public class ConnexionManager {
     }
 
     private ConnexionManager() {
+        System.out.println("BDD URL is set to " + System.getenv("MONGOHQ_URL"));
+
         mongo = new MongoClient(System.getenv("MONGOHQ_URL"));
     }
 
