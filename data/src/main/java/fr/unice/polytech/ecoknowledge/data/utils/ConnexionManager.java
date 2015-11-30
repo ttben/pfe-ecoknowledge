@@ -28,6 +28,7 @@ public class ConnexionManager {
             System.err.println("DEPLOYED MODE");
         }
         catch(Exception e) {
+            e.printStackTrace();
             local = true;
         }
 
