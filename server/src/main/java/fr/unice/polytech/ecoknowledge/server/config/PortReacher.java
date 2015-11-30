@@ -10,24 +10,28 @@ import java.util.Properties;
  */
 public class PortReacher {
 
-
     public static int getPort() {
-        System.out.println("Finding port.");
+        System.out.println("Retrieving server properties ...");
+
         Properties prop = new Properties();
         InputStream input = null;
         int res = 0;
-        try {
-            input = new FileInputStream("./server/target/classes/server.properties");
-        }catch (Throwable t){
-            System.err.println("Can't find server configs.");
-            System.err.println(t.getMessage());
+
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        input = classLoader.getResourceAsStream("server.properties");
+
+        if(input == null){
+            System.err.println("\n\t+! server.properties resource not found !+");
+            return -1;
         }
+
         try {
             prop.load(input);
             res = Integer.parseInt(prop.getProperty("port"));
         } catch (IOException e) {
-            System.err.println("Malformed server configs.");
+            System.err.println("\n\t+! Malformed server configs !");
         }
+        
         return res;
     }
 }
