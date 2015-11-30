@@ -15,5 +15,5 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public interface Operand {
 
 	boolean isRequired();
-	Object getValue();
+	Object getSymbolicName();
 }

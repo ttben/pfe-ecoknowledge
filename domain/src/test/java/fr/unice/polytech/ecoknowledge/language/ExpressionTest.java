@@ -47,28 +47,28 @@ public class ExpressionTest {
 	public void anExpression_WhenBuilt_ShouldHaveProperTypeOfLeftOperand() throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Expression result = objectMapper.readValue(jsonExpression.toString(), Expression.class);
-		assertTrue(result.getLeftOperand().getValue() instanceof String);
+		assertTrue(result.getLeftOperand().getSymbolicName() instanceof String);
 	}
 
 	@Test
 	public void anExpression_WhenBuilt_ShouldHaveProperValueOfLeftOperand() throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Expression result = objectMapper.readValue(jsonExpression.toString(), Expression.class);
-		assertEquals(symbolicName, result.getLeftOperand().getValue());
+		assertEquals(symbolicName, result.getLeftOperand().getSymbolicName());
 	}
 
 	@Test
 	public void anExpression_WhenBuilt_ShouldHaveProperTypeOfRightOperand() throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Expression result = objectMapper.readValue(jsonExpression.toString(), Expression.class);
-		assertTrue(result.getRightOperand().getValue() instanceof Double);
+		assertTrue(result.getRightOperand().getSymbolicName() instanceof Double);
 	}
 
 	@Test
 	public void anExpression_WhenBuilt_ShouldHaveProperValueOfRightOperand() throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Expression result = objectMapper.readValue(jsonExpression.toString(), Expression.class);
-		assertEquals(value, result.getRightOperand().getValue());
+		assertEquals(value, result.getRightOperand().getSymbolicName());
 	}
 
 	@Test

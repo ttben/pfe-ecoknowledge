@@ -17,13 +17,13 @@ public class ChallengeService {
 	@Consumes("application/json")
 	public Response addChallenge(String object) {
 		JsonObject json = new JsonParser().parse(object).getAsJsonObject();
-		JsonObject id = null;
+		JsonObject result = null;
 		try {
-			id = Controller.getInstance().createChallenge(json);
+			result = Controller.getInstance().createChallenge(json);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return Response.ok().entity(id.toString()).build();
+		return Response.ok().entity(result.toString()).build();
 	}
 
 
@@ -38,5 +38,11 @@ public class ChallengeService {
 			return  Response.ok(response.toString()).build();
 		return Response.status(Response.Status.NOT_FOUND).build();
 
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllChallenges() {
+		return Response.ok().entity(Controller.getInstance().getAllChallenges().toString()).build();
 	}
 }
