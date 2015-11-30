@@ -1,9 +1,8 @@
-package fr.unice.polytech.ecoknowledge.domain.calculator;
+package fr.unice.polytech.ecoknowledge.domain.views.goals;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
-import org.json.JSONArray;
+import fr.unice.polytech.ecoknowledge.domain.views.challenges.LevelView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,17 +57,8 @@ public class LevelResult {
 	}
 
 	public JsonObject toJsonForClient() {
-		JsonObject result = new JsonObject();
-
-		result.addProperty("name", level.getName());
+		JsonObject result = new LevelView(level).toJsonForClient();
 		result.addProperty("percent", this.correctRate);
-
-		JsonArray conditions = new JsonArray();
-		for(ConditionResult conditionResult : conditionResultList) {
-			conditions.add(conditionResult.toJsonForClient());
-		}
-
-		result.add("conditions", conditions);
 
 		return result;
 	}

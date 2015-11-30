@@ -2,11 +2,9 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.improve;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
-import fr.unice.polytech.ecoknowledge.domain.calculator.ConditionResult;
 
 public class ImproveCondition implements Condition{
 
@@ -39,11 +37,5 @@ public class ImproveCondition implements Condition{
 	@Override
 	public void accept(GoalVisitor goalVisitor) {
 		goalVisitor.visit(this);
-	}
-
-
-	@Override
-	public JsonObject toJsonForClient() {
-		return null;
 	}
 }

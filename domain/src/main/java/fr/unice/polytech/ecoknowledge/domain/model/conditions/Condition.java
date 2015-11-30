@@ -19,5 +19,5 @@ import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCon
 		@JsonSubTypes.Type(value = StandardCondition.class, name = "standard") }
 )
 public interface Condition extends VisitableComponent {
-	JsonObject toJsonForClient();
+
 }

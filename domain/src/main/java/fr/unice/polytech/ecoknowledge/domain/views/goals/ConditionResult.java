@@ -1,7 +1,8 @@
-package fr.unice.polytech.ecoknowledge.domain.calculator;
+package fr.unice.polytech.ecoknowledge.domain.views.goals;
 
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
+import fr.unice.polytech.ecoknowledge.domain.views.challenges.conditions.ConditionViewFactory;
 
 /**
  * Created by Benjamin on 26/11/2015.
@@ -49,7 +50,7 @@ public class ConditionResult {
 	public JsonObject toJsonForClient() {
 		JsonObject result = new JsonObject();
 
-		result = condition.toJsonForClient();
+		result = ConditionViewFactory.getView(condition).toJsonForClient();
 		result.addProperty("percent", this.correctRate);
 
 		return result;

@@ -73,17 +73,4 @@ public class StandardCondition extends BasicCondition {
 		return super.equals(standardCondition)
 				&& counter.equals(standardCondition.counter);
 	}
-
-
-	@Override
-	public JsonObject toJsonForClient() {
-		JsonObject result = new JsonObject();
-
-		String description = this.getExpression().getDescription();
-		description = description.concat(this.counter.toString());
-
-		result.addProperty("condition", description);
-
-		return result;
-	}
 }

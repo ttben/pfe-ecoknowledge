@@ -33,8 +33,6 @@ public class ChallengePersistence {
 		JsonParser parser = new JsonParser();
 		JsonObject persistedJsonObject = parser.parse(doc.toJson()).getAsJsonObject();
 
-		System.out.println("\n\nPERSISTED OBJECT : " + persistedJsonObject.toString());
-
 		return (JsonObject) persistedJsonObject;
 	}
 
@@ -42,9 +40,6 @@ public class ChallengePersistence {
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
 		MongoCollection<Document> collection = mongoDatabase.getCollection(COLLECTION_NAME);
-
-		JsonObject parameters = new JsonParser().parse("{ _id : false } ").getAsJsonObject();
-
 
 		Document result = collection.find(Filters.eq("id", projectId)).projection(Projections.exclude("_id")).first();
 

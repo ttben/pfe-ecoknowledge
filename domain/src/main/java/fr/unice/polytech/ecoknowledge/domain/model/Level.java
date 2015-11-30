@@ -69,20 +69,4 @@ public class Level implements VisitableComponent{
 				&& name.equals(level.name)
 				&& badge.equals(level.badge);
 	}
-
-	public JsonObject toJsonForClient() {
-		JsonObject result = new JsonObject();
-
-		result.addProperty("name", this.name);
-
-		JsonArray conditionsJsonArray = new JsonArray();
-		for(Condition condition : this.conditionList) {
-			JsonObject currentJsonOfCondition = condition.toJsonForClient();
-			conditionsJsonArray.add(currentJsonOfCondition);
-		}
-
-		result.add("conditions", conditionsJsonArray);
-
-		return result;
-	}
 }

@@ -100,46 +100,6 @@ public class Challenge implements VisitableComponent {
 				&& challenge.recurrence.equals(recurrence);
 	}
 
-	public JsonObject toJsonForClient() {
-		JsonObject result = new JsonObject();
-
-		result.addProperty("id", this.id.toString());
-		result.addProperty("name", this.name);
-
-		if(icon !=  null) {
-			result.addProperty("image", this.icon);
-		}
-
-		result.addProperty("startTime", this.timeSpan.getStart().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
-		result.addProperty("endTime", this.timeSpan.getEnd().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
-
-		String recurrence = "";
-
-		switch (this.recurrence) {
-			case "day" :
-				result.addProperty("length", "1 jour");
-				break;
-			case "week":
-				result.addProperty("length", "1 semaine");
-				break;
-			case "month":
-				result.addProperty("length", "1 month");
-				break;
-			default:
-				break;
-		}
-
-		JsonArray levelJson = new JsonArray();
-		for(Level level : this.levels) {
-			JsonObject currentJsonOfLevel = level.toJsonForClient();
-			levelJson.add(currentJsonOfLevel);
-		}
-
-		result.add("levels",levelJson);
-
-		return result;
-	}
-
 	public String getIcon() {
 		return icon;
 	}
