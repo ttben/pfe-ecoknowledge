@@ -38,4 +38,16 @@ public class Counter {
 				? "" + threshold + "% du temps"
 				: "" + threshold + "fois";
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Counter)) {
+			return false;
+		}
+
+		Counter counter = (Counter) obj;
+
+		return threshold.equals(counter.threshold)
+				&& counterType.equals(counter.counterType);
+	}
 }

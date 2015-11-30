@@ -21,4 +21,15 @@ public class Value implements Operand {
 	public Double getSymbolicName() {
 		return this.value;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Value)) {
+			return false;
+		}
+
+		Value value = (Value)obj;
+
+		return this.value == value.value;
+	}
 }

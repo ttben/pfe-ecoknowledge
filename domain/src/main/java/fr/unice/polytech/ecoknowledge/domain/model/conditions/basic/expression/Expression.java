@@ -52,4 +52,17 @@ public class Expression {
 	public String getDescription() {
 		return "" + leftOperand.getSymbolicName() + " " + comparator.toString() + " " + rightOperand.getSymbolicName();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Expression)) {
+			return false;
+		}
+
+		Expression expression = (Expression)obj;
+
+		return comparator.equals(expression.comparator)
+				&& leftOperand.equals(expression.leftOperand)
+				&& rightOperand.equals(expression.rightOperand);
+	}
 }

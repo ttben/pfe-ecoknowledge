@@ -78,4 +78,19 @@ public class Challenge implements VisitableComponent {
 
 		goalVisitor.visit(this);
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Challenge)) {
+			return false;
+		}
+
+		Challenge challenge = (Challenge)obj;
+
+		return challenge.id.equals(id)
+				&& challenge.name.equals(name)
+				&& challenge.levels.equals(levels)
+				&& challenge.timeSpan.equals(timeSpan)
+				&& challenge.recurrence.equals(recurrence);
+	}
 }

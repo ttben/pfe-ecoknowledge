@@ -54,4 +54,17 @@ public class Level implements VisitableComponent{
 
 		goalVisitor.visit(this);
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Level)) {
+			return false;
+		}
+
+		Level level = (Level) obj;
+
+		return conditionList.equals(level.conditionList)
+				&& name.equals(level.name)
+				&& badge.equals(level.badge);
+	}
 }

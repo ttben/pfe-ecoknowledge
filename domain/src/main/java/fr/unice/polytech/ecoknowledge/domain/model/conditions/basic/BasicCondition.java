@@ -33,4 +33,21 @@ public abstract class BasicCondition implements Condition {
 	public void setTargetDays(List<Day> targetDays) {
 		this.targetDays = targetDays;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof BasicCondition)) {
+			return false;
+		}
+
+		BasicCondition basicCondition = (BasicCondition) obj;
+
+		// FIXME: 30/11/2015 targetDays can not be null (not yet implemented)
+		if(targetDays != null) {
+			return expression.equals(basicCondition.expression)
+					&& targetDays.equals(basicCondition.targetDays);
+		} else {
+			return expression.equals(basicCondition.expression);
+		}
+	}
 }

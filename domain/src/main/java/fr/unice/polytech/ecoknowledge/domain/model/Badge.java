@@ -40,4 +40,17 @@ public class Badge {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Badge)) {
+			return false;
+		}
+
+		Badge badge = (Badge)obj;
+
+		return image.equals(badge.image)
+				&& reward.equals(badge.reward)
+				&& name.equals(badge.name);
+	}
 }

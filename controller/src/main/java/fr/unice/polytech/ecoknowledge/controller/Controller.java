@@ -4,9 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-import fr.unice.polytech.ecoknowledge.ChallengePersistance;
+import fr.unice.polytech.ecoknowledge.ChallengePersistence;
 import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.Model;
@@ -14,7 +12,6 @@ import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 
@@ -47,9 +44,12 @@ public class Controller {
             Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
 
             jsonObject.addProperty("id",""+challenge.getId());
-            result = ChallengePersistance.store(jsonObject);
+            result = ChallengePersistence.store(jsonObject);
 
             Challenge newChallenge = (Challenge)objectMapper.readValue(result.toString(), Challenge.class);
+
+            System.out.println("OLD CHALLENGE : " + challenge.toString() + "\n\nNEW CHALLENGE : " + newChallenge.toString());
+
 
         } catch (JsonMappingException | JsonParseException e) {
             e.printStackTrace();
@@ -91,7 +91,7 @@ public class Controller {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             Expression expression = (Expression)objectMapper.readValue(jsonObject.toString(), Expression.class);
-            //result = ChallengePersistance.store(jsonObject);
+            //result = ChallengePersistence.store(jsonObject);
         } catch (JsonMappingException | JsonParseException e) {
             e.printStackTrace();
             throw new InvalidParameterException("Can not build condition with specified parameters :\n " + e.getMessage());
@@ -108,7 +108,7 @@ public class Controller {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             Condition condition = (Condition)objectMapper.readValue(jsonObject.toString(), Condition.class);
-            //result = ChallengePersistance.store(jsonObject);
+            //result = ChallengePersistence.store(jsonObject);
         } catch (JsonMappingException | JsonParseException e) {
             e.printStackTrace();
             throw new InvalidParameterException("Can not build condition with specified parameters :\n " + e.getMessage());
@@ -124,7 +124,7 @@ public class Controller {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             Level level = (Level)objectMapper.readValue(jsonObject.toString(), Level.class);
-            //result = ChallengePersistance.store(jsonObject);
+            //result = ChallengePersistence.store(jsonObject);
         } catch (JsonMappingException | JsonParseException e) {
             e.printStackTrace();
             throw new InvalidParameterException("Can not build condition with specified parameters :\n " + e.getMessage());
