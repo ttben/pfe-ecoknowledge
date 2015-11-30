@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.ChallengePersistence;
+import fr.unice.polytech.ecoknowledge.data.ChallengePersistence;
 import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.Model;
@@ -131,8 +131,8 @@ public class Controller {
         return result;
     }
 
-    public JsonArray getAllChallenges() {
-        return ChallengePersistence.readAll();
+    public JsonArray getAllChallenges() throws IOException {
+        return this.model.getAllChallenges();
     }
 
     public boolean dropAllChallenges() {

@@ -1,8 +1,7 @@
-package fr.unice.polytech.ecoknowledge.connexion;
+package fr.unice.polytech.ecoknowledge.data.utils;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 /**

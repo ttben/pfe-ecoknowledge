@@ -15,7 +15,7 @@ public class CounterDeserializer extends JsonDeserializer<Counter> {
 			throws IOException, JsonProcessingException {
 		JsonNode node = jp.getCodec().readTree(jp);
 		String type = (node.get("type")).asText();
-		Double threshold = (node.get("threshold")).asDouble();
+		Integer threshold = (node.get("threshold")).asInt();
 
 		return new Counter(threshold, CounterType.fromString(type));
 	}

@@ -3,7 +3,7 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.unice.polytech.ecoknowledge.ChallengePersistence;
+import fr.unice.polytech.ecoknowledge.data.ChallengePersistence;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;

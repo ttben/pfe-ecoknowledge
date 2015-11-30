@@ -44,7 +44,12 @@ public class ChallengeService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllChallenges() {
-		return Response.ok().entity(Controller.getInstance().getAllChallenges().toString()).build();
+		try {
+			return Response.ok().entity(Controller.getInstance().getAllChallenges().toString()).build();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		}
 	}
 
 	@DELETE

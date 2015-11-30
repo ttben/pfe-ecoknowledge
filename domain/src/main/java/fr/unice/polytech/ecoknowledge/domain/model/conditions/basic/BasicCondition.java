@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 
+import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Day;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
@@ -50,4 +51,5 @@ public abstract class BasicCondition implements Condition {
 			return expression.equals(basicCondition.expression);
 		}
 	}
+
 }

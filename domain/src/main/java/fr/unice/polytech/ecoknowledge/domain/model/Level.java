@@ -2,6 +2,8 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 
@@ -66,5 +68,21 @@ public class Level implements VisitableComponent{
 		return conditionList.equals(level.conditionList)
 				&& name.equals(level.name)
 				&& badge.equals(level.badge);
+	}
+
+	public JsonObject toJsonForClient() {
+		JsonObject result = new JsonObject();
+
+		result.addProperty("name", this.name);
+
+		JsonArray conditionsJsonArray = new JsonArray();
+		for(Condition condition : this.conditionList) {
+			JsonObject currentJsonOfCondition = condition.toJsonForClient();
+			conditionsJsonArray.add(currentJsonOfCondition);
+		}
+
+		result.add("conditions", conditionsJsonArray);
+
+		return result;
 	}
 }

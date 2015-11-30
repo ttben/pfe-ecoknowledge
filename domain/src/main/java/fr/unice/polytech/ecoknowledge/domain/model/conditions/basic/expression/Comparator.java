@@ -42,4 +42,9 @@ public class Comparator {
 		Comparator otherComparator = (Comparator)o;
 		return otherComparator.comparator.equals(this.comparator);
 	}
+
+	@Override
+	public String toString() {
+		return this.comparator;
+	}
 }
