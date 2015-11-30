@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.data.ChallengePersistence;
+import fr.unice.polytech.ecoknowledge.domain.TestUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,30 +23,8 @@ public class ChallengePersistenceTest {
 
 	@Before
 	public void loadJsonFile() {
-		BufferedReader br = null;
-		String result = "";
 
-		try {
-
-			String currentLine;
-
-			br = new BufferedReader(new FileReader("./src/test/java/fr/unice/polytech/ecoknowledge/domain/model/challenge-example-sample1.json"));
-
-			while ((currentLine = br.readLine()) != null) {
-				result = result.concat(currentLine);
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null) br.close();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
-
-		jsonObject = new JsonParser().parse(result).getAsJsonObject();
+		jsonObject = TestUtils.getFakeJson();
 	}
 
 

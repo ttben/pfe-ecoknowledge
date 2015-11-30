@@ -3,6 +3,7 @@ package fr.unice.polytech.ecoknowledge.domain.calculator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fr.unice.polytech.ecoknowledge.domain.TestUtils;
 import fr.unice.polytech.ecoknowledge.domain.model.*;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.ConditionResult;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
@@ -52,35 +53,13 @@ public class AchievementProcessorVisitorStandardConditionTest {
 
 	@Before
 	public void setUp() throws IOException {
-		BufferedReader br = null;
-		String result = "";
-
-		try {
-
-			String currentLine;
-
-			br = new BufferedReader(new FileReader("./src/test/java/fr/unice/polytech/ecoknowledge/domain/calculator/challenge-example-sample1.json"));
-
-			while ((currentLine = br.readLine()) != null) {
-				result = result.concat(currentLine);
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null) br.close();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
 
 		Map<String, String> fakedSymbolicNameToSensorNamesMap = new HashMap<>();
 		fakedSymbolicNameToSensorNamesMap.put("TMP_CLI", aSensorName);
 		fakedSymbolicNameToSensorNamesMap.put("TMP_AMB", anotherSensorName);
 		willReturn(fakedSymbolicNameToSensorNamesMap).given(user).getSymbolicNameToSensorNameMap();
 
-		jsonObject = new JsonParser().parse(result).getAsJsonObject();
+		jsonObject = TestUtils.getFakeJson();
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
