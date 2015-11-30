@@ -22,13 +22,14 @@ public class ChallengeService {
 			result = Controller.getInstance().createChallenge(json);
 		} catch (IOException e) {
 			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
 		}
 		return Response.ok().entity(result.toString()).build();
 	}
 
 
 	@GET
-	@Path("/${challengeId}")
+	@Path("/{challengeId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getBadge(@PathParam("challengeId") String challengeId){
 
@@ -43,6 +44,22 @@ public class ChallengeService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllChallenges() {
-		return Response.ok().entity(Controller.getInstance().getAllChallenges().toString()).build();
+		try {
+			return Response.ok().entity(Controller.getInstance().getAllChallenges().toString()).build();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		}
+	}
+
+	@DELETE
+	public Response dropAllChallenges() {
+		return Response.ok().entity(Controller.getInstance().dropAllChallenges()).build();
+	}
+
+	@DELETE
+	@Path("/{challengeId}")
+	public Response dropAChallengeById(@PathParam("challengeId") String challengeId) {
+		return Response.ok().entity(Controller.getInstance().dropAChallenge(challengeId)).build();
 	}
 }

@@ -2,7 +2,10 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
+import org.joda.time.format.DateTimeFormat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +15,7 @@ public class Challenge implements VisitableComponent {
 
 	private UUID id;
 	private String name;
+	private String icon;
 	private List<Level> levels = new ArrayList<>();
 	private TimeBox timeSpan;
 	private String recurrence;
@@ -19,12 +23,14 @@ public class Challenge implements VisitableComponent {
 	@JsonCreator
 	public Challenge(@JsonProperty(value = "id", required = false) String id,
 					 @JsonProperty(value = "name", required = true) String name,
+					 @JsonProperty(value = "icon", required = false) String icon,
 					 @JsonProperty(value = "levels", required = true) List<Level> levels,
 					 @JsonProperty(value = "lifeSpan", required = true) TimeBox timeBox,
 					 @JsonProperty(value = "recurrence", required = true) String recurrence) {
 
 		this.id = (id == null || id.isEmpty()) ? UUID.randomUUID() : UUID.fromString(id);
 		this.name = name;
+		this.icon = icon;
 		this.levels = levels;
 		this.timeSpan = timeBox;
 		this.recurrence = recurrence;
@@ -92,5 +98,13 @@ public class Challenge implements VisitableComponent {
 				&& challenge.levels.equals(levels)
 				&& challenge.timeSpan.equals(timeSpan)
 				&& challenge.recurrence.equals(recurrence);
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 }

@@ -6,6 +6,9 @@ import fr.unice.polytech.ecoknowledge.domain.model.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.StandardCondition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Operand;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCondition;
+import fr.unice.polytech.ecoknowledge.domain.views.goals.ConditionResult;
+import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
+import fr.unice.polytech.ecoknowledge.domain.views.goals.LevelResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +51,7 @@ public class AchievementProcessor implements GoalVisitor {
 
 		double correctRate = percentageAchieved / currentLevelResult.size();
 
-		goalResult = new GoalResult(challenge.getName(), achieved, correctRate, currentLevelResult);
+		goalResult = new GoalResult(goal, achieved, correctRate, currentLevelResult);
 		currentLevelResult = new ArrayList<>();
 	}
 
@@ -64,7 +67,7 @@ public class AchievementProcessor implements GoalVisitor {
 
 		boolean achieved = correctRate >= 100.0;
 
-		LevelResult levelResult = new LevelResult(achieved, correctRate, level.getName(), currentConditionResult);
+		LevelResult levelResult = new LevelResult(achieved, correctRate, currentConditionResult, level);
 		currentLevelResult.add(levelResult);
 
 		currentConditionResult = new ArrayList<>();
@@ -112,7 +115,7 @@ public class AchievementProcessor implements GoalVisitor {
 		boolean achieved = achievedRate >= 100.0;
 
 		//	Build conditionResult
-		ConditionResult conditionResult = new ConditionResult(achieved, achievedRate, condition.getDescription());
+		ConditionResult conditionResult = new ConditionResult(achieved, achievedRate, condition);
 
 		currentConditionResult.add(conditionResult);
 	}

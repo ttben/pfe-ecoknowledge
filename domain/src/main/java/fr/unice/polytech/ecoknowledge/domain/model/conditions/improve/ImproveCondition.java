@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
-import fr.unice.polytech.ecoknowledge.domain.calculator.ConditionResult;
 
 public class ImproveCondition implements Condition{
 

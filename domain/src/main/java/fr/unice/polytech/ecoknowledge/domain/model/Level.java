@@ -2,6 +2,8 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 

@@ -3,8 +3,9 @@ package fr.unice.polytech.ecoknowledge.controller;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.ChallengePersistence;
+import fr.unice.polytech.ecoknowledge.data.ChallengePersistence;
 import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.Model;
@@ -40,16 +41,13 @@ public class Controller {
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-
             Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
 
             jsonObject.addProperty("id",""+challenge.getId());
-            result = ChallengePersistence.store(jsonObject);
+            ChallengePersistence.store(jsonObject);
 
+            result = ChallengePersistence.read(challenge.getId().toString());
             Challenge newChallenge = (Challenge)objectMapper.readValue(result.toString(), Challenge.class);
-
-            System.out.println("OLD CHALLENGE : " + challenge.toString() + "\n\nNEW CHALLENGE : " + newChallenge.toString());
-
 
         } catch (JsonMappingException | JsonParseException e) {
             e.printStackTrace();
@@ -133,7 +131,19 @@ public class Controller {
         return result;
     }
 
-    public JsonObject getAllChallenges() {
-        return null;
+    public JsonArray getAllChallenges() throws IOException {
+        return this.model.getAllChallenges();
+    }
+
+    public boolean dropAllChallenges() {
+        ChallengePersistence.drop();
+
+        return true;
+    }
+
+    public boolean dropAChallenge(String challengeId) {
+        ChallengePersistence.drop(challengeId);
+
+        return true;
     }
 }

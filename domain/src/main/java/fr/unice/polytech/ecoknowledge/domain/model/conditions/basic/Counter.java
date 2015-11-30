@@ -6,21 +6,21 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(using = CounterDeserializer.class)
 public class Counter {
-	private Double threshold;
+	private Integer threshold;
 	private CounterType counterType;
 
 	@JsonCreator
-	public Counter(@JsonProperty(value = "threshold", required = true) Double threshold,
+	public Counter(@JsonProperty(value = "threshold", required = true) Integer threshold,
 				   @JsonProperty(value = "type", required = true) CounterType counterType) {
 		this.threshold = threshold;
 		this.counterType = counterType;
 	}
 
-	public Double getThreshold() {
+	public Integer getThreshold() {
 		return threshold;
 	}
 
-	public void setThreshold(Double threshold) {
+	public void setThreshold(Integer threshold) {
 		this.threshold = threshold;
 	}
 
@@ -35,8 +35,8 @@ public class Counter {
 	@Override
 	public String toString() {
 		return (counterType.equals(CounterType.PERCENT_OF_TIME))
-				? "" + threshold + "% du temps"
-				: "" + threshold + "fois";
+				? " " + threshold + "% du temps"
+				: " " + threshold + " fois";
 	}
 
 	@Override
