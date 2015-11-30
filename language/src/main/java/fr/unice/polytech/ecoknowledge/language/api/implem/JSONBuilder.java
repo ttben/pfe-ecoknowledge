@@ -72,7 +72,7 @@ public class JSONBuilder {
 
         level.put("name", cb.getName());
         level.put("badge", createBadge(cb));
-        level.put("conditions", parseConditions(cb.getConditions()));
+        level.put("conditions", parseConditions(cb.getConditions(), cb.getImprovements()));
 
         return level;
     }
@@ -87,7 +87,7 @@ public class JSONBuilder {
         return badge;
     }
 
-    private static JSONArray parseConditions(List<Condition> conditions) {
+    private static JSONArray parseConditions(List<Condition> conditions, List<Improvement> improvements) {
         JSONArray conditionsA = new JSONArray();
 
         for(Condition c : conditions){
@@ -102,7 +102,22 @@ public class JSONBuilder {
 
         }
 
+        for(Improvement i : improvements){
+            conditionsA.put(parseImprovementCondition(i));
+        }
+
         return conditionsA;
+    }
+
+    private static JSONObject parseImprovementCondition(Improvement i) {
+        JSONObject improvement = new JSONObject();
+
+        improvement.put("type", "improve");
+        improvement.put("threshold", i.getImprovementValue());
+        improvement.put("symbolicName", i.getSensor());
+        improvement.put("referencePeriod", i.getImprovementPeriod().toString());
+
+        return improvement;
     }
 
     private static JSONObject parseOverAllCondition(Condition c) {
@@ -118,6 +133,7 @@ public class JSONBuilder {
 
         condition.put("type", "standard");
         condition.put("expression", parseExpression(c));
+        condition.put("counter", parseAtLeast(c.getWfv()));
 
         return condition;
     }
@@ -136,7 +152,6 @@ public class JSONBuilder {
         expression.put("leftOperand", leftOperand);
         expression.put("rightOperand", rightOperand);
         expression.put("comparator", c.getComparator());
-        expression.put("counter", parseAtLeast(c.getWfv()));
 
         return expression;
     }

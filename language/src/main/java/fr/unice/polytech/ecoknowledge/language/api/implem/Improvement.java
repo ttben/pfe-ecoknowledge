@@ -11,19 +11,20 @@ public class Improvement extends ChallengeBuilderGettable implements IImprovable
 
     private Conditions conditions;
     private String sensor;
-    private Integer improvementRate = null;
+
+    private Integer improvementValue = null;
 
     private OLD_PERIOD improvementPeriod = null;
 
     public Improvement(Conditions conditions, String sensor) {
         this.conditions = conditions;
         this.sensor = sensor;
-
+        getChallengeBuilder().addImprovement(this);
     }
 
     @Override
     public IImprovementPercentable by(int value) {
-        improvementRate = value;
+        improvementValue = value;
         Percentable p = new Percentable(this);
         return p;
     }
@@ -36,6 +37,19 @@ public class Improvement extends ChallengeBuilderGettable implements IImprovable
     @Override
     ChallengeBuilder getChallengeBuilder() {
         return conditions.getChallengeBuilder();
+    }
+
+
+    Integer getImprovementValue() {
+        return improvementValue;
+    }
+
+    String getSensor() {
+        return sensor;
+    }
+
+    OLD_PERIOD getImprovementPeriod() {
+        return improvementPeriod;
     }
 
     void setImprovementPeriod(OLD_PERIOD improvementPeriod) {

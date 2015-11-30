@@ -38,7 +38,6 @@ public class GEN_IncompleteTest {
         wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
         wanted.add(new AbstractMap.SimpleEntry<>("conditions", JSONArray.class));
         wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
-        wanted.add(new AbstractMap.SimpleEntry<>("expression", JSONObject.class));
         wanted.add(new AbstractMap.SimpleEntry<>("counter", JSONObject.class));
 
         Object c = JsonSearcher.lookFor(cb.getDescription(), wanted);
