@@ -17,6 +17,11 @@ public class Main {
 
         int port = PortReacher.getPort();
 
+        if(System.getenv("PORT") != null) {
+            System.out.println("\nPORT environment variable is set to " + System.getenv("PORT") + ". Try to start server on it ...");
+            port = Integer.parseInt(System.getenv("PORT"));
+        }
+
         Server jettyServer = new Server(port);
         jettyServer.setHandler(context);
 
