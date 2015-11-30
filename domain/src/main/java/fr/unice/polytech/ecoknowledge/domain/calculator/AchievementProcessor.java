@@ -64,7 +64,7 @@ public class AchievementProcessor implements GoalVisitor {
 
 		boolean achieved = correctRate >= 100.0;
 
-		LevelResult levelResult = new LevelResult(achieved, correctRate, level.getName(), currentConditionResult);
+		LevelResult levelResult = new LevelResult(achieved, correctRate, currentConditionResult, level);
 		currentLevelResult.add(levelResult);
 
 		currentConditionResult = new ArrayList<>();
@@ -112,7 +112,7 @@ public class AchievementProcessor implements GoalVisitor {
 		boolean achieved = achievedRate >= 100.0;
 
 		//	Build conditionResult
-		ConditionResult conditionResult = new ConditionResult(achieved, achievedRate, condition.getDescription());
+		ConditionResult conditionResult = new ConditionResult(achieved, achievedRate, condition);
 
 		currentConditionResult.add(conditionResult);
 	}

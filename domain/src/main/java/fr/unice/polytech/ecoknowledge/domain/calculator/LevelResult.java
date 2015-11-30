@@ -1,5 +1,10 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import fr.unice.polytech.ecoknowledge.domain.model.Level;
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,14 +14,14 @@ import java.util.List;
 public class LevelResult {
 	private boolean achieved;
 	private double correctRate;
-	private String description;
+	private Level level;
 
 	private List<ConditionResult> conditionResultList = new ArrayList<>();
 
-	public LevelResult(boolean achieved, double correctRate, String description, List<ConditionResult> conditionResultList) {
+	public LevelResult(boolean achieved, double correctRate, List<ConditionResult> conditionResultList, Level level) {
 		this.achieved = achieved;
 		this.correctRate = correctRate;
-		this.description = description;
+		this.level = level;
 		this.conditionResultList = conditionResultList;
 	}
 
@@ -36,12 +41,12 @@ public class LevelResult {
 		this.correctRate = correctRate;
 	}
 
-	public String getDescription() {
-		return description;
+	public Level getLevel() {
+		return level;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setLevel(Level level) {
+		this.level = level;
 	}
 
 	public List<ConditionResult> getConditionResultList() {
@@ -50,5 +55,21 @@ public class LevelResult {
 
 	public void setConditionResultList(List<ConditionResult> conditionResultList) {
 		this.conditionResultList = conditionResultList;
+	}
+
+	public JsonObject toJsonForClient() {
+		JsonObject result = new JsonObject();
+
+		result.addProperty("name", level.getName());
+		result.addProperty("percent", this.correctRate);
+
+		JsonArray conditions = new JsonArray();
+		for(ConditionResult conditionResult : conditionResultList) {
+			conditions.add(conditionResult.toJsonForClient());
+		}
+
+		result.add("conditions", conditions);
+
+		return result;
 	}
 }

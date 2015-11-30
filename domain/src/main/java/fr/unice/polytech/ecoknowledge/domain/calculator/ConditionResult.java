@@ -1,17 +1,20 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
+import com.google.gson.JsonObject;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
+
 /**
  * Created by Benjamin on 26/11/2015.
  */
 public class ConditionResult {
 	private boolean achieved;
 	private double correctRate;
-	private String description;
+	private Condition condition;
 
-	public ConditionResult(boolean achieved, double correctRate, String description) {
+	public ConditionResult(boolean achieved, double correctRate, Condition condition) {
 		this.achieved = achieved;
 		this.correctRate = correctRate;
-		this.description = description;
+		this.condition = condition;
 	}
 
 	public boolean isAchieved() {
@@ -30,16 +33,25 @@ public class ConditionResult {
 		this.correctRate = correctRate;
 	}
 
-	public String getDescription() {
-		return description;
+	public Condition getCondition() {
+		return condition;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setCondition(Condition condition) {
+		this.condition = condition;
 	}
 
 	@Override
 	public String toString() {
-		return "Condition " + description + " achieved at " + correctRate + " so achieved ? " + achieved;
+		return "Condition " + condition + " achieved at " + correctRate + " so achieved ? " + achieved;
+	}
+
+	public JsonObject toJsonForClient() {
+		JsonObject result = new JsonObject();
+
+		result = condition.toJsonForClient();
+		result.addProperty("percent", this.correctRate);
+
+		return result;
 	}
 }
