@@ -19,7 +19,8 @@ public class ConnexionManager {
     }
 
     private ConnexionManager() {
-        System.err.println("BDD URL is set to:" + System.getenv("MONGOHQ_URL"));
+        System.err.println("BDD URL SET TO");
+        System.err.println(System.getenv("MONGOHQ_URL"));
 
         //mongo ds059524.mongolab.com:59524/heroku_3jmsqjbq -u pfe -p ecoknowledge
         //   mongodb://username:password@host1:port1/database
