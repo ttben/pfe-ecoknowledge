@@ -18,7 +18,18 @@ public class SymbolicName implements Operand {
 	}
 
 	@Override
-	public String getValue() {
+	public String getSymbolicName() {
 		return this.name;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof SymbolicName)) {
+			return false;
+		}
+
+		SymbolicName symbolicName = (SymbolicName) obj;
+
+		return name.equals(symbolicName.name);
 	}
 }

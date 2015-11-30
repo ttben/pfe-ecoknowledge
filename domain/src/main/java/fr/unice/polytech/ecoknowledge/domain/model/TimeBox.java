@@ -3,6 +3,8 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 @JsonDeserialize(using = TimeBoxDeserializer.class)
 public class TimeBox {
@@ -31,5 +33,22 @@ public class TimeBox {
 
 	public void setEnd(DateTime end) {
 		this.end = end;
+	}
+
+	@Override
+	public String toString() {
+		return start.toString(DateTimeFormat.forPattern("dd/mm/yyyy HH:mm:ss"))
+				+ "  -  "
+				+ end.toString(DateTimeFormat.forPattern("dd/mm/yyyy HH:mm:ss"));
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if(! (o instanceof TimeBox)) {
+			return false;
+		}
+
+		TimeBox timeBox = (TimeBox)o;
+		return timeBox.start.equals(start) && timeBox.end.equals(end);
 	}
 }

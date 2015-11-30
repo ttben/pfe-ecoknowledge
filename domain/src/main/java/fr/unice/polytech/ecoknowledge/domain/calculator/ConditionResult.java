@@ -37,4 +37,9 @@ public class ConditionResult {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	@Override
+	public String toString() {
+		return "Condition " + description + " achieved at " + correctRate + " so achieved ? " + achieved;
+	}
 }

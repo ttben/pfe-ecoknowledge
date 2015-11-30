@@ -1,7 +1,6 @@
 package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public enum CounterType {
 
@@ -18,8 +17,19 @@ public enum CounterType {
 		this.counterType = counterType;
 	}
 
-	@JsonCreator
-	CounterType(@JsonProperty(value = "type", required = true) String counterType) {
+
+	public static CounterType fromString(String text) {
+		if (text != null) {
+			for (CounterType b : CounterType.values()) {
+				if (text.equalsIgnoreCase(b.counterType)) {
+					return b;
+				}
+			}
+		}
+		throw new IllegalArgumentException("Field " + text + " does not exist on counter object");
+	}
+
+	CounterType(String counterType) {
 		this.counterType = counterType;
 	}
 }

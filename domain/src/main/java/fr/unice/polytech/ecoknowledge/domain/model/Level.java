@@ -2,12 +2,13 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Level {
+public class Level implements VisitableComponent{
 	private List<Condition> conditionList = new ArrayList<>();
 	private String name;
 	private Badge badge;
@@ -43,5 +44,27 @@ public class Level {
 
 	public void setBadge(Badge badge) {
 		this.badge = badge;
+	}
+
+	@Override
+	public void accept(GoalVisitor goalVisitor) {
+		for(VisitableComponent visitableComponent : conditionList) {
+			visitableComponent.accept(goalVisitor);
+		}
+
+		goalVisitor.visit(this);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Level)) {
+			return false;
+		}
+
+		Level level = (Level) obj;
+
+		return conditionList.equals(level.conditionList)
+				&& name.equals(level.name)
+				&& badge.equals(level.badge);
 	}
 }

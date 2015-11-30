@@ -14,5 +14,14 @@ public class Day {
 		this.targetHours = targetHours;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Day)) {
+			return false;
+		}
 
+		Day day = (Day)obj;
+
+		return targetHours.equals(day.targetHours);
+	}
 }
