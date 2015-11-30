@@ -20,6 +20,7 @@ public class ConnexionManager {
 
     private ConnexionManager() {
         mongo = new MongoClient(System.getenv("MONGOHQ_URL"), 27017);
+
     }
 
     public static ConnexionManager getInstance() {
