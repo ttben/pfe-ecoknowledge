@@ -7,8 +7,8 @@ import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
  */
 public interface IChallengeable {
 
-    public IDurationnable avalaibleFrom(int day);
-    public IDurationnable avalaibleFrom(int day, int month);
-    public IDurationnable avalaibleFrom(int day, int month, int year);
+    public IDurationnable availableFrom(int day);
+    public IDurationnable availableFrom(int day, int month);
+    public IDurationnable availableFrom(int day, int month, int year);
 
 }

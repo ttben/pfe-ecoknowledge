@@ -1,6 +1,7 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
 import fr.unice.polytech.ecoknowledge.language.api.config.AddressReacher;
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
 import junit.framework.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,11 +28,11 @@ public class GenerationTest {
         ChallengeBuilder cb = Challenge.create("DSL done");
         cb
                 .dontSend() // Just because it's a test
-                .avalaibleFrom(23,11,2015).to(7,3,2016)
+                .availableFrom(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
                 .rewards(2)
                 .withConditions()
-                .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
+                .valueOf("BENNI_RAGE_QUIT").lowerThan(1).atLeast(5).times()
         .end();
 
         description = cb.getDescription();
@@ -90,7 +91,7 @@ public class GenerationTest {
 
         ChallengeBuilder cb = Challenge.create("For real");
         cb
-                .avalaibleFrom(23,11,2015).to(7,3,2016)
+                .availableFrom(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
                 .rewards(2)
                 .withConditions()

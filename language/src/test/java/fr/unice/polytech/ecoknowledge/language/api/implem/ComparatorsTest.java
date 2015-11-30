@@ -18,7 +18,7 @@ public class ComparatorsTest {
         ChallengeBuilder cb = Challenge.create("comparatorLT");
         cb
                 .dontSend() // Just because it's a test
-                .avalaibleFrom(1).to(2)
+                .availableFrom(1).to(2)
                 .during(2, WEEK)
                 .rewards(2)
                 .withConditions()
@@ -36,7 +36,7 @@ public class ComparatorsTest {
         ChallengeBuilder cb = Challenge.create("comparatorGT");
         cb
                 .dontSend() // Just because it's a test
-                .avalaibleFrom(1).to(2)
+                .availableFrom(1).to(2)
                 .during(2, WEEK)
                 .rewards(2)
                 .withConditions()
@@ -53,7 +53,7 @@ public class ComparatorsTest {
         ChallengeBuilder cb = Challenge.create("comparatorLT");
         cb
                 .dontSend() // Just because it's a test
-                .avalaibleFrom(1).to(2)
+                .availableFrom(1).to(2)
                 .during(2, WEEK)
                 .rewards(2)
                 .withConditions()
@@ -71,7 +71,7 @@ public class ComparatorsTest {
         ChallengeBuilder cb = Challenge.create("comparatorDF");
         cb
                 .dontSend() // Just because it's a test
-                .avalaibleFrom(1).to(2)
+                .availableFrom(1).to(2)
                 .during(2, WEEK)
                 .rewards(2)
                 .withConditions()
