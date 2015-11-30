@@ -84,7 +84,6 @@ public class GenerationTest {
 
     }
 
-
     @Ignore
     @Test
     public void sendForReal(){
@@ -98,6 +97,7 @@ public class GenerationTest {
                 .valueOf("We did it").greaterThan(9000)
                 .end();
     }
+
 
     @Test
     public void address(){
