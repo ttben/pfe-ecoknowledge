@@ -97,15 +97,7 @@ public class JSONBuilder {
         JSONArray conditionsA = new JSONArray();
 
         for(Condition c : conditions){
-            switch (c.getType()){
-                case AVERAGE:
-                    conditionsA.put(parseOverAllCondition(c));
-                    break;
-                case VALUE_OF:
-                    conditionsA.put(parseStandardCondition(c));
-                    break;
-            }
-
+            conditionsA.put(parseStandardCondition(c));
         }
 
         for(Improvement i : improvements){
@@ -127,18 +119,10 @@ public class JSONBuilder {
         return improvement;
     }
 
-    private static JSONObject parseOverAllCondition(Condition c) {
-        JSONObject condition = new JSONObject();
-
-        // TODO
-
-        return condition;
-    }
-
     private static JSONObject parseStandardCondition(Condition c) {
         JSONObject condition = new JSONObject();
 
-        condition.put("type", "standard");
+        condition.put("type", c.getType().toString());
         condition.put("expression", parseExpression(c));
         condition.put("targetTime", parseTargetTime(c.getWfv()));
         condition.put("counter", parseAtLeast(c.getWfv()));
