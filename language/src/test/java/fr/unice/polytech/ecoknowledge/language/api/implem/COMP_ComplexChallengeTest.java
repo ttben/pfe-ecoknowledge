@@ -17,7 +17,7 @@ public class COMP_ComplexChallengeTest {
 
         Challenge.create("Arbitrary complex challenge")
                 .dontSend() // Just because it's a test
-                .availableFrom(2,11).to(1,4,16)
+                .availableFrom(2,11,2015).to(1,4,2016)
                 .during(9, DAY)
                 .rewards(30)
                 .withConditions()

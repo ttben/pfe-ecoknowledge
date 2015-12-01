@@ -24,6 +24,11 @@ public class Improvement extends ChallengeBuilderGettable implements IImprovable
 
     @Override
     public IImprovementPercentable by(int value) {
+        if(value > 100){
+        throw new IllegalArgumentException("Can't have more than 100% time condition");
+    } else if(value < 1){
+        throw new IllegalArgumentException("Can't have less than 1% time condition");
+    }
         improvementValue = value;
         Percentable p = new Percentable(this);
         return p;

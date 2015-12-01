@@ -22,12 +22,20 @@ public class ConditionLeast extends ChallengeBuilderGettable implements IAtLeast
 
     @Override
     public ISecondActiveDurationnableAndAndable percent() {
+        if(wfv.getAtLeast() > 100){
+            throw new IllegalArgumentException("Can't have more than 100% time condition");
+        } else if(wfv.getAtLeast() < 1){
+            throw new IllegalArgumentException("Can't have less than 1% time condition");
+        }
         wfv.setType(AT_LEAST_TYPE.PERCENT);
         return wfv;
     }
 
     @Override
     public ISecondActiveDurationnableAndAndable times() {
+        if(wfv.getAtLeast() < 1){
+            throw new IllegalArgumentException("Can't have less than 1 time condition");
+        }
         wfv.setType(AT_LEAST_TYPE.TIMES);
         return wfv;
     }
