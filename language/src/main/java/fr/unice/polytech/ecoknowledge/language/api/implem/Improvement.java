@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.LevelBuilderGettable;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.OLD_PERIOD;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IImprovable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IImprovementPercentable;
@@ -7,7 +8,7 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.IImprovementPercen
 /**
  * Created by Sébastien on 30/11/2015.
  */
-public class Improvement extends ChallengeBuilderGettable implements IImprovable {
+public class Improvement extends LevelBuilderGettable implements IImprovable {
 
     private Conditions conditions;
     private String sensor;
@@ -21,7 +22,7 @@ public class Improvement extends ChallengeBuilderGettable implements IImprovable
         this.conditions = conditions;
         this.sensor = sensor;
         this.type = type;
-        getChallengeBuilder().addImprovement(this);
+        getLevel().addImprovement(this);
     }
 
     @Override
@@ -36,16 +37,9 @@ public class Improvement extends ChallengeBuilderGettable implements IImprovable
         return p;
     }
 
-
     Conditions getConditions() {
         return conditions;
     }
-
-    @Override
-    ChallengeBuilder getChallengeBuilder() {
-        return conditions.getChallengeBuilder();
-    }
-
 
     Integer getImprovementValue() {
         return improvementValue;
@@ -65,5 +59,10 @@ public class Improvement extends ChallengeBuilderGettable implements IImprovable
 
     IMPROVEMENT_TYPE getType() {
         return type;
+    }
+
+    @Override
+    protected Level getLevel() {
+        return conditions.getLevel();
     }
 }

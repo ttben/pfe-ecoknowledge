@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.LevelBuilderGettable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IActiveDurationnable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IActiveDurationnableAndConditionsable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionable;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by Sébastien on 25/11/2015.
  */
-public class Condition extends ChallengeBuilderGettable implements IConditionable {
+public class Condition extends LevelBuilderGettable implements IConditionable {
 
     private Conditions conditions;
     private ConditionType type = null;
@@ -53,11 +54,6 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
         return new WaitForValue(this);
     }
 
-    @Override
-    ChallengeBuilder getChallengeBuilder() {
-        return conditions.getChallengeBuilder();
-    }
-
     Conditions getConditions() {
         return conditions;
     }
@@ -84,5 +80,10 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
 
     WaitForValue getWfv() {
         return waitForValue;
+    }
+
+    @Override
+    protected Level getLevel() {
+        return conditions.getLevel();
     }
 }

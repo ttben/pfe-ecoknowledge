@@ -19,13 +19,14 @@ public class COMP_ComplexChallengeTest {
                 .dontSend() // Just because it's a test
                 .availableFrom(2,11,2015).to(1,4,2016)
                 .during(9, DAY)
-                .rewards(30)
-                .withConditions()
-                .averageOf("SOMETHING").greaterThan(30).on(WEEK_PERIOD.WEEK_DAYS, DAY_MOMENT.AFTERNOON)
-                .and()
-                .valueOf("SOMETHING_ELSE").lowerThan(2)
-                .and()
-                .valueOf("SOMETHING_ELSE_AGAIN").lowerThan(30).on(WEEK_PERIOD.WEEK_DAYS).atLeast(3).percent()
+                .atLevel("First level")
+                    .rewards(30)
+                    .withConditions()
+                    .averageOf("SOMETHING").greaterThan(30).on(WEEK_PERIOD.WEEK_DAYS, DAY_MOMENT.AFTERNOON)
+                    .and()
+                    .valueOf("SOMETHING_ELSE").lowerThan(2)
+                    .and()
+                    .valueOf("SOMETHING_ELSE_AGAIN").lowerThan(30).on(WEEK_PERIOD.WEEK_DAYS).atLeast(3).percent()
                 .end();
 
     }
@@ -37,9 +38,10 @@ public class COMP_ComplexChallengeTest {
                 .dontSend() // Just because it's a test
                 .availableFrom(3).to(4)
                 .during(1, DAY)
-                .rewards(2)
-                .withConditions()
-                .valueOf("SENSOR").lowerThan(5).atLeast(5).times()
+                .atLevel("level")
+                    .rewards(2)
+                    .withConditions()
+                    .valueOf("SENSOR").lowerThan(5).atLeast(5).times()
                 .end();
     }
 

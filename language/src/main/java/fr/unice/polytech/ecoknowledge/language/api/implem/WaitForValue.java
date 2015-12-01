@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.LevelBuilderGettable;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.AT_LEAST_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
@@ -8,7 +9,7 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.*;
 /**
  * Created by Sébastien on 25/11/2015.
  */
-public class WaitForValue extends ChallengeBuilderGettable implements IActiveDurationnableAndConditionsable {
+public class WaitForValue extends LevelBuilderGettable implements IActiveDurationnableAndConditionsable {
 
     private Condition condition;
     private WEEK_PERIOD period = null;
@@ -41,21 +42,20 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
 
     @Override
     public void end() {
-        getChallengeBuilder().end();
-
+        getLevel().end();
     }
 
     @Override
     public IConditionable averageOf(String sensor) {
         Condition c = new Condition(this.getCondition().getConditions(), ConditionType.AVERAGE, sensor);
-        getChallengeBuilder().addCondition(c);
+        getLevel().addCondition(c);
         return c;
     }
 
     @Override
     public IConditionable valueOf(String sensor) {
         Condition c = new Condition(this.getCondition().getConditions(), ConditionType.VALUE_OF, sensor);
-        getChallengeBuilder().addCondition(c);
+        getLevel().addCondition(c);
         return c;
     }
 
@@ -69,11 +69,6 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
     public IImprovable decrease(String sensor) {
         Improvement i = new Improvement(condition.getConditions(), sensor, IMPROVEMENT_TYPE.DECREASE);
         return i;
-    }
-
-    @Override
-    ChallengeBuilder getChallengeBuilder() {
-        return condition.getChallengeBuilder();
     }
 
     void addWaitAfterOn(WaitAfterOn wao){
@@ -117,5 +112,15 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
 
     DAY_MOMENT getMoment() {
         return moment;
+    }
+
+    @Override
+    protected Level getLevel() {
+        return condition.getLevel();
+    }
+
+    @Override
+    public IRewardable atLevel(String levelName) {
+        return getLevel().newLevel(levelName);
     }
 }

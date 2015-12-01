@@ -31,9 +31,10 @@ public class GEN_BadgeTest {
                         "dcc6f991541e0ea8462e6d3de93f9f69e4a5d43be170ec4b25fdc113549843b0/happy-jpg.jpg")
                 .availableFrom(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
-                .rewards(2)
-                .withConditions()
-                .valueOf("BENNI_RAGE_QUIT").lowerThan(1).atLeast(5).times()
+                .atLevel("level")
+                    .rewards(2)
+                    .withConditions()
+                        .valueOf("BENNI_RAGE_QUIT").lowerThan(1).atLeast(5).times()
                 .end();
 
         description = cb.getDescription();
@@ -42,10 +43,8 @@ public class GEN_BadgeTest {
     @Test
     public void checkIcon(){
 
+        System.out.println(description);
         ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
-        wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
-        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
-        wanted.add(new AbstractMap.SimpleEntry<>("badge", JSONObject.class));
         wanted.add(new AbstractMap.SimpleEntry<>("image", String.class));
 
         Object i = JsonSearcher.lookFor(description, wanted);

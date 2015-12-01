@@ -29,9 +29,7 @@ public class ChallengeBuilder implements IChallengeableIcon {
     private Period p = null;
     private Integer time = null;
     private DURATION_TYPE type = null;
-    private Integer points = null;
-    private List<Condition> conditions = new ArrayList<>();
-    private List<Improvement> improvements = new ArrayList<>();
+    private List<Level> levels = new ArrayList<>();
 
     // Output
     private JSONObject description = null;
@@ -90,13 +88,6 @@ public class ChallengeBuilder implements IChallengeableIcon {
         p = period;
     }
 
-    void addCondition(Condition c) {
-        conditions.add(c);
-    }
-    void addImprovement(Improvement i) {
-        improvements.add(i);
-    }
-
     // For tests
     ChallengeBuilder dontSend(){send = false; return this;}
 
@@ -104,8 +95,6 @@ public class ChallengeBuilder implements IChallengeableIcon {
         p = null;
         time = null;
         type = null;
-        points = null;
-        conditions = new ArrayList<>();
         description = null;
     }
 
@@ -120,16 +109,6 @@ public class ChallengeBuilder implements IChallengeableIcon {
     DURATION_TYPE getType() {
         return type;
     }
-
-    Integer getPoints() {
-        return points;
-    }
-
-    List<Condition> getConditions() {
-        return conditions;
-    }
-
-    List<Improvement> getImprovements() {return improvements;}
 
     String getName() {
         return name;
@@ -147,12 +126,15 @@ public class ChallengeBuilder implements IChallengeableIcon {
         this.type = type;
     }
 
-    void setPoints(Integer points) {
-        this.points = points;
-    }
-
     String getIcon() {
         return iconURL;
     }
 
+    List<Level> getLevels() {
+        return levels;
+    }
+
+    void addLevel(Level level) {
+        levels.add(level);
+    }
 }

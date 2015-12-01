@@ -23,6 +23,7 @@ public class JSONBuilder {
         challenge.put("lifeSpan", parsePeriod(cb.getP()));
         challenge.put("recurrence", parseRecurrence(cb));
         challenge.put("levels", createLevels(cb));
+        challenge.put("image", cb.getIcon()==null?"":cb.getIcon());
 
         return challenge;
     }
@@ -64,27 +65,29 @@ public class JSONBuilder {
     private static JSONArray createLevels(ChallengeBuilder cb) {
         JSONArray levels = new JSONArray();
 
-        levels.put(createLevel(cb));
+        for(Level l : cb.getLevels()) {
+            levels.put(createLevel(l));
+        }
 
         return levels;
     }
 
-    private static JSONObject createLevel(ChallengeBuilder cb) {
+    private static JSONObject createLevel(Level l) {
         JSONObject level = new JSONObject();
 
-        level.put("name", cb.getName());
-        level.put("badge", createBadge(cb));
-        level.put("conditions", parseConditions(cb.getConditions(), cb.getImprovements()));
+        level.put("name", l.getName());
+        level.put("badge", createBadge(l));
+        level.put("conditions", parseConditions(l.getConditions(), l.getImprovements()));
 
         return level;
     }
 
-    private static JSONObject createBadge(ChallengeBuilder cb) {
+    private static JSONObject createBadge(Level l) {
         JSONObject badge = new JSONObject();
 
-        badge.put("name", cb.getName());
-        badge.put("reward", cb.getPoints());
-        badge.put("image", cb.getIcon()==null?"":cb.getIcon());
+        badge.put("name", l.getName());
+        badge.put("reward", l.getPoints());
+        //badge.put("image", l.getIcon()==null?"":l.getIcon());
 
         return badge;
     }
@@ -136,8 +139,8 @@ public class JSONBuilder {
 
         condition.put("type", "standard");
         condition.put("expression", parseExpression(c));
-        condition.put("counter", parseAtLeast(c.getWfv()));
         condition.put("targetTime", parseTargetTime(c.getWfv()));
+        condition.put("counter", parseAtLeast(c.getWfv()));
 
         return condition;
     }
@@ -178,7 +181,7 @@ public class JSONBuilder {
     private static JSONObject parseAtLeast(WaitForValue w) {
         JSONObject counter = new JSONObject();
 
-        if(w == null) {
+        if(w == null || w.getAtLeast() == null) {
             counter.put("threshold", 100);
             counter.put("type", AT_LEAST_TYPE.PERCENT.toString());
         } else {

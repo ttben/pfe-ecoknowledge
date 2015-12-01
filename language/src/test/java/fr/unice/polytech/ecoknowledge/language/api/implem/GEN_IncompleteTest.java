@@ -31,9 +31,10 @@ public class GEN_IncompleteTest {
                 .availableFrom(2)
                 .to(4)
                 .during(3, WEEK)
-                .rewards(1)
-                .withConditions()
-                .valueOf("SENSOR").greaterThan(2)
+                .atLevel("level")
+                    .rewards(1)
+                    .withConditions()
+                        .valueOf("SENSOR").greaterThan(2)
                 .end();
 
         description = cb.getDescription();

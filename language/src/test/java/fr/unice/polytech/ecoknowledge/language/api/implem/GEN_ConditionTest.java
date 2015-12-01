@@ -32,13 +32,14 @@ public class GEN_ConditionTest {
                 .dontSend() // Just because it's a test
                 .availableFrom(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
-                .rewards(2)
-                .withConditions()
-                .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
-                    .on(WEEK_PERIOD.WEEK_DAYS, DAY_MOMENT.MORNING)
-                    .atLeast(5).times()
-                .and()
-                .increase("OLD").by(50).percent().comparedTo(LAST_MONTH)
+                .atLevel("level")
+                    .rewards(2)
+                    .withConditions()
+                        .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
+                            .on(WEEK_PERIOD.WEEK_DAYS, DAY_MOMENT.MORNING)
+                            .atLeast(5).times()
+                        .and()
+                        .increase("OLD").by(50).percent().comparedTo(LAST_MONTH)
                 .end();
 
         description = cb.getDescription();

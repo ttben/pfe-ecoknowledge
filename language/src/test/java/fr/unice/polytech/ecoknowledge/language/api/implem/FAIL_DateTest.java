@@ -21,9 +21,11 @@ public class FAIL_DateTest {
             Challenge.create("cb")
                     .dontSend() // Just because it's a test
                     .availableFrom(48).to(2, 899, 2)
-                    .during(3, DAY).rewards(10)
-                    .withConditions()
-                    .valueOf("smth").greaterThan(30)
+                    .during(3, DAY)
+                    .atLevel("level")
+                        .rewards(10)
+                        .withConditions()
+                            .valueOf("smth").greaterThan(30)
                     .end();
 
         }catch (IllegalFieldValueException t){
@@ -42,9 +44,11 @@ public class FAIL_DateTest {
             Challenge.create("cb")
                     .dontSend() // Just because it's a test
                     .availableFrom(23).to(2)
-                    .during(2, WEEK).rewards(20)
-                    .withConditions()
-                    .valueOf("smth").differentFrom(2)
+                    .during(2, WEEK)
+                    .atLevel("level")
+                        .rewards(20)
+                        .withConditions()
+                            .valueOf("smth").differentFrom(2)
                     .end();
         } catch (IllegalArgumentException t){
             exception = t;

@@ -28,9 +28,10 @@ public class GEN_ChallengeSimpleFieldsTest {
                 .dontSend() // Just because it's a test
                 .availableFrom(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
-                .rewards(2)
-                .withConditions()
-                .valueOf("BENNI_RAGE_QUIT").lowerThan(1).atLeast(5).times()
+                .atLevel("level")
+                    .rewards(2)
+                    .withConditions()
+                        .valueOf("BENNI_RAGE_QUIT").lowerThan(1).atLeast(5).times()
         .end();
 
         description = cb.getDescription();
