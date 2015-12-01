@@ -2,14 +2,17 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
+import fr.unice.polytech.ecoknowledge.domain.model.deserializer.LevelDeserializer;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonDeserialize(using = LevelDeserializer.class)
 public class Level implements VisitableComponent{
 	private List<Condition> conditionList = new ArrayList<>();
 	private String name;
