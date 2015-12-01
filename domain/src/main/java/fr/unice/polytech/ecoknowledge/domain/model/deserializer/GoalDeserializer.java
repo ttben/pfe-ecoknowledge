@@ -5,8 +5,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.DataPersistence;
+import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.model.User;
 
 import java.io.IOException;
 
@@ -17,11 +21,15 @@ public class GoalDeserializer extends JsonDeserializer<Goal> {
 		String userID = (node.get("user")).asText();
 		String challengeID = (node.get("challenge")).asText();
 
-		// FIXME: 01/12/2015 // TODO: 01/12/2015
-		//	User ...
+		JsonObject challengeJsonDescription = DataPersistence.read(DataPersistence.CHALLENGE_COLLECTION,challengeID);
+		JsonObject userJsonDescription = DataPersistence.read(DataPersistence.USER_COLLECTION,userID);
 
-		DataPersistence.read(DataPersistence.CHALLENGE_COLLECTION,challengeID);
+		ObjectMapper objectMapper = new ObjectMapper();
 
-		return null;
+		User user = (User) objectMapper.readValue(userJsonDescription.toString(), User.class);
+		Challenge challenge = (Challenge) objectMapper.readValue(challengeJsonDescription.toString(), Challenge.class);
+
+		Goal goal = new Goal(challenge, null, user);
+		return goal;
 	}
 }

@@ -81,6 +81,20 @@ public class Model {
 		User newUser = (User)objectMapper.readValue(userJsonDescription.toString(), User.class);
 		userJsonDescription.addProperty("id", newUser.getId().toString());
 
+		DataPersistence.store(DataPersistence.USER_COLLECTION, userJsonDescription);
+
 		return userJsonDescription;
+	}
+
+	public JsonArray getAllUsers() throws IOException {
+		JsonArray result = new JsonArray();
+
+		JsonArray usersDescription = DataPersistence.readAll(DataPersistence.USER_COLLECTION);
+
+		return usersDescription;
+	}
+
+	public void deleteAllUsers() {
+		DataPersistence.drop(DataPersistence.USER_COLLECTION);
 	}
 }

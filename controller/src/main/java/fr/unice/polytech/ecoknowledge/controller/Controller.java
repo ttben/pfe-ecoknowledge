@@ -154,4 +154,13 @@ public class Controller {
         this.model.takeChallenge(jsonObject);
 
     }
+
+    public JsonArray getAllUsers() throws IOException {
+        return this.model.getAllUsers();
+    }
+
+    public boolean dropAllUsers() {
+        this.model.deleteAllUsers();
+        return true;
+    }
 }
