@@ -77,7 +77,6 @@ public class JSONBuilder {
 
         level.put("name", l.getName());
         level.put("badge", createBadge(l));
-        level.put("image", l.getImage()==null?"":l.getImage());
         level.put("conditions", parseConditions(l.getConditions(), l.getImprovements()));
 
         return level;
@@ -88,7 +87,7 @@ public class JSONBuilder {
 
         badge.put("name", l.getName());
         badge.put("reward", l.getPoints());
-        //badge.put("image", l.getIcon()==null?"":l.getIcon());
+        badge.put("image", l.getImage()==null?"":l.getImage());
 
         return badge;
     }
