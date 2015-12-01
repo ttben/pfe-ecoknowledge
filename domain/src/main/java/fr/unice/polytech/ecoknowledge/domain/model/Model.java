@@ -15,18 +15,29 @@ import fr.unice.polytech.ecoknowledge.domain.model.repositories.GoalRepository;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.ChallengeView;
 
 import java.io.IOException;
+import java.security.InvalidParameterException;
 
 public class Model {
 
-	private BadgeRepository badgeRepository;
-	private ChallengeRepository challengeRepository;
-	private GoalRepository goalRepository;
-	private UserRepository userRepository;
+	public JsonObject createChallenge(JsonObject jsonObject) throws IOException {
+		JsonObject result = new JsonObject();
 
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
 
-	public void createChallenge(Challenge challenge) {
-		// TODO - implement language.createChallenge
-		throw new UnsupportedOperationException();
+			jsonObject.addProperty("id",""+challenge.getId());
+			DataPersistence.store(DataPersistence.Collections.CHALLENGE,jsonObject);
+
+			result = DataPersistence.read(DataPersistence.Collections.CHALLENGE, challenge.getId().toString());
+			Challenge newChallenge = (Challenge)objectMapper.readValue(result.toString(), Challenge.class);
+
+		} catch (JsonMappingException | JsonParseException e) {
+			e.printStackTrace();
+			throw new InvalidParameterException("Can not build condition with specified parameters :\n " + e.getMessage());
+		}
+
+		return result;
 	}
 
 	public void getGoal(Integer idGoal) {
@@ -44,15 +55,10 @@ public class Model {
 		throw new UnsupportedOperationException();
 	}
 
-	public void takeUpChallenge(Integer idUser, Goal goal) {
-		// TODO - implement language.takeUpChallenge
-		throw new UnsupportedOperationException();
-	}
-
 	public JsonArray getAllChallenges() throws IOException {
 		JsonArray result = new JsonArray();
 
-		JsonArray challengesDescription = DataPersistence.readAll(DataPersistence.CHALLENGE_COLLECTION);
+		JsonArray challengesDescription = DataPersistence.readAll(DataPersistence.Collections.CHALLENGE);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
@@ -71,9 +77,14 @@ public class Model {
 		return result;
 	}
 
-	public void takeChallenge(JsonObject jsonObject) throws IOException, JsonParseException, JsonMappingException {
+	public JsonObject takeChallenge(JsonObject jsonObject) throws IOException, JsonParseException, JsonMappingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Goal goal = (Goal)objectMapper.readValue(jsonObject.toString(), Goal.class);
+		jsonObject.addProperty("id", goal.getId().toString());
+
+		DataPersistence.store(DataPersistence.Collections.GOAL, jsonObject);
+
+		return jsonObject;
 	}
 
 	public JsonObject registerUser(JsonObject userJsonDescription) throws IOException {
@@ -81,7 +92,7 @@ public class Model {
 		User newUser = (User)objectMapper.readValue(userJsonDescription.toString(), User.class);
 		userJsonDescription.addProperty("id", newUser.getId().toString());
 
-		DataPersistence.store(DataPersistence.USER_COLLECTION, userJsonDescription);
+		DataPersistence.store(DataPersistence.Collections.USER, userJsonDescription);
 
 		return userJsonDescription;
 	}
@@ -89,12 +100,20 @@ public class Model {
 	public JsonArray getAllUsers() throws IOException {
 		JsonArray result = new JsonArray();
 
-		JsonArray usersDescription = DataPersistence.readAll(DataPersistence.USER_COLLECTION);
+		JsonArray usersDescription = DataPersistence.readAll(DataPersistence.Collections.USER);
 
 		return usersDescription;
 	}
 
 	public void deleteAllUsers() {
-		DataPersistence.drop(DataPersistence.USER_COLLECTION);
+		DataPersistence.drop(DataPersistence.Collections.USER);
+	}
+
+	public void deleteAllChallenges() {
+		DataPersistence.drop(DataPersistence.Collections.CHALLENGE);
+	}
+
+	public void deleteAChallenge(String challengeId) {
+		DataPersistence.drop(DataPersistence.Collections.CHALLENGE, challengeId);
 	}
 }

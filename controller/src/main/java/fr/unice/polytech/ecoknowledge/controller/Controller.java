@@ -40,43 +40,8 @@ public class Controller {
     }
 
     public JsonObject createChallenge(JsonObject jsonObject)throws InvalidParameterException, IOException {
-        JsonObject result = new JsonObject();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
-
-            jsonObject.addProperty("id",""+challenge.getId());
-            DataPersistence.store(DataPersistence.CHALLENGE_COLLECTION,jsonObject);
-
-            result = DataPersistence.read(DataPersistence.CHALLENGE_COLLECTION, challenge.getId().toString());
-            Challenge newChallenge = (Challenge)objectMapper.readValue(result.toString(), Challenge.class);
-
-        } catch (JsonMappingException | JsonParseException e) {
-            e.printStackTrace();
-            throw new InvalidParameterException("Can not build condition with specified parameters :\n " + e.getMessage());
-        }
-
-        return result;
+        return this.model.createChallenge(jsonObject);
     }
-
-    public JSONObject createBadge(JSONObject json) {
-
-        // Check structure with model
-        // TODO
-
-        // Store the badge in the data module
-        //return BadgePersistance.store(json);
-        JSONObject js = new JSONObject();
-        js.put("valid", true);
-        return js;
-
-    }
-
-    public JSONObject searchBadge(String challengeId) {
-        return new JSONObject();
-    }
-
 
 
     /*
@@ -141,18 +106,18 @@ public class Controller {
     public boolean dropAllChallenges() {
         // TODO: 01/12/2015 ChallengePersistence.drop();
 
+        this.model.deleteAllChallenges();
+
         return true;
     }
 
     public boolean dropAChallenge(String challengeId) {
-        // TODO: 01/12/2015 ChallengePersistence.drop(challengeId);
-
+        this.model.deleteAChallenge(challengeId);
         return true;
     }
 
     public void createGoal(JsonObject jsonObject) throws IOException,JsonParseException, JsonMappingException {
         this.model.takeChallenge(jsonObject);
-
     }
 
     public JsonArray getAllUsers() throws IOException {

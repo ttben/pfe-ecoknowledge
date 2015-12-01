@@ -31,9 +31,9 @@ public class ChallengePersistenceTest {
 		Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
 
 		jsonObject.addProperty("id",""+challenge.getId());
-		DataPersistence.store(DataPersistence.CHALLENGE_COLLECTION, jsonObject);
+		DataPersistence.store(DataPersistence.Collections.CHALLENGE, jsonObject);
 
-		JsonObject result = DataPersistence.read(DataPersistence.CHALLENGE_COLLECTION,challenge.getId().toString());
+		JsonObject result = DataPersistence.read(DataPersistence.Collections.CHALLENGE,challenge.getId().toString());
 		aChallenge = (Challenge)objectMapper.readValue(result.toString(), Challenge.class);
 
 		assertEquals(challenge, aChallenge);
@@ -41,6 +41,6 @@ public class ChallengePersistenceTest {
 
 	@AfterClass
 	public static void tearDown() {
-		DataPersistence.drop(DataPersistence.CHALLENGE_COLLECTION,aChallenge.getId().toString());
+		DataPersistence.drop(DataPersistence.Collections.CHALLENGE,aChallenge.getId().toString());
 	}
 }

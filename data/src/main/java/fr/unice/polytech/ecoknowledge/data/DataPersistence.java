@@ -16,16 +16,29 @@ import org.bson.Document;
  * Created by Benjamin on 01/12/2015.
  */
 public class DataPersistence {
+	public enum Collections {
+		CHALLENGE("challenges"),
+		BADGES("badges"),
+		USER("users"),
+		GOAL("goals");
+
+		private String collectionName;
+
+		Collections(String collectionName) {
+			this.collectionName = collectionName;
+		}
+	}
+
 	public static String CHALLENGE_COLLECTION = "challenges";
 	public static String BADGE_COLLECTION = "badges";
 	public static String USER_COLLECTION = "users";
 
 	public static String DB_NAME = "pfe";
 
-	public static JsonObject store(String collectionName, JsonObject json) {
+	public static JsonObject store(Collections targetCollection, JsonObject json) {
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
-		MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 
 		collection.insertOne(Document.parse(json.toString()));
 
@@ -38,10 +51,10 @@ public class DataPersistence {
 		return (JsonObject) persistedJsonObject;
 	}
 
-	public static JsonObject read(String collectionName, String id) {
+	public static JsonObject read(Collections targetCollection, String id) {
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
-		MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 
 		Document result = collection.find(Filters.eq("id", id)).projection(Projections.exclude("_id")).first();
 
@@ -51,12 +64,12 @@ public class DataPersistence {
 		return persistedJsonObject;
 	}
 
-	public static JsonArray readAll(String collectionName) {
+	public static JsonArray readAll(Collections targetCollection) {
 		JsonArray jsonArray = new JsonArray();
 
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
-		MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 
 		MongoCursor<Document> cursor = collection.find().projection(Projections.exclude("_id")).iterator();
 		try {
@@ -70,21 +83,21 @@ public class DataPersistence {
 		return jsonArray;
 	}
 
-	public static void drop(String collectionName) {
+	public static void drop(Collections targetCollection) {
 		JsonArray jsonArray = new JsonArray();
 
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
-		MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 		collection.drop();
 	}
 
-	public static void drop(String collectionName, String id) {
+	public static void drop(Collections targetCollection, String id) {
 		JsonArray jsonArray = new JsonArray();
 
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
-		MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 
 		Document result = collection.find(Filters.eq("id", id)).projection(Projections.exclude("_id")).first();
 

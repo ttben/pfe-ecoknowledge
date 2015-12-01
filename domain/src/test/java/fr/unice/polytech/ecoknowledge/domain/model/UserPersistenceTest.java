@@ -44,7 +44,7 @@ public class UserPersistenceTest {
 		JsonObject jsonObject = this.jsonUserDescription;
 		jsonObject.addProperty("id", user.getId().toString());
 
-		DataPersistence.store(DataPersistence.USER_COLLECTION, jsonObject);
+		DataPersistence.store(DataPersistence.Collections.USER, jsonObject);
 	}
 
 	@Test
@@ -52,8 +52,8 @@ public class UserPersistenceTest {
 		JsonObject jsonObject = this.jsonUserDescription;
 		jsonObject.addProperty("id", user.getId().toString());
 
-		DataPersistence.store(DataPersistence.USER_COLLECTION, jsonObject);
-		JsonObject result = DataPersistence.read(DataPersistence.USER_COLLECTION, user.getId().toString());
+		DataPersistence.store(DataPersistence.Collections.USER, jsonObject);
+		JsonObject result = DataPersistence.read(DataPersistence.Collections.USER, user.getId().toString());
 		ObjectMapper objectMapper = new ObjectMapper();
 		User anotherUser = (User) objectMapper.readValue(result.toString(), User.class);
 

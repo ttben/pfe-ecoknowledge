@@ -65,7 +65,7 @@ public class AchievementProcessorVisitorStandardConditionTest {
 		challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
 		lifeSpan = challenge.getTimeSpan();
 
-		goal = new Goal(challenge, lifeSpan, user);
+		goal = new Goal(null, challenge, lifeSpan, user);
 
 		List<Data> firstSensorFakedData = new ArrayList<>();
 		firstSensorFakedData.add(new Data(20.0, lifeSpan.getStart().plusDays(3)));

@@ -20,16 +20,21 @@ public class GoalDeserializer extends JsonDeserializer<Goal> {
 		JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 		String userID = (node.get("user")).asText();
 		String challengeID = (node.get("challenge")).asText();
+		String goalID = null;
 
-		JsonObject challengeJsonDescription = DataPersistence.read(DataPersistence.CHALLENGE_COLLECTION,challengeID);
-		JsonObject userJsonDescription = DataPersistence.read(DataPersistence.USER_COLLECTION,userID);
+		if(node.get("id") != null) {
+			goalID = node.get("id").asText();
+		}
+
+		JsonObject challengeJsonDescription = DataPersistence.read(DataPersistence.Collections.CHALLENGE,challengeID);
+		JsonObject userJsonDescription = DataPersistence.read(DataPersistence.Collections.USER,userID);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		User user = (User) objectMapper.readValue(userJsonDescription.toString(), User.class);
 		Challenge challenge = (Challenge) objectMapper.readValue(challengeJsonDescription.toString(), Challenge.class);
 
-		Goal goal = new Goal(challenge, null, user);
+		Goal goal = new Goal(goalID, challenge, null, user);
 		return goal;
 	}
 }
