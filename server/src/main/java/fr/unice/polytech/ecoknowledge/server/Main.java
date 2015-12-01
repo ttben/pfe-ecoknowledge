@@ -33,6 +33,8 @@ public class Main {
 
                 MyExampleService.class.getCanonicalName() + ","
                         +  ChallengeService.class.getCanonicalName() +","
+                        +  UserService.class.getCanonicalName() +","
+                        +  GoalService.class.getCanonicalName() +","
                         +  TestService.class.getCanonicalName());
 
         System.out.println("// ------- Server starting on port " + port + " ------- //");

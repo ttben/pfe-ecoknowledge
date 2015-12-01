@@ -3,7 +3,7 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.CounterType;
+import fr.unice.polytech.ecoknowledge.domain.model.deserializer.RecurrenceDeserializer;
 
 @JsonDeserialize(using = RecurrenceDeserializer.class)
 public class Recurrence {

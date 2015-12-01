@@ -2,19 +2,28 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
+import fr.unice.polytech.ecoknowledge.domain.model.deserializer.GoalDeserializer;
 import org.joda.time.DateTime;
 
+import java.util.UUID;
+
+@JsonDeserialize(using = GoalDeserializer.class)
 public class Goal implements VisitableComponent {
 
+	private UUID id;
 	private Challenge challengeDefinition;
 	private TimeBox timeSpan;
 	private User user;
 
 	@JsonCreator
-	public Goal(@JsonProperty("challenge") Challenge definition,
+	public Goal(@JsonProperty(value = "id", required = false) String id,
+				@JsonProperty("challenge") Challenge definition,
 				@JsonProperty("lifeSpan") TimeBox timeSpan,
 				User user) {
+
+		this.id = (id != null && !id.isEmpty()) ? UUID.fromString(id) : UUID.randomUUID();
 		this.challengeDefinition = definition;
 		this.timeSpan = timeSpan;
 		this.user = user;
@@ -60,5 +69,13 @@ public class Goal implements VisitableComponent {
 	public void accept(GoalVisitor goalVisitor) {
 		challengeDefinition.accept(goalVisitor);
 		goalVisitor.visit(this);
+	}
+
+	public UUID getId() {
+		return this.id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
 	}
 }

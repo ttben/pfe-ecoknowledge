@@ -1,10 +1,12 @@
-package fr.unice.polytech.ecoknowledge.domain.model;
+package fr.unice.polytech.ecoknowledge.domain.model.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import fr.unice.polytech.ecoknowledge.domain.model.Recurrence;
+import fr.unice.polytech.ecoknowledge.domain.model.RecurrenceType;
 
 import java.io.IOException;
 

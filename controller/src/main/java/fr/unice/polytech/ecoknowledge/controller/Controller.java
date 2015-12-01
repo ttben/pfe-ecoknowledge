@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.data.ChallengePersistence;
+import fr.unice.polytech.ecoknowledge.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.Model;
@@ -35,45 +35,13 @@ public class Controller {
         return instance;
     }
 
+    public JsonObject createUser(JsonObject userJsonDescription) throws IOException {
+        return this.model.registerUser(userJsonDescription);
+    }
 
     public JsonObject createChallenge(JsonObject jsonObject)throws InvalidParameterException, IOException {
-        JsonObject result = new JsonObject();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
-
-            jsonObject.addProperty("id",""+challenge.getId());
-            ChallengePersistence.store(jsonObject);
-
-            result = ChallengePersistence.read(challenge.getId().toString());
-            Challenge newChallenge = (Challenge)objectMapper.readValue(result.toString(), Challenge.class);
-
-        } catch (JsonMappingException | JsonParseException e) {
-            e.printStackTrace();
-            throw new InvalidParameterException("Can not build condition with specified parameters :\n " + e.getMessage());
-        }
-
-        return result;
+        return this.model.createChallenge(jsonObject);
     }
-
-    public JSONObject createBadge(JSONObject json) {
-
-        // Check structure with model
-        // TODO
-
-        // Store the badge in the data module
-        //return BadgePersistance.store(json);
-        JSONObject js = new JSONObject();
-        js.put("valid", true);
-        return js;
-
-    }
-
-    public JSONObject searchBadge(String challengeId) {
-        return new JSONObject();
-    }
-
 
 
     /*
@@ -136,14 +104,28 @@ public class Controller {
     }
 
     public boolean dropAllChallenges() {
-        ChallengePersistence.drop();
+        // TODO: 01/12/2015 ChallengePersistence.drop();
+
+        this.model.deleteAllChallenges();
 
         return true;
     }
 
     public boolean dropAChallenge(String challengeId) {
-        ChallengePersistence.drop(challengeId);
+        this.model.deleteAChallenge(challengeId);
+        return true;
+    }
 
+    public void createGoal(JsonObject jsonObject) throws IOException,JsonParseException, JsonMappingException {
+        this.model.takeChallenge(jsonObject);
+    }
+
+    public JsonArray getAllUsers() throws IOException {
+        return this.model.getAllUsers();
+    }
+
+    public boolean dropAllUsers() {
+        this.model.deleteAllUsers();
         return true;
     }
 }

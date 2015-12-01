@@ -12,20 +12,35 @@ import com.mongodb.client.model.Projections;
 import fr.unice.polytech.ecoknowledge.data.utils.ConnexionManager;
 import org.bson.Document;
 
+/**
+ * Created by Benjamin on 01/12/2015.
+ */
+public class DataPersistence {
+	public enum Collections {
+		CHALLENGE("challenges"),
+		BADGES("badges"),
+		USER("users"),
+		GOAL("goals");
 
-public class ChallengePersistence {
-	private static final String COLLECTION_NAME = "challenge";
-	private static final String DB_NAME = "pfe";
+		private String collectionName;
 
-	public static JsonObject store(JsonObject json) {
+		Collections(String collectionName) {
+			this.collectionName = collectionName;
+		}
+	}
+
+	public static String CHALLENGE_COLLECTION = "challenges";
+	public static String BADGE_COLLECTION = "badges";
+	public static String USER_COLLECTION = "users";
+
+	public static String DB_NAME = "pfe";
+
+	public static JsonObject store(Collections targetCollection, JsonObject json) {
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
-		MongoCollection<Document> collection = mongoDatabase.getCollection(COLLECTION_NAME);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 
 		collection.insertOne(Document.parse(json.toString()));
-
-		JsonObject parameters = new JsonParser().parse("{ _id : false } ").getAsJsonObject();
-
 
 		MongoCursor cursor = collection.find(Document.parse(json.toString()) ).projection(Projections.exclude("_id")).iterator();
 		Document doc = (Document) cursor.next();
@@ -36,12 +51,12 @@ public class ChallengePersistence {
 		return (JsonObject) persistedJsonObject;
 	}
 
-	public static JsonObject read(String projectId) {
+	public static JsonObject read(Collections targetCollection, String id) {
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
-		MongoCollection<Document> collection = mongoDatabase.getCollection(COLLECTION_NAME);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 
-		Document result = collection.find(Filters.eq("id", projectId)).projection(Projections.exclude("_id")).first();
+		Document result = collection.find(Filters.eq("id", id)).projection(Projections.exclude("_id")).first();
 
 		JsonParser parser = new JsonParser();
 		JsonObject persistedJsonObject = parser.parse(result.toJson()).getAsJsonObject();
@@ -49,12 +64,12 @@ public class ChallengePersistence {
 		return persistedJsonObject;
 	}
 
-	public static JsonArray readAll() {
+	public static JsonArray readAll(Collections targetCollection) {
 		JsonArray jsonArray = new JsonArray();
 
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
-		MongoCollection<Document> collection = mongoDatabase.getCollection(COLLECTION_NAME);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 
 		MongoCursor<Document> cursor = collection.find().projection(Projections.exclude("_id")).iterator();
 		try {
@@ -68,23 +83,23 @@ public class ChallengePersistence {
 		return jsonArray;
 	}
 
-	public static void drop() {
+	public static void drop(Collections targetCollection) {
 		JsonArray jsonArray = new JsonArray();
 
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
-		MongoCollection<Document> collection = mongoDatabase.getCollection(COLLECTION_NAME);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 		collection.drop();
 	}
 
-	public static void drop(String challengeProjectId) {
+	public static void drop(Collections targetCollection, String id) {
 		JsonArray jsonArray = new JsonArray();
 
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
-		MongoCollection<Document> collection = mongoDatabase.getCollection(COLLECTION_NAME);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 
-		Document result = collection.find(Filters.eq("id", challengeProjectId)).projection(Projections.exclude("_id")).first();
+		Document result = collection.find(Filters.eq("id", id)).projection(Projections.exclude("_id")).first();
 
 		collection.deleteOne(result);
 	}
