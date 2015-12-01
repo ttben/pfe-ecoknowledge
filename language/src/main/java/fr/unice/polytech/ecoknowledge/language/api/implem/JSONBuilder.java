@@ -82,7 +82,7 @@ public class JSONBuilder {
 
         badge.put("name", cb.getName());
         badge.put("reward", cb.getPoints());
-        badge.put("image", "https://drive.google.com/file/d/0B_K7OPwZvrgHaXFUTk94SE1ndHc/view?usp=sharing");
+        badge.put("image", cb.getIcon()==null?"":cb.getIcon());
 
         return badge;
     }

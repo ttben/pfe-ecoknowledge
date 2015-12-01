@@ -25,7 +25,10 @@ public class GEN_BadgeTest {
 
         ChallengeBuilder cb = Challenge.create("DSL done");
         cb
+
                 .dontSend() // Just because it's a test
+                .withIcon("http://d75822.medialib.glogster.com/media/dc/" +
+                        "dcc6f991541e0ea8462e6d3de93f9f69e4a5d43be170ec4b25fdc113549843b0/happy-jpg.jpg")
                 .availableFrom(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
                 .rewards(2)
@@ -37,30 +40,19 @@ public class GEN_BadgeTest {
     }
 
     @Test
-    public void checkReward(){
+    public void checkIcon(){
 
         ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
         wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
         wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
         wanted.add(new AbstractMap.SimpleEntry<>("badge", JSONObject.class));
-        wanted.add(new AbstractMap.SimpleEntry<>("reward", Integer.class));
+        wanted.add(new AbstractMap.SimpleEntry<>("image", String.class));
 
-        Object r = JsonSearcher.lookFor(description, wanted);
-        int reward = (Integer) r;
-        assertEquals(2, reward);
-    }
+        Object i = JsonSearcher.lookFor(description, wanted);
+        String icon = (String) i;
 
-    @Test
-    public void checkImage(){
-
-        ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
-        wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
-        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
-        wanted.add(new AbstractMap.SimpleEntry<>("conditions", JSONArray.class));
-        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
-
-
-        Object r = JsonSearcher.lookFor(description, wanted);
+        assertEquals("http://d75822.medialib.glogster.com/media/dc/dcc6f991541e0ea8462e6d3de93f9f69e4a5d43be170ec4b25fdc113549843b0/happy-jpg.jpg",
+                icon);
     }
 
     @Test
