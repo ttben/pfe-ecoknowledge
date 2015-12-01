@@ -1,6 +1,7 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.ILevelable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IRewardableWithIcon;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IRewardable;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class Level implements ILevelable {
     private During d;
     private String name;
     private Integer points = null;
+    private String image = null;
     private List<Condition> conditions = new ArrayList<>();
     private List<Improvement> improvements = new ArrayList<>();
 
@@ -23,13 +25,13 @@ public class Level implements ILevelable {
     }
 
     @Override
-    public IRewardable atLevel(String levelName) {
+    public IRewardableWithIcon atLevel(String levelName) {
         this.name = levelName;
         Rewards r = new Rewards(this);
         return r;
     }
 
-    IRewardable newLevel(String levelName){
+    IRewardableWithIcon newLevel(String levelName){
         Level l = new Level(d);
         l.name = levelName;
         Rewards r = new Rewards(l);
@@ -67,5 +69,11 @@ public class Level implements ILevelable {
 
     Integer getPoints() {
         return points;
+    }
+
+    String getImage() {return image;}
+
+    void setImage(String image) {
+        this.image = image;
     }
 }

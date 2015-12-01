@@ -4,10 +4,7 @@ import fr.unice.polytech.ecoknowledge.language.api.LevelBuilderGettable;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.AT_LEAST_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IAtLeastable;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionsable;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IRewardable;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurationnableAndAndable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.*;
 
 /**
  * Created by Sébastien on 25/11/2015.
@@ -47,7 +44,7 @@ public class WaitAfterOn extends LevelBuilderGettable implements ISecondActiveDu
     }
 
     @Override
-    public IRewardable atLevel(String levelName) {
+    public IRewardableWithIcon atLevel(String levelName) {
         return getLevel().newLevel(levelName);
     }
 

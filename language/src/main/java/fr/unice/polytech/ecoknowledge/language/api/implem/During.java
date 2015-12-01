@@ -1,6 +1,5 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
-import fr.unice.polytech.ecoknowledge.language.api.LevelBuilderGettable;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDuringable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.ILevelable;

@@ -38,12 +38,28 @@ public class GEN_MultipleLevels {
                             .valueOf("TEMP_SENS").lowerThan(18)
                                 .on(WEEK_PERIOD.WEEK_END)
                     .atLevel("Elsa")
+                        .withImage("http://emea.lum.dolimg.com/v1/images/6d7454cea6644379adc7e529c5790a28078a2823.jpeg?region=0,0,450,450")
                         .rewards(100)
                         .withConditions()
                             .averageOf("TEMP_SENS").lowerThan(18)
             .end();
 
         description = cb.getDescription();
+    }
+
+    @Test void checkImageOfLevel1(){
+
+
+        ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
+        wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
+        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
+        wanted.add(new AbstractMap.SimpleEntry<>("image", String.class));
+
+        Object i = JsonSearcher.lookFor(description, wanted);
+        String image = (String) i;
+
+        assertEquals("http://emea.lum.dolimg.com/v1/images/6d7454cea6644379adc7e529c5790a28078a2823.jpeg?region=0,0,450,450",
+                image);
     }
 
     @Test

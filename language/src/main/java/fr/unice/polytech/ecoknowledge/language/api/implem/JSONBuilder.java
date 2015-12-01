@@ -77,6 +77,7 @@ public class JSONBuilder {
 
         level.put("name", l.getName());
         level.put("badge", createBadge(l));
+        level.put("image", l.getImage()==null?"":l.getImage());
         level.put("conditions", parseConditions(l.getConditions(), l.getImprovements()));
 
         return level;
