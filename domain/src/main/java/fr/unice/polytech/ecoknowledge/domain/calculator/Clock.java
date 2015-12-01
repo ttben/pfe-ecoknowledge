@@ -41,15 +41,9 @@ public class Clock {
 */
             DateTimeFormatter dtf = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss'Z'");
             DateTime dt = dtf.parseDateTime(time);
-            System.out.println("Date built from input : " + dt.toString(DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss'Z'")));
             //new LocalDate(day.parse(dayS));
 
-            DateTime dateTimeInProperTZ = dt.toDateTime(DateTimeZone.forID(middlewareTimeZone));
-            System.out.println("Date built with TZ :\t" + dateTimeInProperTZ.toString(DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss'Z'")));
-
-
-
-            return dateTimeInProperTZ;
+            return dt.toDateTime(DateTimeZone.forID(middlewareTimeZone));
         }
         catch (Throwable t){
             System.err.println(t);
