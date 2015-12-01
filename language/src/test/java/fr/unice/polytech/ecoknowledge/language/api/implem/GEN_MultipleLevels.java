@@ -54,6 +54,7 @@ public class GEN_MultipleLevels {
         ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
         wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
         wanted.add(new AbstractMap.SimpleEntry<>(1, JSONObject.class));
+        wanted.add(new AbstractMap.SimpleEntry<>("badge", JSONObject.class));
         wanted.add(new AbstractMap.SimpleEntry<>("image", String.class));
 
         Object i = JsonSearcher.lookFor(description, wanted);
