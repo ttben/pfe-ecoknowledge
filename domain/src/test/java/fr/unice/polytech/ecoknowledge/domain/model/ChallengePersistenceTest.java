@@ -2,15 +2,12 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import fr.unice.polytech.ecoknowledge.data.ChallengePersistence;
+import fr.unice.polytech.ecoknowledge.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.TestUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
@@ -34,9 +31,9 @@ public class ChallengePersistenceTest {
 		Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
 
 		jsonObject.addProperty("id",""+challenge.getId());
-		ChallengePersistence.store(jsonObject);
+		DataPersistence.store(DataPersistence.CHALLENGE_COLLECTION, jsonObject);
 
-		JsonObject result = ChallengePersistence.read(challenge.getId().toString());
+		JsonObject result = DataPersistence.read(DataPersistence.CHALLENGE_COLLECTION,challenge.getId().toString());
 		aChallenge = (Challenge)objectMapper.readValue(result.toString(), Challenge.class);
 
 		assertEquals(challenge, aChallenge);
@@ -44,6 +41,6 @@ public class ChallengePersistenceTest {
 
 	@AfterClass
 	public static void tearDown() {
-		ChallengePersistence.drop(aChallenge.getId().toString());
+		DataPersistence.drop(DataPersistence.CHALLENGE_COLLECTION,aChallenge.getId().toString());
 	}
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.data.ChallengePersistence;
+import fr.unice.polytech.ecoknowledge.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.Model;
@@ -35,6 +35,9 @@ public class Controller {
         return instance;
     }
 
+    public JsonObject createUser(JsonObject userJsonDescription) throws IOException {
+        return this.model.registerUser(userJsonDescription);
+    }
 
     public JsonObject createChallenge(JsonObject jsonObject)throws InvalidParameterException, IOException {
         JsonObject result = new JsonObject();
@@ -44,9 +47,9 @@ public class Controller {
             Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
 
             jsonObject.addProperty("id",""+challenge.getId());
-            ChallengePersistence.store(jsonObject);
+            DataPersistence.store(DataPersistence.CHALLENGE_COLLECTION,jsonObject);
 
-            result = ChallengePersistence.read(challenge.getId().toString());
+            result = DataPersistence.read(DataPersistence.CHALLENGE_COLLECTION, challenge.getId().toString());
             Challenge newChallenge = (Challenge)objectMapper.readValue(result.toString(), Challenge.class);
 
         } catch (JsonMappingException | JsonParseException e) {
@@ -136,13 +139,13 @@ public class Controller {
     }
 
     public boolean dropAllChallenges() {
-        ChallengePersistence.drop();
+        // TODO: 01/12/2015 ChallengePersistence.drop();
 
         return true;
     }
 
     public boolean dropAChallenge(String challengeId) {
-        ChallengePersistence.drop(challengeId);
+        // TODO: 01/12/2015 ChallengePersistence.drop(challengeId);
 
         return true;
     }
