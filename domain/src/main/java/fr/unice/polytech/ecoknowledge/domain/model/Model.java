@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.data.ChallengePersistence;
+import fr.unice.polytech.ecoknowledge.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.model.repositories.BadgeRepository;
 import fr.unice.polytech.ecoknowledge.domain.model.repositories.UserRepository;
 import fr.unice.polytech.ecoknowledge.domain.model.repositories.ChallengeRepository;
@@ -52,7 +52,7 @@ public class Model {
 	public JsonArray getAllChallenges() throws IOException {
 		JsonArray result = new JsonArray();
 
-		JsonArray challengesDescription = ChallengePersistence.readAll();
+		JsonArray challengesDescription = DataPersistence.readAll(DataPersistence.CHALLENGE_COLLECTION);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
@@ -74,5 +74,13 @@ public class Model {
 	public void takeChallenge(JsonObject jsonObject) throws IOException, JsonParseException, JsonMappingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Goal goal = (Goal)objectMapper.readValue(jsonObject.toString(), Goal.class);
+	}
+
+	public JsonObject registerUser(JsonObject userJsonDescription) throws IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		User newUser = (User)objectMapper.readValue(userJsonDescription.toString(), User.class);
+		userJsonDescription.addProperty("id", newUser.getId().toString());
+
+		return userJsonDescription;
 	}
 }
