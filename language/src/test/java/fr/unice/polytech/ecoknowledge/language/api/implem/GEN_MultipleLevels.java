@@ -43,16 +43,17 @@ public class GEN_MultipleLevels {
                         .withConditions()
                             .averageOf("TEMP_SENS").lowerThan(18)
             .end();
-
         description = cb.getDescription();
     }
 
-    @Test void checkImageOfLevel1(){
+    @Test
+    public void checkImageOfLevel1(){
 
 
+        System.out.println((description));
         ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
         wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
-        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
+        wanted.add(new AbstractMap.SimpleEntry<>(1, JSONObject.class));
         wanted.add(new AbstractMap.SimpleEntry<>("image", String.class));
 
         Object i = JsonSearcher.lookFor(description, wanted);

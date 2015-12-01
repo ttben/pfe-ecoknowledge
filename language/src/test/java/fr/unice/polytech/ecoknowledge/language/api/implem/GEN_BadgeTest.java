@@ -43,7 +43,6 @@ public class GEN_BadgeTest {
     @Test
     public void checkIcon(){
 
-        System.out.println(description);
         ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
         wanted.add(new AbstractMap.SimpleEntry<>("image", String.class));
 
