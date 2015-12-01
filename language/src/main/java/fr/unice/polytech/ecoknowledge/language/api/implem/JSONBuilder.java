@@ -1,6 +1,8 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.AT_LEAST_TYPE;
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -134,8 +136,24 @@ public class JSONBuilder {
         condition.put("type", "standard");
         condition.put("expression", parseExpression(c));
         condition.put("counter", parseAtLeast(c.getWfv()));
+        condition.put("targetTime", parseTargetTime(c.getWfv()));
 
         return condition;
+    }
+
+    private static JSONObject parseTargetTime(WaitForValue wfv) {
+        JSONObject targetTime = new JSONObject();
+
+        if(wfv == null){
+
+            targetTime.put("hours", DAY_MOMENT.ALL.toString());
+            targetTime.put("days", WEEK_PERIOD.ALL.toString());
+        } else {
+            targetTime.put("hours", wfv.getMoment().toString());
+            targetTime.put("days", wfv.getPeriod().toString());
+        }
+
+        return targetTime;
     }
 
     private static JSONObject parseExpression(Condition c) {

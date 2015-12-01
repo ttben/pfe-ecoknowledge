@@ -20,6 +20,8 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
 
     public WaitForValue(Condition condition) {
         this.condition = condition;
+        period = WEEK_PERIOD.ALL;
+        moment = DAY_MOMENT.ALL;
     }
 
     @Override
@@ -110,5 +112,13 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
 
     AT_LEAST_TYPE getType() {
         return type;
+    }
+
+    WEEK_PERIOD getPeriod() {
+        return period;
+    }
+
+    DAY_MOMENT getMoment() {
+        return moment;
     }
 }

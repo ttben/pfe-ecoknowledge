@@ -1,5 +1,7 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
 import fr.unice.polytech.ecoknowledge.language.api.implem.util.JsonSearcher;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,12 +34,31 @@ public class GEN_ConditionTest {
                 .during(1, WEEK)
                 .rewards(2)
                 .withConditions()
-                .valueOf("BENNI_RAGE_QUIT").lowerThan(1).atLeast(5).times()
+                .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
+                    .on(WEEK_PERIOD.WEEK_DAYS, DAY_MOMENT.MORNING)
+                    .atLeast(5).times()
                 .and()
                 .improve("OLD").by(50).percent().comparedTo(LAST_MONTH)
                 .end();
 
         description = cb.getDescription();
+    }
+
+    @Test
+    public void checkTargetTime(){
+        ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
+        wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
+        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
+        wanted.add(new AbstractMap.SimpleEntry<>("conditions", JSONArray.class));
+        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
+        wanted.add(new AbstractMap.SimpleEntry<>("targetTime", JSONObject.class));
+
+        Object t = JsonSearcher.lookFor(description, wanted);
+        JSONObject targetTime = (JSONObject) t;
+
+        assertEquals(WEEK_PERIOD.WEEK_DAYS.toString(), targetTime.getString("days"));
+        assertEquals(DAY_MOMENT.MORNING.toString(), targetTime.getString("hours"));
+
     }
 
     @Test
