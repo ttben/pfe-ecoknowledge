@@ -1,6 +1,8 @@
 package fr.unice.polytech.ecoknowledge.domain.model;
 
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -67,5 +69,10 @@ public class Model {
 		}
 
 		return result;
+	}
+
+	public void takeChallenge(JsonObject jsonObject) throws IOException, JsonParseException, JsonMappingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		Goal goal = (Goal)objectMapper.readValue(jsonObject.toString(), Goal.class);
 	}
 }

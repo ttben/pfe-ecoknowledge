@@ -146,4 +146,9 @@ public class Controller {
 
         return true;
     }
+
+    public void createGoal(JsonObject jsonObject) throws IOException,JsonParseException, JsonMappingException {
+        this.model.takeChallenge(jsonObject);
+
+    }
 }
