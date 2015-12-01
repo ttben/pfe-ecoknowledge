@@ -11,14 +11,16 @@ public class Improvement extends ChallengeBuilderGettable implements IImprovable
 
     private Conditions conditions;
     private String sensor;
+    private IMPROVEMENT_TYPE type;
 
     private Integer improvementValue = null;
 
     private OLD_PERIOD improvementPeriod = null;
 
-    public Improvement(Conditions conditions, String sensor) {
+    public Improvement(Conditions conditions, String sensor, IMPROVEMENT_TYPE type) {
         this.conditions = conditions;
         this.sensor = sensor;
+        this.type = type;
         getChallengeBuilder().addImprovement(this);
     }
 
@@ -61,4 +63,7 @@ public class Improvement extends ChallengeBuilderGettable implements IImprovable
         this.improvementPeriod = improvementPeriod;
     }
 
+    IMPROVEMENT_TYPE getType() {
+        return type;
+    }
 }

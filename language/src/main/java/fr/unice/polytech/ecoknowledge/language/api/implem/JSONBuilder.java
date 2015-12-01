@@ -115,6 +115,7 @@ public class JSONBuilder {
         JSONObject improvement = new JSONObject();
 
         improvement.put("type", "improve");
+        improvement.put("improvementType", i.getType().toString());
         improvement.put("threshold", i.getImprovementValue());
         improvement.put("symbolicName", i.getSensor());
         improvement.put("referencePeriod", i.getImprovementPeriod().toString());

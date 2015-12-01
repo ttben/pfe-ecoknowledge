@@ -38,7 +38,7 @@ public class GEN_ConditionTest {
                     .on(WEEK_PERIOD.WEEK_DAYS, DAY_MOMENT.MORNING)
                     .atLeast(5).times()
                 .and()
-                .improve("OLD").by(50).percent().comparedTo(LAST_MONTH)
+                .increase("OLD").by(50).percent().comparedTo(LAST_MONTH)
                 .end();
 
         description = cb.getDescription();
@@ -96,6 +96,7 @@ public class GEN_ConditionTest {
         JSONObject improvement = (JSONObject) i;
 
         assertEquals("improve", improvement.getString("type"));
+        assertEquals(IMPROVEMENT_TYPE.INCREASE.toString(), improvement.getString("improvementType"));
         assertEquals(LAST_MONTH.toString(), improvement.getString("referencePeriod"));
         assertNotNull(improvement.getString("symbolicName"));
         assertEquals(50, improvement.getInt("threshold"));

@@ -67,14 +67,6 @@ public class Period implements IDurationnable {
         );
     }
 
-    @Override
-    public String toString() {
-        return "Period{" +
-                ", start=" + start.toString() +
-                ", end=" + end.toString() +
-                '}';
-    }
-
     DateTime getStart() {
         return start;
     }

@@ -155,15 +155,4 @@ public class ChallengeBuilder implements IChallengeableIcon {
         return iconURL;
     }
 
-    @Override
-    public String toString() {
-        return "ChallengeBuilder{" +
-                "p=" + p +
-                ", time=" + time +
-                ", type=" + type +
-                ", points=" + points +
-                ", conditions=" + conditions +
-                '}';
-    }
-
 }

@@ -82,16 +82,6 @@ public class Condition extends ChallengeBuilderGettable implements IConditionabl
         return comparator;
     }
 
-    @Override
-    public String toString() {
-        return "Condition{" +
-                "type=" + type +
-                ", sensor='" + sensor + '\'' +
-                ", value=" + value +
-                ", waitForValue=" + waitForValue +
-                '}';
-    }
-
     WaitForValue getWfv() {
         return waitForValue;
     }

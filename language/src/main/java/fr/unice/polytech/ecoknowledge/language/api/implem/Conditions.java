@@ -34,8 +34,14 @@ public class Conditions extends ChallengeBuilderGettable implements IConditionsa
     }
 
     @Override
-    public IImprovable improve(String sensor) {
-        Improvement i = new Improvement(this, sensor);
+    public IImprovable increase(String sensor) {
+        Improvement i = new Improvement(this, sensor, IMPROVEMENT_TYPE.INCREASE);
+        return i;
+    }
+
+    @Override
+    public IImprovable decrease(String sensor) {
+        Improvement i = new Improvement(this, sensor, IMPROVEMENT_TYPE.DECREASE);
         return i;
     }
 }

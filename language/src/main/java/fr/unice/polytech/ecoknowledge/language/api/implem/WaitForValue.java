@@ -60,8 +60,14 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
     }
 
     @Override
-    public IImprovable improve(String sensor) {
-        Improvement i = new Improvement(condition.getConditions(), sensor);
+    public IImprovable increase(String sensor) {
+        Improvement i = new Improvement(condition.getConditions(), sensor, IMPROVEMENT_TYPE.INCREASE);
+        return i;
+    }
+
+    @Override
+    public IImprovable decrease(String sensor) {
+        Improvement i = new Improvement(condition.getConditions(), sensor, IMPROVEMENT_TYPE.DECREASE);
         return i;
     }
 
@@ -76,15 +82,6 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
 
     Condition getCondition(){
         return condition;
-    }
-
-    @Override
-    public String toString() {
-        return "WaitForValue{" +
-                "wao=" + wao +
-                ", moment=" + moment +
-                ", period=" + period +
-                '}';
     }
 
     @Override
