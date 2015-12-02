@@ -11,7 +11,7 @@ import java.io.IOException;
  * Created by Benjamin on 30/11/2015.
  */
 public class TestUtils {
-	public static JsonObject getFakeJson() {
+	public static JsonObject getFakeJson(int filenumber) {
 		BufferedReader br = null;
 		String result = "";
 
@@ -19,7 +19,8 @@ public class TestUtils {
 
 			String currentLine;
 
-			br = new BufferedReader(new FileReader("./src/test/java/fr/unice/polytech/ecoknowledge/domain/challenge-example-sample1.json"));
+			br = new BufferedReader(new FileReader("./src/test/java/fr/unice/polytech/ecoknowledge/domain/challenge-example-sample"
+					+ filenumber +".json"));
 
 			while ((currentLine = br.readLine()) != null) {
 				result = result.concat(currentLine);

@@ -59,7 +59,7 @@ public class AchievementProcessorVisitorStandardConditionTest {
 		fakedSymbolicNameToSensorNamesMap.put("TMP_AMB", anotherSensorName);
 		willReturn(fakedSymbolicNameToSensorNamesMap).given(user).getSymbolicNameToSensorNameMap();
 
-		jsonObject = TestUtils.getFakeJson();
+		jsonObject = TestUtils.getFakeJson(1);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);

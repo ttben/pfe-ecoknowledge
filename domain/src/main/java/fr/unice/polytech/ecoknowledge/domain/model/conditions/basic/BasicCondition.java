@@ -1,13 +1,8 @@
 package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 
-import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
-import fr.unice.polytech.ecoknowledge.domain.model.conditions.Day;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.time.TimeFilter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class BasicCondition implements Condition {
 
