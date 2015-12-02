@@ -1,9 +1,6 @@
 package fr.unice.polytech.ecoknowledge.domain.model.conditions.time;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Sébastien on 02/12/2015.
@@ -29,14 +26,14 @@ public enum WeekMoment {
         this.days = days;
     }
 
-    public List<Integer> getDays(){
+    public AbstractMap.SimpleEntry<Integer, Integer> getDays(){
         switch (days){
             case ("weekDays"):
-               return Arrays.asList(1,2,3,4,5);
+               return new AbstractMap.SimpleEntry<Integer, Integer>(1, 5);
             case("weekEnd"):
-                return Arrays.asList(6,7);
+                return new AbstractMap.SimpleEntry<Integer, Integer>(6, 7);
             default:
-                return Arrays.asList(1,2,3,4,5,6,7);
+                return new AbstractMap.SimpleEntry<Integer, Integer>(1, 7);
         }
     }
 }

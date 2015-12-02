@@ -24,6 +24,7 @@ public abstract class BasicCondition implements Condition {
 	}
 
 	public TimeFilter getTargetDays() {
+		if(targetDays == null) return new TimeFilter();
 		return targetDays;
 	}
 

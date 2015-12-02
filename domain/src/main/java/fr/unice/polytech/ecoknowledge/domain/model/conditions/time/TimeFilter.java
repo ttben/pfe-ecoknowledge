@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.unice.polytech.ecoknowledge.domain.model.deserializer.TargetTimeDeserializer;
 
+import java.util.AbstractMap;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -13,29 +15,34 @@ import java.util.List;
 @JsonDeserialize(using = TargetTimeDeserializer.class)
 public class TimeFilter {
 
-    List<Integer> dayMoment;
-    List<Integer> weekMoment;
+    List<AbstractMap.SimpleEntry<Integer, Integer>> dayMoment;
+    AbstractMap.SimpleEntry<Integer, Integer> weekMoment;
 
     @JsonCreator
-    public TimeFilter(@JsonProperty(value="hours", required = true) List<Integer> dayMoment,
-                      @JsonProperty(value="days", required = true) List<Integer> weekMoment) {
+    public TimeFilter(@JsonProperty(value="hours", required = true) List<AbstractMap.SimpleEntry<Integer, Integer>> dayMoment,
+                      @JsonProperty(value="days", required = true) AbstractMap.SimpleEntry<Integer, Integer> weekMoment) {
         this.dayMoment = dayMoment;
         this.weekMoment = weekMoment;
     }
 
-    public List<Integer> getDayMoment() {
+    public TimeFilter() {
+        dayMoment = Arrays.asList(new AbstractMap.SimpleEntry<Integer, Integer>(0,23));
+        weekMoment = new AbstractMap.SimpleEntry<Integer, Integer>(1,7);
+    }
+
+    public List<AbstractMap.SimpleEntry<Integer, Integer>> getDayMoment() {
         return dayMoment;
     }
 
-    public void setDayMoment(List<Integer> dayMoment) {
+    public void setDayMoment(List<AbstractMap.SimpleEntry<Integer, Integer>> dayMoment) {
         this.dayMoment = dayMoment;
     }
 
-    public List<Integer> getWeekMoment() {
+    public AbstractMap.SimpleEntry<Integer, Integer> getWeekMoment() {
         return weekMoment;
     }
 
-    public void setWeekMoment(List<Integer> weekMoment) {
+    public void setWeekMoment(AbstractMap.SimpleEntry<Integer, Integer> weekMoment) {
         this.weekMoment = weekMoment;
     }
 }
