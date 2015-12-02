@@ -7,6 +7,7 @@ import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Day;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Operand;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.time.TimeFilter;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class StandardCondition extends BasicCondition {
 
 	@JsonCreator
 	public StandardCondition(@JsonProperty(value = "expression", required = true) Expression expression,
-							 @JsonProperty(value = "targetDays", required = false) List<Day> targetDays,    // FIXME: 25/11/2015 required must be true
+							 @JsonProperty(value = "targetTime", required = false) TimeFilter targetDays,    // FIXME: 25/11/2015 required must be true
 							 @JsonProperty(value = "counter", required = true) Counter counter) {
 
 		super(expression, targetDays);
