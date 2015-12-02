@@ -3,6 +3,8 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.DataPersistence;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,6 +24,11 @@ public class UserPersistenceTest {
 	public void setUp() {
 		this.user = getExpectedUser();
 		this.jsonUserDescription = getUserDescription();
+	}
+
+	@AfterClass
+	public static void eraseUsers(){
+		DataPersistence.drop(DataPersistence.Collections.USER);
 	}
 
 	@Test
@@ -68,7 +75,8 @@ public class UserPersistenceTest {
 		JsonObject personalMapping = new JsonObject();
 		personalMapping.addProperty("TMP_CLI", "TEMP_433V");
 
-		jsonObject.addProperty("name", "johnny");
+		jsonObject.addProperty("firstName", "johnny");
+		jsonObject.addProperty("lastName", "depp");
 		jsonObject.add("personalMapping", personalMapping);
 
 		return jsonObject;
@@ -77,7 +85,7 @@ public class UserPersistenceTest {
 	private User getExpectedUser() {
 		Map<String, String> expectedMap = new HashMap<>();
 		expectedMap.put("TMP_CLI", "TEMP_433V");
-		User expectedUser = new User(null, "johnny", null, null, expectedMap);
+		User expectedUser = new User(null, "johnny", "depp", null, null, null, expectedMap);
 		return expectedUser;
 	}
 }

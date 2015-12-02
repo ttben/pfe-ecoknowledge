@@ -2,6 +2,7 @@ package fr.unice.polytech.ecoknowledge.domain.views.goals;
 
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
+import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.LevelView;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by Benjamin on 26/11/2015.
  */
-public class LevelResult {
+public class LevelResult implements ViewForClient {
 	private boolean achieved;
 	private double correctRate;
 	private Level level;

@@ -13,6 +13,8 @@ import fr.unice.polytech.ecoknowledge.domain.model.repositories.UserRepository;
 import fr.unice.polytech.ecoknowledge.domain.model.repositories.ChallengeRepository;
 import fr.unice.polytech.ecoknowledge.domain.model.repositories.GoalRepository;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.ChallengeView;
+import fr.unice.polytech.ecoknowledge.domain.views.users.UserView;
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
@@ -97,10 +99,26 @@ public class Model {
 		return userJsonDescription;
 	}
 
+	public JsonObject getUser(String id) throws IOException {
+		JsonElement u = DataPersistence.read(DataPersistence.Collections.USER, id);
+		System.out.println("U : " + u);
+		ObjectMapper objectMapper = new ObjectMapper();
+		User user = (User) objectMapper.readValue(u.toString(), User.class);
+		UserView uv = new UserView(user);
+		return uv.toJsonForClient();
+	}
+
 	public JsonArray getAllUsers() throws IOException {
 		JsonArray result = new JsonArray();
 
 		JsonArray usersDescription = DataPersistence.readAll(DataPersistence.Collections.USER);
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		for(JsonElement e : usersDescription){
+			User user = (User) objectMapper.readValue(e.toString(), User.class);
+			UserView uv = new UserView(user);
+			result.add(uv.toJsonForClient());
+		}
 
 		return usersDescription;
 	}

@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.RecurrenceType;
+import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 import org.joda.time.format.DateTimeFormat;
 
 import static fr.unice.polytech.ecoknowledge.domain.model.RecurrenceType.DAY;
@@ -12,7 +13,7 @@ import static fr.unice.polytech.ecoknowledge.domain.model.RecurrenceType.DAY;
 /**
  * Created by Benjamin on 30/11/2015.
  */
-public class ChallengeView {
+public class ChallengeView implements ViewForClient{
 
 	private Challenge challenge;
 

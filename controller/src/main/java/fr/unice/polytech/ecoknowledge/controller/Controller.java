@@ -128,4 +128,8 @@ public class Controller {
         this.model.deleteAllUsers();
         return true;
     }
+
+    public JsonObject getUser(String id) throws IOException {
+        return this.model.getUser(id);
+    }
 }
