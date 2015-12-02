@@ -26,13 +26,14 @@ public class GEN_ComparatorsTest {
                 .dontSend() // Just because it's a test
                 .availableFrom(1).to(2)
                 .during(2, WEEK)
-                .rewards(2)
-                .withConditions()
-                    .valueOf("Sensor").lowerThan(5)
+                .atLevel("level")
+                    .rewards(2)
+                    .withConditions()
+                        .valueOf("Sensor").lowerThan(5)
                 .end();
 
         String comparator = getComparatorForSimpleChallenge(cb.getDescription());
-        Assert.assertEquals("<", comparator);
+        assertEquals("<", comparator);
 
     }
 
@@ -44,13 +45,14 @@ public class GEN_ComparatorsTest {
                 .dontSend() // Just because it's a test
                 .availableFrom(1).to(2)
                 .during(2, WEEK)
-                .rewards(2)
-                .withConditions()
-                .valueOf("Sensor").greaterThan(5)
+                .atLevel("level")
+                    .rewards(2)
+                    .withConditions()
+                    .valueOf("Sensor").greaterThan(5)
                 .end();
 
         String comparator = getComparatorForSimpleChallenge(cb.getDescription());
-        Assert.assertEquals(">", comparator);
+        assertEquals(">", comparator);
 
     }
     @Test
@@ -61,13 +63,14 @@ public class GEN_ComparatorsTest {
                 .dontSend() // Just because it's a test
                 .availableFrom(1).to(2)
                 .during(2, WEEK)
-                .rewards(2)
-                .withConditions()
-                .valueOf("Sensor").equalsTo(5)
+                .atLevel("level")
+                    .rewards(2)
+                    .withConditions()
+                    .valueOf("Sensor").equalsTo(5)
                 .end();
 
         String comparator = getComparatorForSimpleChallenge(cb.getDescription());
-        Assert.assertEquals("=", comparator);
+        assertEquals("=", comparator);
 
     }
 
@@ -79,13 +82,14 @@ public class GEN_ComparatorsTest {
                 .dontSend() // Just because it's a test
                 .availableFrom(1).to(2)
                 .during(2, WEEK)
-                .rewards(2)
-                .withConditions()
-                .valueOf("Sensor").differentFrom(5)
+                .atLevel("level")
+                    .rewards(2)
+                    .withConditions()
+                    .valueOf("Sensor").differentFrom(5)
                 .end();
 
         String comparator = getComparatorForSimpleChallenge(cb.getDescription());
-        Assert.assertEquals("!=", comparator);
+        assertEquals("!=", comparator);
 
     }
 

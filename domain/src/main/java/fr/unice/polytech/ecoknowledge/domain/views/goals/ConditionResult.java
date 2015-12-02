@@ -2,12 +2,13 @@ package fr.unice.polytech.ecoknowledge.domain.views.goals;
 
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
+import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.conditions.ConditionViewFactory;
 
 /**
  * Created by Benjamin on 26/11/2015.
  */
-public class ConditionResult {
+public class ConditionResult implements ViewForClient {
 	private boolean achieved;
 	private double correctRate;
 	private Condition condition;

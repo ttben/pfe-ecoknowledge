@@ -1,6 +1,8 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.AT_LEAST_TYPE;
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,6 +23,7 @@ public class JSONBuilder {
         challenge.put("lifeSpan", parsePeriod(cb.getP()));
         challenge.put("recurrence", parseRecurrence(cb));
         challenge.put("levels", createLevels(cb));
+        challenge.put("image", cb.getIcon()==null?"":cb.getIcon());
 
         return challenge;
     }
@@ -62,64 +65,83 @@ public class JSONBuilder {
     private static JSONArray createLevels(ChallengeBuilder cb) {
         JSONArray levels = new JSONArray();
 
-        levels.put(createLevel(cb));
+        for(Level l : cb.getLevels()) {
+            levels.put(createLevel(l));
+        }
 
         return levels;
     }
 
-    private static JSONObject createLevel(ChallengeBuilder cb) {
+    private static JSONObject createLevel(Level l) {
         JSONObject level = new JSONObject();
 
-        level.put("name", cb.getName());
-        level.put("badge", createBadge(cb));
-        level.put("conditions", parseConditions(cb.getConditions()));
+        level.put("name", l.getName());
+        level.put("badge", createBadge(l));
+        level.put("conditions", parseConditions(l.getConditions(), l.getImprovements()));
 
         return level;
     }
 
-    private static JSONObject createBadge(ChallengeBuilder cb) {
+    private static JSONObject createBadge(Level l) {
         JSONObject badge = new JSONObject();
 
-        badge.put("name", cb.getName());
-        badge.put("reward", cb.getPoints());
-        badge.put("image", "https://drive.google.com/file/d/0B_K7OPwZvrgHaXFUTk94SE1ndHc/view?usp=sharing");
+        badge.put("name", l.getName());
+        badge.put("reward", l.getPoints());
+        badge.put("image", l.getImage()==null?"":l.getImage());
 
         return badge;
     }
 
-    private static JSONArray parseConditions(List<Condition> conditions) {
+    private static JSONArray parseConditions(List<Condition> conditions, List<Improvement> improvements) {
         JSONArray conditionsA = new JSONArray();
 
         for(Condition c : conditions){
-            switch (c.getType()){
-                case AVERAGE:
-                    conditionsA.put(parseOverAllCondition(c));
-                    break;
-                case VALUE_OF:
-                    conditionsA.put(parseStandardCondition(c));
-                    break;
-            }
+            conditionsA.put(parseStandardCondition(c));
+        }
 
+        for(Improvement i : improvements){
+            conditionsA.put(parseImprovementCondition(i));
         }
 
         return conditionsA;
     }
 
-    private static JSONObject parseOverAllCondition(Condition c) {
-        JSONObject condition = new JSONObject();
+    private static JSONObject parseImprovementCondition(Improvement i) {
+        JSONObject improvement = new JSONObject();
 
-        // TODO
+        improvement.put("type", "improve");
+        improvement.put("improvementType", i.getType().toString());
+        improvement.put("threshold", i.getImprovementValue());
+        improvement.put("symbolicName", i.getSensor());
+        improvement.put("referencePeriod", i.getImprovementPeriod().toString());
 
-        return condition;
+        return improvement;
     }
 
     private static JSONObject parseStandardCondition(Condition c) {
         JSONObject condition = new JSONObject();
 
-        condition.put("type", "standard");
+        condition.put("type", c.getType().toString());
         condition.put("expression", parseExpression(c));
+        condition.put("targetTime", parseTargetTime(c.getWfv()));
+        condition.put("counter", parseAtLeast(c.getWfv()));
 
         return condition;
+    }
+
+    private static JSONObject parseTargetTime(WaitForValue wfv) {
+        JSONObject targetTime = new JSONObject();
+
+        if(wfv == null){
+
+            targetTime.put("hours", DAY_MOMENT.ALL.toString());
+            targetTime.put("days", WEEK_PERIOD.ALL.toString());
+        } else {
+            targetTime.put("hours", wfv.getMoment().toString());
+            targetTime.put("days", wfv.getPeriod().toString());
+        }
+
+        return targetTime;
     }
 
     private static JSONObject parseExpression(Condition c) {
@@ -136,7 +158,6 @@ public class JSONBuilder {
         expression.put("leftOperand", leftOperand);
         expression.put("rightOperand", rightOperand);
         expression.put("comparator", c.getComparator());
-        expression.put("counter", parseAtLeast(c.getWfv()));
 
         return expression;
     }
@@ -144,7 +165,7 @@ public class JSONBuilder {
     private static JSONObject parseAtLeast(WaitForValue w) {
         JSONObject counter = new JSONObject();
 
-        if(w == null) {
+        if(w == null || w.getAtLeast() == null) {
             counter.put("threshold", 100);
             counter.put("type", AT_LEAST_TYPE.PERCENT.toString());
         } else {

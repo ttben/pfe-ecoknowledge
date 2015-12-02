@@ -3,6 +3,7 @@ package fr.unice.polytech.ecoknowledge.language.api.implem;
 import fr.unice.polytech.ecoknowledge.language.api.config.AddressReacher;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IChallengeable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IChallengeableIcon;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDurationnable;
 import fr.unice.polytech.ecoknowledge.language.api.util.HTTPCall;
 import org.json.JSONObject;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * Created by Sébastien on 25/11/2015.
  */
-public class ChallengeBuilder implements IChallengeable {
+public class ChallengeBuilder implements IChallengeableIcon {
 
     // ------- FIELDS ------- //
 
@@ -24,11 +25,11 @@ public class ChallengeBuilder implements IChallengeable {
 
     // Specific fields of the challenge builder
     private String name;
+    private String iconURL = null;
     private Period p = null;
     private Integer time = null;
     private DURATION_TYPE type = null;
-    private Integer points = null;
-    private List<Condition> conditions = new ArrayList<>();
+    private List<Level> levels = new ArrayList<>();
 
     // Output
     private JSONObject description = null;
@@ -61,6 +62,13 @@ public class ChallengeBuilder implements IChallengeable {
         Period p = new Period(this, day, month, year);
         return p;
     }
+
+    @Override
+    public IChallengeable withIcon(String url) {
+        this.iconURL = url;
+        return this;
+    }
+
     void end() {
         String IPAddress = AddressReacher.getAddress();
         System.out.println("/----- Generating description -----/");
@@ -80,10 +88,6 @@ public class ChallengeBuilder implements IChallengeable {
         p = period;
     }
 
-    void addCondition(Condition c) {
-        conditions.add(c);
-    }
-
     // For tests
     ChallengeBuilder dontSend(){send = false; return this;}
 
@@ -91,8 +95,6 @@ public class ChallengeBuilder implements IChallengeable {
         p = null;
         time = null;
         type = null;
-        points = null;
-        conditions = new ArrayList<>();
         description = null;
     }
 
@@ -106,14 +108,6 @@ public class ChallengeBuilder implements IChallengeable {
 
     DURATION_TYPE getType() {
         return type;
-    }
-
-    Integer getPoints() {
-        return points;
-    }
-
-    List<Condition> getConditions() {
-        return conditions;
     }
 
     String getName() {
@@ -132,19 +126,15 @@ public class ChallengeBuilder implements IChallengeable {
         this.type = type;
     }
 
-    void setPoints(Integer points) {
-        this.points = points;
+    String getIcon() {
+        return iconURL;
     }
 
-    @Override
-    public String toString() {
-        return "ChallengeBuilder{" +
-                "p=" + p +
-                ", time=" + time +
-                ", type=" + type +
-                ", points=" + points +
-                ", conditions=" + conditions +
-                '}';
+    List<Level> getLevels() {
+        return levels;
     }
 
+    void addLevel(Level level) {
+        levels.add(level);
+    }
 }

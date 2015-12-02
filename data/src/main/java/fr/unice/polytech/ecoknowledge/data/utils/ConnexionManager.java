@@ -1,6 +1,7 @@
 package fr.unice.polytech.ecoknowledge.data.utils;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
@@ -19,6 +20,7 @@ public class ConnexionManager {
 
     private ConnexionManager() {
         mongo = new MongoClient(System.getenv("MONGOHQ_URL"), 27017);
+
     }
 
     public static ConnexionManager getInstance() {

@@ -67,7 +67,7 @@ public class AchievementProcessor implements GoalVisitor {
 
 		boolean achieved = correctRate >= 100.0;
 
-		LevelResult levelResult = new LevelResult(achieved, correctRate, currentConditionResult, level);
+		LevelResult levelResult = new LevelResult(currentLevelResult.size()+1,achieved, correctRate, currentConditionResult, level);
 		currentLevelResult.add(levelResult);
 
 		currentConditionResult = new ArrayList<>();

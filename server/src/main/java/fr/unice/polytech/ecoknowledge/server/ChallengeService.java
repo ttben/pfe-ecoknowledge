@@ -33,11 +33,16 @@ public class ChallengeService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getBadge(@PathParam("challengeId") String challengeId){
 
-		JSONObject response = Controller.getInstance().searchBadge(challengeId);
+		// FIXME: 01/12/2015 
+		/*
+		
+		JSONObject response = Controller.getInstance().(challengeId);
 
 		if(response.getBoolean("valid"))
 			return  Response.ok(response.toString()).build();
 		return Response.status(Response.Status.NOT_FOUND).build();
+		*/
+		return null;
 
 	}
 

@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.LevelBuilderGettable;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.AT_LEAST_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
@@ -8,7 +9,7 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.*;
 /**
  * Created by Sébastien on 25/11/2015.
  */
-public class WaitForValue extends ChallengeBuilderGettable implements IActiveDurationnableAndConditionsable {
+public class WaitForValue extends LevelBuilderGettable implements IActiveDurationnableAndConditionsable {
 
     private Condition condition;
     private WEEK_PERIOD period = null;
@@ -20,6 +21,8 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
 
     public WaitForValue(Condition condition) {
         this.condition = condition;
+        period = WEEK_PERIOD.ALL;
+        moment = DAY_MOMENT.ALL;
     }
 
     @Override
@@ -39,27 +42,33 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
 
     @Override
     public void end() {
-        getChallengeBuilder().end();
-
+        getLevel().end();
     }
 
     @Override
     public IConditionable averageOf(String sensor) {
         Condition c = new Condition(this.getCondition().getConditions(), ConditionType.AVERAGE, sensor);
-        getChallengeBuilder().addCondition(c);
+        getLevel().addCondition(c);
         return c;
     }
 
     @Override
     public IConditionable valueOf(String sensor) {
         Condition c = new Condition(this.getCondition().getConditions(), ConditionType.VALUE_OF, sensor);
-        getChallengeBuilder().addCondition(c);
+        getLevel().addCondition(c);
         return c;
     }
 
     @Override
-    ChallengeBuilder getChallengeBuilder() {
-        return condition.getChallengeBuilder();
+    public IImprovable increase(String sensor) {
+        Improvement i = new Improvement(condition.getConditions(), sensor, IMPROVEMENT_TYPE.INCREASE);
+        return i;
+    }
+
+    @Override
+    public IImprovable decrease(String sensor) {
+        Improvement i = new Improvement(condition.getConditions(), sensor, IMPROVEMENT_TYPE.DECREASE);
+        return i;
     }
 
     void addWaitAfterOn(WaitAfterOn wao){
@@ -68,15 +77,6 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
 
     Condition getCondition(){
         return condition;
-    }
-
-    @Override
-    public String toString() {
-        return "WaitForValue{" +
-                "wao=" + wao +
-                ", moment=" + moment +
-                ", period=" + period +
-                '}';
     }
 
     @Override
@@ -104,5 +104,23 @@ public class WaitForValue extends ChallengeBuilderGettable implements IActiveDur
 
     AT_LEAST_TYPE getType() {
         return type;
+    }
+
+    WEEK_PERIOD getPeriod() {
+        return period;
+    }
+
+    DAY_MOMENT getMoment() {
+        return moment;
+    }
+
+    @Override
+    protected Level getLevel() {
+        return condition.getLevel();
+    }
+
+    @Override
+    public IRewardableWithIcon atLevel(String levelName) {
+        return getLevel().newLevel(levelName);
     }
 }
