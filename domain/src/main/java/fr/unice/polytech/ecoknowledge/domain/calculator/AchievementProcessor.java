@@ -84,7 +84,8 @@ public class AchievementProcessor implements GoalVisitor {
 		String sensorBound = goal.getSensorNameForGivenSymbolicName(symbolicName);
 
 		//	Retrieves values of sensors
-		List<Data> data = this.cache.getDataOfSensorBetweenDate(sensorBound, goal.getStart(), goal.getEnd());
+		List<Data> data = this.cache.getDataOfSensorBetweenDate(sensorBound, goal.getStart(), goal.getEnd(),
+                condition.getTargetDays().getWeekMoment(), condition.getTargetDays().getDayMoment());
 
 		//	Compute evaluation of condition
 		int numberOfCorrectValues = 0;

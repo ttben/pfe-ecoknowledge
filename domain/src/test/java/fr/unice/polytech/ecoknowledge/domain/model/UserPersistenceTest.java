@@ -17,7 +17,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class UserPersistenceTest {
 
-	private User user;
+	static private User user;
 	private JsonObject jsonUserDescription;
 
 	@Before
@@ -28,7 +28,8 @@ public class UserPersistenceTest {
 
 	@AfterClass
 	public static void eraseUsers(){
-		DataPersistence.drop(DataPersistence.Collections.USER);
+		DataPersistence.drop(DataPersistence.Collections.USER,
+				user.getId().toString());
 	}
 
 	@Test
