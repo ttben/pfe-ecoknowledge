@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
@@ -11,6 +12,9 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import fr.unice.polytech.ecoknowledge.data.utils.ConnexionManager;
 import org.bson.Document;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Benjamin on 01/12/2015.
@@ -29,10 +33,6 @@ public class DataPersistence {
 		}
 	}
 
-	public static String CHALLENGE_COLLECTION = "challenges";
-	public static String BADGE_COLLECTION = "badges";
-	public static String USER_COLLECTION = "users";
-
 	public static String DB_NAME = "pfe";
 
 	public static JsonObject store(Collections targetCollection, JsonObject json) {
@@ -50,6 +50,25 @@ public class DataPersistence {
 
 		return (JsonObject) persistedJsonObject;
 	}
+
+
+	public static List<JsonObject> findGoal(String idUser) {
+
+		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
+		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(Collections.GOAL.collectionName);
+
+		FindIterable<Document> docs = collection.find(new Document("user.id", idUser));
+
+		ArrayList<JsonObject> res = new ArrayList<>();
+		for(Document doc : docs) {
+			JsonParser parser = new JsonParser();
+			res.add(parser.parse(doc.toJson()).getAsJsonObject());
+		}
+
+		return res;
+	}
+
 
 	public static JsonObject read(Collections targetCollection, String id) {
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();

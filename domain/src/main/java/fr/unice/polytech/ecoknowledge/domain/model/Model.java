@@ -8,16 +8,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.DataPersistence;
-import fr.unice.polytech.ecoknowledge.domain.model.repositories.BadgeRepository;
-import fr.unice.polytech.ecoknowledge.domain.model.repositories.UserRepository;
-import fr.unice.polytech.ecoknowledge.domain.model.repositories.ChallengeRepository;
-import fr.unice.polytech.ecoknowledge.domain.model.repositories.GoalRepository;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.ChallengeView;
 import fr.unice.polytech.ecoknowledge.domain.views.users.UserView;
-import org.json.JSONArray;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Model {
 
@@ -47,9 +44,15 @@ public class Model {
 		throw new UnsupportedOperationException();
 	}
 
-	public void getGoalsOfUser(Integer idUser) {
-		// TODO - implement language.getGoalsOfUser
-		throw new UnsupportedOperationException();
+	public List<Goal> getGoalsOfUser(String idUser) throws IOException {
+		List<JsonObject> jsons = DataPersistence.findGoal(idUser);
+		ArrayList<Goal> goals = new ArrayList<>();
+
+		ObjectMapper mapper = new ObjectMapper();
+		for(JsonObject json : jsons){
+			goals.add(mapper.readValue(json.toString(), Goal.class));
+		}
+		return goals;
 	}
 
 	public void decernBadge(Integer idUser, Badge badge) {
@@ -133,5 +136,15 @@ public class Model {
 
 	public void deleteAChallenge(String challengeId) {
 		DataPersistence.drop(DataPersistence.Collections.CHALLENGE, challengeId);
+	}
+
+	public Goal getGoal(String userId, String challengeId) throws IOException {
+		List<Goal> goals = getGoalsOfUser(userId);
+		for(Goal g : goals){
+			if(g.getChallengeDefinition().getId().equals(challengeId)){
+				return g;
+			}
+		}
+		return null;
 	}
 }

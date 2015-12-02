@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.data.DataPersistence;
-import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
+import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
@@ -24,9 +23,11 @@ public class Controller {
     private static Controller instance;
 
     private Model model;
+    private Calculator calculator;
 
     private Controller() {
         model = new Model();
+        calculator = new Calculator(new Cache());
     }
 
     public static Controller getInstance() {
@@ -131,5 +132,9 @@ public class Controller {
 
     public JsonObject getUser(String id) throws IOException {
         return this.model.getUser(id);
+    }
+
+    public JsonObject evaluate(String userId, String challengeId) throws IOException {
+        return this.calculator.evaluate(model.getGoal(userId, challengeId));
     }
 }
