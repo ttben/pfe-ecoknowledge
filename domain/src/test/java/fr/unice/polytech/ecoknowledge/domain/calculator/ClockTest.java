@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
+import junit.framework.Assert;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
@@ -13,18 +14,26 @@ import static junit.framework.TestCase.assertEquals;
 public class ClockTest {
 
     @Test
-    public void checkDateCreation(){
+    public void checkDateCreationEurope(){
 
         Clock c = new Clock();
         DateTime withEurope = c.parseDate("2015-12-01T18:00:00Z");
-        c.setMiddleWareTZ(TimeZone.getTimeZone("America/Los_Angeles"));
-        DateTime withAmerica = c.parseDate("2015-12-01T18:00:00Z");
 
-        assertEquals(1448989200000L, withEurope.getMillis());
-        assertEquals(1449021600000L, withAmerica.getMillis());
+        assertEquals("Europe/Paris", withEurope.getZone().getID());
+        assertEquals(18, withEurope.getHourOfDay());
 
     }
 
+    @Test
+    public void checkDateCreationAmerica(){
 
+        Clock c = new Clock();
+        c.setMiddleWareTZ(TimeZone.getTimeZone("America/Los_Angeles"));
+        DateTime withAmerica = c.parseDate("2015-12-01T18:00:00Z");
+
+
+        assertEquals("America/Los_Angeles", withAmerica.getZone().getID());
+        Assert.assertEquals(18, withAmerica.getHourOfDay());
+    }
 
 }
