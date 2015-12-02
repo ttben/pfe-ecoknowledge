@@ -2,23 +2,21 @@ package fr.unice.polytech.ecoknowledge.domain.views.goals;
 
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
-import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.LevelView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Benjamin on 26/11/2015.
- */
-public class LevelResult implements ViewForClient {
+public class LevelResult {
+	private int levelIndex;
 	private boolean achieved;
 	private double correctRate;
 	private Level level;
 
 	private List<ConditionResult> conditionResultList = new ArrayList<>();
 
-	public LevelResult(boolean achieved, double correctRate, List<ConditionResult> conditionResultList, Level level) {
+	public LevelResult(int levelIndex, boolean achieved, double correctRate, List<ConditionResult> conditionResultList, Level level) {
+		this.levelIndex = levelIndex;
 		this.achieved = achieved;
 		this.correctRate = correctRate;
 		this.level = level;
@@ -57,8 +55,16 @@ public class LevelResult implements ViewForClient {
 		this.conditionResultList = conditionResultList;
 	}
 
+	public int getLevelIndex() {
+		return levelIndex;
+	}
+
+	public void setLevelIndex(int levelIndex) {
+		this.levelIndex = levelIndex;
+	}
+
 	public JsonObject toJsonForClient() {
-		JsonObject result = new LevelView(level).toJsonForClient();
+		JsonObject result = new LevelView(this.levelIndex, level).toJsonForClient();
 		result.addProperty("percent", this.correctRate);
 
 		return result;
