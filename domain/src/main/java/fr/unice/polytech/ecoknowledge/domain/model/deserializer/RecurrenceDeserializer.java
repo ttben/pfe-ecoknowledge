@@ -5,8 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import fr.unice.polytech.ecoknowledge.domain.model.Recurrence;
-import fr.unice.polytech.ecoknowledge.domain.model.RecurrenceType;
+import fr.unice.polytech.ecoknowledge.domain.model.time.Recurrence;
+import fr.unice.polytech.ecoknowledge.domain.model.time.RecurrenceType;
 
 import java.io.IOException;
 

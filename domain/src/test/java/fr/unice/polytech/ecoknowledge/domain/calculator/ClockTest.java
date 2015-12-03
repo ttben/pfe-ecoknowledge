@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
+import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import junit.framework.Assert;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -13,27 +14,27 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class ClockTest {
 
-    @Test
-    public void checkDateCreationEurope(){
+	@Test
+	public void checkDateCreationEurope() {
 
-        Clock c = new Clock();
-        DateTime withEurope = c.parseDate("2015-12-01T18:00:00Z");
+		Clock c = new Clock();
+		DateTime withEurope = c.parseDate("2015-12-01T18:00:00Z");
 
-        assertEquals("Europe/Paris", withEurope.getZone().getID());
-        assertEquals(18, withEurope.getHourOfDay());
+		assertEquals("Europe/Paris", withEurope.getZone().getID());
+		assertEquals(18, withEurope.getHourOfDay());
 
-    }
+	}
 
-    @Test
-    public void checkDateCreationAmerica(){
+	@Test
+	public void checkDateCreationAmerica() {
 
-        Clock c = new Clock();
-        c.setMiddleWareTZ(TimeZone.getTimeZone("America/Los_Angeles"));
-        DateTime withAmerica = c.parseDate("2015-12-01T18:00:00Z");
+		Clock c = new Clock();
+		c.setMiddleWareTZ(TimeZone.getTimeZone("America/Los_Angeles"));
+		DateTime withAmerica = c.parseDate("2015-12-01T18:00:00Z");
 
 
-        assertEquals("America/Los_Angeles", withAmerica.getZone().getID());
-        Assert.assertEquals(18, withAmerica.getHourOfDay());
-    }
+		assertEquals("America/Los_Angeles", withAmerica.getZone().getID());
+		Assert.assertEquals(18, withAmerica.getHourOfDay());
+	}
 
 }

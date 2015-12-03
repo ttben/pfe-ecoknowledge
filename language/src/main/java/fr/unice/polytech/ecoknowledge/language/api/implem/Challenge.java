@@ -5,11 +5,11 @@ package fr.unice.polytech.ecoknowledge.language.api.implem;
  */
 public class Challenge {
 
-    private Challenge() {
-    }
+	private Challenge() {
+	}
 
-    public static ChallengeBuilder create(String name){
-        return new ChallengeBuilder(name);
-    }
+	public static ChallengeBuilder create(String name) {
+		return new ChallengeBuilder(name);
+	}
 
 }

@@ -2,15 +2,14 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.unice.polytech.ecoknowledge.controller.Controller;
-import org.json.JSONObject;
+import fr.unice.polytech.ecoknowledge.domain.Controller;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
-@Path("/challenge")
+@Path("/challenges")
 public class ChallengeService {
 
 	@POST
@@ -31,7 +30,7 @@ public class ChallengeService {
 	@GET
 	@Path("/{challengeId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getBadge(@PathParam("challengeId") String challengeId){
+	public Response getBadge(@PathParam("challengeId") String challengeId) {
 
 		// FIXME: 01/12/2015 
 		/*

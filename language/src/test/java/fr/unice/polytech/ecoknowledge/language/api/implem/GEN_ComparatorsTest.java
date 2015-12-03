@@ -1,7 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
 import fr.unice.polytech.ecoknowledge.language.api.implem.util.JsonSearcher;
-import junit.framework.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -18,94 +17,95 @@ import static org.junit.Assert.assertEquals;
  */
 public class GEN_ComparatorsTest {
 
-    @Test
-    public void comparatorLowerThan(){
+	@Test
+	public void comparatorLowerThan() {
 
-        ChallengeBuilder cb = Challenge.create("comparatorLT");
-        cb
-                .dontSend() // Just because it's a test
-                .availableFrom(1).to(2)
-                .during(2, WEEK)
-                .atLevel("level")
-                    .rewards(2)
-                    .withConditions()
-                        .valueOf("Sensor").lowerThan(5)
-                .end();
+		ChallengeBuilder cb = Challenge.create("comparatorLT");
+		cb
+				.dontSend() // Just because it's a test
+				.availableFrom(1).to(2)
+				.during(2, WEEK)
+				.atLevel("level")
+				.rewards(2)
+				.withConditions()
+				.valueOf("Sensor").lowerThan(5)
+				.end();
 
-        String comparator = getComparatorForSimpleChallenge(cb.getDescription());
-        assertEquals("<", comparator);
+		String comparator = getComparatorForSimpleChallenge(cb.getDescription());
+		assertEquals("<", comparator);
 
-    }
+	}
 
-    @Test
-    public void comparatorGreaterThan(){
+	@Test
+	public void comparatorGreaterThan() {
 
-        ChallengeBuilder cb = Challenge.create("comparatorGT");
-        cb
-                .dontSend() // Just because it's a test
-                .availableFrom(1).to(2)
-                .during(2, WEEK)
-                .atLevel("level")
-                    .rewards(2)
-                    .withConditions()
-                    .valueOf("Sensor").greaterThan(5)
-                .end();
+		ChallengeBuilder cb = Challenge.create("comparatorGT");
+		cb
+				.dontSend() // Just because it's a test
+				.availableFrom(1).to(2)
+				.during(2, WEEK)
+				.atLevel("level")
+				.rewards(2)
+				.withConditions()
+				.valueOf("Sensor").greaterThan(5)
+				.end();
 
-        String comparator = getComparatorForSimpleChallenge(cb.getDescription());
-        assertEquals(">", comparator);
+		String comparator = getComparatorForSimpleChallenge(cb.getDescription());
+		assertEquals(">", comparator);
 
-    }
-    @Test
-    public void comparatorEqualsTo(){
+	}
 
-        ChallengeBuilder cb = Challenge.create("comparatorLT");
-        cb
-                .dontSend() // Just because it's a test
-                .availableFrom(1).to(2)
-                .during(2, WEEK)
-                .atLevel("level")
-                    .rewards(2)
-                    .withConditions()
-                    .valueOf("Sensor").equalsTo(5)
-                .end();
+	@Test
+	public void comparatorEqualsTo() {
 
-        String comparator = getComparatorForSimpleChallenge(cb.getDescription());
-        assertEquals("=", comparator);
+		ChallengeBuilder cb = Challenge.create("comparatorLT");
+		cb
+				.dontSend() // Just because it's a test
+				.availableFrom(1).to(2)
+				.during(2, WEEK)
+				.atLevel("level")
+				.rewards(2)
+				.withConditions()
+				.valueOf("Sensor").equalsTo(5)
+				.end();
 
-    }
+		String comparator = getComparatorForSimpleChallenge(cb.getDescription());
+		assertEquals("=", comparator);
 
-    @Test
-    public void comparatorDifferentFrom(){
+	}
 
-        ChallengeBuilder cb = Challenge.create("comparatorDF");
-        cb
-                .dontSend() // Just because it's a test
-                .availableFrom(1).to(2)
-                .during(2, WEEK)
-                .atLevel("level")
-                    .rewards(2)
-                    .withConditions()
-                    .valueOf("Sensor").differentFrom(5)
-                .end();
+	@Test
+	public void comparatorDifferentFrom() {
 
-        String comparator = getComparatorForSimpleChallenge(cb.getDescription());
-        assertEquals("!=", comparator);
+		ChallengeBuilder cb = Challenge.create("comparatorDF");
+		cb
+				.dontSend() // Just because it's a test
+				.availableFrom(1).to(2)
+				.during(2, WEEK)
+				.atLevel("level")
+				.rewards(2)
+				.withConditions()
+				.valueOf("Sensor").differentFrom(5)
+				.end();
 
-    }
+		String comparator = getComparatorForSimpleChallenge(cb.getDescription());
+		assertEquals("!=", comparator);
 
-    private String getComparatorForSimpleChallenge(JSONObject json){
+	}
 
-        ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
-        wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
-        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
-        wanted.add(new AbstractMap.SimpleEntry<>("conditions", JSONArray.class));
-        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
-        wanted.add(new AbstractMap.SimpleEntry<>("expression", JSONObject.class));
-        wanted.add(new AbstractMap.SimpleEntry<>("comparator", String.class));
+	private String getComparatorForSimpleChallenge(JSONObject json) {
+
+		ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
+		wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
+		wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
+		wanted.add(new AbstractMap.SimpleEntry<>("conditions", JSONArray.class));
+		wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
+		wanted.add(new AbstractMap.SimpleEntry<>("expression", JSONObject.class));
+		wanted.add(new AbstractMap.SimpleEntry<>("comparator", String.class));
 
 
-        Object c = JsonSearcher.lookFor(json, wanted);
-        return (String) c;
-    }
+		Object c = JsonSearcher.lookFor(json, wanted);
+		return (String) c;
+	}
 
 }

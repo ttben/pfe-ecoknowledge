@@ -3,10 +3,10 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.improve;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
-import fr.unice.polytech.ecoknowledge.domain.model.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 
-public class ImproveCondition implements Condition{
+public class ImproveCondition implements Condition {
 
 	private TimeBox comparedPeriod;
 	private Double threshold;

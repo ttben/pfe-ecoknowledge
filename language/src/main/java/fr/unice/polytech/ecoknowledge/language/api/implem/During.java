@@ -9,21 +9,21 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.ILevelable;
  */
 public class During implements IDuringable {
 
-    ChallengeBuilder cb;
+	ChallengeBuilder cb;
 
-    During(ChallengeBuilder cb){
-        this.cb = cb;
-    }
+	During(ChallengeBuilder cb) {
+		this.cb = cb;
+	}
 
-    @Override
-    public ILevelable during(Integer value, DURATION_TYPE type) {
-        cb.setTime(value);
-        cb.setType(type);
-        return new Level(this);
-    }
+	@Override
+	public ILevelable during(Integer value, DURATION_TYPE type) {
+		cb.setTime(value);
+		cb.setType(type);
+		return new Level(this);
+	}
 
-    ChallengeBuilder getChallengeBuilder(){
-        return cb;
-    }
+	ChallengeBuilder getChallengeBuilder() {
+		return cb;
+	}
 
 }

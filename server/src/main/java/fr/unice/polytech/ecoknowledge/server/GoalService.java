@@ -5,13 +5,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.unice.polytech.ecoknowledge.controller.Controller;
+import fr.unice.polytech.ecoknowledge.domain.Controller;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
-@Path("/goal")
+@Path("/goals")
 public class GoalService {
 
 	@POST
@@ -23,13 +23,11 @@ public class GoalService {
 		try {
 			JsonObject result = Controller.getInstance().createGoal(jsonObject);
 			return Response.ok().entity(result.toString()).build();
-		}
-		catch(JsonMappingException | JsonParseException e) {
+		} catch (JsonMappingException | JsonParseException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 			return Response.status(403).entity(e.getMessage()).build();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 			return Response.status(500).entity(e.getMessage()).build();

@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.domain.model;
+package fr.unice.polytech.ecoknowledge.domain.model.time;
 
 /**
  * Created by Benjamin on 30/11/2015.

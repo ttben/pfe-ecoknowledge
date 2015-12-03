@@ -9,8 +9,9 @@ import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
  */
 public interface IActiveDurationnable extends ISecondActiveDurationnableAndAndable {
 
-    public ISecondActiveDurationnableAndAndable on(WEEK_PERIOD period, DAY_MOMENT moment);
-    public ISecondActiveDurationnableAndAndable on(WEEK_PERIOD period);
+	public ISecondActiveDurationnableAndAndable on(WEEK_PERIOD period, DAY_MOMENT moment);
+
+	public ISecondActiveDurationnableAndAndable on(WEEK_PERIOD period);
 
 
 }

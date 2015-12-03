@@ -2,10 +2,10 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import org.joda.time.DateTime;
 
+@Deprecated
 public class RecurrenceService {
 
 	/**
-	 * 
 	 * @param now
 	 */
 	public DateTime getNextStart(DateTime now) {
@@ -14,7 +14,6 @@ public class RecurrenceService {
 	}
 
 	/**
-	 * 
 	 * @param now
 	 */
 	public DateTime getNextEnd(DateTime now) {
@@ -23,7 +22,6 @@ public class RecurrenceService {
 	}
 
 	/**
-	 * 
 	 * @param now
 	 */
 	public DateTime getCurrentStart(DateTime now) {
@@ -32,7 +30,6 @@ public class RecurrenceService {
 	}
 
 	/**
-	 * 
 	 * @param now
 	 */
 	public DateTime getCurrentEnd(DateTime now) {

@@ -10,20 +10,20 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.IImprovementFinish
  */
 public class ImprovementPeriod extends LevelBuilderGettable implements IImprovementFinished {
 
-    private Percentable p;
+	private Percentable p;
 
-    public ImprovementPeriod(Percentable percentable) {
-        this.p = percentable;
-    }
+	public ImprovementPeriod(Percentable percentable) {
+		this.p = percentable;
+	}
 
-    @Override
-    public IAndable comparedTo(OLD_PERIOD when) {
-        p.getImprovement().setImprovementPeriod(when);
-        return new AndOfImprovement(p.getImprovement().getConditions());
-    }
+	@Override
+	public IAndable comparedTo(OLD_PERIOD when) {
+		p.getImprovement().setImprovementPeriod(when);
+		return new AndOfImprovement(p.getImprovement().getConditions());
+	}
 
-    @Override
-    protected Level getLevel() {
-        return p.getLevel();
-    }
+	@Override
+	protected Level getLevel() {
+		return p.getLevel();
+	}
 }

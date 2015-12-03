@@ -3,7 +3,6 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.DataPersistence;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +26,7 @@ public class UserPersistenceTest {
 	}
 
 	@AfterClass
-	public static void eraseUsers(){
+	public static void eraseUsers() {
 		DataPersistence.drop(DataPersistence.Collections.USER,
 				user.getId().toString());
 	}
@@ -67,7 +66,6 @@ public class UserPersistenceTest {
 
 		assertEquals(getExpectedUser(), anotherUser);
 	}
-
 
 
 	private JsonObject getUserDescription() {

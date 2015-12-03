@@ -10,34 +10,34 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurat
  */
 public class ConditionLeast extends LevelBuilderGettable implements IAtLeastable {
 
-    private WaitForValue wfv;
+	private WaitForValue wfv;
 
-    public ConditionLeast(WaitForValue waitAfterOn) {
-        wfv = waitAfterOn;
-    }
+	public ConditionLeast(WaitForValue waitAfterOn) {
+		wfv = waitAfterOn;
+	}
 
-    @Override
-    public ISecondActiveDurationnableAndAndable percent() {
-        if(wfv.getAtLeast() > 100){
-            throw new IllegalArgumentException("Can't have more than 100% time condition");
-        } else if(wfv.getAtLeast() < 1){
-            throw new IllegalArgumentException("Can't have less than 1% time condition");
-        }
-        wfv.setType(AT_LEAST_TYPE.PERCENT);
-        return wfv;
-    }
+	@Override
+	public ISecondActiveDurationnableAndAndable percent() {
+		if (wfv.getAtLeast() > 100) {
+			throw new IllegalArgumentException("Can't have more than 100% time condition");
+		} else if (wfv.getAtLeast() < 1) {
+			throw new IllegalArgumentException("Can't have less than 1% time condition");
+		}
+		wfv.setType(AT_LEAST_TYPE.PERCENT);
+		return wfv;
+	}
 
-    @Override
-    public ISecondActiveDurationnableAndAndable times() {
-        if(wfv.getAtLeast() < 1){
-            throw new IllegalArgumentException("Can't have less than 1 time condition");
-        }
-        wfv.setType(AT_LEAST_TYPE.TIMES);
-        return wfv;
-    }
+	@Override
+	public ISecondActiveDurationnableAndAndable times() {
+		if (wfv.getAtLeast() < 1) {
+			throw new IllegalArgumentException("Can't have less than 1 time condition");
+		}
+		wfv.setType(AT_LEAST_TYPE.TIMES);
+		return wfv;
+	}
 
-    @Override
-    protected Level getLevel() {
-        return wfv.getLevel();
-    }
+	@Override
+	protected Level getLevel() {
+		return wfv.getLevel();
+	}
 }

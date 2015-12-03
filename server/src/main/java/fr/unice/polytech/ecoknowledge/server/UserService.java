@@ -2,7 +2,7 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.unice.polytech.ecoknowledge.controller.Controller;
+import fr.unice.polytech.ecoknowledge.domain.Controller;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -26,15 +26,15 @@ public class UserService {
 
 	@GET
 	@Path("/{id}")
-	public Response getUser(@PathParam("id") String id){
-		try{
+	public Response getUser(@PathParam("id") String id) {
+		try {
 			return Response.ok().entity(Controller.getInstance().getUser(id).toString()).build();
-		} catch(InvalidParameterException e){
+		} catch (InvalidParameterException e) {
 			return Response.status(403).entity(e.getMessage()).build();
-		}catch (IOException e) {
-            e.printStackTrace();
-            return Response.status(500).entity(e.getMessage()).build();
-        }
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		}
 	}
 
 	@GET

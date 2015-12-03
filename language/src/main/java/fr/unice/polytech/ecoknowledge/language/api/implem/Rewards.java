@@ -10,27 +10,27 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.IRewardableWithIco
  */
 public class Rewards extends LevelBuilderGettable implements IRewardableWithIcon {
 
-    Level l;
+	Level l;
 
-    public Rewards(Level level) {
-        this.l = level;
-    }
+	public Rewards(Level level) {
+		this.l = level;
+	}
 
 
-    @Override
-    public IConditionsableAfterReward rewards(Integer points) {
-        l.setPoints(points);
-        return new ConditionBuilder(this);
-    }
+	@Override
+	public IConditionsableAfterReward rewards(Integer points) {
+		l.setPoints(points);
+		return new ConditionBuilder(this);
+	}
 
-    @Override
-    public IRewardable withImage(String url) {
-        l.setImage(url);
-        return this;
-    }
+	@Override
+	public IRewardable withImage(String url) {
+		l.setImage(url);
+		return this;
+	}
 
-    @Override
-    protected Level getLevel() {
-        return l;
-    }
+	@Override
+	protected Level getLevel() {
+		return l;
+	}
 }

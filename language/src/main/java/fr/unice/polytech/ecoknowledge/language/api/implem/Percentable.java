@@ -9,24 +9,24 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.IImprovementPercen
  */
 public class Percentable extends LevelBuilderGettable implements IImprovementPercentable {
 
-    private Improvement i;
+	private Improvement i;
 
-    public Percentable(Improvement improvement) {
-        this.i = improvement;
-    }
+	public Percentable(Improvement improvement) {
+		this.i = improvement;
+	}
 
-    @Override
-    public IImprovementFinished percent() {
-        ImprovementPeriod ip = new ImprovementPeriod(this);
-        return ip;
-    }
+	@Override
+	public IImprovementFinished percent() {
+		ImprovementPeriod ip = new ImprovementPeriod(this);
+		return ip;
+	}
 
-    Improvement getImprovement() {
-        return i;
-    }
+	Improvement getImprovement() {
+		return i;
+	}
 
-    @Override
-    protected Level getLevel() {
-        return i.getLevel();
-    }
+	@Override
+	protected Level getLevel() {
+		return i.getLevel();
+	}
 }

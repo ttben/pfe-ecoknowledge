@@ -5,5 +5,5 @@ package fr.unice.polytech.ecoknowledge.language.api.interfaces;
  */
 public interface IRewardable {
 
-    public IConditionsableAfterReward rewards(Integer points);
+	public IConditionsableAfterReward rewards(Integer points);
 }

@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.domain.model;
+package fr.unice.polytech.ecoknowledge.domain.model.challenges;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -43,11 +43,11 @@ public class Badge {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof Badge)) {
+		if (!(obj instanceof Badge)) {
 			return false;
 		}
 
-		Badge badge = (Badge)obj;
+		Badge badge = (Badge) obj;
 
 		return image.equals(badge.image)
 				&& reward.equals(badge.reward)

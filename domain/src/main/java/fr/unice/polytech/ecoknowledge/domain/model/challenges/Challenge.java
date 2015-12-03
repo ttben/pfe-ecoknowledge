@@ -1,11 +1,11 @@
-package fr.unice.polytech.ecoknowledge.domain.model;
+package fr.unice.polytech.ecoknowledge.domain.model.challenges;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
-import org.joda.time.format.DateTimeFormat;
+import fr.unice.polytech.ecoknowledge.domain.model.VisitableComponent;
+import fr.unice.polytech.ecoknowledge.domain.model.time.Recurrence;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +36,38 @@ public class Challenge implements VisitableComponent {
 		this.recurrence = recurrence;
 	}
 
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
+	public List<Level> getLevels() {
+		return levels;
+	}
+
+	public void setLevels(List<Level> levels) {
+		this.levels = levels;
+	}
+
 	public TimeBox getTimeSpan() {
 		return timeSpan;
 	}
@@ -52,33 +84,9 @@ public class Challenge implements VisitableComponent {
 		this.recurrence = recurrence;
 	}
 
-	public List<Level> getLevels() {
-		return levels;
-	}
-
-	public void setLevels(List<Level> levels) {
-		this.levels = levels;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
-
 	@Override
 	public void accept(GoalVisitor goalVisitor) {
-		for(VisitableComponent visitableComponent : levels) {
+		for (VisitableComponent visitableComponent : levels) {
 			visitableComponent.accept(goalVisitor);
 		}
 
@@ -87,24 +95,16 @@ public class Challenge implements VisitableComponent {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof Challenge)) {
+		if (!(obj instanceof Challenge)) {
 			return false;
 		}
 
-		Challenge challenge = (Challenge)obj;
+		Challenge challenge = (Challenge) obj;
 
 		return challenge.id.equals(id)
 				&& challenge.name.equals(name)
 				&& challenge.levels.equals(levels)
 				&& challenge.timeSpan.equals(timeSpan)
 				&& challenge.recurrence.equals(recurrence);
-	}
-
-	public String getIcon() {
-		return icon;
-	}
-
-	public void setIcon(String icon) {
-		this.icon = icon;
 	}
 }
