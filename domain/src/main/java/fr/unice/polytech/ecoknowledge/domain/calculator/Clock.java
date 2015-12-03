@@ -32,6 +32,11 @@ public class Clock {
         return dt;
     }
 
+    public DateTime createDate(DateTime time){
+        return createDate(time.getYear(), time.getMonthOfYear(), time.getDayOfMonth(),
+                time.getHourOfDay(), time.getMinuteOfHour(), time.getSecondOfMinute());
+    }
+
     public DateTime createDate(int year, int month, int day, int hour, int minute, int second){
         DateTime date = new DateTime(year, month, day, hour, minute, second, 0,
                 DateTimeZone.forTimeZone(middleWareTZ));

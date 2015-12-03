@@ -8,10 +8,12 @@ import fr.unice.polytech.ecoknowledge.domain.views.goals.LevelResult;
 public class Calculator {
 
 	private Cache cache;
+    private Clock clock;
 
-	public Calculator(Cache cache) {
+    public Calculator(Cache cache) {
 		this.cache = cache;
-	}
+        this.clock = new Clock();
+    }
 
     public JsonObject evaluate(Goal g){
         AchievementProcessor ap = new AchievementProcessor(g, cache);
@@ -30,8 +32,7 @@ public class Calculator {
         return res;
     }
 
-
-    public void evaluate(String userId, String challengeId) {
-
+    public Clock getClock() {
+        return clock;
     }
 }

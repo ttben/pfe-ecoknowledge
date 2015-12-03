@@ -7,10 +7,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.data.DataPersistence;
+import fr.unice.polytech.ecoknowledge.domain.calculator.Clock;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.ChallengeView;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalView;
 import fr.unice.polytech.ecoknowledge.domain.views.users.UserView;
+import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
@@ -129,17 +132,26 @@ public class Model {
 		return result;
 	}
 
-	public Goal takeChallenge(JsonObject jsonObject) throws IOException, JsonParseException, JsonMappingException {
+	public Goal takeChallenge(JsonObject jsonObject, Clock clock) throws IOException, JsonParseException, JsonMappingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Goal goal = (Goal)objectMapper.readValue(jsonObject.toString(), Goal.class);
-		jsonObject.addProperty("id", goal.getId().toString());
+
+        TimeBox timeSpan = TimeSpanGenerator.generateTimeSpan(goal.getChallengeDefinition().getRecurrence(),
+                clock);
+        String timeSpanString = objectMapper.writeValueAsString(timeSpan);
+
+        JsonObject timeSpanJsonDescription = new JsonParser().parse(timeSpanString).getAsJsonObject();
+
+                goal.setTimeSpan(timeSpan);
+        jsonObject.addProperty("id", goal.getId().toString());
+        jsonObject.addProperty("timeSpan", ""+timeSpanJsonDescription);
 
 		DataPersistence.store(DataPersistence.Collections.GOAL, jsonObject);
 
 		return goal;
 	}
 
-	public JsonObject registerUser(JsonObject userJsonDescription) throws IOException {
+    public JsonObject registerUser(JsonObject userJsonDescription) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		User newUser = (User)objectMapper.readValue(userJsonDescription.toString(), User.class);
 		userJsonDescription.addProperty("id", newUser.getId().toString());
