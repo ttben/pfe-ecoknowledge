@@ -18,11 +18,9 @@ public class JsonSearcher {
     public static Object lookFor(JSONObject json, List<Map.Entry<Object, Class>> path){
 
         Object current = json;
-        Iterator<Map.Entry<Object, Class>> i = path.iterator();
 
-        while(i.hasNext()){
-            Map.Entry<Object, Class> c = i.next();
-            if(c.getKey().getClass().equals(Integer.class)){
+        for (Map.Entry<Object, Class> c : path) {
+            if (c.getKey().getClass().equals(Integer.class)) {
                 assertEquals(JSONArray.class, current.getClass());
                 JSONArray jsa = (JSONArray) current;
                 current = jsa.get((int) c.getKey());

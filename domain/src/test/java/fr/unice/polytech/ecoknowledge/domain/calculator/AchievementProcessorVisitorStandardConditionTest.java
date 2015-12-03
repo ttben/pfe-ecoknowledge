@@ -2,7 +2,6 @@ package fr.unice.polytech.ecoknowledge.domain.calculator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.domain.TestUtils;
 import fr.unice.polytech.ecoknowledge.domain.model.*;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.ConditionResult;
@@ -15,8 +14,6 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,7 +56,7 @@ public class AchievementProcessorVisitorStandardConditionTest {
 		fakedSymbolicNameToSensorNamesMap.put("TMP_AMB", anotherSensorName);
 		willReturn(fakedSymbolicNameToSensorNamesMap).given(user).getSymbolicNameToSensorNameMap();
 
-		jsonObject = TestUtils.getFakeJson();
+		jsonObject = TestUtils.getFakeJson(1);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
@@ -75,8 +72,8 @@ public class AchievementProcessorVisitorStandardConditionTest {
 		secondSensorFakedData.add(new Data(60.0, lifeSpan.getStart().plusDays(3)));
 		secondSensorFakedData.add(new Data(25.0, lifeSpan.getStart().plusDays(5)));
 
-		willReturn(firstSensorFakedData).given(cache).getDataOfSensorBetweenDate(Matchers.matches(aSensorName), any(), any());
-		willReturn(secondSensorFakedData).given(cache).getDataOfSensorBetweenDate(Matchers.matches(anotherSensorName),  any(), any());
+		willReturn(firstSensorFakedData).given(cache).getDataOfSensorBetweenDate(Matchers.matches(aSensorName), any(), any(), any(), any());
+		willReturn(secondSensorFakedData).given(cache).getDataOfSensorBetweenDate(Matchers.matches(anotherSensorName),  any(), any(), any(), any());
 
 		AchievementProcessor achievementProcessor = new AchievementProcessor(goal, cache);
 		goal.accept(achievementProcessor);

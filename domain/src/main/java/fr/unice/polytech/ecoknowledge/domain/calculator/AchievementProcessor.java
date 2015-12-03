@@ -67,7 +67,7 @@ public class AchievementProcessor implements GoalVisitor {
 
 		boolean achieved = correctRate >= 100.0;
 
-		LevelResult levelResult = new LevelResult(achieved, correctRate, currentConditionResult, level);
+		LevelResult levelResult = new LevelResult(currentLevelResult.size()+1,achieved, correctRate, currentConditionResult, level);
 		currentLevelResult.add(levelResult);
 
 		currentConditionResult = new ArrayList<>();
@@ -84,7 +84,8 @@ public class AchievementProcessor implements GoalVisitor {
 		String sensorBound = goal.getSensorNameForGivenSymbolicName(symbolicName);
 
 		//	Retrieves values of sensors
-		List<Data> data = this.cache.getDataOfSensorBetweenDate(sensorBound, goal.getStart(), goal.getEnd());
+		List<Data> data = this.cache.getDataOfSensorBetweenDate(sensorBound, goal.getStart(), goal.getEnd(),
+                condition.getTargetDays().getWeekMoment(), condition.getTargetDays().getDayMoment());
 
 		//	Compute evaluation of condition
 		int numberOfCorrectValues = 0;

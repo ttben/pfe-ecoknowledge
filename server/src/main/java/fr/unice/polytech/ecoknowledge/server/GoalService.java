@@ -18,6 +18,7 @@ public class GoalService {
 	@POST
 	@Consumes("application/json")
 	public Response takeChallenge(String payload) {
+		System.out.printf("POST : TAKE CHALLENGE : PAYLOAD : \n" + payload);
 		JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
 
 		try {
@@ -25,9 +26,13 @@ public class GoalService {
 			return Response.ok().build();
 		}
 		catch(JsonMappingException | JsonParseException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
 			return Response.status(403).entity(e.getMessage()).build();
 		}
 		catch (IOException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
 			return Response.status(500).entity(e.getMessage()).build();
 		}
 	}

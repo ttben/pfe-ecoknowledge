@@ -23,7 +23,7 @@ public class Challenge implements VisitableComponent {
 	@JsonCreator
 	public Challenge(@JsonProperty(value = "id", required = false) String id,
 					 @JsonProperty(value = "name", required = true) String name,
-					 @JsonProperty(value = "icon", required = false) String icon,
+					 @JsonProperty(value = "image", required = true) String icon,
 					 @JsonProperty(value = "levels", required = true) List<Level> levels,
 					 @JsonProperty(value = "lifeSpan", required = true) TimeBox timeBox,
 					 @JsonProperty(value = "recurrence", required = true) Recurrence recurrence) {

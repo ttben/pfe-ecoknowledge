@@ -1,28 +1,36 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.LevelBuilderGettable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionsableAfterReward;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IRewardable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IRewardableWithIcon;
 
 /**
  * Created by Sébastien on 27/11/2015.
  */
-public class Rewards extends ChallengeBuilderGettable implements IRewardable {
+public class Rewards extends LevelBuilderGettable implements IRewardableWithIcon {
 
-    During d;
+    Level l;
 
-    public Rewards(During during) {
-        d = during;
+    public Rewards(Level level) {
+        this.l = level;
     }
 
 
     @Override
     public IConditionsableAfterReward rewards(Integer points) {
-        getChallengeBuilder().setPoints(points);
+        l.setPoints(points);
         return new ConditionBuilder(this);
     }
 
     @Override
-    ChallengeBuilder getChallengeBuilder() {
-        return d.getChallengeBuilder();
+    public IRewardable withImage(String url) {
+        l.setImage(url);
+        return this;
+    }
+
+    @Override
+    protected Level getLevel() {
+        return l;
     }
 }

@@ -7,5 +7,5 @@ import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
  */
 public interface IDuringable {
 
-    public IRewardable during(Integer value, DURATION_TYPE type);
+    public ILevelable during(Integer value, DURATION_TYPE type);
 }

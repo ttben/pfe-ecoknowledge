@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.RecurrenceType;
+import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 import org.joda.time.format.DateTimeFormat;
 
 import static fr.unice.polytech.ecoknowledge.domain.model.RecurrenceType.DAY;
@@ -12,7 +13,7 @@ import static fr.unice.polytech.ecoknowledge.domain.model.RecurrenceType.DAY;
 /**
  * Created by Benjamin on 30/11/2015.
  */
-public class ChallengeView {
+public class ChallengeView implements ViewForClient{
 
 	private Challenge challenge;
 
@@ -52,14 +53,16 @@ public class ChallengeView {
 		}
 
 		JsonArray levelJson = new JsonArray();
+		int index = 1;
 		for(Level level : this.challenge.getLevels()) {
-			LevelView levelView = new LevelView(level);
+			LevelView levelView = new LevelView(index++,level);
 			JsonObject currentJsonOfLevel = levelView.toJsonForClient();
 			levelJson.add(currentJsonOfLevel);
 		}
 
 		result.add("levels",levelJson);
-
+		result.addProperty("remaining", "2 jours"); // FIXME: 02/12/2015 compute according to current date
+		result.addProperty("image", this.challenge.getIcon());
 		return result;
 	}
 }

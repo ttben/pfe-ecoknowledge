@@ -1,19 +1,15 @@
 package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 
-import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
-import fr.unice.polytech.ecoknowledge.domain.model.conditions.Day;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
-
-import java.util.ArrayList;
-import java.util.List;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.time.TimeFilter;
 
 public abstract class BasicCondition implements Condition {
 
 	protected Expression expression;
-	protected List<Day> targetDays = new ArrayList<>();
+	protected TimeFilter targetDays;
 
-	public BasicCondition(Expression expression, List<Day> targetDays) {
+	public BasicCondition(Expression expression, TimeFilter targetDays) {
 
 		this.expression = expression;
 		this.targetDays = targetDays;
@@ -27,11 +23,12 @@ public abstract class BasicCondition implements Condition {
 		this.expression = expression;
 	}
 
-	public List<Day> getTargetDays() {
+	public TimeFilter getTargetDays() {
+		if(targetDays == null) return new TimeFilter();
 		return targetDays;
 	}
 
-	public void setTargetDays(List<Day> targetDays) {
+	public void setTargetDays(TimeFilter targetDays) {
 		this.targetDays = targetDays;
 	}
 

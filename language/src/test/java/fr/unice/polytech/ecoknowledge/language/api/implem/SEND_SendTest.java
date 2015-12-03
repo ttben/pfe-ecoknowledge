@@ -19,9 +19,10 @@ public class SEND_SendTest {
         cb
                 .availableFrom(23,11,2015).to(7,3,2016)
                 .during(1, WEEK)
-                .rewards(2)
+                .atLevel("level")
+                    .rewards(2)
                 .withConditions()
-                .valueOf("We did it").greaterThan(9000)
+                        .valueOf("We did it").greaterThan(9000)
                 .end();
     }
 }

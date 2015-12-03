@@ -4,13 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.TestUtils;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.StandardCondition;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ChallengePersistenceTest {
 
@@ -21,7 +24,7 @@ public class ChallengePersistenceTest {
 	@Before
 	public void loadJsonFile() {
 
-		jsonObject = TestUtils.getFakeJson();
+		jsonObject = TestUtils.getFakeJson(1);
 	}
 
 

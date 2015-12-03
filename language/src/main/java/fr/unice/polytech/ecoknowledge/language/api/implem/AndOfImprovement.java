@@ -1,12 +1,15 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.LevelBuilderGettable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IAndable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionsable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IRewardable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IRewardableWithIcon;
 
 /**
  * Created by Sébastien on 30/11/2015.
  */
-public class AndOfImprovement extends ChallengeBuilderGettable implements IAndable {
+public class AndOfImprovement extends LevelBuilderGettable implements IAndable {
 
     private Conditions conditions;
 
@@ -14,10 +17,6 @@ public class AndOfImprovement extends ChallengeBuilderGettable implements IAndab
         this.conditions = conditions;
     }
 
-    @Override
-    ChallengeBuilder getChallengeBuilder() {
-        return conditions.getChallengeBuilder();
-    }
 
     @Override
     public IConditionsable and() {
@@ -26,6 +25,16 @@ public class AndOfImprovement extends ChallengeBuilderGettable implements IAndab
 
     @Override
     public void end() {
-        getChallengeBuilder().end();
+        getLevel().end();
+    }
+
+    @Override
+    public IRewardableWithIcon atLevel(String levelName) {
+        return getLevel().newLevel(levelName);
+    }
+
+    @Override
+    protected Level getLevel() {
+        return conditions.getLevel();
     }
 }
