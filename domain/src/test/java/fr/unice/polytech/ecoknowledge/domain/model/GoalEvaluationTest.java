@@ -3,6 +3,7 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.DataPersistence;
+import fr.unice.polytech.ecoknowledge.domain.Controller;
 import fr.unice.polytech.ecoknowledge.domain.TestUtils;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Clock;
 import org.joda.time.DateTime;
@@ -13,7 +14,6 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by Sébastien on 03/12/2015.
@@ -31,7 +31,6 @@ public class GoalEvaluationTest {
     private static User aUser = null;
     private static Goal aGoal = null;
 
-    private static Model m;
 
     @BeforeClass
     public static void loadJsonFile() throws IOException {
@@ -70,8 +69,8 @@ public class GoalEvaluationTest {
         DataPersistence.store(DataPersistence.Collections.CHALLENGE, jsonObject);
         DataPersistence.store(DataPersistence.Collections.USER, jsonObjectUser);
 
-        m = new Model();
-        aGoal = m.takeChallenge(jsonObjectGoal, new Clock());
+
+        Controller.getInstance().createGoal(jsonObjectGoal);
 
         Clock clock = new Clock();
 
@@ -84,7 +83,7 @@ public class GoalEvaluationTest {
                 clock.createDate(aGoal.getTimeSpan().getEnd()).getDayOfYear());
         assertEquals(23, aGoal.getTimeSpan().getEnd().getHourOfDay());
 
-        aGoal = m.getGoal(userId, challengeId);
+        aGoal = new Model().getGoal(userId, challengeId);
 
         assertEquals(userId, aGoal.getUser().getId().toString());
         assertEquals(
@@ -96,9 +95,13 @@ public class GoalEvaluationTest {
         assertEquals(23, aGoal.getTimeSpan().getEnd().getHourOfDay());
     }
 
+
     @Test
-    public void evaluate(){
-        // TODO
+    public void evaluate() throws IOException {
+
+        Controller.getInstance().evaluate(userId, challengeId);
+
     }
+
 
 }
