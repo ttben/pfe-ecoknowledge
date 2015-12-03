@@ -17,6 +17,7 @@ import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.E
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.List;
 
 /**
  * Created by Sébastien on 24/11/2015.
@@ -142,15 +143,22 @@ public class Controller {
         return this.model.getUser(id);
     }
 
-    public JsonObject evaluate(String userId, String challengeId) throws IOException {
-        return this.calculator.evaluate(model.getGoal(userId, challengeId));
+    public JsonObject evaluate(Goal g){
+        return this.calculator.evaluate(g);
     }
 
-    public JsonArray getGoalsForUser(String userID) throws IOException {
-        return this.model.getGoalsOfUserInJsonFormat(userID);
+    public JsonObject evaluate(String userId, String challengeId) throws IOException {
+        return evaluate(model.getGoal(userId, challengeId));
+    }
+
+    public void evaluateGoalsForUser(String userId) throws IOException {
+        for(Goal g : this.model.getGoalsOfUser(userId)){
+            evaluate(g);
+        }
     }
 
     public JsonArray getMosaicForUser(String userID) throws IOException {
+        evaluateGoalsForUser(userID);
         return this.model.getMosaicForUser(userID);
     }
 
