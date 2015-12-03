@@ -21,7 +21,6 @@
         <module>domain</module>
         <module>data</module>
         <module>language</module>
-        <module>controller</module>
     </modules>
 
     <build>

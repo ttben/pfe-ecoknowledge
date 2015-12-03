@@ -1,6 +1,6 @@
 package fr.unice.polytech.ecoknowledge.server;
 
-import fr.unice.polytech.ecoknowledge.controller.Controller;
+import fr.unice.polytech.ecoknowledge.domain.Controller;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

@@ -2,8 +2,7 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.unice.polytech.ecoknowledge.controller.Controller;
-import org.json.JSONObject;
+import fr.unice.polytech.ecoknowledge.domain.Controller;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

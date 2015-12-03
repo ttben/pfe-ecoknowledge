@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.controller;
+package fr.unice.polytech.ecoknowledge.domain;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -17,7 +17,6 @@ import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.E
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.util.List;
 
 /**
  * Created by Sébastien on 24/11/2015.
