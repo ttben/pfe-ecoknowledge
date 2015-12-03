@@ -36,12 +36,15 @@ public class DataPersistence {
 	public static String DB_NAME = "pfe";
 
 	public static JsonObject store(Collections targetCollection, JsonObject json) {
+		System.out.println("\n+ DataPersistence : store on " + targetCollection + " : " + json.toString());
+
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
 		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 
 		collection.insertOne(Document.parse(json.toString()));
 
+		// TODO: 03/12/2015 delete this ? no need to check if correctly stored
 		MongoCursor cursor = collection.find(Document.parse(json.toString()) ).projection(Projections.exclude("_id")).iterator();
 		Document doc = (Document) cursor.next();
 

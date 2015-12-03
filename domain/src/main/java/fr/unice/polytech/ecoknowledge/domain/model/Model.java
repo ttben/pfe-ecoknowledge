@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.ChallengeView;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalView;
@@ -130,11 +131,15 @@ public class Model {
 	}
 
 	public Goal takeChallenge(JsonObject jsonObject) throws IOException, JsonParseException, JsonMappingException {
+		System.out.println("\n+ Model : takeChallenge : " + jsonObject.toString());
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		Goal goal = (Goal)objectMapper.readValue(jsonObject.toString(), Goal.class);
-		jsonObject.addProperty("id", goal.getId().toString());
 
-		DataPersistence.store(DataPersistence.Collections.GOAL, jsonObject);
+		String goalStrDescription = objectMapper.writeValueAsString(goal);
+		JsonObject goalToPersist = new JsonParser().parse(goalStrDescription).getAsJsonObject();
+
+		DataPersistence.store(DataPersistence.Collections.GOAL, goalToPersist);
 
 		return goal;
 	}

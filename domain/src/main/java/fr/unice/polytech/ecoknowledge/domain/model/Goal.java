@@ -3,12 +3,15 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.deserializer.GoalDeserializer;
+import fr.unice.polytech.ecoknowledge.domain.model.serializer.GoalSerializer;
 import org.joda.time.DateTime;
 
 import java.util.UUID;
 
+@JsonSerialize(using = GoalSerializer.class)
 @JsonDeserialize(using = GoalDeserializer.class)
 public class Goal implements VisitableComponent {
 
