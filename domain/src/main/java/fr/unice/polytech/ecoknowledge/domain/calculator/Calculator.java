@@ -1,12 +1,15 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
+import fr.unice.polytech.ecoknowledge.domain.Controller;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.LevelResult;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Calculator {
@@ -19,16 +22,28 @@ public class Calculator {
         this.clock = new Clock();
     }
 
-    public JsonObject evaluate(Goal g){
+    public JsonObject evaluate(Goal g) throws IOException {
 
+        // Creating processor to evaluate
         AchievementProcessor ap = new AchievementProcessor(g, cache);
+        // Ask evaluation
         g.accept(ap);
+        // Get results
         GoalResult gr = ap.getGoalResult();
 
+        // Look for the best badge
         Badge bestBadge = getBestBadge(gr.getLevelResultList());
-        System.out.println("Best badge : " + bestBadge);
+        System.out.println("Evaluation --> Badge won");
+
         if(bestBadge != null){
-            //Controller.getInstance().giveBadge(bestBadge, g.getUser().getId().toString());
+            // Give the badge
+            Controller.getInstance().giveBadge(bestBadge, g.getUser().getId().toString());
+
+            // Delete the goal
+            Controller.getInstance().deleteGoal(g.getId().toString());
+
+            // Give a new goal
+            // TODO
         }
 
         return gr.toJsonForClient();

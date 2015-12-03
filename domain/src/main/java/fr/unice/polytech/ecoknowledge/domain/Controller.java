@@ -5,16 +5,20 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import fr.unice.polytech.ecoknowledge.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.Model;
+import fr.unice.polytech.ecoknowledge.domain.model.User;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.UUID;
 
 /**
  * Created by Sébastien on 24/11/2015.
@@ -137,15 +141,17 @@ public class Controller {
         return this.model.getUser(id);
     }
 
-    public JsonObject evaluate(Goal g){
+    public JsonObject evaluate(Goal g) throws IOException, InvalidParameterException {
+        if(g == null)
+            throw new InvalidParameterException("Goal doesn't exist");
         return this.calculator.evaluate(g);
     }
 
-    public JsonObject evaluate(String userId, String challengeId) throws IOException {
+    public JsonObject evaluate(String userId, String challengeId) throws IOException, InvalidParameterException {
         return evaluate(model.getGoal(userId, challengeId));
     }
 
-    public void evaluateGoalsForUser(String userId) throws IOException {
+    public void evaluateGoalsForUser(String userId) throws IOException, InvalidParameterException {
         for(Goal g : this.model.getGoalsOfUser(userId)){
             evaluate(g);
         }
@@ -162,5 +168,13 @@ public class Controller {
 
     public void dropAllGoals() {
         this.model.deleteAllGoals();
+    }
+
+    public void giveBadge(Badge bestBadge, String userId) throws IOException {
+        this.model.giveBadge(bestBadge, userId);
+    }
+
+    public void deleteGoal(String goalId) {
+        this.model.deleteGoal(goalId);
     }
 }

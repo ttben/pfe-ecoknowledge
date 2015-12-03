@@ -5,9 +5,9 @@ import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
 import fr.unice.polytech.ecoknowledge.domain.TestUtils;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
-import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import org.joda.time.DateTime;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -16,6 +16,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Sébastien on 03/12/2015.
@@ -37,7 +38,7 @@ public class GoalEvaluationTest {
     @BeforeClass
     public static void loadJsonFile() throws IOException {
 
-        jsonObject = TestUtils.getFakeJson(1);
+        jsonObject = TestUtils.getFakeJson(3);
         ObjectMapper objectMapper = new ObjectMapper();
         aChallenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
         challengeId = aChallenge.getId() + "";
@@ -56,7 +57,7 @@ public class GoalEvaluationTest {
     }
 
     @Test
-    public void checkGoalResearch_WithUserAndChallenge() throws IOException {
+    public void checkGoalCreationAndEvaluation() throws IOException {
 
         aGoal = new Goal(null, aChallenge, null, aUser);
         goalId = aGoal.getId().toString();
@@ -74,27 +75,14 @@ public class GoalEvaluationTest {
 
         Controller.getInstance().createGoal(jsonObjectGoal);
 
-        Clock clock = new Clock();
+        JsonObject user = DataPersistence.read(DataPersistence.Collections.USER, userId);
+        ObjectMapper mapper = new ObjectMapper();
+        User u = mapper.readValue(user.toString(), User.class);
 
-        assertEquals(userId, aGoal.getUser().getId().toString());
+        Badge toCompare = new Badge("http://www.derp.com", 69, "you're too good for me");
 
-        aGoal = new Model().getGoal(userId, challengeId);
-
-        assertEquals(userId, aGoal.getUser().getId().toString());
-        assertEquals(
-                clock.createDate(DateTime.now()).getDayOfYear(),
-                clock.createDate(aGoal.getTimeSpan().getStart()).getDayOfYear());
-        assertEquals(
-                clock.createDate(aGoal.getTimeSpan().getStart()).getDayOfYear(),
-                clock.createDate(aGoal.getTimeSpan().getEnd()).getDayOfYear());
-        assertEquals(23, aGoal.getTimeSpan().getEnd().getHourOfDay());
-    }
-
-
-    @Test
-    public void evaluate() throws IOException {
-
-        Controller.getInstance().evaluate(userId, challengeId);
+        assertTrue(u.getBadges().contains(toCompare));
+        assertEquals(1, u.getBadges().size());
 
     }
 }

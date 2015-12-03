@@ -20,6 +20,7 @@ import java.util.List;
  * Created by Benjamin on 01/12/2015.
  */
 public class DataPersistence {
+
 	public enum Collections {
 		CHALLENGE("challenges"),
 		BADGES("badges"),
@@ -104,7 +105,6 @@ public class DataPersistence {
 	}
 
 	public static void drop(Collections targetCollection) {
-		JsonArray jsonArray = new JsonArray();
 
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
@@ -113,7 +113,6 @@ public class DataPersistence {
 	}
 
 	public static void drop(Collections targetCollection, String id) {
-		JsonArray jsonArray = new JsonArray();
 
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
@@ -121,6 +120,17 @@ public class DataPersistence {
 
 		Document result = collection.find(Filters.eq("id", id)).projection(Projections.exclude("_id")).first();
 
-		collection.deleteOne(result);
+		if(result != null)
+			collection.deleteOne(result);
+	}
+
+
+	public static void update(Collections targetCollection, String id, String newOne) {
+
+		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
+		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
+
+		collection.replaceOne(Filters.eq("id", id), Document.parse(newOne));
 	}
 }

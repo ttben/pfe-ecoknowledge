@@ -244,4 +244,19 @@ public class Model {
 	public void deleteAllGoals() {
 		DataPersistence.drop(DataPersistence.Collections.GOAL);
 	}
+
+	public void giveBadge(Badge bestBadge, String userId) throws IOException {
+
+        JsonObject u = DataPersistence.read(DataPersistence.Collections.USER, userId);
+		ObjectMapper mapper = new ObjectMapper();
+		User user = mapper.readValue(u.toString(), User.class);
+
+		user.addBadge(bestBadge);
+		String userString = mapper.writeValueAsString(user);
+		DataPersistence.update(DataPersistence.Collections.USER, user.getId().toString(), userString);
+	}
+
+    public void deleteGoal(String goalId) {
+        DataPersistence.drop(DataPersistence.Collections.GOAL, goalId);
+    }
 }
