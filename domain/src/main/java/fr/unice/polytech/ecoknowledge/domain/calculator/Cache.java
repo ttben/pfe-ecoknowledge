@@ -33,4 +33,18 @@ public class Cache {
 	public void setData(Map<String, List<Data>> data) {
 		this.data = data;
 	}
+
+	public static Cache getFakeCache() {
+		Cache cache = new Cache();
+
+		Map<String, List<Data>> fakedData = new HashMap<>();
+
+		List<Data> aListOfData = new ArrayList<>();
+		aListOfData.add(new Data(20.0,new DateTime().minusDays(1)));
+		aListOfData.add(new Data(22.0,new DateTime().minusDays(1)));
+		fakedData.put("TMP_CLI", aListOfData);
+
+		return cache;
+	}
+
 }

@@ -129,14 +129,14 @@ public class Model {
 		return result;
 	}
 
-	public JsonObject takeChallenge(JsonObject jsonObject) throws IOException, JsonParseException, JsonMappingException {
+	public Goal takeChallenge(JsonObject jsonObject) throws IOException, JsonParseException, JsonMappingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Goal goal = (Goal)objectMapper.readValue(jsonObject.toString(), Goal.class);
 		jsonObject.addProperty("id", goal.getId().toString());
 
 		DataPersistence.store(DataPersistence.Collections.GOAL, jsonObject);
 
-		return jsonObject;
+		return goal;
 	}
 
 	public JsonObject registerUser(JsonObject userJsonDescription) throws IOException {
@@ -201,14 +201,18 @@ public class Model {
 		List<Challenge> takenChallenges = getTakenChallenges(userID);
 		List<Challenge> notTakenChallenges = new ArrayList<>();
 
+		System.out.println("TAKEN CHALLENGES : " + takenChallenges);
 		for(Challenge currentChallenge : allChallenges) {
+			System.out.println("CHECK IF CONTAINS " + currentChallenge);
 			if(!takenChallenges.contains(currentChallenge)) {
 				notTakenChallenges.add(currentChallenge);
 			}
 		}
 
+		System.out.println("SO : C NOT TAKEN : " + notTakenChallenges);
 		result.addAll(getChallengesInJsonFormat(notTakenChallenges));
 		result.addAll(getGoalsOfUserInJsonFormat(userID));
+		System.out.println("GOAL OF USER : " + getGoalsOfUser(userID));
 
 		return result;
 	}
@@ -222,5 +226,13 @@ public class Model {
 		}
 
 		return challenges;
+	}
+
+	public JsonArray getAllGoals() {
+		return DataPersistence.readAll(DataPersistence.Collections.GOAL);
+	}
+
+	public void deleteAllGoals() {
+		DataPersistence.drop(DataPersistence.Collections.GOAL);
 	}
 }
