@@ -23,6 +23,14 @@ public class Goal implements VisitableComponent {
 				@JsonProperty("lifeSpan") TimeBox timeSpan,
 				User user) {
 
+		if(user == null) {
+			throw new NullPointerException("User specified is null");
+		}
+
+		if(definition == null) {
+			throw new NullPointerException("Challenge specified is null");
+		}
+
 		this.id = (id != null && !id.isEmpty()) ? UUID.fromString(id) : UUID.randomUUID();
 		this.challengeDefinition = definition;
 		this.timeSpan = timeSpan;

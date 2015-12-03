@@ -11,6 +11,8 @@ import fr.unice.polytech.ecoknowledge.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
+import fr.unice.polytech.ecoknowledge.domain.model.exceptions.ChallengeNotFoundException;
+import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 
 import java.io.IOException;
 
@@ -32,7 +34,14 @@ public class GoalDeserializer extends JsonDeserializer<Goal> {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		User user = (User) objectMapper.readValue(userJsonDescription.toString(), User.class);
+		if(user == null) {
+			throw new UserNotFoundException("Can not find user with given id:" + userID);
+		}
+
 		Challenge challenge = (Challenge) objectMapper.readValue(challengeJsonDescription.toString(), Challenge.class);
+		if(challenge == null) {
+			throw new ChallengeNotFoundException("Can not find challenge with given id:" + challengeID);
+		}
 
 		Goal goal = new Goal(goalID, challenge, null, user);
 		return goal;
