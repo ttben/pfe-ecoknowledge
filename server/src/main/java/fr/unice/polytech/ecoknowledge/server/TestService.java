@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.data.utils.Utils;
 import fr.unice.polytech.ecoknowledge.controller.Controller;
+import org.json.JSONObject;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -29,6 +30,21 @@ public class TestService {
 		}
 
 		return Response.ok().entity(json.toString()).build();
+	}
+
+	@Path("/evaluate")
+	@POST
+	@Consumes("application/json")
+	public Response evaluate(String object){
+		JsonObject json = new JsonParser().parse(object).getAsJsonObject();
+		try{
+			Controller.getInstance().evaluate(
+					json.get("userId").getAsString(),
+					json.get("challengeId").getAsString());
+		} catch (IOException e){
+			return Response.status(500).entity(e.getMessage()).build();
+		}
+		return Response.ok().build();
 	}
 
 	@Path("/expressionTest")

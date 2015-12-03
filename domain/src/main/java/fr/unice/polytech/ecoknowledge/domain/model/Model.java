@@ -61,20 +61,15 @@ public class Model {
 	public List<Goal> getGoalsOfUser(String userID) throws IOException {
 		List<Goal> result = new ArrayList<>();
 
-		JsonArray challengesDescription = DataPersistence.readAll(DataPersistence.Collections.CHALLENGE);
+		List<JsonObject> challengesDescription = DataPersistence.findGoal(userID);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		for(JsonElement currentChallengeDescription : challengesDescription) {
-			//	Convert value
-			JsonObject currentGoalJsonObject = currentChallengeDescription.getAsJsonObject();
+		for(JsonObject currentGoalJsonObject : challengesDescription) {
 
 			//	Create challenge from DB description
 			Goal currentGoal = objectMapper.readValue(currentGoalJsonObject.toString(), Goal.class);
-
-			if(currentGoal.getUser().getId().equals(UUID.fromString(userID))) {
-				result.add(currentGoal);
-			}
+			result.add(currentGoal);
 		}
 
 		return result;
@@ -190,6 +185,15 @@ public class Model {
 		DataPersistence.drop(DataPersistence.Collections.CHALLENGE, challengeId);
 	}
 
+	public Goal getGoal(String userId, String challengeId) throws IOException {
+		List<Goal> goals = getGoalsOfUser(userId);
+		for (Goal g : goals) {
+			if (g.getChallengeDefinition().getId().equals(challengeId)) {
+				return g;
+			}
+		}
+		return null;
+	}
 	public JsonArray getMosaicForUser(String userID) throws IOException {
 		JsonArray result = new JsonArray();
 
