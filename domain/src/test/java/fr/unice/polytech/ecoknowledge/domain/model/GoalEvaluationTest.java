@@ -56,7 +56,7 @@ public class GoalEvaluationTest {
     @Test
     public void checkGoalResearch_WithUserAndChallenge() throws IOException {
 
-        aGoal = new Goal(null, aChallenge, new TimeBox(DateTime.now(), DateTime.now().plusDays(3)), aUser);
+        aGoal = new Goal(null, aChallenge, null, aUser);
         goalId = aGoal.getId().toString();
 
         jsonObject.addProperty("id", challengeId);
@@ -75,13 +75,6 @@ public class GoalEvaluationTest {
         Clock clock = new Clock();
 
         assertEquals(userId, aGoal.getUser().getId().toString());
-        assertEquals(
-                clock.createDate(DateTime.now()).getDayOfYear(),
-                clock.createDate(aGoal.getTimeSpan().getStart()).getDayOfYear());
-        assertEquals(
-                clock.createDate(aGoal.getTimeSpan().getStart()).getDayOfYear(),
-                clock.createDate(aGoal.getTimeSpan().getEnd()).getDayOfYear());
-        assertEquals(23, aGoal.getTimeSpan().getEnd().getHourOfDay());
 
         aGoal = new Model().getGoal(userId, challengeId);
 
