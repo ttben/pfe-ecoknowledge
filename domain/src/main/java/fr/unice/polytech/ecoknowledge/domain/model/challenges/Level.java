@@ -1,16 +1,15 @@
-package fr.unice.polytech.ecoknowledge.domain.model;
+package fr.unice.polytech.ecoknowledge.domain.model.challenges;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
+import fr.unice.polytech.ecoknowledge.domain.model.VisitableComponent;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Level implements VisitableComponent{
+public class Level implements VisitableComponent {
 	private List<Condition> conditionList = new ArrayList<>();
 	private String name;
 	private Badge badge;
@@ -50,7 +49,7 @@ public class Level implements VisitableComponent{
 
 	@Override
 	public void accept(GoalVisitor goalVisitor) {
-		for(VisitableComponent visitableComponent : conditionList) {
+		for (VisitableComponent visitableComponent : conditionList) {
 			visitableComponent.accept(goalVisitor);
 		}
 
@@ -59,7 +58,7 @@ public class Level implements VisitableComponent{
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof Level)) {
+		if (!(obj instanceof Level)) {
 			return false;
 		}
 

@@ -5,6 +5,6 @@ package fr.unice.polytech.ecoknowledge.language.api.interfaces;
  */
 public interface IImprovable {
 
-    public IImprovementPercentable by(int value);
+	public IImprovementPercentable by(int value);
 
 }

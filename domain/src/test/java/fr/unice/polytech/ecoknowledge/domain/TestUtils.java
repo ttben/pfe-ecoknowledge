@@ -20,7 +20,7 @@ public class TestUtils {
 			String currentLine;
 
 			br = new BufferedReader(new FileReader("./src/test/java/fr/unice/polytech/ecoknowledge/domain/challenge-example-sample"
-					+ filenumber +".json"));
+					+ filenumber + ".json"));
 
 			while ((currentLine = br.readLine()) != null) {
 				result = result.concat(currentLine);
@@ -47,7 +47,7 @@ public class TestUtils {
 			String currentLine;
 
 			br = new BufferedReader(new FileReader("./src/test/java/fr/unice/polytech/ecoknowledge/domain/user-example-sample"
-					+ filenumber +".json"));
+					+ filenumber + ".json"));
 
 			while ((currentLine = br.readLine()) != null) {
 				result = result.concat(currentLine);
@@ -62,6 +62,6 @@ public class TestUtils {
 				ex.printStackTrace();
 			}
 		}
-        return new JsonParser().parse(result).getAsJsonObject();
+		return new JsonParser().parse(result).getAsJsonObject();
 	}
 }

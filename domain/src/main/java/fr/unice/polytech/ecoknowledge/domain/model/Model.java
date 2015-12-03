@@ -9,17 +9,18 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.data.DataPersistence;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Clock;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeSpanGenerator;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.ChallengeView;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalView;
 import fr.unice.polytech.ecoknowledge.domain.views.users.UserView;
-import org.joda.time.DateTime;
 
 import java.io.IOException;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Model {
 
@@ -27,23 +28,16 @@ public class Model {
 		JsonObject result = new JsonObject();
 
 		ObjectMapper objectMapper = new ObjectMapper();
-		try {
-			Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
 
-			jsonObject.addProperty("id",""+challenge.getId());
-			DataPersistence.store(DataPersistence.Collections.CHALLENGE,jsonObject);
+		Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
+		jsonObject.addProperty("id", "" + challenge.getId());
 
-			result = DataPersistence.read(DataPersistence.Collections.CHALLENGE, challenge.getId().toString());
-			Challenge newChallenge = (Challenge)objectMapper.readValue(result.toString(), Challenge.class);
-
-		} catch (JsonMappingException | JsonParseException e) {
-			e.printStackTrace();
-			throw new InvalidParameterException("Can not build condition with specified parameters :\n " + e.getMessage());
-		}
+		DataPersistence.store(DataPersistence.Collections.CHALLENGE, jsonObject);
 
 		return result;
 	}
 
+	@Deprecated
 	public void getGoal(Integer idGoal) {
 		// TODO - implement language.getGoal
 		throw new UnsupportedOperationException();
@@ -52,7 +46,7 @@ public class Model {
 	public JsonArray getGoalsInJsonFormat(List<Goal> goals) {
 		JsonArray result = new JsonArray();
 
-		for(Goal currentGoal : goals) {
+		for (Goal currentGoal : goals) {
 			//	Create JSON required for client
 			JsonObject currentChallengeJsonToClient = new GoalView(currentGoal).toJsonForClient();
 			result.add(currentChallengeJsonToClient);
@@ -68,7 +62,7 @@ public class Model {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		for(JsonObject currentGoalJsonObject : challengesDescription) {
+		for (JsonObject currentGoalJsonObject : challengesDescription) {
 
 			//	Create challenge from DB description
 			Goal currentGoal = objectMapper.readValue(currentGoalJsonObject.toString(), Goal.class);
@@ -82,6 +76,7 @@ public class Model {
 		return getGoalsInJsonFormat(getGoalsOfUser(idUser));
 	}
 
+	@Deprecated
 	public void decernBadge(Integer idUser, Badge badge) {
 		// TODO - implement language.decernBadge
 		throw new UnsupportedOperationException();
@@ -93,7 +88,7 @@ public class Model {
 		JsonArray challengesDescription = DataPersistence.readAll(DataPersistence.Collections.CHALLENGE);
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		for(JsonElement currentChallengeDescription : challengesDescription) {
+		for (JsonElement currentChallengeDescription : challengesDescription) {
 			//	Convert value
 			JsonObject currentChallengeJsonObject = currentChallengeDescription.getAsJsonObject();
 
@@ -109,7 +104,7 @@ public class Model {
 	public JsonArray getChallengesInJsonFormat(List<Challenge> challenges) {
 		JsonArray result = new JsonArray();
 
-		for(Challenge currentChallenge : challenges) {
+		for (Challenge currentChallenge : challenges) {
 			//	Create JSON required for client
 			JsonObject currentChallengeJsonToClient = new ChallengeView(currentChallenge).toJsonForClient();
 			result.add(currentChallengeJsonToClient);
@@ -123,7 +118,7 @@ public class Model {
 
 		List<Challenge> challenges = getAllChallenges();
 
-		for(Challenge currentChallenge : challenges) {
+		for (Challenge currentChallenge : challenges) {
 			//	Create JSON required for client
 			JsonObject currentChallengeJsonToClient = new ChallengeView(currentChallenge).toJsonForClient();
 			result.add(currentChallengeJsonToClient);
@@ -136,7 +131,7 @@ public class Model {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		//	Build goal with custom deserializer
-		Goal goal = (Goal)objectMapper.readValue(jsonObject.toString(), Goal.class);
+		Goal goal = (Goal) objectMapper.readValue(jsonObject.toString(), Goal.class);
 
 		//	Generate a timeSpan and set it into the goal
 		TimeBox timeSpan = TimeSpanGenerator.generateTimeSpan(goal.getChallengeDefinition().getRecurrence(), clock);
@@ -152,9 +147,9 @@ public class Model {
 		return goal;
 	}
 
-    public JsonObject registerUser(JsonObject userJsonDescription) throws IOException {
+	public JsonObject registerUser(JsonObject userJsonDescription) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
-		User newUser = (User)objectMapper.readValue(userJsonDescription.toString(), User.class);
+		User newUser = (User) objectMapper.readValue(userJsonDescription.toString(), User.class);
 		userJsonDescription.addProperty("id", newUser.getId().toString());
 
 		DataPersistence.store(DataPersistence.Collections.USER, userJsonDescription);
@@ -177,7 +172,7 @@ public class Model {
 		JsonArray usersDescription = DataPersistence.readAll(DataPersistence.Collections.USER);
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		for(JsonElement e : usersDescription){
+		for (JsonElement e : usersDescription) {
 			User user = (User) objectMapper.readValue(e.toString(), User.class);
 			UserView uv = new UserView(user);
 			result.add(uv.toJsonForClient());
@@ -200,13 +195,14 @@ public class Model {
 
 	public Goal getGoal(String userId, String challengeId) throws IOException {
 		List<Goal> goals = getGoalsOfUser(userId);
-        for (Goal g : goals) {
+		for (Goal g : goals) {
 			if (g.getChallengeDefinition().getId().toString().equals(challengeId)) {
 				return g;
 			}
 		}
 		return null;
 	}
+
 	public JsonArray getMosaicForUser(String userID) throws IOException {
 		JsonArray result = new JsonArray();
 
@@ -215,9 +211,9 @@ public class Model {
 		List<Challenge> notTakenChallenges = new ArrayList<>();
 
 		System.out.println("TAKEN CHALLENGES : " + takenChallenges);
-		for(Challenge currentChallenge : allChallenges) {
+		for (Challenge currentChallenge : allChallenges) {
 			System.out.println("CHECK IF CONTAINS " + currentChallenge);
-			if(!takenChallenges.contains(currentChallenge)) {
+			if (!takenChallenges.contains(currentChallenge)) {
 				notTakenChallenges.add(currentChallenge);
 			}
 		}
@@ -234,7 +230,7 @@ public class Model {
 		List<Goal> goals = getGoalsOfUser(userID);
 		List<Challenge> challenges = new ArrayList<>();
 
-		for(Goal currentGoal : goals) {
+		for (Goal currentGoal : goals) {
 			challenges.add(currentGoal.getChallengeDefinition());
 		}
 

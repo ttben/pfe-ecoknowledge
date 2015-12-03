@@ -5,13 +5,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
 import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
-
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
-import fr.unice.polytech.ecoknowledge.domain.model.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.Model;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
 
@@ -23,33 +21,33 @@ import java.security.InvalidParameterException;
  */
 public class Controller {
 
-    private static Controller instance;
+	private static Controller instance;
 
-    private Model model;
-    private Calculator calculator;
+	private Model model;
+	private Calculator calculator;
 
-    private Controller() {
-        model = new Model();
-        calculator = new Calculator(Cache.getFakeCache());
-    }
+	private Controller() {
+		model = new Model();
+		calculator = new Calculator(Cache.getFakeCache());
+	}
 
-    public static Controller getInstance() {
-        if(instance == null)
-            instance = new Controller();
-        return instance;
-    }
+	public static Controller getInstance() {
+		if (instance == null)
+			instance = new Controller();
+		return instance;
+	}
 
-    public JsonObject createUser(JsonObject userJsonDescription) throws IOException {
-        return this.model.registerUser(userJsonDescription);
-    }
+	public JsonObject createUser(JsonObject userJsonDescription) throws IOException {
+		return this.model.registerUser(userJsonDescription);
+	}
 
-    public JsonObject createChallenge(JsonObject jsonObject)throws InvalidParameterException, IOException {
-        return this.model.createChallenge(jsonObject);
-    }
+	public JsonObject createChallenge(JsonObject jsonObject) throws InvalidParameterException, IOException {
+		return this.model.createChallenge(jsonObject);
+	}
 
 
     /*
-    ----------------------------------------------------
+	----------------------------------------------------
     TEST
     ----------------------------------------------------
      */

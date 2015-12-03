@@ -2,18 +2,15 @@ package fr.unice.polytech.ecoknowledge.domain.views.challenges;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
-import fr.unice.polytech.ecoknowledge.domain.model.Level;
-import fr.unice.polytech.ecoknowledge.domain.model.RecurrenceType;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 import org.joda.time.format.DateTimeFormat;
-
-import static fr.unice.polytech.ecoknowledge.domain.model.RecurrenceType.DAY;
 
 /**
  * Created by Benjamin on 30/11/2015.
  */
-public class ChallengeView implements ViewForClient{
+public class ChallengeView implements ViewForClient {
 
 	private Challenge challenge;
 
@@ -28,7 +25,7 @@ public class ChallengeView implements ViewForClient{
 		result.addProperty("id", this.challenge.getId().toString());
 		result.addProperty("name", this.challenge.getName());
 
-		if(this.challenge.getIcon() !=  null) {
+		if (this.challenge.getIcon() != null) {
 			result.addProperty("image", this.challenge.getIcon());
 		}
 
@@ -39,7 +36,7 @@ public class ChallengeView implements ViewForClient{
 
 		// FIXME: 30/11/2015 unit not used
 		switch (this.challenge.getRecurrence().getRecurrenceType()) {
-			case DAY :
+			case DAY:
 				result.addProperty("length", "1 jour");
 				break;
 			case WEEK:
@@ -54,13 +51,13 @@ public class ChallengeView implements ViewForClient{
 
 		JsonArray levelJson = new JsonArray();
 		int index = 1;
-		for(Level level : this.challenge.getLevels()) {
-			LevelView levelView = new LevelView(index++,level);
+		for (Level level : this.challenge.getLevels()) {
+			LevelView levelView = new LevelView(index++, level);
 			JsonObject currentJsonOfLevel = levelView.toJsonForClient();
 			levelJson.add(currentJsonOfLevel);
 		}
 
-		result.add("levels",levelJson);
+		result.add("levels", levelJson);
 		result.addProperty("remaining", "2 jours"); // FIXME: 02/12/2015 compute according to current date
 		result.addProperty("image", this.challenge.getIcon());
 		return result;

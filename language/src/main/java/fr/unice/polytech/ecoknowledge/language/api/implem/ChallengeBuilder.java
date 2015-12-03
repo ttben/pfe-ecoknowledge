@@ -17,124 +17,129 @@ import java.util.List;
  */
 public class ChallengeBuilder implements IChallengeableIcon {
 
-    // ------- FIELDS ------- //
+	// ------- FIELDS ------- //
 
-    // Configs to end the request
-    private static final String path = "challenge";
-    private boolean send = true;
+	// Configs to end the request
+	private static final String path = "challenge";
+	private boolean send = true;
 
-    // Specific fields of the challenge builder
-    private String name;
-    private String iconURL = null;
-    private Period p = null;
-    private Integer time = null;
-    private DURATION_TYPE type = null;
-    private List<Level> levels = new ArrayList<>();
+	// Specific fields of the challenge builder
+	private String name;
+	private String iconURL = null;
+	private Period p = null;
+	private Integer time = null;
+	private DURATION_TYPE type = null;
+	private List<Level> levels = new ArrayList<>();
 
-    // Output
-    private JSONObject description = null;
-
-
-    // ------- CONSTRUCTOR ------- //
-
-    public ChallengeBuilder(String name){
-        this.name = name;
-    }
+	// Output
+	private JSONObject description = null;
 
 
-    // ------- API Methods ------- //
+	// ------- CONSTRUCTOR ------- //
 
-    @Override
-    public IDurationnable availableFrom(int day) {
-        reinit();
-        Period p = new Period(this, day);
-        return p;
-    }
-    @Override
-    public IDurationnable availableFrom(int day, int month) {
-        reinit();
-        Period p = new Period(this, day, month);
-        return p;
-    }
-    @Override
-    public IDurationnable availableFrom(int day, int month, int year) {
-        reinit();
-        Period p = new Period(this, day, month, year);
-        return p;
-    }
+	public ChallengeBuilder(String name) {
+		this.name = name;
+	}
 
-    @Override
-    public IChallengeable withIcon(String url) {
-        this.iconURL = url;
-        return this;
-    }
 
-    void end() {
-        String IPAddress = AddressReacher.getAddress();
-        System.out.println("/----- Generating description -----/");
-        description = JSONBuilder.parse(this);
-        if(IPAddress != null && send) {
-            Response r = HTTPCall.POST(IPAddress, path, description);
-            System.out.println(r.getStatus()==200?
-                    "\t---> Success sending the challenge" +
-                            "\nResult :\n" + r.readEntity(String.class)
-                    :"\t---> Challenge Failed : \n\t" + r.getStatusInfo());
-        }
-    }
+	// ------- API Methods ------- //
 
-    // ------- Accessors ------- //
+	@Override
+	public IDurationnable availableFrom(int day) {
+		reinit();
+		Period p = new Period(this, day);
+		return p;
+	}
 
-    void addPeriod(Period period) {
-        p = period;
-    }
+	@Override
+	public IDurationnable availableFrom(int day, int month) {
+		reinit();
+		Period p = new Period(this, day, month);
+		return p;
+	}
 
-    // For tests
-    ChallengeBuilder dontSend(){send = false; return this;}
+	@Override
+	public IDurationnable availableFrom(int day, int month, int year) {
+		reinit();
+		Period p = new Period(this, day, month, year);
+		return p;
+	}
 
-    private void reinit(){
-        p = null;
-        time = null;
-        type = null;
-        description = null;
-    }
+	@Override
+	public IChallengeable withIcon(String url) {
+		this.iconURL = url;
+		return this;
+	}
 
-    Period getP() {
-        return p;
-    }
+	void end() {
+		String IPAddress = AddressReacher.getAddress();
+		System.out.println("/----- Generating description -----/");
+		description = JSONBuilder.parse(this);
+		if (IPAddress != null && send) {
+			Response r = HTTPCall.POST(IPAddress, path, description);
+			System.out.println(r.getStatus() == 200 ?
+					"\t---> Success sending the challenge" +
+							"\nResult :\n" + r.readEntity(String.class)
+					: "\t---> Challenge Failed : \n\t" + r.getStatusInfo());
+		}
+	}
 
-    Integer getTime() {
-        return time;
-    }
+	// ------- Accessors ------- //
 
-    DURATION_TYPE getType() {
-        return type;
-    }
+	void addPeriod(Period period) {
+		p = period;
+	}
 
-    String getName() {
-        return name;
-    }
+	// For tests
+	ChallengeBuilder dontSend() {
+		send = false;
+		return this;
+	}
 
-    JSONObject getDescription() {
-        return description;
-    }
+	private void reinit() {
+		p = null;
+		time = null;
+		type = null;
+		description = null;
+	}
 
-    void setTime(Integer time) {
-        this.time = time;
-    }
+	Period getP() {
+		return p;
+	}
 
-    void setType(DURATION_TYPE type) {
-        this.type = type;
-    }
+	Integer getTime() {
+		return time;
+	}
 
-    String getIcon() {
-        return iconURL;
-    }
+	DURATION_TYPE getType() {
+		return type;
+	}
 
-    List<Level> getLevels() {
-        return levels;
-    }
+	String getName() {
+		return name;
+	}
 
-    void addLevel(Level level) {
-        levels.add(level);
-    }
+	JSONObject getDescription() {
+		return description;
+	}
+
+	void setTime(Integer time) {
+		this.time = time;
+	}
+
+	void setType(DURATION_TYPE type) {
+		this.type = type;
+	}
+
+	String getIcon() {
+		return iconURL;
+	}
+
+	List<Level> getLevels() {
+		return levels;
+	}
+
+	void addLevel(Level level) {
+		levels.add(level);
+	}
 }

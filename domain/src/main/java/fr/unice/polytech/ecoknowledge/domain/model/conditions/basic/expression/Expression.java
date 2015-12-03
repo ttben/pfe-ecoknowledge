@@ -55,11 +55,11 @@ public class Expression {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof Expression)) {
+		if (!(obj instanceof Expression)) {
 			return false;
 		}
 
-		Expression expression = (Expression)obj;
+		Expression expression = (Expression) obj;
 
 		return comparator.equals(expression.comparator)
 				&& leftOperand.equals(expression.leftOperand)

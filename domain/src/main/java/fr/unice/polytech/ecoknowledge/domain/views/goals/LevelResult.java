@@ -1,7 +1,7 @@
 package fr.unice.polytech.ecoknowledge.domain.views.goals;
 
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.model.Level;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.LevelView;
 
 import java.util.ArrayList;

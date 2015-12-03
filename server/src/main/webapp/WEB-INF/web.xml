@@ -39,7 +39,8 @@
         </init-param>
         <init-param>
             <param-name>cors.allowed.headers</param-name>
-            <param-value>GCN-APIKEY,SESSION,Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+            <param-value>
+                GCN-APIKEY,SESSION,Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers
             </param-value>
         </init-param>
         <init-param>

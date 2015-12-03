@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.deserializer.GoalDeserializer;
 import fr.unice.polytech.ecoknowledge.domain.model.serializer.GoalSerializer;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import org.joda.time.DateTime;
 
 import java.util.UUID;

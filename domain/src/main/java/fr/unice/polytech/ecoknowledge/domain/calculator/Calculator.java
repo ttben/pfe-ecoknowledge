@@ -1,12 +1,11 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.Controller;
-import fr.unice.polytech.ecoknowledge.domain.model.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
+import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.LevelResult;
-import org.json.JSONArray;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class Calculator {
         return b;
     }
 
-    public Clock getClock() {
-        return clock;
-    }
+	public Clock getClock() {
+		return clock;
+	}
 }

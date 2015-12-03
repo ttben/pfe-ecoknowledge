@@ -3,7 +3,10 @@ package fr.unice.polytech.ecoknowledge.domain.calculator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.TestUtils;
-import fr.unice.polytech.ecoknowledge.domain.model.*;
+import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.model.User;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.ConditionResult;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.LevelResult;
@@ -73,7 +76,7 @@ public class AchievementProcessorVisitorStandardConditionTest {
 		secondSensorFakedData.add(new Data(25.0, lifeSpan.getStart().plusDays(5)));
 
 		willReturn(firstSensorFakedData).given(cache).getDataOfSensorBetweenDate(Matchers.matches(aSensorName), any(), any(), any(), any());
-		willReturn(secondSensorFakedData).given(cache).getDataOfSensorBetweenDate(Matchers.matches(anotherSensorName),  any(), any(), any(), any());
+		willReturn(secondSensorFakedData).given(cache).getDataOfSensorBetweenDate(Matchers.matches(anotherSensorName), any(), any(), any(), any());
 
 		AchievementProcessor achievementProcessor = new AchievementProcessor(goal, cache);
 		goal.accept(achievementProcessor);

@@ -12,48 +12,48 @@ import static org.junit.Assert.assertNotNull;
  */
 public class FAIL_DateTest {
 
-    @Test
-    public void dateFailure() {
+	@Test
+	public void dateFailure() {
 
-        IllegalFieldValueException exception = null;
+		IllegalFieldValueException exception = null;
 
-        try {
-            Challenge.create("cb")
-                    .dontSend() // Just because it's a test
-                    .availableFrom(48).to(2, 899, 2)
-                    .during(3, DAY)
-                    .atLevel("level")
-                        .rewards(10)
-                        .withConditions()
-                            .valueOf("smth").greaterThan(30)
-                    .end();
+		try {
+			Challenge.create("cb")
+					.dontSend() // Just because it's a test
+					.availableFrom(48).to(2, 899, 2)
+					.during(3, DAY)
+					.atLevel("level")
+					.rewards(10)
+					.withConditions()
+					.valueOf("smth").greaterThan(30)
+					.end();
 
-        }catch (IllegalFieldValueException t){
-            exception = t;
-        }
+		} catch (IllegalFieldValueException t) {
+			exception = t;
+		}
 
-        assertNotNull(exception);
-    }
+		assertNotNull(exception);
+	}
 
-    @Test
-    public void negativePeriodFailure(){
+	@Test
+	public void negativePeriodFailure() {
 
-        IllegalArgumentException exception = null;
+		IllegalArgumentException exception = null;
 
-        try{
-            Challenge.create("cb")
-                    .dontSend() // Just because it's a test
-                    .availableFrom(23).to(2)
-                    .during(2, WEEK)
-                    .atLevel("level")
-                        .rewards(20)
-                        .withConditions()
-                            .valueOf("smth").differentFrom(2)
-                    .end();
-        } catch (IllegalArgumentException t){
-            exception = t;
-        }
+		try {
+			Challenge.create("cb")
+					.dontSend() // Just because it's a test
+					.availableFrom(23).to(2)
+					.during(2, WEEK)
+					.atLevel("level")
+					.rewards(20)
+					.withConditions()
+					.valueOf("smth").differentFrom(2)
+					.end();
+		} catch (IllegalArgumentException t) {
+			exception = t;
+		}
 
-        assertNotNull(exception);
-    }
+		assertNotNull(exception);
+	}
 }

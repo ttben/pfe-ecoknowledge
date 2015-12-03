@@ -5,7 +5,9 @@ import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
 import fr.unice.polytech.ecoknowledge.domain.TestUtils;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Clock;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import org.joda.time.DateTime;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -95,6 +97,4 @@ public class GoalEvaluationTest {
         Controller.getInstance().evaluate(userId, challengeId);
 
     }
-
-
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import fr.unice.polytech.ecoknowledge.domain.model.TimeBox;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -18,10 +18,10 @@ public class TimeBoxDeserializer extends JsonDeserializer<TimeBox> {
 	public TimeBox deserialize(JsonParser jp, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 		JsonNode node = jp.getCodec().readTree(jp);
-		System.out.println("JSON TIMEBOX  " +node);
+		System.out.println("JSON TIMEBOX  " + node);
 
-		String start =(node.get("start")).asText();
-		String end =(node.get("end")).asText();
+		String start = (node.get("start")).asText();
+		String end = (node.get("end")).asText();
 
 		DateTime startDate = DateTime.parse(start);
 		DateTime endDate = DateTime.parse(end);

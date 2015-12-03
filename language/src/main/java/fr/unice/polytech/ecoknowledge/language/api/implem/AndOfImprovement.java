@@ -3,7 +3,6 @@ package fr.unice.polytech.ecoknowledge.language.api.implem;
 import fr.unice.polytech.ecoknowledge.language.api.LevelBuilderGettable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IAndable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionsable;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IRewardable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IRewardableWithIcon;
 
 /**
@@ -11,30 +10,30 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.IRewardableWithIco
  */
 public class AndOfImprovement extends LevelBuilderGettable implements IAndable {
 
-    private Conditions conditions;
+	private Conditions conditions;
 
-    public AndOfImprovement(Conditions conditions) {
-        this.conditions = conditions;
-    }
+	public AndOfImprovement(Conditions conditions) {
+		this.conditions = conditions;
+	}
 
 
-    @Override
-    public IConditionsable and() {
-        return conditions;
-    }
+	@Override
+	public IConditionsable and() {
+		return conditions;
+	}
 
-    @Override
-    public void end() {
-        getLevel().end();
-    }
+	@Override
+	public void end() {
+		getLevel().end();
+	}
 
-    @Override
-    public IRewardableWithIcon atLevel(String levelName) {
-        return getLevel().newLevel(levelName);
-    }
+	@Override
+	public IRewardableWithIcon atLevel(String levelName) {
+		return getLevel().newLevel(levelName);
+	}
 
-    @Override
-    protected Level getLevel() {
-        return conditions.getLevel();
-    }
+	@Override
+	protected Level getLevel() {
+		return conditions.getLevel();
+	}
 }
