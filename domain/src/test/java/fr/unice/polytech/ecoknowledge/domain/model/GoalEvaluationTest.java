@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.TestUtils;
+import fr.unice.polytech.ecoknowledge.domain.calculator.Clock;
 import org.joda.time.DateTime;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -66,14 +67,31 @@ public class GoalEvaluationTest {
 
         DataPersistence.store(DataPersistence.Collections.CHALLENGE, jsonObject);
         DataPersistence.store(DataPersistence.Collections.USER, jsonObjectUser);
-        DataPersistence.store(DataPersistence.Collections.GOAL, jsonObjectGoal);
 
         Model m = new Model();
+        aGoal = m.takeChallenge(jsonObjectGoal, new Clock());
+
+        Clock clock = new Clock();
+
+        assertEquals(userId, aGoal.getUser().getId().toString());
+        assertEquals(
+                clock.createDate(DateTime.now()).getDayOfYear(),
+                clock.createDate(aGoal.getTimeSpan().getStart()).getDayOfYear());
+        assertEquals(
+                clock.createDate(aGoal.getTimeSpan().getStart()).getDayOfYear(),
+                clock.createDate(aGoal.getTimeSpan().getEnd()).getDayOfYear());
+        assertEquals(23, aGoal.getTimeSpan().getEnd().getHourOfDay());
+
         aGoal = m.getGoal(userId, challengeId);
 
-        assertNotNull(aGoal);
-        assertEquals(goalId, aGoal.getId().toString());
         assertEquals(userId, aGoal.getUser().getId().toString());
+        assertEquals(
+                clock.createDate(DateTime.now()).getDayOfYear(),
+                clock.createDate(aGoal.getTimeSpan().getStart()).getDayOfYear());
+        assertEquals(
+                clock.createDate(aGoal.getTimeSpan().getStart()).getDayOfYear(),
+                clock.createDate(aGoal.getTimeSpan().getEnd()).getDayOfYear());
+        assertEquals(23, aGoal.getTimeSpan().getEnd().getHourOfDay());
     }
 
 }

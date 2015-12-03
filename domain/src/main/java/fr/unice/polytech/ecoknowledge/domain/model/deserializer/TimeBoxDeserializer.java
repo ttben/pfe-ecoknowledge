@@ -18,12 +18,11 @@ public class TimeBoxDeserializer extends JsonDeserializer<TimeBox> {
 	public TimeBox deserialize(JsonParser jp, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 		JsonNode node = jp.getCodec().readTree(jp);
+		System.out.println("JSON TIMEBOX  " +node);
+
 		String start =(node.get("start")).asText();
 		String end =(node.get("end")).asText();
-/*
-		String itemName = node.get("itemName").asText();
-		int userId = (Integer) ((IntNode) node.get("createdBy")).numberValue();
-*/
+
 		DateTime startDate = DateTime.parse(start);
 		DateTime endDate = DateTime.parse(end);
 
