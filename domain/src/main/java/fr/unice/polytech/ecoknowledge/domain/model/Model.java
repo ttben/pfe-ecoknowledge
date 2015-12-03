@@ -187,8 +187,8 @@ public class Model {
 
 	public Goal getGoal(String userId, String challengeId) throws IOException {
 		List<Goal> goals = getGoalsOfUser(userId);
-		for (Goal g : goals) {
-			if (g.getChallengeDefinition().getId().equals(challengeId)) {
+        for (Goal g : goals) {
+			if (g.getChallengeDefinition().getId().toString().equals(challengeId)) {
 				return g;
 			}
 		}

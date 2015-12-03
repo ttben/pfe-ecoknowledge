@@ -37,4 +37,31 @@ public class TestUtils {
 		}
 		return new JsonParser().parse(result).getAsJsonObject();
 	}
+
+	public static JsonObject getFakeUser(int filenumber) {
+		BufferedReader br = null;
+		String result = "";
+
+		try {
+
+			String currentLine;
+
+			br = new BufferedReader(new FileReader("./src/test/java/fr/unice/polytech/ecoknowledge/domain/user-example-sample"
+					+ filenumber +".json"));
+
+			while ((currentLine = br.readLine()) != null) {
+				result = result.concat(currentLine);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null) br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+        return new JsonParser().parse(result).getAsJsonObject();
+	}
 }

@@ -58,7 +58,7 @@ public class DataPersistence {
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
 		MongoCollection<Document> collection = mongoDatabase.getCollection(Collections.GOAL.collectionName);
 
-		FindIterable<Document> docs = collection.find(new Document("user.id", idUser));
+		FindIterable<Document> docs = collection.find(new Document("user", idUser));
 
 		ArrayList<JsonObject> res = new ArrayList<>();
 		for(Document doc : docs) {
