@@ -31,6 +31,8 @@ public class GoalEvaluationTest {
     private static User aUser = null;
     private static Goal aGoal = null;
 
+    private static Model m;
+
     @BeforeClass
     public static void loadJsonFile() throws IOException {
 
@@ -68,7 +70,7 @@ public class GoalEvaluationTest {
         DataPersistence.store(DataPersistence.Collections.CHALLENGE, jsonObject);
         DataPersistence.store(DataPersistence.Collections.USER, jsonObjectUser);
 
-        Model m = new Model();
+        m = new Model();
         aGoal = m.takeChallenge(jsonObjectGoal, new Clock());
 
         Clock clock = new Clock();
@@ -92,6 +94,11 @@ public class GoalEvaluationTest {
                 clock.createDate(aGoal.getTimeSpan().getStart()).getDayOfYear(),
                 clock.createDate(aGoal.getTimeSpan().getEnd()).getDayOfYear());
         assertEquals(23, aGoal.getTimeSpan().getEnd().getHourOfDay());
+    }
+
+    @Test
+    public void evaluate(){
+        // TODO
     }
 
 }

@@ -29,6 +29,8 @@ public class Calculator {
         for(LevelResult lr : gr.getLevelResultList())
            res.addProperty("lvl" + i, lr.toJsonForClient().toString());
 
+        System.out.println(res);
+
         return res;
     }
 
