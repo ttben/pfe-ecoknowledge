@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
 
+import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
@@ -119,8 +120,13 @@ public class Controller {
         return true;
     }
 
-    public void createGoal(JsonObject jsonObject) throws IOException,JsonParseException, JsonMappingException {
-        this.model.takeChallenge(jsonObject);
+    public JsonObject createGoal(JsonObject jsonObject) throws IOException,JsonParseException, JsonMappingException {
+        Goal newGoal = this.model.takeChallenge(jsonObject);
+
+        Calculator c = new Calculator(Cache.getFakeCache());
+
+        JsonObject result = c.evaluate(newGoal);
+        return result;
     }
 
     public JsonArray getAllUsers() throws IOException {
@@ -146,5 +152,13 @@ public class Controller {
 
     public JsonArray getMosaicForUser(String userID) throws IOException {
         return this.model.getMosaicForUser(userID);
+    }
+
+    public JsonArray getAllGoals() {
+        return this.model.getAllGoals();
+    }
+
+    public void dropAllGoals() {
+        this.model.deleteAllGoals();
     }
 }
