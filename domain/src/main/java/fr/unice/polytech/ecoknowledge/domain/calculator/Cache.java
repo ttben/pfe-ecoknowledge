@@ -29,6 +29,10 @@ public class Cache {
 		System.out.printf("\n\n+\tWant to access data of : " + sensorName);
 		List<Data> result = this.getDataOf(sensorName);
 
+		if(result == null) {
+			result = new ArrayList<>();
+		}
+
 		System.out.println("\n\n+\tReturning : \n"+ result.toString());
 
 		return result;
