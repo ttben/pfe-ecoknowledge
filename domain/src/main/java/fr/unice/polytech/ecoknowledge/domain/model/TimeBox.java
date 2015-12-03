@@ -2,10 +2,13 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.unice.polytech.ecoknowledge.domain.model.deserializer.TimeBoxDeserializer;
+import fr.unice.polytech.ecoknowledge.domain.model.serializer.TimeBoxSerializer;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
+@JsonSerialize(using = TimeBoxSerializer.class)
 @JsonDeserialize(using = TimeBoxDeserializer.class)
 public class TimeBox {
 

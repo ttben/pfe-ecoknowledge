@@ -121,7 +121,7 @@ public class Controller {
     }
 
     public JsonObject createGoal(JsonObject jsonObject) throws IOException,JsonParseException, JsonMappingException {
-        Goal newGoal = this.model.takeChallenge(jsonObject);
+        Goal newGoal = this.model.takeChallenge(jsonObject, calculator.getClock());
 
         Calculator c = new Calculator(Cache.getFakeCache());
 
