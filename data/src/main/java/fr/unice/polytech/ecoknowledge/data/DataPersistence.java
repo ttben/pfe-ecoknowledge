@@ -81,6 +81,11 @@ public class DataPersistence {
 		Document result = collection.find(Filters.eq("id", id)).projection(Projections.exclude("_id")).first();
 
 		JsonParser parser = new JsonParser();
+
+		if(result == null) {
+			return null;
+		}
+
 		JsonObject persistedJsonObject = parser.parse(result.toJson()).getAsJsonObject();
 
 		return persistedJsonObject;

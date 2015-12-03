@@ -30,7 +30,7 @@ public class Controller {
 
     private Controller() {
         model = new Model();
-        calculator = new Calculator(new Cache());
+        calculator = new Calculator(Cache.getFakeCache());
     }
 
     public static Controller getInstance() {
@@ -122,10 +122,8 @@ public class Controller {
 
     public JsonObject createGoal(JsonObject jsonObject) throws IOException,JsonParseException, JsonMappingException {
         Goal newGoal = this.model.takeChallenge(jsonObject, calculator.getClock());
-
-        Calculator c = new Calculator(Cache.getFakeCache());
-
-        JsonObject result = c.evaluate(newGoal);
+        
+        JsonObject result = calculator.evaluate(newGoal);
         return result;
     }
 

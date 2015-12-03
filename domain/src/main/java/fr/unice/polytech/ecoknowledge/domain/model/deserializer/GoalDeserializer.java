@@ -38,19 +38,27 @@ public class GoalDeserializer extends JsonDeserializer<Goal> {
 			goalID = node.get("id").asText();
 		}
 
-		JsonObject challengeJsonDescription = DataPersistence.read(DataPersistence.Collections.CHALLENGE,challengeID);
 		JsonObject userJsonDescription = DataPersistence.read(DataPersistence.Collections.USER,userID);
+		JsonObject challengeJsonDescription = DataPersistence.read(DataPersistence.Collections.CHALLENGE,challengeID);
+
+		if(userJsonDescription == null) {
+			throw new UserNotFoundException("Can not find user with given id:" + userID);
+		}
+
+		if(challengeJsonDescription == null) {
+			throw new ChallengeNotFoundException("Can not find challenge with given id:" + challengeID);
+		}
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		User user = (User) objectMapper.readValue(userJsonDescription.toString(), User.class);
 		if(user == null) {
-			throw new UserNotFoundException("Can not find user with given id:" + userID);
+			throw new InternalError("Can not build user " + userID);
 		}
 
 		Challenge challenge = (Challenge) objectMapper.readValue(challengeJsonDescription.toString(), Challenge.class);
 		if(challenge == null) {
-			throw new ChallengeNotFoundException("Can not find challenge with given id:" + challengeID);
+			throw new InternalError("Can not build challenge " + challengeID);
 		}
 
 		Goal goal = new Goal(goalID, challenge, timeBox, user);

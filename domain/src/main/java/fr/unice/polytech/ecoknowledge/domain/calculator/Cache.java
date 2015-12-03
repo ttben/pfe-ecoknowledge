@@ -23,7 +23,15 @@ public class Cache {
 	public List<Data> getDataOfSensorBetweenDate(String sensorName, DateTime start, DateTime end,
 												 AbstractMap.SimpleEntry<Integer, Integer> weekMoment,
 												 List<AbstractMap.SimpleEntry<Integer, Integer>> dayMoment){
-		return this.getDataOf(sensorName);
+		System.out.println("\n\n+\tAccessing cache ... Data saved : \n"+ this.data.toString());
+
+
+		System.out.printf("\n\n+\tWant to access data of : " + sensorName);
+		List<Data> result = this.getDataOf(sensorName);
+
+		System.out.println("\n\n+\tReturning : \n"+ result.toString());
+
+		return result;
 	}
 
 	public Map<String, List<Data>> getData() {
@@ -42,7 +50,14 @@ public class Cache {
 		List<Data> aListOfData = new ArrayList<>();
 		aListOfData.add(new Data(20.0,new DateTime().minusDays(1)));
 		aListOfData.add(new Data(22.0,new DateTime().minusDays(1)));
-		fakedData.put("TMP_CLI", aListOfData);
+		fakedData.put("TEMP_443V", aListOfData);
+
+		List<Data> anotherListOfData = new ArrayList<>();
+		anotherListOfData.add(new Data(20.0,new DateTime().minusDays(1)));
+		anotherListOfData.add(new Data(22.0,new DateTime().minusDays(1)));
+		fakedData.put("TEMP_555", anotherListOfData);
+
+		cache.setData(fakedData);
 
 		return cache;
 	}
