@@ -12,9 +12,12 @@ import fr.unice.polytech.ecoknowledge.domain.model.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
+import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Sébastien on 24/11/2015.
@@ -119,10 +122,10 @@ public class Controller {
 		return true;
 	}
 
-	public JsonObject createGoal(JsonObject jsonObject) throws IOException, JsonParseException, JsonMappingException {
+	public GoalResult createGoal(JsonObject jsonObject) throws IOException, JsonParseException, JsonMappingException {
 		Goal newGoal = this.model.takeChallenge(jsonObject, calculator.getClock());
 
-		JsonObject result = calculator.evaluate(newGoal);
+		GoalResult result = calculator.evaluate(newGoal);
 		return result;
 	}
 
@@ -139,23 +142,43 @@ public class Controller {
 		return this.model.getUser(id);
 	}
 
-	public JsonObject evaluate(Goal g) {
+	public GoalResult evaluate(Goal g) {
 		return this.calculator.evaluate(g);
 	}
 
-	public JsonObject evaluate(String userId, String challengeId) throws IOException {
+	public GoalResult evaluate(String userId, String challengeId) throws IOException {
 		return evaluate(model.getGoal(userId, challengeId));
 	}
 
-	public void evaluateGoalsForUser(String userId) throws IOException {
+	public List<GoalResult> evaluateGoalsForUser(String userId) throws IOException {
+		List<GoalResult> goalResultList = new ArrayList<>();
 		for (Goal g : this.model.getGoalsOfUser(userId)) {
-			evaluate(g);
+			GoalResult currentGoalResult = evaluate(g);
+			goalResultList.add(currentGoalResult);
 		}
+
+		return goalResultList;
 	}
 
 	public JsonArray getMosaicForUser(String userID) throws IOException {
-		evaluateGoalsForUser(userID);
-		return this.model.getMosaicForUser(userID);
+		List<GoalResult> goalResultList = evaluateGoalsForUser(userID);
+
+		JsonArray goalResultArray = new JsonArray();
+		for(GoalResult goalResult : goalResultList) {
+			JsonObject goalResultJsonDescription = goalResult.toJsonForClient();
+			goalResultArray.add(goalResultJsonDescription);
+		}
+
+		JsonArray notTakenChallengesJsonArray = this.model.getNotTakenChallengesOfUser(userID);
+
+		System.out.println("\n\n+\tNot taken challenges : " + notTakenChallengesJsonArray);
+		System.out.println("\n\n+\tGoal result : " + goalResultArray);
+
+		JsonArray result = new JsonArray();
+		result.addAll(goalResultArray);
+		result.addAll(notTakenChallengesJsonArray);
+
+		return result;
 	}
 
 	public JsonArray getAllGoals() {

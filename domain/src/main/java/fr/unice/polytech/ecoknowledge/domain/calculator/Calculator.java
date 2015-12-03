@@ -16,7 +16,7 @@ public class Calculator {
 		this.clock = new Clock();
 	}
 
-	public JsonObject evaluate(Goal g) {
+	public GoalResult evaluate(Goal g) {
 		AchievementProcessor ap = new AchievementProcessor(g, cache);
 
 		g.accept(ap);
@@ -32,7 +32,7 @@ public class Calculator {
 
 		System.out.println(res);
 
-		return res;
+		return gr;
 	}
 
 	public Clock getClock() {

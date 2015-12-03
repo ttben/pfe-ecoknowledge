@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
+import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -21,7 +22,7 @@ public class GoalService {
 		JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
 
 		try {
-			JsonObject result = Controller.getInstance().createGoal(jsonObject);
+			GoalResult result = Controller.getInstance().createGoal(jsonObject);
 			return Response.ok().entity(result.toString()).build();
 		} catch (JsonMappingException | JsonParseException e) {
 			e.printStackTrace();
