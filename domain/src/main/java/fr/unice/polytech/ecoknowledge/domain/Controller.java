@@ -5,20 +5,20 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.Model;
-import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
+import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Sébastien on 24/11/2015.
@@ -49,12 +49,6 @@ public class Controller {
 		return this.model.createChallenge(jsonObject);
 	}
 
-
-    /*
-	----------------------------------------------------
-    TEST
-    ----------------------------------------------------
-     */
 
     //  TODO delete token : vertical test only
     public JsonObject createExpression(JsonObject jsonObject) throws InvalidParameterException, IOException {
@@ -90,6 +84,7 @@ public class Controller {
     }
 
     //  TODO delete token : vertical test only
+	@Deprecated
     public JsonObject createLevel(JsonObject jsonObject) throws InvalidParameterException, IOException {
         JsonObject result = new JsonObject();
 
@@ -141,6 +136,23 @@ public class Controller {
         return this.model.getUser(id);
     }
 
+
+	public List<GoalResult> evaluateGoalsForUserResult(String userId) throws IOException {
+		List<GoalResult> goalResultList = new ArrayList<>();
+		for (Goal g : this.model.getGoalsOfUser(userId)) {
+
+			JsonObject goalRes = evaluate(g);
+			ObjectMapper mapper = new ObjectMapper();
+
+			GoalResult currentGoalResult = mapper.readValue(goalRes.toString(), GoalResult.class);
+			goalResultList.add(currentGoalResult);
+		}
+
+		return goalResultList;
+	}
+
+
+
     public JsonObject evaluate(Goal g) throws IOException, InvalidParameterException {
         if(g == null)
             throw new InvalidParameterException("Goal doesn't exist");
@@ -157,19 +169,6 @@ public class Controller {
         }
     }
 
-    public JsonArray getMosaicForUser(String userID) throws IOException {
-        evaluateGoalsForUser(userID);
-        return this.model.getMosaicForUser(userID);
-    }
-
-    public JsonArray getAllGoals() {
-        return this.model.getAllGoals();
-    }
-
-    public void dropAllGoals() {
-        this.model.deleteAllGoals();
-    }
-
     public void giveBadge(Badge bestBadge, String userId) throws IOException {
         this.model.giveBadge(bestBadge, userId);
     }
@@ -177,4 +176,33 @@ public class Controller {
     public void deleteGoal(String goalId) {
         this.model.deleteGoal(goalId);
     }
+
+	public JsonArray getMosaicForUser(String userID) throws IOException {
+		List<GoalResult> goalResultList = evaluateGoalsForUserResult(userID);
+
+		JsonArray goalResultArray = new JsonArray();
+		for(GoalResult goalResult : goalResultList) {
+			JsonObject goalResultJsonDescription = goalResult.toJsonForClient();
+			goalResultArray.add(goalResultJsonDescription);
+		}
+
+		JsonArray notTakenChallengesJsonArray = this.model.getNotTakenChallengesOfUser(userID);
+
+		System.out.println("\n\n+\tNot taken challenges : " + notTakenChallengesJsonArray);
+		System.out.println("\n\n+\tGoal result : " + goalResultArray);
+
+		JsonArray result = new JsonArray();
+		result.addAll(goalResultArray);
+		result.addAll(notTakenChallengesJsonArray);
+
+		return result;
+	}
+
+	public JsonArray getAllGoals() {
+		return this.model.getAllGoals();
+	}
+
+	public void dropAllGoals() {
+		this.model.deleteAllGoals();
+	}
 }

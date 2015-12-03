@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
+import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
