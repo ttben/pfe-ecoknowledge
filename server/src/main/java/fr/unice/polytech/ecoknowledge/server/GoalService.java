@@ -2,13 +2,12 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.controller.Controller;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
@@ -22,8 +21,8 @@ public class GoalService {
 		JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
 
 		try {
-			Controller.getInstance().createGoal(jsonObject);
-			return Response.ok().build();
+			JsonObject result = Controller.getInstance().createGoal(jsonObject);
+			return Response.ok().entity(result.toString()).build();
 		}
 		catch(JsonMappingException | JsonParseException e) {
 			e.printStackTrace();
@@ -35,6 +34,19 @@ public class GoalService {
 			System.out.println(e.getMessage());
 			return Response.status(500).entity(e.getMessage()).build();
 		}
+	}
+
+	@GET
+	@Produces("application/json")
+	public Response getAllGoals() {
+		JsonArray result = Controller.getInstance().getAllGoals();
+		return Response.ok().entity(result.toString()).build();
+	}
+
+	@DELETE
+	public Response deleteAllGoals() {
+		Controller.getInstance().dropAllGoals();
+		return Response.ok().build();
 	}
 
 }

@@ -15,7 +15,9 @@ public class Calculator {
 
     public JsonObject evaluate(Goal g){
         AchievementProcessor ap = new AchievementProcessor(g, cache);
-        ap.visit(g);
+
+        g.accept(ap);
+
         GoalResult gr = ap.getGoalResult();
 
         // Just a test for now
