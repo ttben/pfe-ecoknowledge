@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
+
 import fr.unice.polytech.ecoknowledge.domain.model.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
@@ -101,7 +103,7 @@ public class Controller {
     }
 
     public JsonArray getAllChallenges() throws IOException {
-        return this.model.getAllChallenges();
+        return this.model.getAllChallengesInJsonFormat();
     }
 
     public boolean dropAllChallenges() {
@@ -136,5 +138,13 @@ public class Controller {
 
     public JsonObject evaluate(String userId, String challengeId) throws IOException {
         return this.calculator.evaluate(model.getGoal(userId, challengeId));
+    }
+
+    public JsonArray getGoalsForUser(String userID) throws IOException {
+        return this.model.getGoalsOfUserInJsonFormat(userID);
+    }
+
+    public JsonArray getMosaicForUser(String userID) throws IOException {
+        return this.model.getMosaicForUser(userID);
     }
 }
