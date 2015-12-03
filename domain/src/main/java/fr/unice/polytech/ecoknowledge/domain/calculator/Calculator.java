@@ -1,37 +1,48 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
 import com.google.gson.JsonObject;
+import fr.unice.polytech.ecoknowledge.domain.Controller;
+import fr.unice.polytech.ecoknowledge.domain.model.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.LevelResult;
+import org.json.JSONArray;
+
+import java.util.List;
 
 public class Calculator {
 
-	private Cache cache;
+    private Cache cache;
     private Clock clock;
 
     public Calculator(Cache cache) {
-		this.cache = cache;
+        this.cache = cache;
         this.clock = new Clock();
     }
 
     public JsonObject evaluate(Goal g){
+
         AchievementProcessor ap = new AchievementProcessor(g, cache);
-
         g.accept(ap);
-
         GoalResult gr = ap.getGoalResult();
 
-        // Just a test for now
+        Badge bestBadge = getBestBadge(gr.getLevelResultList());
+        System.out.println("Best badge : " + bestBadge);
+        if(bestBadge != null){
+            //Controller.getInstance().giveBadge(bestBadge, g.getUser().getId().toString());
+        }
 
-        JsonObject res = new JsonObject();
-        int i = 0;
-        for(LevelResult lr : gr.getLevelResultList())
-           res.addProperty("lvl" + i, lr.toJsonForClient().toString());
+        return gr.toJsonForClient();
+    }
 
-        System.out.println(res);
+    private Badge getBestBadge(List<LevelResult> levelResultList) {
 
-        return res;
+        Badge b = null;
+        for(LevelResult lr : levelResultList){
+            if(lr.isAchieved())
+                b = lr.getLevel().getBadge();
+        }
+        return b;
     }
 
     public Clock getClock() {

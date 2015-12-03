@@ -122,7 +122,6 @@ public class Controller {
 
     public JsonObject createGoal(JsonObject jsonObject) throws IOException,JsonParseException, JsonMappingException {
         Goal newGoal = this.model.takeChallenge(jsonObject, calculator.getClock());
-        
         JsonObject result = calculator.evaluate(newGoal);
         return result;
     }
