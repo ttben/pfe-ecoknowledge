@@ -5,7 +5,6 @@ import org.json.JSONObject;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.LinkedList;
 
 /**
  * Created by Sébastien on 27/11/2015.
@@ -13,15 +12,15 @@ import java.util.LinkedList;
 
 public class HTTPCall {
 
-    public static Response POST(String ipAddress, String service, JSONObject media){
-        Client client = ClientBuilder.newClient();
-        WebTarget resource = client.target(ipAddress + service);
-        Invocation.Builder b = resource.request();
-        System.out.println("\t---> Sending request to '" + ipAddress+service + "'");
+	public static Response POST(String ipAddress, String service, JSONObject media) {
+		Client client = ClientBuilder.newClient();
+		WebTarget resource = client.target(ipAddress + service);
+		Invocation.Builder b = resource.request();
+		System.out.println("\t---> Sending request to '" + ipAddress + service + "'");
 
-        Entity e = Entity.entity(media.toString(5), MediaType.APPLICATION_JSON);
+		Entity e = Entity.entity(media.toString(5), MediaType.APPLICATION_JSON);
 
-        return b.post(e);
-    }
+		return b.post(e);
+	}
 
 }

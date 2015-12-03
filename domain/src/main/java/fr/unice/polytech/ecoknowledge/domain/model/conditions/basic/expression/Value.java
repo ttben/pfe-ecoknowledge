@@ -24,11 +24,11 @@ public class Value implements Operand {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof Value)) {
+		if (!(obj instanceof Value)) {
 			return false;
 		}
 
-		Value value = (Value)obj;
+		Value value = (Value) obj;
 
 		return this.value == value.value;
 	}

@@ -10,39 +10,39 @@ import fr.unice.polytech.ecoknowledge.language.api.interfaces.IImprovable;
  */
 public class Conditions extends LevelBuilderGettable implements IConditionsable {
 
-    private Level l;
+	private Level l;
 
-    Conditions(Level level){
-        this.l = level;
-    }
+	Conditions(Level level) {
+		this.l = level;
+	}
 
-    protected Level getLevel(){
-        return l;
-    }
+	protected Level getLevel() {
+		return l;
+	}
 
-    @Override
-    public IConditionable averageOf(String sensor) {
-        Condition c = new Condition(this, ConditionType.AVERAGE, sensor);
-        l.addCondition(c);
-        return c;
-    }
+	@Override
+	public IConditionable averageOf(String sensor) {
+		Condition c = new Condition(this, ConditionType.AVERAGE, sensor);
+		l.addCondition(c);
+		return c;
+	}
 
-    @Override
-    public IConditionable valueOf(String sensor) {
-        Condition c = new Condition(this, ConditionType.VALUE_OF, sensor);
-        l.addCondition(c);
-        return c;
-    }
+	@Override
+	public IConditionable valueOf(String sensor) {
+		Condition c = new Condition(this, ConditionType.VALUE_OF, sensor);
+		l.addCondition(c);
+		return c;
+	}
 
-    @Override
-    public IImprovable increase(String sensor) {
-        Improvement i = new Improvement(this, sensor, IMPROVEMENT_TYPE.INCREASE);
-        return i;
-    }
+	@Override
+	public IImprovable increase(String sensor) {
+		Improvement i = new Improvement(this, sensor, IMPROVEMENT_TYPE.INCREASE);
+		return i;
+	}
 
-    @Override
-    public IImprovable decrease(String sensor) {
-        Improvement i = new Improvement(this, sensor, IMPROVEMENT_TYPE.DECREASE);
-        return i;
-    }
+	@Override
+	public IImprovable decrease(String sensor) {
+		Improvement i = new Improvement(this, sensor, IMPROVEMENT_TYPE.DECREASE);
+		return i;
+	}
 }

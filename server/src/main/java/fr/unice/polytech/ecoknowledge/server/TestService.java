@@ -5,7 +5,10 @@ import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.data.utils.Utils;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.security.InvalidParameterException;
@@ -34,13 +37,13 @@ public class TestService {
 	@Path("/evaluate")
 	@POST
 	@Consumes("application/json")
-	public Response evaluate(String object){
+	public Response evaluate(String object) {
 		JsonObject json = new JsonParser().parse(object).getAsJsonObject();
-		try{
+		try {
 			Controller.getInstance().evaluate(
 					json.get("userId").getAsString(),
 					json.get("challengeId").getAsString());
-		} catch (IOException e){
+		} catch (IOException e) {
 			return Response.status(500).entity(e.getMessage()).build();
 		}
 		return Response.ok().build();

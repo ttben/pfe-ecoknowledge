@@ -1,8 +1,8 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
-import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
-import fr.unice.polytech.ecoknowledge.domain.model.Level;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.StandardCondition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Operand;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCondition;
@@ -42,8 +42,8 @@ public class AchievementProcessor implements GoalVisitor {
 		double percentageAchieved = 0;
 		boolean achieved = true;
 
-		for(LevelResult levelResult : currentLevelResult) {
-			if(!levelResult.isAchieved()) {
+		for (LevelResult levelResult : currentLevelResult) {
+			if (!levelResult.isAchieved()) {
 				achieved = false;
 				percentageAchieved += levelResult.getCorrectRate();
 			}
@@ -59,7 +59,7 @@ public class AchievementProcessor implements GoalVisitor {
 	public void visit(Level level) {
 		double percentageAchieved = 0;
 
-		for(ConditionResult conditionResult : currentConditionResult) {
+		for (ConditionResult conditionResult : currentConditionResult) {
 			percentageAchieved += conditionResult.getCorrectRate();
 		}
 
@@ -67,7 +67,7 @@ public class AchievementProcessor implements GoalVisitor {
 
 		boolean achieved = correctRate >= 100.0;
 
-		LevelResult levelResult = new LevelResult(currentLevelResult.size()+1,achieved, correctRate, currentConditionResult, level);
+		LevelResult levelResult = new LevelResult(currentLevelResult.size() + 1, achieved, correctRate, currentConditionResult, level);
 		currentLevelResult.add(levelResult);
 
 		currentConditionResult = new ArrayList<>();
@@ -85,7 +85,7 @@ public class AchievementProcessor implements GoalVisitor {
 
 		//	Retrieves values of sensors
 		List<Data> data = this.cache.getDataOfSensorBetweenDate(sensorBound, goal.getStart(), goal.getEnd(),
-                condition.getTargetDays().getWeekMoment(), condition.getTargetDays().getDayMoment());
+				condition.getTargetDays().getWeekMoment(), condition.getTargetDays().getDayMoment());
 
 		//	Compute evaluation of condition
 		int numberOfCorrectValues = 0;
@@ -98,11 +98,11 @@ public class AchievementProcessor implements GoalVisitor {
 		}
 
 		//	Compute percentage achieved and if achievement
-		double correctRate =(data.size() > 0) ? (numberOfCorrectValues * 100) / data.size() : 0;
+		double correctRate = (data.size() > 0) ? (numberOfCorrectValues * 100) / data.size() : 0;
 
 		double achievedRate = 0.0;
 
-		switch(condition.getCounter().getCounterType()) {
+		switch (condition.getCounter().getCounterType()) {
 			case PERCENT_OF_TIME:
 				achievedRate = (correctRate * 100) / condition.getCounter().getThreshold();
 				break;

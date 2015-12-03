@@ -1,44 +1,43 @@
 {
-  "name":"Baisse de la clim",
-  "image":"url",
-  "lifeSpan":{
-    "start" :"2015-10-07T10:14:40Z",
-    "end":"2015-10-10T11:22:40Z"
+  "name": "Baisse de la clim",
+  "image": "url",
+  "lifeSpan": {
+    "start": "2015-10-07T10:14:40Z",
+    "end": "2015-10-10T11:22:40Z"
   },
-  "recurrence":{
-    "type":"day",
-    "unit":1
+  "recurrence": {
+    "type": "day",
+    "unit": 1
   },
   "levels": [
     {
-      "name":"Bronze - Love is all you need",
-      "badge":{
-        "name":"you're too good for me",
-        "reward" : 69,
-        "image" : "http://www.derp.com"
+      "name": "Bronze - Love is all you need",
+      "badge": {
+        "name": "you're too good for me",
+        "reward": 69,
+        "image": "http://www.derp.com"
       },
-      "conditions":
-      [
+      "conditions": [
         {
-          "type":"standard",
-          "expression":   {
+          "type": "standard",
+          "expression": {
             "leftOperand": {
-              "type":"symbolicName",
-              "symbolicName":"TMP_CLI"
+              "type": "symbolicName",
+              "symbolicName": "TMP_CLI"
             },
             "rightOperand": {
-              "type":"value",
-              "value":27
+              "type": "value",
+              "value": 27
             },
             "comparator": ">"
           },
           "counter": {
-            "threshold":50,
-            "type":"percent-of-time"
+            "threshold": 50,
+            "type": "percent-of-time"
           },
           "targetTime": {
-            "days":"weekDays",
-            "hours":"morning"
+            "days": "weekDays",
+            "hours": "morning"
           }
         }
       ]

@@ -52,7 +52,7 @@ public class GoalResult implements ViewForClient {
 		JsonObject result = new GoalView(goal).toJsonForClient();
 
 		// TODO: 30/11/2015  
-		
+
 		return result;
 	}
 }

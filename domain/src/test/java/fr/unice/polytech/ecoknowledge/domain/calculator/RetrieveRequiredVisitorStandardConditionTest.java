@@ -2,21 +2,17 @@ package fr.unice.polytech.ecoknowledge.domain.calculator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.domain.TestUtils;
-import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
-import fr.unice.polytech.ecoknowledge.domain.model.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,7 +1,5 @@
 package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 public enum CounterType {
 
 	TIMES("times"),

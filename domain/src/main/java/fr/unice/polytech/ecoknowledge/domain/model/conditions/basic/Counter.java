@@ -41,7 +41,7 @@ public class Counter {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof Counter)) {
+		if (!(obj instanceof Counter)) {
 			return false;
 		}
 

@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.domain.model;
+package fr.unice.polytech.ecoknowledge.domain.model.time;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -47,11 +47,11 @@ public class TimeBox {
 
 	@Override
 	public boolean equals(Object o) {
-		if(! (o instanceof TimeBox)) {
+		if (!(o instanceof TimeBox)) {
 			return false;
 		}
 
-		TimeBox timeBox = (TimeBox)o;
+		TimeBox timeBox = (TimeBox) o;
 		return timeBox.start.equals(start) && timeBox.end.equals(end);
 	}
 }

@@ -10,6 +10,7 @@ import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 public class GoalView implements ViewForClient {
 
 	private Goal goal;
+
 	public GoalView(Goal goal) {
 		this.goal = goal;
 	}
@@ -18,7 +19,7 @@ public class GoalView implements ViewForClient {
 		JsonObject result = new JsonObject();
 
 		// TODO: 30/11/2015
-		
+
 		return result;
 	}
 }

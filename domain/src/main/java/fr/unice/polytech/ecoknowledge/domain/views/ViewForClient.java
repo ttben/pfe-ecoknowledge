@@ -7,5 +7,5 @@ import com.google.gson.JsonObject;
  */
 public interface ViewForClient {
 
-    JsonObject toJsonForClient();
+	JsonObject toJsonForClient();
 }

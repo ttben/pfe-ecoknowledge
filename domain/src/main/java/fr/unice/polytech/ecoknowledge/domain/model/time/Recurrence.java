@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.domain.model;
+package fr.unice.polytech.ecoknowledge.domain.model.time;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -56,11 +56,11 @@ public class Recurrence {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof Recurrence)) {
+		if (!(obj instanceof Recurrence)) {
 			return false;
 		}
 
-		Recurrence recurrence = (Recurrence)obj;
+		Recurrence recurrence = (Recurrence) obj;
 
 		return recurrenceType.equals(recurrence.recurrenceType)
 				&& unit.equals(recurrence.unit);

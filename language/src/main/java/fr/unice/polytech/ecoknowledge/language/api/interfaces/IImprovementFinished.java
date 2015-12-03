@@ -7,5 +7,5 @@ import fr.unice.polytech.ecoknowledge.language.api.implem.enums.OLD_PERIOD;
  */
 public interface IImprovementFinished {
 
-    public IAndable comparedTo(OLD_PERIOD when);
+	public IAndable comparedTo(OLD_PERIOD when);
 }

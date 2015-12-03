@@ -22,87 +22,87 @@ import static org.junit.Assert.assertNotNull;
  */
 public class GEN_ConditionTest {
 
-    JSONObject description;
+	JSONObject description;
 
-    @Before
-    public void createChallenge(){
+	@Before
+	public void createChallenge() {
 
-        ChallengeBuilder cb = Challenge.create("DSL done");
-        cb
-                .dontSend() // Just because it's a test
-                .availableFrom(23,11,2015).to(7,3,2016)
-                .during(1, WEEK)
-                .atLevel("level")
-                    .rewards(2)
-                    .withConditions()
-                        .valueOf("BENNI_RAGE_QUIT").lowerThan(1)
-                            .on(WEEK_PERIOD.WEEK_DAYS, DAY_MOMENT.MORNING)
-                            .atLeast(5).times()
-                        .and()
-                        .increase("OLD").by(50).percent().comparedTo(LAST_MONTH)
-                .end();
+		ChallengeBuilder cb = Challenge.create("DSL done");
+		cb
+				.dontSend() // Just because it's a test
+				.availableFrom(23, 11, 2015).to(7, 3, 2016)
+				.during(1, WEEK)
+				.atLevel("level")
+				.rewards(2)
+				.withConditions()
+				.valueOf("BENNI_RAGE_QUIT").lowerThan(1)
+				.on(WEEK_PERIOD.WEEK_DAYS, DAY_MOMENT.MORNING)
+				.atLeast(5).times()
+				.and()
+				.increase("OLD").by(50).percent().comparedTo(LAST_MONTH)
+				.end();
 
-        description = cb.getDescription();
-    }
+		description = cb.getDescription();
+	}
 
-    @Test
-    public void checkTargetTime(){
-        ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
-        wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
-        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
-        wanted.add(new AbstractMap.SimpleEntry<>("conditions", JSONArray.class));
-        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
-        wanted.add(new AbstractMap.SimpleEntry<>("targetTime", JSONObject.class));
+	@Test
+	public void checkTargetTime() {
+		ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
+		wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
+		wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
+		wanted.add(new AbstractMap.SimpleEntry<>("conditions", JSONArray.class));
+		wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
+		wanted.add(new AbstractMap.SimpleEntry<>("targetTime", JSONObject.class));
 
-        Object t = JsonSearcher.lookFor(description, wanted);
-        JSONObject targetTime = (JSONObject) t;
+		Object t = JsonSearcher.lookFor(description, wanted);
+		JSONObject targetTime = (JSONObject) t;
 
-        assertEquals(WEEK_PERIOD.WEEK_DAYS.toString(), targetTime.getString("days"));
-        assertEquals(DAY_MOMENT.MORNING.toString(), targetTime.getString("hours"));
+		assertEquals(WEEK_PERIOD.WEEK_DAYS.toString(), targetTime.getString("days"));
+		assertEquals(DAY_MOMENT.MORNING.toString(), targetTime.getString("hours"));
 
-    }
+	}
 
-    @Test
-    public void checkOperands(){
+	@Test
+	public void checkOperands() {
 
-        ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
-        wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
-        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
-        wanted.add(new AbstractMap.SimpleEntry<>("conditions", JSONArray.class));
-        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
-        wanted.add(new AbstractMap.SimpleEntry<>("expression", JSONObject.class));
+		ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
+		wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
+		wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
+		wanted.add(new AbstractMap.SimpleEntry<>("conditions", JSONArray.class));
+		wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
+		wanted.add(new AbstractMap.SimpleEntry<>("expression", JSONObject.class));
 
-        Object e = JsonSearcher.lookFor(description, wanted);
-        JSONObject expression = (JSONObject) e;
+		Object e = JsonSearcher.lookFor(description, wanted);
+		JSONObject expression = (JSONObject) e;
 
-        assertNotNull(expression.getString("comparator"));
-        assertNotNull(expression.getJSONObject("leftOperand"));
-        assertNotNull(expression.getJSONObject("leftOperand").getString("symbolicName"));
-        assertNotNull(expression.getJSONObject("leftOperand").getString("type"));
-        assertNotNull(expression.getJSONObject("rightOperand"));
-        assertNotNull(expression.getJSONObject("rightOperand").getString("type"));
-        assertNotNull(expression.getJSONObject("rightOperand").getInt("value"));
-    }
+		assertNotNull(expression.getString("comparator"));
+		assertNotNull(expression.getJSONObject("leftOperand"));
+		assertNotNull(expression.getJSONObject("leftOperand").getString("symbolicName"));
+		assertNotNull(expression.getJSONObject("leftOperand").getString("type"));
+		assertNotNull(expression.getJSONObject("rightOperand"));
+		assertNotNull(expression.getJSONObject("rightOperand").getString("type"));
+		assertNotNull(expression.getJSONObject("rightOperand").getInt("value"));
+	}
 
-    @Test
-    public void checkImprovement(){
+	@Test
+	public void checkImprovement() {
 
-        ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
-        wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
-        wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
-        wanted.add(new AbstractMap.SimpleEntry<>("conditions", JSONArray.class));
-        wanted.add(new AbstractMap.SimpleEntry<>(1, JSONObject.class));
+		ArrayList<Map.Entry<Object, Class>> wanted = new ArrayList<>();
+		wanted.add(new AbstractMap.SimpleEntry<>("levels", JSONArray.class));
+		wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
+		wanted.add(new AbstractMap.SimpleEntry<>("conditions", JSONArray.class));
+		wanted.add(new AbstractMap.SimpleEntry<>(1, JSONObject.class));
 
-        Object i = JsonSearcher.lookFor(description, wanted);
-        JSONObject improvement = (JSONObject) i;
+		Object i = JsonSearcher.lookFor(description, wanted);
+		JSONObject improvement = (JSONObject) i;
 
-        assertEquals("improve", improvement.getString("type"));
-        assertEquals(IMPROVEMENT_TYPE.INCREASE.toString(), improvement.getString("improvementType"));
-        assertEquals(LAST_MONTH.toString(), improvement.getString("referencePeriod"));
-        assertNotNull(improvement.getString("symbolicName"));
-        assertEquals(50, improvement.getInt("threshold"));
+		assertEquals("improve", improvement.getString("type"));
+		assertEquals(IMPROVEMENT_TYPE.INCREASE.toString(), improvement.getString("improvementType"));
+		assertEquals(LAST_MONTH.toString(), improvement.getString("referencePeriod"));
+		assertNotNull(improvement.getString("symbolicName"));
+		assertEquals(50, improvement.getInt("threshold"));
 
 
-        System.out.println(improvement);
-    }
+		System.out.println(improvement);
+	}
 }

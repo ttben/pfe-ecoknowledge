@@ -7,6 +7,6 @@ import fr.unice.polytech.ecoknowledge.language.api.implem.Level;
  */
 public abstract class LevelBuilderGettable {
 
-    protected abstract Level getLevel();
+	protected abstract Level getLevel();
 
 }

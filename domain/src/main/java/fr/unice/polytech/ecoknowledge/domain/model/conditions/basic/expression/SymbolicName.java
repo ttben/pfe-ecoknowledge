@@ -24,7 +24,7 @@ public class SymbolicName implements Operand {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof SymbolicName)) {
+		if (!(obj instanceof SymbolicName)) {
 			return false;
 		}
 

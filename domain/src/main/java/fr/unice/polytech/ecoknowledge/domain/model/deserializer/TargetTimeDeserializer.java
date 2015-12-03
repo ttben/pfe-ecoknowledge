@@ -15,13 +15,13 @@ import java.io.IOException;
  * Created by Sébastien on 02/12/2015.
  */
 public class TargetTimeDeserializer extends JsonDeserializer<TimeFilter> {
-    @Override
-    public TimeFilter deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-        JsonNode node = jsonParser.getCodec().readTree(jsonParser);
+	@Override
+	public TimeFilter deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+		JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
-        String hours = (node.get("hours")).asText();
-        String days = (node.get("days")).asText();
+		String hours = (node.get("hours")).asText();
+		String days = (node.get("days")).asText();
 
-        return new TimeFilter(DayMoment.fromString(hours).getHours(), WeekMoment.fromString(days).getDays());
-    }
+		return new TimeFilter(DayMoment.fromString(hours).getHours(), WeekMoment.fromString(days).getDays());
+	}
 }

@@ -34,12 +34,12 @@ public class Comparator {
 	}
 
 	@Override
-	public boolean equals(Object o){
-		if(! (o instanceof Comparator)) {
+	public boolean equals(Object o) {
+		if (!(o instanceof Comparator)) {
 			return false;
 		}
 
-		Comparator otherComparator = (Comparator)o;
+		Comparator otherComparator = (Comparator) o;
 		return otherComparator.comparator.equals(this.comparator);
 	}
 

@@ -1,9 +1,9 @@
 {
-  "profilePic" : "http://media.steampowered.com/steamcommunity/public/images/avatars/b3/b3a88d804414663378bfd9c2b9a4f1d6834831e0_full.jpg",
-  "firstName" : "Hugo",
-  "lastName" : "Simond",
+  "profilePic": "http://media.steampowered.com/steamcommunity/public/images/avatars/b3/b3a88d804414663378bfd9c2b9a4f1d6834831e0_full.jpg",
+  "firstName": "Hugo",
+  "lastName": "Simond",
   "personalMapping": {
-    "TMP":"TMP_hu",
-    "CLI":"CLI_08"
+    "TMP": "TMP_hu",
+    "CLI": "CLI_08"
   }
 }

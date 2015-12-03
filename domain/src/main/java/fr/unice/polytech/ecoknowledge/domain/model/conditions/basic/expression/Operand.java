@@ -10,10 +10,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonSubTypes({
 		@JsonSubTypes.Type(value = Value.class, name = "value"),
-		@JsonSubTypes.Type(value = SymbolicName.class, name = "symbolicName") }
+		@JsonSubTypes.Type(value = SymbolicName.class, name = "symbolicName")}
 )
 public interface Operand {
 
 	boolean isRequired();
+
 	Object getSymbolicName();
 }

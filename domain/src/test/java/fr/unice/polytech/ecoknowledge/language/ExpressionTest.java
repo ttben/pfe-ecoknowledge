@@ -21,7 +21,7 @@ public class ExpressionTest {
 
 	String symbolicName = "TMP_CLI";
 	Double value = 20.0;
-	String comparator =  ">";
+	String comparator = ">";
 
 	@Before
 	public void setUp() {
