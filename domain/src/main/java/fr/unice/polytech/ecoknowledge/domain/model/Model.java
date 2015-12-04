@@ -206,22 +206,27 @@ public class Model {
 	public JsonArray getMosaicForUser(String userID) throws IOException {
 		JsonArray result = new JsonArray();
 
+		result.addAll(getNotTakenChallengesOfUser(userID));
+		result.addAll(getGoalsOfUserInJsonFormat(userID));
+		System.out.println("GOAL OF USER : " + getGoalsOfUser(userID));
+
+		return result;
+	}
+
+	public JsonArray getNotTakenChallengesOfUser(String userID) throws IOException {
+		JsonArray result = new JsonArray();
+
 		List<Challenge> allChallenges = getAllChallenges();
 		List<Challenge> takenChallenges = getTakenChallenges(userID);
 		List<Challenge> notTakenChallenges = new ArrayList<>();
 
-		System.out.println("TAKEN CHALLENGES : " + takenChallenges);
 		for (Challenge currentChallenge : allChallenges) {
-			System.out.println("CHECK IF CONTAINS " + currentChallenge);
 			if (!takenChallenges.contains(currentChallenge)) {
 				notTakenChallenges.add(currentChallenge);
 			}
 		}
 
-		System.out.println("SO : C NOT TAKEN : " + notTakenChallenges);
 		result.addAll(getChallengesInJsonFormat(notTakenChallenges));
-		result.addAll(getGoalsOfUserInJsonFormat(userID));
-		System.out.println("GOAL OF USER : " + getGoalsOfUser(userID));
 
 		return result;
 	}
