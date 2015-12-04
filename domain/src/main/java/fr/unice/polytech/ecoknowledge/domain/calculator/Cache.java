@@ -1,7 +1,10 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
+import com.google.gson.JsonObject;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
 
+import java.security.KeyStore;
 import java.util.*;
 
 /**
@@ -10,6 +13,8 @@ import java.util.*;
 public class Cache {
 
 	private Map<String, List<Data>> data = new HashMap<>();
+
+	private static Cache fakeCacheInstance;
 
 	public List<Data> getDataOf(String sensorName) {
 		return this.data.get(sensorName);
@@ -47,23 +52,43 @@ public class Cache {
 	}
 
 	public static Cache getFakeCache() {
-		Cache cache = new Cache();
+		if(fakeCacheInstance == null) {
+			fakeCacheInstance = new Cache();
 
-		Map<String, List<Data>> fakedData = new HashMap<>();
+			Map<String, List<Data>> fakedData = new HashMap<>();
 
-		List<Data> aListOfData = new ArrayList<>();
-		aListOfData.add(new Data(20.0, new DateTime().minusDays(1)));
-		aListOfData.add(new Data(22.0, new DateTime().minusDays(1)));
-		fakedData.put("TEMP_443V", aListOfData);
+			List<Data> aListOfData = new ArrayList<>();
+			aListOfData.add(new Data(20.0, new DateTime().minusDays(1)));
+			aListOfData.add(new Data(22.0, new DateTime().minusDays(1)));
+			fakedData.put("TEMP_443V", aListOfData);
 
-		List<Data> anotherListOfData = new ArrayList<>();
-		anotherListOfData.add(new Data(20.0, new DateTime().minusDays(1)));
-		anotherListOfData.add(new Data(22.0, new DateTime().minusDays(1)));
-		fakedData.put("TEMP_555", anotherListOfData);
+			List<Data> anotherListOfData = new ArrayList<>();
+			anotherListOfData.add(new Data(20.0, new DateTime().minusDays(1)));
+			anotherListOfData.add(new Data(22.0, new DateTime().minusDays(1)));
+			fakedData.put("TEMP_555", anotherListOfData);
 
-		cache.setData(fakedData);
+			fakeCacheInstance.setData(fakedData);
+		}
 
-		return cache;
+		return fakeCacheInstance;
 	}
 
+	public void addData(JsonObject object) {
+		String sensorName = object.get("sensor").getAsString();
+		String dataDescription = object.get("data").getAsString();
+		String dateDescription = object.get("date").getAsString();
+
+		Double dataValue = Double.parseDouble(dataDescription);
+		DateTime dateTime = DateTime.parse(dateDescription);
+
+		Data dataToAdd = new Data(dataValue, dateTime);
+
+		List<Data> dataList = new ArrayList<>();
+		if(fakeCacheInstance.getData().containsKey(sensorName)) {
+			dataList = fakeCacheInstance.getData().get(sensorName);
+		}
+		dataList.add(dataToAdd);
+
+		fakeCacheInstance.getData().put(sensorName, dataList);
+	}
 }

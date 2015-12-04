@@ -52,7 +52,10 @@ public class Clock {
 	}
 
 	public void setFakeTime(DateTime time){
+		System.out.println("\n\n+ Setting fake time ... ");
+		System.out.println("\n\n+ Time before setting : " + this.getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")));
 		this.fakeTime = createDate(time);
+		System.out.println("\n\n+ Time after setting : " + this.getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")));
 	}
 
 	public void setMiddleWareTZ(TimeZone middleWareTZ) {

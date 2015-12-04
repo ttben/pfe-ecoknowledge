@@ -174,6 +174,7 @@ public class Model {
 		JsonArray result = new JsonArray();
 
 		JsonArray usersDescription = DataPersistence.readAll(DataPersistence.Collections.USER);
+		System.out.println("\n\nUSERS DESCRIPTION : " + usersDescription);
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		for (JsonElement e : usersDescription) {
@@ -182,7 +183,7 @@ public class Model {
 			result.add(uv.toJsonForClient());
 		}
 
-		return usersDescription;
+		return result;
 	}
 
 	public void deleteAllUsers() {
@@ -268,4 +269,30 @@ public class Model {
     public void deleteGoal(String goalId) {
         DataPersistence.drop(DataPersistence.Collections.GOAL, goalId);
     }
+
+	public JsonArray getBadgesOfUser(String id) throws IOException {
+		JsonElement u = DataPersistence.read(DataPersistence.Collections.USER, id);
+		System.out.println("U : " + u);
+		ObjectMapper objectMapper = new ObjectMapper();
+		User user = (User) objectMapper.readValue(u.toString(), User.class);
+
+		JsonArray result = new JsonArray();
+
+		List<Badge> badges = new ArrayList<>();
+		if(user.getBadges() != null) {
+			badges.addAll(user.getBadges());
+		}
+
+		for(Badge badge : badges) {
+			JsonObject badgeJsonDescription = new JsonObject();
+			badgeJsonDescription.addProperty("nameChallenge", badge.getName()); // FIXME: 04/12/2015
+			badgeJsonDescription.addProperty("nameLevel", badge.getName()); // FIXME: 04/12/2015
+			badgeJsonDescription.addProperty("points", badge.getReward());
+			badgeJsonDescription.addProperty("numberPossessed", 1); // FIXME: 04/12/2015
+
+			result.add(badgeJsonDescription);
+		}
+
+		return result;
+	}
 }

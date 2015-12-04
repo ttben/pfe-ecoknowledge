@@ -113,6 +113,7 @@ public class DataPersistence {
 	}
 
 	public static void drop(Collections targetCollection, String id) {
+		System.out.println("\n+ DataPersistence : drop on " + targetCollection + " : " + id);
 
 		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);

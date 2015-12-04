@@ -38,6 +38,8 @@ public class ChallengePersistenceTest {
 		aChallenge = (Challenge) objectMapper.readValue(result.toString(), Challenge.class);
 
 		assertEquals(challenge, aChallenge);
+		DataPersistence.drop(DataPersistence.Collections.CHALLENGE, aChallenge.getId().toString());
+
 	}
 
 	@AfterClass

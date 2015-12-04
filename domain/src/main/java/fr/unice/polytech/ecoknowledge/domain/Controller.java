@@ -9,6 +9,7 @@ import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.Model;
+import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
@@ -16,7 +17,10 @@ import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.E
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.json.JSONArray;
 
+import javax.swing.text.DateFormatter;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -147,15 +151,13 @@ public class Controller {
         return this.model.getUser(id);
     }
 
-	public List<GoalResult> evaluateGoalsForUserResult(String userId) throws IOException {
-		List<GoalResult> goalResultList = new ArrayList<>();
+	public JsonArray evaluateGoalsForUserResult(String userId) throws IOException {
+		JsonArray goalResultList = new JsonArray();
+
 		for (Goal g : this.model.getGoalsOfUser(userId)) {
 
 			JsonObject goalRes = evaluate(g);
-			ObjectMapper mapper = new ObjectMapper();
-
-			GoalResult currentGoalResult = mapper.readValue(goalRes.toString(), GoalResult.class);
-			goalResultList.add(currentGoalResult);
+			goalResultList.add(goalRes);
 		}
 
 		return goalResultList;
@@ -186,13 +188,7 @@ public class Controller {
     }
 
 	public JsonArray getMosaicForUser(String userID) throws IOException {
-		List<GoalResult> goalResultList = evaluateGoalsForUserResult(userID);
-
-		JsonArray goalResultArray = new JsonArray();
-		for(GoalResult goalResult : goalResultList) {
-			JsonObject goalResultJsonDescription = goalResult.toJsonForClient();
-			goalResultArray.add(goalResultJsonDescription);
-		}
+		JsonArray goalResultArray  = evaluateGoalsForUserResult(userID);
 
 		JsonArray notTakenChallengesJsonArray = this.model.getNotTakenChallengesOfUser(userID);
 
@@ -220,5 +216,24 @@ public class Controller {
 
     public void setTime(DateTime time) {
         this.calculator.getClock().setFakeTime(time);
+    }
+
+    public String getTimeDescription() {
+        return this.calculator.getClock().getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"));
+    }
+
+    public JsonArray getGoalsOfUserInJsonFormat(String userID) throws IOException {
+        JsonArray goalResultArray  = evaluateGoalsForUserResult(userID);
+
+
+        return goalResultArray;
+    }
+
+    public JsonArray getAllChallengesForUser(String userID) throws IOException {
+        return this.model.getChallengesInJsonFormat(this.model.getTakenChallenges(userID));
+    }
+
+    public JsonArray getBadgesOfUser(String id) throws IOException {
+        return this.model.getBadgesOfUser(id);
     }
 }

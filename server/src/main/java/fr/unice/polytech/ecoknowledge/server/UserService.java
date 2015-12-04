@@ -12,6 +12,20 @@ import java.security.InvalidParameterException;
 @Path("/users")
 public class UserService {
 
+	@GET
+	@Path("/{id}/badges")
+	public Response getBadgesOfUsers(@PathParam("id") String id) {
+		try {
+			return Response.ok().entity(Controller.getInstance().getBadgesOfUser(id).toString()).build();
+		} catch (InvalidParameterException e) {
+			e.printStackTrace();
+			return Response.status(403).entity(e.getMessage()).build();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		}
+	}
+
 	@POST
 	public Response registerUser(String payload) {
 		JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
@@ -30,6 +44,7 @@ public class UserService {
 		try {
 			return Response.ok().entity(Controller.getInstance().getUser(id).toString()).build();
 		} catch (InvalidParameterException e) {
+			e.printStackTrace();
 			return Response.status(403).entity(e.getMessage()).build();
 		} catch (IOException e) {
 			e.printStackTrace();
