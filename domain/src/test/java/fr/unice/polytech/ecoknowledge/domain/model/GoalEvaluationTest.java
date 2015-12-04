@@ -16,6 +16,8 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -47,6 +49,9 @@ public class GoalEvaluationTest {
         jsonObjectUser = TestUtils.getFakeUser(1);
         aUser = objectMapper.readValue(jsonObjectUser.toString(), User.class);
         userId = aUser.getId() + "";
+
+        aGoal = Controller.getInstance().getGoals(userId, challengeId);
+        System.out.println(aGoal);
     }
 
     @AfterClass
@@ -73,16 +78,36 @@ public class GoalEvaluationTest {
         DataPersistence.store(DataPersistence.Collections.USER, jsonObjectUser);
 
 
-        Controller.getInstance().createGoal(jsonObjectGoal);
+        Controller.getInstance().createGoal(jsonObjectGoal, null);
 
         JsonObject user = DataPersistence.read(DataPersistence.Collections.USER, userId);
         ObjectMapper mapper = new ObjectMapper();
         User u = mapper.readValue(user.toString(), User.class);
 
-        Badge toCompare = new Badge("http://www.derp.com", 69, "you're too good for me");
+        assertNull(u.getBadges());
 
-        assertTrue(u.getBadges().contains(toCompare));
+        Controller.getInstance().setTime(DateTime.now().plusDays(1));
+        Controller.getInstance().evaluate(userId, challengeId);
+
+        user = DataPersistence.read(DataPersistence.Collections.USER, userId);
+        mapper = new ObjectMapper();
+        u = mapper.readValue(user.toString(), User.class);
+
         assertEquals(1, u.getBadges().size());
+
+        Badge toCompare = new Badge("http://www.derp.com", 69, "you're too good for me");
+        assertTrue(u.getBadges().contains(toCompare));
+
+
+        Controller.getInstance().setTime(DateTime.now().plusDays(2));
+        Controller.getInstance().evaluate(userId, challengeId);
+
+        user = DataPersistence.read(DataPersistence.Collections.USER, userId);
+        mapper = new ObjectMapper();
+        u = mapper.readValue(user.toString(), User.class);
+
+        assertEquals(2, u.getBadges().size());
+
 
     }
 }

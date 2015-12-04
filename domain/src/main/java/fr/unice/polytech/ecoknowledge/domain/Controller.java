@@ -13,7 +13,9 @@ import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
+import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
@@ -117,8 +119,14 @@ public class Controller {
         return true;
     }
 
-    public JsonObject createGoal(JsonObject jsonObject) throws IOException,JsonParseException, JsonMappingException {
-        Goal newGoal = this.model.takeChallenge(jsonObject, calculator.getClock());
+    public JsonObject createGoal(JsonObject jsonObject, TimeBox next) throws IOException,JsonParseException, JsonMappingException {
+        Goal newGoal = this.model.takeChallenge(jsonObject, calculator.getClock(), next);
+        JsonObject result = calculator.evaluate(newGoal);
+        return result;
+    }
+
+    public JsonObject createNextGoal(JsonObject json, TimeBox timeSpan) throws IOException {
+        Goal newGoal = this.model.takeChallenge(json, calculator.getClock(), timeSpan);
         JsonObject result = calculator.evaluate(newGoal);
         return result;
     }
@@ -127,15 +135,17 @@ public class Controller {
         return this.model.getAllUsers();
     }
 
+
     public boolean dropAllUsers() {
         this.model.deleteAllUsers();
         return true;
     }
 
+
+
     public JsonObject getUser(String id) throws IOException {
         return this.model.getUser(id);
     }
-
 
 	public List<GoalResult> evaluateGoalsForUserResult(String userId) throws IOException {
 		List<GoalResult> goalResultList = new ArrayList<>();
@@ -150,8 +160,6 @@ public class Controller {
 
 		return goalResultList;
 	}
-
-
 
     public JsonObject evaluate(Goal g) throws IOException, InvalidParameterException {
         if(g == null)
@@ -205,4 +213,12 @@ public class Controller {
 	public void dropAllGoals() {
 		this.model.deleteAllGoals();
 	}
+
+    public Goal getGoals(String userId, String challengeId) throws IOException {
+        return model.getGoal(userId, challengeId);
+    }
+
+    public void setTime(DateTime time) {
+        this.calculator.getClock().setFakeTime(time);
+    }
 }

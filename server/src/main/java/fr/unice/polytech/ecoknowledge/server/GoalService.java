@@ -22,7 +22,7 @@ public class GoalService {
 		JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
 
 		try {
-			JsonObject result = Controller.getInstance().createGoal(jsonObject);
+			JsonObject result = Controller.getInstance().createGoal(jsonObject, null);
 			return Response.ok().entity(result.toString()).build();
 		} catch (JsonMappingException | JsonParseException e) {
 			e.printStackTrace();

@@ -12,7 +12,15 @@ import java.util.TimeZone;
  */
 public class Clock {
 
+	private DateTime fakeTime = null;
+
 	public Clock() {
+	}
+
+	public DateTime getTime(){
+		if(fakeTime == null)
+			return createDate(DateTime.now());
+		return fakeTime;
 	}
 
 	private TimeZone middleWareTZ = TimeZone.getTimeZone("Europe/Paris");
@@ -41,6 +49,10 @@ public class Clock {
 		DateTime date = new DateTime(year, month, day, hour, minute, second, 0,
 				DateTimeZone.forTimeZone(middleWareTZ));
 		return date;
+	}
+
+	public void setFakeTime(DateTime time){
+		this.fakeTime = createDate(time);
 	}
 
 	public void setMiddleWareTZ(TimeZone middleWareTZ) {
