@@ -23,7 +23,7 @@ public class User {
 				@JsonProperty(value = "profilePic", required = false) String picUrl,
 				@JsonProperty(value = "goals", required = false) List<String> goalIDs,
 				@JsonProperty(value = "badges", required = false) List<Badge> badges,
-				@JsonProperty(value = "personalMapping", required = true) Map<String, String> personalMapping) {
+				@JsonProperty(value = "symbolicNameToSensorNameMap", required = true) Map<String, String> symbolicNameToSensorNameMap) {
 
 		this.id = (ID != null && !ID.isEmpty()) ? UUID.fromString(ID) : UUID.randomUUID();
 		this.firstName = firstName;
@@ -31,7 +31,7 @@ public class User {
 		this.picUrl = picUrl;
 		this.goalIDs = goalIDs;
 		this.badges = badges;
-		this.symbolicNameToSensorNameMap = personalMapping;
+		this.symbolicNameToSensorNameMap = symbolicNameToSensorNameMap;
 	}
 
 	public Map<String, String> getSymbolicNameToSensorNameMap() {
@@ -102,4 +102,9 @@ public class User {
 		this.id = id;
 	}
 
+	public void addBadge(Badge bestBadge) {
+		if(badges == null)
+			badges = new ArrayList<>();
+		badges.add(bestBadge);
+	}
 }

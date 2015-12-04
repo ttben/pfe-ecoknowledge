@@ -76,7 +76,7 @@ public class UserPersistenceTest {
 
 		jsonObject.addProperty("firstName", "johnny");
 		jsonObject.addProperty("lastName", "depp");
-		jsonObject.add("personalMapping", personalMapping);
+		jsonObject.add("symbolicNameToSensorNameMap", personalMapping);
 
 		return jsonObject;
 	}

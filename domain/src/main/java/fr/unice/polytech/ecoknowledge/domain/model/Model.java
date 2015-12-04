@@ -127,14 +127,18 @@ public class Model {
 		return result;
 	}
 
-	public Goal takeChallenge(JsonObject jsonObject, Clock clock) throws IOException, JsonParseException, JsonMappingException {
+	public Goal takeChallenge(JsonObject jsonObject, Clock clock, TimeBox next) throws IOException, JsonParseException, JsonMappingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		//	Build goal with custom deserializer
 		Goal goal = (Goal) objectMapper.readValue(jsonObject.toString(), Goal.class);
 
 		//	Generate a timeSpan and set it into the goal
-		TimeBox timeSpan = TimeSpanGenerator.generateTimeSpan(goal.getChallengeDefinition().getRecurrence(), clock);
+		TimeBox timeSpan;
+		if(next != null)
+			timeSpan = TimeSpanGenerator.generateNextTimeSpan(goal.getChallengeDefinition().getRecurrence(), clock, next);
+		else
+			timeSpan = TimeSpanGenerator.generateTimeSpan(goal.getChallengeDefinition().getRecurrence(), clock);
 		goal.setTimeSpan(timeSpan);
 
 		//	Retrieve JSON description of goal (using custom serializer)
@@ -249,4 +253,19 @@ public class Model {
 	public void deleteAllGoals() {
 		DataPersistence.drop(DataPersistence.Collections.GOAL);
 	}
+
+	public void giveBadge(Badge bestBadge, String userId) throws IOException {
+
+        JsonObject u = DataPersistence.read(DataPersistence.Collections.USER, userId);
+		ObjectMapper mapper = new ObjectMapper();
+		User user = mapper.readValue(u.toString(), User.class);
+
+		user.addBadge(bestBadge);
+		String userString = mapper.writeValueAsString(user);
+		DataPersistence.update(DataPersistence.Collections.USER, user.getId().toString(), userString);
+	}
+
+    public void deleteGoal(String goalId) {
+        DataPersistence.drop(DataPersistence.Collections.GOAL, goalId);
+    }
 }
