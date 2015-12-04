@@ -40,7 +40,7 @@ public class TimeSpanGenerator {
 
 		start = clock.getTime().withDayOfWeek(1)
 				.withTime(0, 0, 0, 0);
-		end = clock.createDate(start.plusWeeks(unit - 1).withDayOfWeek(7)
+		end = clock.createDate(start.plusWeeks(unit - 1).withDayOfWeek(5)
 				.withTime(23, 59, 59, 99));
 
 		return new TimeBox(start, end);
@@ -53,7 +53,7 @@ public class TimeSpanGenerator {
 
 		start = clock.getTime().withDayOfWeek(1)
 				.withTime(0, 0, 0, 0);
-		end = clock.createDate(start.plusMonths(unit).withDayOfWeek(1).minusDays(1)
+		end = clock.createDate(start.plusMonths(unit).withDayOfWeek(1).minusDays(3)
 				.withTime(23, 59, 59, 99));
 
 		return new TimeBox(start, end);
@@ -98,7 +98,7 @@ public class TimeSpanGenerator {
 		start = clock.createDate(next.getEnd().plusWeeks(1).withDayOfWeek(1)
 				.withTime(0, 0, 0, 0));
 
-		end = clock.createDate(start.plusWeeks(unit - 1).withDayOfWeek(7)
+		end = clock.createDate(start.plusWeeks(unit - 1).withDayOfWeek(5)
 				.withTime(23, 59, 59, 99));
 
 
@@ -113,7 +113,7 @@ public class TimeSpanGenerator {
 		start = clock.createDate(next.getEnd().plusWeeks(1).withDayOfWeek(1)
 				.withTime(0, 0, 0, 0));
 
-        end = clock.createDate(start.plusMonths(unit).withDayOfWeek(1).minusDays(1)
+        end = clock.createDate(start.plusMonths(unit).withDayOfWeek(1).minusDays(3)
                 .withTime(23, 59, 59, 99));
 
 		return new TimeBox(start, end);
