@@ -32,6 +32,6 @@ public class Data {
 
 	@Override
 	public String toString() {
-		return date.toString(DateTimeFormat.forPattern("dd/mm/yyyy HH:mm:ss")) + " - value : " + value;
+		return date.toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")) + " - value : " + value;
 	}
 }

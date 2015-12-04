@@ -4,9 +4,7 @@ import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 
-/**
- * Created by Benjamin on 30/11/2015.
- */
+@Deprecated //	Goal view is a GoalResult.toJsonForClient
 public class GoalView implements ViewForClient {
 
 	private Goal goal;
