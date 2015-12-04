@@ -13,6 +13,7 @@ import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_
  */
 public class SEND_SendTest {
 
+	@Ignore
 	@Test
 	public void sendForReal() {
 
