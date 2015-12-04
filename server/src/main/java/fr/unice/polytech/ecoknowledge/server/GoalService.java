@@ -37,9 +37,23 @@ public class GoalService {
 
 	@GET
 	@Produces("application/json")
-	public Response getAllGoals() {
-		JsonArray result = Controller.getInstance().getAllGoals();
-		return Response.ok().entity(result.toString()).build();
+	public Response getAllGoals(@QueryParam("userID") String userID) {
+
+		try {
+			System.out.println("USER ID : " + userID);
+
+			if (userID != null && !userID.isEmpty() && !userID.equalsIgnoreCase("undefined")) {
+				System.out.println("User ID specified (" + userID + "). Displaying goals for user ...");
+				return Response.ok().entity(Controller.getInstance().getGoalsOfUserInJsonFormat(userID).toString()).build();
+			} else {
+				JsonArray result = Controller.getInstance().getAllGoals();
+				return Response.ok().entity(result.toString()).build();
+			}
+		} catch (IOException e) {
+			System.out.println("\n" + e.getMessage());
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		}
 	}
 
 	@DELETE

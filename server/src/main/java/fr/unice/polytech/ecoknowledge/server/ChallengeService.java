@@ -12,6 +12,17 @@ import java.io.IOException;
 @Path("/challenges")
 public class ChallengeService {
 
+	@GET
+	public Response getAllChallenges(@PathParam("userID") String userID) {
+		System.out.println("USER ID RECEIVED : " + userID);
+		try {
+			return Response.ok().entity(Controller.getInstance().getAllChallengesForUser(userID).toString()).build();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		}
+	}
+
 	@POST
 	@Consumes("application/json")
 	public Response addChallenge(String object) {

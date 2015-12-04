@@ -13,6 +13,7 @@ public class MosaicService {
 	@GET
 	public Response getMosaic(@QueryParam("userID") String userID) {
 		try {
+			System.out.println("USER ID : " + userID);
 			//	If user not logged
 			//	TODO check if userID exists
 			//	TODO move this code into controller
@@ -25,7 +26,7 @@ public class MosaicService {
 				return Response.ok().entity(Controller.getInstance().getAllChallenges().toString()).build();
 			}
 		} catch (IOException e) {
-			System.out.printf("\n" + e.getMessage());
+			System.out.println("\n" + e.getMessage());
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
 		}

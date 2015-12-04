@@ -20,7 +20,7 @@ public class ChallengeBuilder implements IChallengeableIcon {
 	// ------- FIELDS ------- //
 
 	// Configs to end the request
-	private static final String path = "challenge";
+	private static final String path = "challenges";
 	private boolean send = true;
 
 	// Specific fields of the challenge builder

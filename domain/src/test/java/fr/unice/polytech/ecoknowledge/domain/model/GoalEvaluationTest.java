@@ -20,9 +20,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by Sébastien on 03/12/2015.
- */
+// FIXME: 04/12/2015 THIS TEST DUMP A GOAL IN THE BDD WITHOUT ERASING IT
 public class GoalEvaluationTest {
 
     private static JsonObject jsonObject = null;
@@ -108,6 +106,8 @@ public class GoalEvaluationTest {
 
         assertEquals(2, u.getBadges().size());
 
-
+        DataPersistence.drop(DataPersistence.Collections.GOAL, jsonObjectGoal.get("id").getAsString());
+        DataPersistence.drop(DataPersistence.Collections.CHALLENGE, jsonObject.get("id").getAsString());
+        DataPersistence.drop(DataPersistence.Collections.USER, jsonObjectUser.get("id").getAsString());
     }
 }

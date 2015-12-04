@@ -45,8 +45,8 @@ public class AchievementProcessor implements GoalVisitor {
 		for (LevelResult levelResult : currentLevelResult) {
 			if (!levelResult.isAchieved()) {
 				achieved = false;
-				percentageAchieved += levelResult.getCorrectRate();
 			}
+			percentageAchieved += levelResult.getCorrectRate();
 		}
 
 		double correctRate = percentageAchieved / currentLevelResult.size();

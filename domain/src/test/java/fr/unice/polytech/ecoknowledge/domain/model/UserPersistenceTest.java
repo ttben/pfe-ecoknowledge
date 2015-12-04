@@ -38,7 +38,7 @@ public class UserPersistenceTest {
 		ObjectMapper objectMapper = new ObjectMapper();
 		User user = (User) objectMapper.readValue(jsonObject.toString(), User.class);
 
-		assertEquals(getExpectedUser(), user);
+		assertEquals(UserPersistenceTest.user, user);
 	}
 
 	@Test
@@ -64,7 +64,9 @@ public class UserPersistenceTest {
 		ObjectMapper objectMapper = new ObjectMapper();
 		User anotherUser = (User) objectMapper.readValue(result.toString(), User.class);
 
-		assertEquals(getExpectedUser(), anotherUser);
+		DataPersistence.drop(DataPersistence.Collections.USER, jsonObject.get("id").getAsString());
+
+		assertEquals(UserPersistenceTest.user, anotherUser);
 	}
 
 

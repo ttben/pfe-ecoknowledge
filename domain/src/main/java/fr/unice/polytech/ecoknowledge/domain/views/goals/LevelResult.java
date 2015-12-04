@@ -1,8 +1,12 @@
 package fr.unice.polytech.ecoknowledge.domain.views.goals;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.LevelView;
+import fr.unice.polytech.ecoknowledge.domain.views.challenges.conditions.ConditionView;
+import fr.unice.polytech.ecoknowledge.domain.views.challenges.conditions.ConditionViewFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +68,21 @@ public class LevelResult {
 	}
 
 	public JsonObject toJsonForClient() {
-		JsonObject result = new LevelView(this.levelIndex, level).toJsonForClient();
+		JsonObject result = new JsonObject();
 		result.addProperty("percent", this.correctRate);
+
+		result.addProperty("name", this.level.getName());
+
+		JsonArray conditionsJsonArray = new JsonArray();
+		for (ConditionResult condition : this.conditionResultList) {
+			conditionsJsonArray.add(condition.toJsonForClient());
+		}
+		result.add("conditions", conditionsJsonArray);
+
+		result.addProperty("index", this.levelIndex);
+		result.addProperty("points", this.level.getBadge().getReward());
+		result.addProperty("image", this.level.getBadge().getImage());
+
 
 		return result;
 	}

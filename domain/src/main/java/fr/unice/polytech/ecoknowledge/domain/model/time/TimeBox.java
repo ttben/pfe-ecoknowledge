@@ -40,9 +40,9 @@ public class TimeBox {
 
 	@Override
 	public String toString() {
-		return start.toString(DateTimeFormat.forPattern("dd/mm/yyyy HH:mm:ss"))
+		return start.toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"))
 				+ "  -  "
-				+ end.toString(DateTimeFormat.forPattern("dd/mm/yyyy HH:mm:ss"));
+				+ end.toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"));
 	}
 
 	@Override

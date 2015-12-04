@@ -52,7 +52,7 @@ public class GoalResult implements ViewForClient {
 
 
 	public JsonObject toJsonForClient() {
-		JsonObject result = new GoalView(goal).toJsonForClient();
+		JsonObject result = new JsonObject();
 
 		JsonArray levelsJsonArray = new JsonArray();
 		for(LevelResult levelResult : this.levelResultList) {
