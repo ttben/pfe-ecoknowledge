@@ -25,6 +25,7 @@ public class AchievementProcessor implements GoalVisitor {
 	private List<LevelResult> currentLevelResult = new ArrayList<>();
 	private GoalResult goalResult;
 
+
 	public AchievementProcessor(Goal goal, Cache cache) {
 		this.goal = goal;
 		this.cache = cache;
@@ -124,6 +125,49 @@ public class AchievementProcessor implements GoalVisitor {
 	// TODO: 27/11/2015  
 	@Override
 	public void visit(ImproveCondition condition) {
+
+        //	Retrieves sensor bound for symbolic names
+        String symbolicName = condition.getSymbolicName().toString();
+        String sensorBound = goal.getSensorNameForGivenSymbolicName(symbolicName);
+
+        // Retrieve old values of sensor
+        List<Data> oldData = this.cache.getDataOfSensorBetweenDate(sensorBound,
+                condition.getComparedPeriod().getStart(), condition.getComparedPeriod().getEnd());
+
+        List<Data> newData = this.cache.getDataOfSensorBetweenDate(sensorBound,
+                goal.getStart(), goal.getEnd());
+
+        double oldSum = 0;
+        for(Data d : oldData)
+            oldSum += d.getValue();
+
+        double newSem = 0;
+        for(Data d : newData)
+            newSem += d.getValue();
+
+        double oldAverage = oldSum / oldData.size();
+        double newAverage = newSem / newData.size();
+
+        double threshold = condition.getThreshold();
+
+        double achievedRate = 0.0;
+
+        String improveType = condition.getType();
+        switch (improveType){
+            case "increase":
+                if(newAverage < oldAverage) achievedRate = 0;
+                else if(newAverage/oldAverage > 1 + threshold/100) achievedRate = 1;
+                else achievedRate = (newAverage/oldAverage) / (1 + threshold/100);
+                break;
+            case "decrease":
+                if(newAverage > oldAverage) achievedRate = 0;
+                else if(newAverage/oldAverage < 1 - threshold/100) achievedRate = 1;
+                else achievedRate = (oldAverage/newAverage) / (1 + threshold/100);
+        }
+        boolean achieved = achievedRate == 1;
+
+        ConditionResult conditionResult = new ConditionResult(achieved, achievedRate, condition);
+        currentConditionResult.add(conditionResult);
 	}
 
 	public GoalResult getGoalResult() {
