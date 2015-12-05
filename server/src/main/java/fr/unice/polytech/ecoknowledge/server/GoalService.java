@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.unice.polytech.ecoknowledge.domain.Controller;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
+import fr.unice.polytech.ecoknowledge.domain.Model;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -22,7 +21,7 @@ public class GoalService {
 		JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
 
 		try {
-			JsonObject result = Controller.getInstance().createGoal(jsonObject, null);
+			JsonObject result = Model.getInstance().takeChallenge(jsonObject, null);    // TODO: 05/12/2015 clean call: no need to pass "null"
 			return Response.ok().entity(result.toString()).build();
 		} catch (JsonMappingException | JsonParseException e) {
 			e.printStackTrace();
@@ -44,9 +43,9 @@ public class GoalService {
 
 			if (userID != null && !userID.isEmpty() && !userID.equalsIgnoreCase("undefined")) {
 				System.out.println("User ID specified (" + userID + "). Displaying goals for user ...");
-				return Response.ok().entity(Controller.getInstance().getGoalsOfUserInJsonFormat(userID).toString()).build();
+				return Response.ok().entity(Model.getInstance().getGoalsOfUserInJsonFormat(userID).toString()).build();
 			} else {
-				JsonArray result = Controller.getInstance().getAllGoals();
+				JsonArray result = Model.getInstance().getAllGoals();
 				return Response.ok().entity(result.toString()).build();
 			}
 		} catch (IOException e) {
@@ -56,10 +55,19 @@ public class GoalService {
 		}
 	}
 
-	@DELETE
-	public Response deleteAllGoals() {
-		Controller.getInstance().dropAllGoals();
-		return Response.ok().build();
-	}
+	@GET
+	@Path("/{id}")
+	@Produces("application/json")
+	public Response getGoalById(@PathParam("id") String userID) {
 
+		try {
+			JsonObject result = Model.getInstance().getGoal(userID);
+			return Response.ok().entity(result.toString()).build();
+
+		} catch (IOException e) {
+			System.out.println("\n" + e.getMessage());
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		}
+	}
 }

@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.domain.model;
+package fr.unice.polytech.ecoknowledge.domain;
 
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -9,20 +9,48 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.data.DataPersistence;
+import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
+import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
+import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
+import fr.unice.polytech.ecoknowledge.domain.model.time.Recurrence;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeSpanGenerator;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.ChallengeView;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalView;
 import fr.unice.polytech.ecoknowledge.domain.views.users.UserView;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
+
+	private static Model instance;
+
+	private Calculator calculator;
+
+	public Model(Calculator calculator) {
+		this.calculator = calculator;
+	}
+
+	public Model() {
+		this.calculator = new Calculator(Cache.getFakeCache());
+	}
+
+	public static Model getInstance() {
+		if(instance == null) {
+			instance = new Model();
+		}
+
+		return instance;
+	}
 
 	public JsonObject createChallenge(JsonObject jsonObject) throws IOException {
 		JsonObject result = new JsonObject();
@@ -35,12 +63,6 @@ public class Model {
 		DataPersistence.store(DataPersistence.Collections.CHALLENGE, jsonObject);
 
 		return result;
-	}
-
-	@Deprecated
-	public void getGoal(Integer idGoal) {
-		// TODO - implement language.getGoal
-		throw new UnsupportedOperationException();
 	}
 
 	public JsonArray getGoalsInJsonFormat(List<Goal> goals) {
@@ -70,16 +92,6 @@ public class Model {
 		}
 
 		return result;
-	}
-
-	public JsonArray getGoalsOfUserInJsonFormat(String idUser) throws IOException {
-		return getGoalsInJsonFormat(getGoalsOfUser(idUser));
-	}
-
-	@Deprecated
-	public void decernBadge(Integer idUser, Badge badge) {
-		// TODO - implement language.decernBadge
-		throw new UnsupportedOperationException();
 	}
 
 	public List<Challenge> getAllChallenges() throws IOException {
@@ -127,18 +139,21 @@ public class Model {
 		return result;
 	}
 
-	public Goal takeChallenge(JsonObject jsonObject, Clock clock, TimeBox next) throws IOException, JsonParseException, JsonMappingException {
+	public JsonObject takeChallenge(JsonObject jsonObject, TimeBox next) throws IOException, JsonParseException, JsonMappingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		//	Build goal with custom deserializer
 		Goal goal = (Goal) objectMapper.readValue(jsonObject.toString(), Goal.class);
 
+		Recurrence goalRecurrence = goal.getChallengeDefinition().getRecurrence();
+		Clock clock = calculator.getClock();
+
 		//	Generate a timeSpan and set it into the goal
 		TimeBox timeSpan;
 		if(next != null)
-			timeSpan = TimeSpanGenerator.generateNextTimeSpan(goal.getChallengeDefinition().getRecurrence(), clock, next);
+			timeSpan = TimeSpanGenerator.generateNextTimeSpan(goalRecurrence, clock, next);
 		else
-			timeSpan = TimeSpanGenerator.generateTimeSpan(goal.getChallengeDefinition().getRecurrence(), clock);
+			timeSpan = TimeSpanGenerator.generateTimeSpan(goalRecurrence, clock);
 		goal.setTimeSpan(timeSpan);
 
 		//	Retrieve JSON description of goal (using custom serializer)
@@ -148,7 +163,10 @@ public class Model {
 		//	Store goal JSON description into DB
 		DataPersistence.store(DataPersistence.Collections.GOAL, goalToPersist);
 
-		return goal;
+		JsonObject result = calculator.evaluate(goal);
+
+
+		return result;
 	}
 
 	public JsonObject registerUser(JsonObject userJsonDescription) throws IOException {
@@ -161,7 +179,7 @@ public class Model {
 		return userJsonDescription;
 	}
 
-	public JsonObject getUser(String id) throws IOException {
+	public JsonObject getUserProfile(String id) throws IOException {
 		JsonElement u = DataPersistence.read(DataPersistence.Collections.USER, id);
 		System.out.println("U : " + u);
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -198,6 +216,13 @@ public class Model {
 		DataPersistence.drop(DataPersistence.Collections.CHALLENGE, challengeId);
 	}
 
+	public JsonObject getGoal(String goalID) throws IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonObject goalJsonDescription = DataPersistence.read(DataPersistence.Collections.GOAL, goalID);
+		Goal result = (Goal) objectMapper.readValue(goalJsonDescription.toString(), Goal.class);
+		return goalJsonDescription;
+	}
+
 	public Goal getGoal(String userId, String challengeId) throws IOException {
 		List<Goal> goals = getGoalsOfUser(userId);
 		for (Goal g : goals) {
@@ -208,15 +233,6 @@ public class Model {
 		return null;
 	}
 
-	public JsonArray getMosaicForUser(String userID) throws IOException {
-		JsonArray result = new JsonArray();
-
-		result.addAll(getNotTakenChallengesOfUser(userID));
-		result.addAll(getGoalsOfUserInJsonFormat(userID));
-		System.out.println("GOAL OF USER : " + getGoalsOfUser(userID));
-
-		return result;
-	}
 
 	public JsonArray getNotTakenChallengesOfUser(String userID) throws IOException {
 		JsonArray result = new JsonArray();
@@ -294,5 +310,82 @@ public class Model {
 		}
 
 		return result;
+	}
+
+
+	public void evaluateGoalsForUser(String userId) throws IOException, InvalidParameterException {
+		for(Goal g : this.getGoalsOfUser(userId)){
+			evaluate(g);
+		}
+	}
+
+	/*
+	public JsonArray getMosaicForUser(String userID) throws IOException {
+		JsonArray goalResultArray  = evaluateGoalsForUserResult(userID);
+
+		JsonArray notTakenChallengesJsonArray = this.getNotTakenChallengesOfUser(userID);
+
+		System.out.println("\n\n+\tNot taken challenges : " + notTakenChallengesJsonArray);
+		System.out.println("\n\n+\tGoal result : " + goalResultArray);
+
+		JsonArray result = new JsonArray();
+		result.addAll(goalResultArray);
+		result.addAll(notTakenChallengesJsonArray);
+
+		return result;
+	}
+
+
+	public JsonArray getMosaicForUser(String userID) throws IOException {
+		JsonArray result = new JsonArray();
+
+		result.addAll(getNotTakenChallengesOfUser(userID));
+		result.addAll(getGoalsOfUserInJsonFormat(userID));
+		System.out.println("GOAL OF USER : " + getGoalsOfUser(userID));
+
+		return result;
+	}
+	*/
+
+	public void setTime(DateTime time) {
+		this.calculator.getClock().setFakeTime(time);
+	}
+
+	public String getTimeDescription() {
+		return this.calculator.getClock().getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"));
+	}
+
+	public JsonArray getGoalsResultOfUserInJsonFormat(String userID) throws IOException {
+		JsonArray goalResultArray  = evaluateGoalsForUserResult(userID);
+
+
+		return goalResultArray;
+	}
+
+	public JsonArray getGoalsOfUserInJsonFormat(String idUser) throws IOException {
+		return getGoalsInJsonFormat(getGoalsOfUser(idUser));
+	}
+
+
+	public JsonArray evaluateGoalsForUserResult(String userId) throws IOException {
+		JsonArray goalResultList = new JsonArray();
+
+		for (Goal g : this.getGoalsOfUser(userId)) {
+
+			JsonObject goalRes = evaluate(g);
+			goalResultList.add(goalRes);
+		}
+
+		return goalResultList;
+	}
+
+	public JsonObject evaluate(Goal g) throws IOException, InvalidParameterException {
+		if(g == null)
+			throw new InvalidParameterException("Goal doesn't exist");
+		return this.calculator.evaluate(g);
+	}
+
+	public JsonObject evaluate(String userId, String challengeId) throws IOException, InvalidParameterException {
+		return evaluate(getGoal(userId, challengeId));
 	}
 }

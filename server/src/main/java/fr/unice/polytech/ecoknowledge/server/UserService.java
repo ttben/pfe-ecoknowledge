@@ -2,7 +2,7 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.unice.polytech.ecoknowledge.domain.Controller;
+import fr.unice.polytech.ecoknowledge.domain.Model;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -12,25 +12,11 @@ import java.security.InvalidParameterException;
 @Path("/users")
 public class UserService {
 
-	@GET
-	@Path("/{id}/badges")
-	public Response getBadgesOfUsers(@PathParam("id") String id) {
-		try {
-			return Response.ok().entity(Controller.getInstance().getBadgesOfUser(id).toString()).build();
-		} catch (InvalidParameterException e) {
-			e.printStackTrace();
-			return Response.status(403).entity(e.getMessage()).build();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return Response.status(500).entity(e.getMessage()).build();
-		}
-	}
-
 	@POST
 	public Response registerUser(String payload) {
 		JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
 		try {
-			JsonObject result = Controller.getInstance().createUser(jsonObject);
+			JsonObject result = Model.getInstance().registerUser(jsonObject);
 			return Response.ok().entity(result.toString()).build();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -39,10 +25,10 @@ public class UserService {
 	}
 
 	@GET
-	@Path("/{id}")
+	@Path("/{id}/profile")
 	public Response getUser(@PathParam("id") String id) {
 		try {
-			return Response.ok().entity(Controller.getInstance().getUser(id).toString()).build();
+			return Response.ok().entity(Model.getInstance().getUserProfile(id).toString()).build();
 		} catch (InvalidParameterException e) {
 			e.printStackTrace();
 			return Response.status(403).entity(e.getMessage()).build();
@@ -55,17 +41,12 @@ public class UserService {
 	@GET
 	public Response getAllUsers() {
 		try {
-			return Response.ok().entity(Controller.getInstance().getAllUsers().toString()).build();
+			return Response.ok().entity(Model.getInstance().getAllUsers().toString()).build();
 		} catch (InvalidParameterException e) {
 			return Response.status(403).entity(e.getMessage()).build();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
 		}
-	}
-
-	@DELETE
-	public Response removeAllUsers() {
-		return Response.ok().entity(Controller.getInstance().dropAllUsers()).build();
 	}
 }

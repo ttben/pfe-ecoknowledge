@@ -1,7 +1,7 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.Controller;
+import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
@@ -38,17 +38,17 @@ public class Calculator {
         if(bestBadge != null && isOver){
             System.out.println("Evaluation --> Badge won");
             // Give the badge
-            Controller.getInstance().giveBadge(bestBadge, g.getUser().getId().toString());
+            Model.getInstance().giveBadge(bestBadge, g.getUser().getId().toString());
 
             // Delete the goal
-            Controller.getInstance().deleteGoal(g.getId().toString());
+            Model.getInstance().deleteGoal(g.getId().toString());
 
             // Give a new goal
             JsonObject json = new JsonObject();
             json.addProperty("user", g.getUser().getId().toString());
             json.addProperty("challenge", g.getChallengeDefinition().getId().toString());
 
-            Controller.getInstance().createNextGoal(json, g.getTimeSpan());
+            Model.getInstance().takeChallenge(json, g.getTimeSpan());
         }
 
         return gr.toJsonForClient();
