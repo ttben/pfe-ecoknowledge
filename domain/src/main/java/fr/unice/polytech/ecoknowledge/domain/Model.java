@@ -52,19 +52,6 @@ public class Model {
 		return instance;
 	}
 
-	public JsonObject createChallenge(JsonObject jsonObject) throws IOException {
-		JsonObject result = new JsonObject();
-
-		ObjectMapper objectMapper = new ObjectMapper();
-
-		Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
-		jsonObject.addProperty("id", "" + challenge.getId());
-
-		DataPersistence.store(DataPersistence.Collections.CHALLENGE, jsonObject);
-
-		return result;
-	}
-
 	public JsonArray getGoalsInJsonFormat(List<Goal> goals) {
 		JsonArray result = new JsonArray();
 
@@ -92,6 +79,67 @@ public class Model {
 		}
 
 		return result;
+	}
+
+	public JsonObject getGoal(String goalID) throws IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonObject goalJsonDescription = DataPersistence.read(DataPersistence.Collections.GOAL, goalID);
+		Goal result = (Goal) objectMapper.readValue(goalJsonDescription.toString(), Goal.class);
+		return goalJsonDescription;
+	}
+
+	public Goal getGoal(String userId, String challengeId) throws IOException {
+		List<Goal> goals = getGoalsOfUser(userId);
+		for (Goal g : goals) {
+			if (g.getChallengeDefinition().getId().toString().equals(challengeId)) {
+				return g;
+			}
+		}
+		return null;
+	}
+
+	public JsonArray getNotTakenChallengesOfUser(String userID) throws IOException {
+		JsonArray result = new JsonArray();
+
+		List<Challenge> allChallenges = getAllChallenges();
+		List<Challenge> takenChallenges = getTakenChallenges(userID);
+		List<Challenge> notTakenChallenges = new ArrayList<>();
+
+		for (Challenge currentChallenge : allChallenges) {
+			if (!takenChallenges.contains(currentChallenge)) {
+				notTakenChallenges.add(currentChallenge);
+			}
+		}
+
+		result.addAll(getChallengesInJsonFormat(notTakenChallenges));
+
+		return result;
+	}
+
+	public List<Challenge> getTakenChallenges(String userID) throws IOException {
+		List<Goal> goals = getGoalsOfUser(userID);
+		List<Challenge> challenges = new ArrayList<>();
+
+		for (Goal currentGoal : goals) {
+			challenges.add(currentGoal.getChallengeDefinition());
+		}
+
+		return challenges;
+	}
+
+	public JsonArray getAllGoals() {
+		return DataPersistence.readAll(DataPersistence.Collections.GOAL);
+	}
+
+	public JsonArray getGoalsResultOfUserInJsonFormat(String userID) throws IOException {
+		JsonArray goalResultArray  = evaluateGoalsForUserResult(userID);
+
+
+		return goalResultArray;
+	}
+
+	public JsonArray getGoalsOfUserInJsonFormat(String idUser) throws IOException {
+		return getGoalsInJsonFormat(getGoalsOfUser(idUser));
 	}
 
 	public List<Challenge> getAllChallenges() throws IOException {
@@ -139,6 +187,44 @@ public class Model {
 		return result;
 	}
 
+	public JsonObject getUserProfile(String id) throws IOException {
+		JsonElement u = DataPersistence.read(DataPersistence.Collections.USER, id);
+		System.out.println("U : " + u);
+		ObjectMapper objectMapper = new ObjectMapper();
+		User user = (User) objectMapper.readValue(u.toString(), User.class);
+		UserView uv = new UserView(user);
+		return uv.toJsonForClient();
+	}
+
+	public JsonArray getAllUsers() throws IOException {
+		JsonArray result = new JsonArray();
+
+		JsonArray usersDescription = DataPersistence.readAll(DataPersistence.Collections.USER);
+		System.out.println("\n\nUSERS DESCRIPTION : " + usersDescription);
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		for (JsonElement e : usersDescription) {
+			User user = (User) objectMapper.readValue(e.toString(), User.class);
+			UserView uv = new UserView(user);
+			result.add(uv.toJsonForClient());
+		}
+
+		return result;
+	}
+
+	public JsonObject createChallenge(JsonObject jsonObject) throws IOException {
+		JsonObject result = new JsonObject();
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
+		jsonObject.addProperty("id", "" + challenge.getId());
+
+		DataPersistence.store(DataPersistence.Collections.CHALLENGE, jsonObject);
+
+		return result;
+	}
+
 	public JsonObject takeChallenge(JsonObject jsonObject, TimeBox next) throws IOException, JsonParseException, JsonMappingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 
@@ -177,98 +263,6 @@ public class Model {
 		DataPersistence.store(DataPersistence.Collections.USER, userJsonDescription);
 
 		return userJsonDescription;
-	}
-
-	public JsonObject getUserProfile(String id) throws IOException {
-		JsonElement u = DataPersistence.read(DataPersistence.Collections.USER, id);
-		System.out.println("U : " + u);
-		ObjectMapper objectMapper = new ObjectMapper();
-		User user = (User) objectMapper.readValue(u.toString(), User.class);
-		UserView uv = new UserView(user);
-		return uv.toJsonForClient();
-	}
-
-	public JsonArray getAllUsers() throws IOException {
-		JsonArray result = new JsonArray();
-
-		JsonArray usersDescription = DataPersistence.readAll(DataPersistence.Collections.USER);
-		System.out.println("\n\nUSERS DESCRIPTION : " + usersDescription);
-		ObjectMapper objectMapper = new ObjectMapper();
-
-		for (JsonElement e : usersDescription) {
-			User user = (User) objectMapper.readValue(e.toString(), User.class);
-			UserView uv = new UserView(user);
-			result.add(uv.toJsonForClient());
-		}
-
-		return result;
-	}
-
-	public void deleteAllUsers() {
-		DataPersistence.drop(DataPersistence.Collections.USER);
-	}
-
-	public void deleteAllChallenges() {
-		DataPersistence.drop(DataPersistence.Collections.CHALLENGE);
-	}
-
-	public void deleteAChallenge(String challengeId) {
-		DataPersistence.drop(DataPersistence.Collections.CHALLENGE, challengeId);
-	}
-
-	public JsonObject getGoal(String goalID) throws IOException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		JsonObject goalJsonDescription = DataPersistence.read(DataPersistence.Collections.GOAL, goalID);
-		Goal result = (Goal) objectMapper.readValue(goalJsonDescription.toString(), Goal.class);
-		return goalJsonDescription;
-	}
-
-	public Goal getGoal(String userId, String challengeId) throws IOException {
-		List<Goal> goals = getGoalsOfUser(userId);
-		for (Goal g : goals) {
-			if (g.getChallengeDefinition().getId().toString().equals(challengeId)) {
-				return g;
-			}
-		}
-		return null;
-	}
-
-
-	public JsonArray getNotTakenChallengesOfUser(String userID) throws IOException {
-		JsonArray result = new JsonArray();
-
-		List<Challenge> allChallenges = getAllChallenges();
-		List<Challenge> takenChallenges = getTakenChallenges(userID);
-		List<Challenge> notTakenChallenges = new ArrayList<>();
-
-		for (Challenge currentChallenge : allChallenges) {
-			if (!takenChallenges.contains(currentChallenge)) {
-				notTakenChallenges.add(currentChallenge);
-			}
-		}
-
-		result.addAll(getChallengesInJsonFormat(notTakenChallenges));
-
-		return result;
-	}
-
-	public List<Challenge> getTakenChallenges(String userID) throws IOException {
-		List<Goal> goals = getGoalsOfUser(userID);
-		List<Challenge> challenges = new ArrayList<>();
-
-		for (Goal currentGoal : goals) {
-			challenges.add(currentGoal.getChallengeDefinition());
-		}
-
-		return challenges;
-	}
-
-	public JsonArray getAllGoals() {
-		return DataPersistence.readAll(DataPersistence.Collections.GOAL);
-	}
-
-	public void deleteAllGoals() {
-		DataPersistence.drop(DataPersistence.Collections.GOAL);
 	}
 
 	public void giveBadge(Badge bestBadge, String userId) throws IOException {
@@ -312,40 +306,11 @@ public class Model {
 		return result;
 	}
 
-
 	public void evaluateGoalsForUser(String userId) throws IOException, InvalidParameterException {
 		for(Goal g : this.getGoalsOfUser(userId)){
 			evaluate(g);
 		}
 	}
-
-	/*
-	public JsonArray getMosaicForUser(String userID) throws IOException {
-		JsonArray goalResultArray  = evaluateGoalsForUserResult(userID);
-
-		JsonArray notTakenChallengesJsonArray = this.getNotTakenChallengesOfUser(userID);
-
-		System.out.println("\n\n+\tNot taken challenges : " + notTakenChallengesJsonArray);
-		System.out.println("\n\n+\tGoal result : " + goalResultArray);
-
-		JsonArray result = new JsonArray();
-		result.addAll(goalResultArray);
-		result.addAll(notTakenChallengesJsonArray);
-
-		return result;
-	}
-
-
-	public JsonArray getMosaicForUser(String userID) throws IOException {
-		JsonArray result = new JsonArray();
-
-		result.addAll(getNotTakenChallengesOfUser(userID));
-		result.addAll(getGoalsOfUserInJsonFormat(userID));
-		System.out.println("GOAL OF USER : " + getGoalsOfUser(userID));
-
-		return result;
-	}
-	*/
 
 	public void setTime(DateTime time) {
 		this.calculator.getClock().setFakeTime(time);
@@ -354,18 +319,6 @@ public class Model {
 	public String getTimeDescription() {
 		return this.calculator.getClock().getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"));
 	}
-
-	public JsonArray getGoalsResultOfUserInJsonFormat(String userID) throws IOException {
-		JsonArray goalResultArray  = evaluateGoalsForUserResult(userID);
-
-
-		return goalResultArray;
-	}
-
-	public JsonArray getGoalsOfUserInJsonFormat(String idUser) throws IOException {
-		return getGoalsInJsonFormat(getGoalsOfUser(idUser));
-	}
-
 
 	public JsonArray evaluateGoalsForUserResult(String userId) throws IOException {
 		JsonArray goalResultList = new JsonArray();
