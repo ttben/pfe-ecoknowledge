@@ -137,7 +137,15 @@ public class AchievementProcessor implements GoalVisitor {
         List<Data> newData = this.cache.getDataOfSensorBetweenDate(sensorBound,
                 goal.getStart(), goal.getEnd());
 
-        double oldSum = 0;
+		// If we don't have the good data
+		if(oldData == null || newData == null){
+			currentConditionResult.add(new ConditionResult(false, 0.0, condition));
+			return;
+		}
+
+		System.out.println(oldData);
+		System.out.println(newData);
+		double oldSum = 0;
         for(Data d : oldData)
             oldSum += d.getValue();
 

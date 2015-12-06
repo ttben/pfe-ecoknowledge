@@ -8,6 +8,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.DAY;
+import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.MONTH;
 import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.WEEK;
 
 /**
@@ -15,14 +16,14 @@ import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_
  */
 public class SEND_SendTest {
 
-	//@Ignore
+	@Ignore
 	@Test
 	public void sendForReal() {
 
 		Challenge.create("I want it hotter")
 				.withIcon("http://divagirl-inc.com/fitness/files/2011/11/pretty-xmas-girl.jpg")
 				.availableFrom(4).to(8)
-				.during(1, DAY)
+				.during(1, WEEK)
 				.atLevel("Pretty good")
 					.rewards(50)
 					.withConditions()
