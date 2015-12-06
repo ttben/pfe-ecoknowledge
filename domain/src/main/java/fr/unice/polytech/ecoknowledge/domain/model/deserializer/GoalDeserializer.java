@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.data.DataPersistence;
+import fr.unice.polytech.ecoknowledge.domain.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
@@ -42,7 +42,8 @@ public class GoalDeserializer extends JsonDeserializer<Goal> {
 		JsonObject challengeJsonDescription = DataPersistence.read(DataPersistence.Collections.CHALLENGE, challengeID);
 
 		if (userJsonDescription == null) {
-			throw new UserNotFoundException("Can not find user with given id:" + userID);
+			// FIXME: 06/12/2015 throw exception
+			// throw new UserNotFoundException("Can not find user with given id:" + userID);
 		}
 
 		if (challengeJsonDescription == null) {

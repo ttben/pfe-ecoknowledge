@@ -2,7 +2,7 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.unice.polytech.ecoknowledge.data.utils.Utils;
+import fr.unice.polytech.ecoknowledge.domain.data.utils.Utils;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
 import org.joda.time.DateTime;

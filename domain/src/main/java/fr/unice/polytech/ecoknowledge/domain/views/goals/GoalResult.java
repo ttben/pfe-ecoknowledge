@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 import org.joda.time.format.DateTimeFormat;
-import org.json.JSONArray;
+
 
 import java.util.ArrayList;
 import java.util.List;

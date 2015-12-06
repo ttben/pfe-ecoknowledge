@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.data;
+package fr.unice.polytech.ecoknowledge.domain.data;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -10,7 +10,7 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
-import fr.unice.polytech.ecoknowledge.data.utils.ConnexionManager;
+import fr.unice.polytech.ecoknowledge.domain.data.utils.MongoDBConnector;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class DataPersistence {
 	public static JsonObject store(Collections targetCollection, JsonObject json) {
 		System.out.println("\n+ DataPersistence : store on " + targetCollection + " : " + json.toString());
 
-		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
+		MongoClient mongoClient = MongoDBConnector.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
 		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 
@@ -51,7 +51,7 @@ public class DataPersistence {
 
 	public static List<JsonObject> findGoal(String idUser) {
 
-		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
+		MongoClient mongoClient = MongoDBConnector.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
 		MongoCollection<Document> collection = mongoDatabase.getCollection(Collections.GOAL.collectionName);
 
@@ -68,7 +68,7 @@ public class DataPersistence {
 
 
 	public static JsonObject read(Collections targetCollection, String id) {
-		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
+		MongoClient mongoClient = MongoDBConnector.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
 		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 
@@ -88,7 +88,7 @@ public class DataPersistence {
 	public static JsonArray readAll(Collections targetCollection) {
 		JsonArray jsonArray = new JsonArray();
 
-		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
+		MongoClient mongoClient = MongoDBConnector.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
 		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 
@@ -106,7 +106,7 @@ public class DataPersistence {
 
 	public static void drop(Collections targetCollection) {
 
-		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
+		MongoClient mongoClient = MongoDBConnector.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
 		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 		collection.drop();
@@ -115,7 +115,7 @@ public class DataPersistence {
 	public static void drop(Collections targetCollection, String id) {
 		System.out.println("\n+ DataPersistence : drop on " + targetCollection + " : " + id);
 
-		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
+		MongoClient mongoClient = MongoDBConnector.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
 		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 
@@ -128,7 +128,7 @@ public class DataPersistence {
 
 	public static void update(Collections targetCollection, String id, String newOne) {
 
-		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
+		MongoClient mongoClient = MongoDBConnector.getInstance().getMongoConnection();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
 		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection.collectionName);
 

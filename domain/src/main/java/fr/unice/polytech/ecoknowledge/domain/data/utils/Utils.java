@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.data.utils;
+package fr.unice.polytech.ecoknowledge.domain.data.utils;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
@@ -12,8 +12,8 @@ import org.bson.Document;
 public class Utils {
 
 	public String displayTableNames() {
-		ConnexionManager connexionManager = ConnexionManager.getInstance();
-		MongoClient mongoConnection = connexionManager.getMongoConnection();
+		MongoDBConnector mongoDBConnector = MongoDBConnector.getInstance();
+		MongoClient mongoConnection = mongoDBConnector.getMongoConnection();
 
 		String result = "\n==============================================\n";
 		result = result.concat("\t\t\tTables");
@@ -27,8 +27,8 @@ public class Utils {
 	}
 
 	public String displayAllContentInStr() {
-		ConnexionManager connexionManager = ConnexionManager.getInstance();
-		MongoClient mongoConnection = connexionManager.getMongoConnection();
+		MongoDBConnector mongoDBConnector = MongoDBConnector.getInstance();
+		MongoClient mongoConnection = mongoDBConnector.getMongoConnection();
 
 		String result = "\n==============================================\n";
 		result = result.concat("\t\t\tTables");
@@ -55,7 +55,7 @@ public class Utils {
 
 	public Object createTable(String name) {
 
-		MongoClient mongoClient = ConnexionManager.getInstance().getMongoConnection();
+		MongoClient mongoClient = MongoDBConnector.getInstance().getMongoConnection();
 		MongoDatabase newDB = mongoClient.getDatabase(name);
 
 		newDB.createCollection("challenges");
