@@ -3,8 +3,11 @@ package fr.unice.polytech.ecoknowledge.domain.model.time;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.unice.polytech.ecoknowledge.domain.model.deserializer.RecurrenceDeserializer;
+import fr.unice.polytech.ecoknowledge.domain.model.serializer.RecurrenceSerializer;
 
+@JsonSerialize(using = RecurrenceSerializer.class)
 @JsonDeserialize(using = RecurrenceDeserializer.class)
 public class Recurrence {
 	private RecurrenceType recurrenceType;

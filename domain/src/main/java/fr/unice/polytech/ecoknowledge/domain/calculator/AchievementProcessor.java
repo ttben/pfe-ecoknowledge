@@ -4,7 +4,7 @@ import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.StandardCondition;
-import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Operand;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.SymbolicName;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCondition;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.ConditionResult;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
@@ -77,7 +77,7 @@ public class AchievementProcessor implements GoalVisitor {
 	public void visit(StandardCondition condition) {
 
 		//	Retrieve symbolic names for condition
-		Operand requiredOperand = condition.getRequiredOperand();
+		SymbolicName requiredOperand = condition.getRequiredOperand();
 
 		//	Retrieves sensor bound for symbolic names
 		String symbolicName = requiredOperand.getSymbolicName().toString();
@@ -102,7 +102,7 @@ public class AchievementProcessor implements GoalVisitor {
 
 		double achievedRate = 0.0;
 
-		switch (condition.getCounter().getCounterType()) {
+		switch (condition.getCounter().getType()) {
 			case PERCENT_OF_TIME:
 				achievedRate = (correctRate * 100) / condition.getCounter().getThreshold();
 				break;

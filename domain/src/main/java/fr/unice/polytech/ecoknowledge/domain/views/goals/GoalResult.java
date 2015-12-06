@@ -9,17 +9,17 @@ import org.joda.time.format.DateTimeFormat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-/**
- * Created by Benjamin on 26/11/2015.
- */
 public class GoalResult implements ViewForClient {
+	private UUID id;
 	private boolean achieved;
 	private double correctRate;
 	private List<LevelResult> levelResultList = new ArrayList<>();
 	private Goal goal;
 
 	public GoalResult(Goal goal, boolean achieved, double correctRate, List<LevelResult> levelResultList) {
+		this.id = UUID.randomUUID();
 		this.achieved = achieved;
 		this.correctRate = correctRate;
 		this.levelResultList = levelResultList;
@@ -50,7 +50,6 @@ public class GoalResult implements ViewForClient {
 		this.levelResultList = levelResultList;
 	}
 
-
 	public JsonObject toJsonForClient() {
 		JsonObject result = new JsonObject();
 
@@ -66,8 +65,8 @@ public class GoalResult implements ViewForClient {
 		result.addProperty("progressPercent", this.correctRate);
 		result.addProperty("timePercent", 20);    // FIXME: 03/12/2015 HARDCODED
 		result.addProperty("remaining", "5 jours");    // FIXME: 03/12/2015 HARDCODED
-		result.addProperty("startTime", this.goal.getChallengeDefinition().getTimeSpan().getStart().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
-		result.addProperty("endTime", this.goal.getChallengeDefinition().getTimeSpan().getEnd().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
+		result.addProperty("startTime", this.goal.getChallengeDefinition().getLifeSpan().getStart().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
+		result.addProperty("endTime", this.goal.getChallengeDefinition().getLifeSpan().getEnd().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
 
 		// FIXME: 30/11/2015 unit not used
 		switch (this.goal.getChallengeDefinition().getRecurrence().getRecurrenceType()) {
@@ -84,18 +83,14 @@ public class GoalResult implements ViewForClient {
 				break;
 		}
 
-		/*
-		    "id": 3,
-    "name": "Magmar",
-    "timePercent": 20,
-    "progressPercent": 70,
-    "startTime":"2015-12-01",
-    "endTime":"2015-12-31",
-    "length":"1 semaine",
-    "remaining":"5 jours",
-		 */
-
-
 		return result;
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
 	}
 }

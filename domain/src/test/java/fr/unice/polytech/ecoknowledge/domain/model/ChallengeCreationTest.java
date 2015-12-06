@@ -32,7 +32,7 @@ public class ChallengeCreationTest {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Challenge challenge = (Challenge) objectMapper.readValue(jsonObject2.toString(), Challenge.class);
 
-		StandardCondition sc = (StandardCondition) challenge.getLevels().get(0).getConditionList().get(0);
+		StandardCondition sc = (StandardCondition) challenge.getLevels().get(0).getConditions().get(0);
 
 		assertEquals(Arrays.asList(new AbstractMap.SimpleEntry<Integer, Integer>(8, 11)), sc.getTargetDays().getDayMoment());
 		assertEquals(new AbstractMap.SimpleEntry<Integer, Integer>(1, 5), sc.getTargetDays().getWeekMoment());

@@ -2,9 +2,14 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fr.unice.polytech.ecoknowledge.domain.data.GoalNotFoundException;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.domain.data.utils.Utils;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
+import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import org.joda.time.DateTime;
 
 import javax.ws.rs.Consumes;
@@ -27,6 +32,21 @@ public class TestService {
 					json.get("userId").getAsString(),
 					json.get("challengeId").getAsString());
 		} catch (IOException e) {
+			return Response.status(500).entity(e.getMessage()).build();
+		} catch (GoalNotFoundException e) {
+			e.printStackTrace();
+			return Response.status(403).entity(e.getMessage()).build();
+		} catch (UserNotFoundException e) {
+			e.printStackTrace();
+			return Response.status(403).entity(e.getMessage()).build();
+		} catch (IncoherentDBContentException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		} catch (NotSavableElementException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		} catch (NotReadableElementException e) {
+			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
 		}
 		return Response.ok().build();

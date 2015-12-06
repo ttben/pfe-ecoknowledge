@@ -30,12 +30,8 @@ public class Clock {
 		DateTimeFormatter dtf = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss'Z'");
 		DateTime dt = dtf.parseDateTime(date);
 
-		System.out.println("DATE BEFORE :\t" + dt.toString());
-
 		dt = createDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth(),
 				dt.getHourOfDay(), dt.getMinuteOfHour(), dt.getSecondOfMinute());
-
-		System.out.println("DATE AFTER :\t" + dt.toString() + "\n");
 
 		return dt;
 	}
@@ -52,8 +48,8 @@ public class Clock {
 	}
 
 	public void setFakeTime(DateTime time){
-		System.out.println("\n\n+ Setting fake time ... ");
-		System.out.println("\n\n+ Time before setting : " + this.getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")));
+		System.out.println("\n+ Setting fake time ... ");
+		System.out.println("\n+ Time before setting : " + this.getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")));
 		this.fakeTime = createDate(time);
 		System.out.println("\n\n+ Time after setting : " + this.getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")));
 	}

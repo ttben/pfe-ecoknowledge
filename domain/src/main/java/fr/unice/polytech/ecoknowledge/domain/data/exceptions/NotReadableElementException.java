@@ -3,7 +3,7 @@ package fr.unice.polytech.ecoknowledge.domain.data.exceptions;
 /**
  * Created by Benjamin on 05/12/2015.
  */
-public class NotReadableElementException  extends Exception {
+public class NotReadableElementException  extends EcoknowledgeDataException {
 	public NotReadableElementException() {
 	}
 

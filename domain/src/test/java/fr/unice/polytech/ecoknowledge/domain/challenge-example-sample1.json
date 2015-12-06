@@ -22,36 +22,44 @@
           "type": "standard",
           "expression": {
             "leftOperand": {
-              "type": "symbolicName",
               "symbolicName": "TMP_CLI"
             },
             "rightOperand": {
-              "type": "value",
               "value": 27
             },
-            "comparator": ">"
+            "comparator":  {
+              "type":">"
+            }
           },
           "counter": {
             "threshold": 50,
             "type": "percent-of-time"
+          },
+          "targetTime": {
+            "days": "all",
+            "hours": "all"
           }
         },
         {
           "type": "standard",
           "expression": {
             "leftOperand": {
-              "type": "symbolicName",
               "symbolicName": "TMP_AMB"
             },
             "rightOperand": {
-              "type": "value",
               "value": 44
             },
-            "comparator": "<"
+            "comparator": {
+              "type":"<"
+            }
           },
           "counter": {
             "threshold": 2,
             "type": "times"
+          },
+          "targetTime": {
+            "days": "all",
+            "hours": "all"
           }
         }
       ]

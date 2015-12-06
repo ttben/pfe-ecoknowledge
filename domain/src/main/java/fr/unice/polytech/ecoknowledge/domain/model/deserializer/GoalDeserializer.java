@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.data.DataPersistence;
+import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
@@ -38,31 +38,20 @@ public class GoalDeserializer extends JsonDeserializer<Goal> {
 			goalID = node.get("id").asText();
 		}
 
-		JsonObject userJsonDescription = DataPersistence.read(DataPersistence.Collections.USER, userID);
-		JsonObject challengeJsonDescription = DataPersistence.read(DataPersistence.Collections.CHALLENGE, challengeID);
-
-		if (userJsonDescription == null) {
-			// FIXME: 06/12/2015 throw exception
-			// throw new UserNotFoundException("Can not find user with given id:" + userID);
+		String goalResultID = "";
+		if (node.get("resultID") != null) {
+			goalResultID = node.get("resultID").asText();
 		}
 
-		if (challengeJsonDescription == null) {
-			throw new ChallengeNotFoundException("Can not find challenge with given id:" + challengeID);
+		try {
+			User user = MongoDBHandler.getInstance().readUserByID(userID);
+			Challenge challenge = MongoDBHandler.getInstance().readChallengeByID(challengeID);
+			Goal goal = new Goal(goalID, challenge, timeBox, user, goalResultID);
+			return goal;
+
+		} catch (UserNotFoundException | NotReadableElementException | ChallengeNotFoundException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Can not deserialize goal", e);
 		}
-
-		ObjectMapper objectMapper = new ObjectMapper();
-
-		User user = (User) objectMapper.readValue(userJsonDescription.toString(), User.class);
-		if (user == null) {
-			throw new InternalError("Can not build user " + userID);
-		}
-
-		Challenge challenge = (Challenge) objectMapper.readValue(challengeJsonDescription.toString(), Challenge.class);
-		if (challenge == null) {
-			throw new InternalError("Can not build challenge " + challengeID);
-		}
-
-		Goal goal = new Goal(goalID, challenge, timeBox, user);
-		return goal;
 	}
 }

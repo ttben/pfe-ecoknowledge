@@ -10,6 +10,10 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import fr.unice.polytech.ecoknowledge.domain.data.DocumentBDDConnector;
+import fr.unice.polytech.ecoknowledge.domain.data.GoalNotFoundException;
+import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.model.exceptions.ChallengeNotFoundException;
+import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import org.bson.Document;
 
 public class MongoDBConnector implements DocumentBDDConnector {
@@ -17,6 +21,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public static String CHALLENGES_COLLECTION = "challenges";
 	public static String USERS_COLLECTION = "users";
 	public static String GOALS_COLLECTION = "goals";
+	public static String RESULTS_COLLECTION = "results";
 
 	private static MongoDBConnector instance;
 	private MongoClient mongoClient;
@@ -99,6 +104,63 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	@Override
 	public JsonObject findUser(String userID) {
 		return findOne(USERS_COLLECTION, userID);
+	}
+
+	@Override
+	public JsonObject findGoalResult(String goalResultID) {
+		return findOne(RESULTS_COLLECTION, goalResultID);
+	}
+
+	@Override
+	public void deleteGoalByID(String goalID) throws GoalNotFoundException {
+		MongoCollection<Document> collection = getCollection(GOALS_COLLECTION);
+		Document result = collection.find(Filters.eq("id", goalID)).projection(Projections.exclude("_id")).first();
+
+		if(result != null) {
+			collection.deleteOne(result);
+		} else {
+			throw new GoalNotFoundException(goalID);
+		}
+	}
+
+	@Override
+	public void deleteChallengeByID(String challengeID) throws ChallengeNotFoundException {
+		MongoCollection<Document> collection = getCollection(CHALLENGES_COLLECTION);
+		Document result = collection.find(Filters.eq("id", challengeID)).projection(Projections.exclude("_id")).first();
+
+		if(result != null) {
+			collection.deleteOne(result);
+		} else {
+			throw new ChallengeNotFoundException(challengeID);
+		}
+	}
+
+	@Override
+	public void deleteUserByID(String userID) throws UserNotFoundException {
+		MongoCollection<Document> collection = getCollection(USERS_COLLECTION);
+		Document result = collection.find(Filters.eq("id", userID)).projection(Projections.exclude("_id")).first();
+
+		if(result != null) {
+			collection.deleteOne(result);
+		} else {
+			throw new UserNotFoundException(userID);
+		}
+	}
+
+	@Override
+	public void updateGoal(JsonObject goalJsonDescription) {
+		MongoCollection<Document> collection = getCollection(GOALS_COLLECTION);
+
+		String id = goalJsonDescription.get("id").getAsString();
+		Document newGoalDocument = Document.parse(goalJsonDescription.toString());
+
+		collection.replaceOne(Filters.eq("id", id), newGoalDocument);
+	}
+
+	@Override
+	public void storeResult(JsonObject resultJsonDescription) {
+		MongoCollection<Document> collection = getCollection(RESULTS_COLLECTION);
+		collection.insertOne(Document.parse(resultJsonDescription.toString()));
 	}
 
 	private JsonArray findAll(String targetCollection) {

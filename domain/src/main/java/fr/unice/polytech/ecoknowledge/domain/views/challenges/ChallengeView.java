@@ -25,12 +25,12 @@ public class ChallengeView implements ViewForClient {
 		result.addProperty("id", this.challenge.getId().toString());
 		result.addProperty("name", this.challenge.getName());
 
-		if (this.challenge.getIcon() != null) {
-			result.addProperty("image", this.challenge.getIcon());
+		if (this.challenge.getImage() != null) {
+			result.addProperty("image", this.challenge.getImage());
 		}
 
-		result.addProperty("startTime", this.challenge.getTimeSpan().getStart().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
-		result.addProperty("endTime", this.challenge.getTimeSpan().getEnd().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
+		result.addProperty("startTime", this.challenge.getLifeSpan().getStart().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
+		result.addProperty("endTime", this.challenge.getLifeSpan().getEnd().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
 
 		String recurrence = "";
 
@@ -59,7 +59,7 @@ public class ChallengeView implements ViewForClient {
 
 		result.add("levels", levelJson);
 		result.addProperty("remaining", "2 jours"); // FIXME: 02/12/2015 compute according to current date
-		result.addProperty("image", this.challenge.getIcon());
+		result.addProperty("image", this.challenge.getImage());
 		return result;
 	}
 }

@@ -12,8 +12,8 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String picUrl;
-	private Collection<String> goalIDs;
-	private Collection<Badge> badges;
+	private List<String> goalIDs;
+	private List<Badge> badges;
 	private Map<String, String> symbolicNameToSensorNameMap = new HashMap<>();
 
 	@JsonCreator
@@ -46,15 +46,15 @@ public class User {
 		return goalIDs;
 	}
 
-	public void setGoalIDs(Collection<String> goalIDs) {
+	public void setGoalIDs(List<String> goalIDs) {
 		this.goalIDs = goalIDs;
 	}
 
-	public Collection<Badge> getBadges() {
+	public List<Badge> getBadges() {
 		return badges;
 	}
 
-	public void setBadges(Collection<Badge> badges) {
+	public void setBadges(List<Badge> badges) {
 		this.badges = badges;
 	}
 

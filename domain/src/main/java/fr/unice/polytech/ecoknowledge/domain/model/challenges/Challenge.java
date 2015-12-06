@@ -15,24 +15,24 @@ public class Challenge implements VisitableComponent {
 
 	private UUID id;
 	private String name;
-	private String icon;
+	private String image;
 	private List<Level> levels = new ArrayList<>();
-	private TimeBox timeSpan;
+	private TimeBox lifeSpan;
 	private Recurrence recurrence;
 
 	@JsonCreator
 	public Challenge(@JsonProperty(value = "id", required = false) String id,
 					 @JsonProperty(value = "name", required = true) String name,
-					 @JsonProperty(value = "image", required = true) String icon,
+					 @JsonProperty(value = "image", required = true) String image,
 					 @JsonProperty(value = "levels", required = true) List<Level> levels,
-					 @JsonProperty(value = "lifeSpan", required = true) TimeBox timeBox,
+					 @JsonProperty(value = "lifeSpan", required = true) TimeBox lifeSpan,
 					 @JsonProperty(value = "recurrence", required = true) Recurrence recurrence) {
 
 		this.id = (id == null || id.isEmpty()) ? UUID.randomUUID() : UUID.fromString(id);
 		this.name = name;
-		this.icon = icon;
+		this.image = image;
 		this.levels = levels;
-		this.timeSpan = timeBox;
+		this.lifeSpan = lifeSpan;
 		this.recurrence = recurrence;
 	}
 
@@ -52,12 +52,12 @@ public class Challenge implements VisitableComponent {
 		this.name = name;
 	}
 
-	public String getIcon() {
-		return icon;
+	public String getImage() {
+		return image;
 	}
 
-	public void setIcon(String icon) {
-		this.icon = icon;
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public List<Level> getLevels() {
@@ -68,12 +68,12 @@ public class Challenge implements VisitableComponent {
 		this.levels = levels;
 	}
 
-	public TimeBox getTimeSpan() {
-		return timeSpan;
+	public TimeBox getLifeSpan() {
+		return lifeSpan;
 	}
 
-	public void setTimeSpan(TimeBox timeSpan) {
-		this.timeSpan = timeSpan;
+	public void setLifeSpan(TimeBox lifeSpan) {
+		this.lifeSpan = lifeSpan;
 	}
 
 	public Recurrence getRecurrence() {
@@ -104,7 +104,7 @@ public class Challenge implements VisitableComponent {
 		return challenge.id.equals(id)
 				&& challenge.name.equals(name)
 				&& challenge.levels.equals(levels)
-				&& challenge.timeSpan.equals(timeSpan)
+				&& challenge.lifeSpan.equals(lifeSpan)
 				&& challenge.recurrence.equals(recurrence);
 	}
 }

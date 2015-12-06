@@ -1,6 +1,6 @@
 package fr.unice.polytech.ecoknowledge.domain.data.exceptions;
 
-public class IncoherentDBContentException  extends Exception {
+public class IncoherentDBContentException extends EcoknowledgeDataException {
 	public IncoherentDBContentException() {
 	}
 

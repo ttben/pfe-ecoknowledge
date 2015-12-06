@@ -15,6 +15,7 @@ import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.ChallengeNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
+import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,7 +43,10 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 		try {
 			String challengeStrDescription = objectMapper.writeValueAsString(challenge);
+
 			JsonObject challengeJsonDescription = new JsonParser().parse(challengeStrDescription).getAsJsonObject();
+			challengeJsonDescription.addProperty("id", challenge.getId().toString());
+
 			bddConnector.storeChallenge(challengeJsonDescription);
 
 		} catch (JsonProcessingException e) {
@@ -79,6 +83,11 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	}
 
 	@Override
+	public void store(GoalResult goalResult) {
+		bddConnector.storeResult(goalResult.toJsonForClient());
+	}
+
+	@Override
 	public List<Challenge> readAllChallenges() throws IncoherentDBContentException, NotReadableElementException {
 		List<Challenge> result = new ArrayList<>();
 
@@ -104,32 +113,16 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	}
 
 	@Override
-	public List<Goal> readAllGoalsOfUser(String userID) {
-		return null;
+	public List<Goal> readAllGoalsOfUser(String userID) throws IncoherentDBContentException, NotReadableElementException {
+		JsonArray goalsJsonArray = bddConnector.findGoalsOfUser(userID);
+		List<Goal> result = convertGoalsJsonArrayIntoGoalsList(goalsJsonArray);
+		return result;
 	}
 
 	@Override
 	public List<Goal> readAllGoals() throws NotReadableElementException, IncoherentDBContentException {
-		List<Goal> result = new ArrayList<>();
-
-		ObjectMapper objectMapper = new ObjectMapper();
-
 		JsonArray goalsJsonArray = bddConnector.findAllGoals();
-
-		for (JsonElement currentGoalJsonDescription : goalsJsonArray) {
-			if (!currentGoalJsonDescription.isJsonObject()) {
-				throw new IncoherentDBContentException("Read all goals contains not json object");
-			}
-
-			String currentGoalStrDescription = currentGoalJsonDescription.getAsString();
-			try {
-				Goal currentGoal = (Goal) objectMapper.readValue(currentGoalStrDescription, Goal.class);
-				result.add(currentGoal);
-			} catch (IOException e) {
-				throwNotReadableElementException("Goal", currentGoalStrDescription, e);
-			}
-		}
-
+		List<Goal> result = convertGoalsJsonArrayIntoGoalsList(goalsJsonArray);
 		return result;
 	}
 
@@ -159,7 +152,7 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	}
 
 	@Override
-	public Challenge readChallengeByID(String challengeID) throws NotReadableElementException {
+	public Challenge readChallengeByID(String challengeID) throws NotReadableElementException, ChallengeNotFoundException {
 		JsonObject jsonObject = bddConnector.findChallenge(challengeID);
 
 		if (jsonObject == null) {
@@ -219,6 +212,80 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	}
 
 	@Override
+	public JsonObject readGoalResultByID(String goalResultID) {
+		return bddConnector.findGoalResult(goalResultID);
+	}
+
+	@Override
+	public Goal readGoalByUserAndChallengeIDs(String userID, String challengeID) throws IncoherentDBContentException, NotReadableElementException, GoalNotFoundException {
+		List<Goal> goalList = readAllGoalsOfUser(userID);
+
+		System.out.println("\n+ALL GOALS FOR USER:"+userID+" :\n" +goalList);
+
+		for(Goal currentGoal : goalList) {
+			if(currentGoal.getChallengeDefinition().getId().toString().equals(challengeID)) {
+				return currentGoal;
+			}
+		}
+
+		String description = "Goal for user:";
+		description = description.concat(userID);
+		description = description.concat(" and challenge:");
+		description = description.concat(challengeID);
+
+	 	throw new GoalNotFoundException(description);
+	}
+
+	@Override
+	public JsonObject readGoalResultByGoalID(String goalID) throws GoalNotFoundException, NotReadableElementException {
+		Goal goal = this.readGoalByID(goalID);
+		String goalResultID = goal.getGoalResultID().toString();
+		JsonObject goalResult = bddConnector.findGoalResult(goalResultID);
+		return goalResult;
+	}
+
+	@Override
+	public void deleteGoal(Goal goal) throws GoalNotFoundException {
+		bddConnector.deleteGoalByID(goal.getId().toString());
+	}
+
+	@Override
+	public void deleteChallenge(Challenge challenge) throws ChallengeNotFoundException {
+		bddConnector.deleteChallengeByID(challenge.getId().toString());
+	}
+
+	@Override
+	public void deleteUser(User user) throws UserNotFoundException {
+		bddConnector.deleteUserByID(user.getId().toString());
+	}
+
+	@Override
+	public boolean userHasGoal(String userID, String goalID) throws IncoherentDBContentException, NotReadableElementException {
+		List<Goal> goalList = this.readAllGoalsOfUser(userID);
+
+		for(Goal currentGoal : goalList) {
+			if(currentGoal.getId().equals(goalID)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean userHasTakenChallenge(String userID, String challengeID) throws IncoherentDBContentException, NotReadableElementException {
+		List<Goal> goalList = this.readAllGoalsOfUser(userID);
+
+		for(Goal currentGoal : goalList) {
+			if(currentGoal.getChallengeDefinition().getId().equals(challengeID)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
 	public void updateUser(User user) throws NotSavableElementException {
 		ObjectMapper objectMapper = new ObjectMapper();
 
@@ -229,6 +296,41 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 		} catch (JsonProcessingException e) {
 			throwNotSavableElementException("User", user.getId().toString(), e);
 		}
+	}
+
+	@Override
+	public void updateGoal(Goal goal) throws NotSavableElementException {
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		try {
+			String goalStrDescription = objectMapper.writeValueAsString(goal);
+			JsonObject goalJsonDescription = new JsonParser().parse(goalStrDescription).getAsJsonObject();
+			this.bddConnector.updateGoal(goalJsonDescription);
+		} catch (JsonProcessingException e) {
+			throwNotSavableElementException("Goal", goal.getId().toString(), e);
+		}
+	}
+
+	private List<Goal> convertGoalsJsonArrayIntoGoalsList(JsonArray goalsJsonArray) throws IncoherentDBContentException, NotReadableElementException {
+		List<Goal> result = new ArrayList<>();
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		for (JsonElement currentGoalJsonDescription : goalsJsonArray) {
+			if (!currentGoalJsonDescription.isJsonObject()) {
+				throw new IncoherentDBContentException("Read all goals contains not json object");
+			}
+
+			String currentGoalStrDescription = currentGoalJsonDescription.toString();
+			try {
+				Goal currentGoal = (Goal) objectMapper.readValue(currentGoalStrDescription, Goal.class);
+				result.add(currentGoal);
+			} catch (IOException e) {
+				throwNotReadableElementException("Goal", currentGoalStrDescription, e);
+			}
+		}
+
+		return result;
 	}
 
 	private void throwNotSavableElementException(String elementType, String id, Exception motherCause) throws NotSavableElementException {

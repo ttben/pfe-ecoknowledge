@@ -3,7 +3,7 @@ package fr.unice.polytech.ecoknowledge.domain.data.exceptions;
 /**
  * Created by Benjamin on 05/12/2015.
  */
-public class NotSavableElementException extends Exception {
+public class NotSavableElementException extends EcoknowledgeDataException {
 	public NotSavableElementException() {}
 
 	public NotSavableElementException(String message) {

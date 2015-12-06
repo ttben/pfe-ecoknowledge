@@ -2,9 +2,12 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.data.DataPersistence;
 import fr.unice.polytech.ecoknowledge.domain.TestUtils;
+import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.model.exceptions.ChallengeNotFoundException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,23 +30,18 @@ public class ChallengePersistenceTest {
 
 
 	@Test
-	public void aChallenge_WhenCreatedAndPersisted_CanBeCreatedAndIsTheSame() throws IOException {
+	public void aChallenge_WhenCreatedAndPersisted_CanBeCreatedAndIsTheSame() throws IOException, NotSavableElementException, ChallengeNotFoundException, NotReadableElementException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
 
-		jsonObject.addProperty("id", "" + challenge.getId());
-		DataPersistence.store(DataPersistence.Collections.CHALLENGE, jsonObject);
-
-		JsonObject result = DataPersistence.read(DataPersistence.Collections.CHALLENGE, challenge.getId().toString());
-		aChallenge = (Challenge) objectMapper.readValue(result.toString(), Challenge.class);
+		MongoDBHandler.getInstance().store(challenge);
+		aChallenge = MongoDBHandler.getInstance().readChallengeByID(challenge.getId().toString());
 
 		assertEquals(challenge, aChallenge);
-		DataPersistence.drop(DataPersistence.Collections.CHALLENGE, aChallenge.getId().toString());
-
 	}
 
 	@AfterClass
 	public static void tearDown() {
-		DataPersistence.drop(DataPersistence.Collections.CHALLENGE, aChallenge.getId().toString());
+		// TODO: 06/12/2015 clean bdd
 	}
 }

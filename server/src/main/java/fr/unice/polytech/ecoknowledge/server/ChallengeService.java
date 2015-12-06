@@ -2,7 +2,10 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.unice.polytech.ecoknowledge.domain.Model;
+import fr.unice.polytech.ecoknowledge.domain.Controller;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,9 +21,12 @@ public class ChallengeService {
 		JsonObject json = new JsonParser().parse(object).getAsJsonObject();
 
 		try {
-			JsonObject result = Model.getInstance().createChallenge(json);
-			return Response.ok().entity(result.toString()).build();
+			Controller.getInstance().createChallenge(json);
+			return Response.ok().build();
 		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		} catch (NotSavableElementException e) {
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
 		}
@@ -39,18 +45,24 @@ public class ChallengeService {
 
 				switch (typeOfChallenges) {
 					case "taken":
-						return Response.ok().entity(Model.getInstance().getTakenChallenges(userID)).build();
+						return Response.ok().entity(Controller.getInstance().getTakenChallengesOfUser(userID)).build();
 					case "notTaken":
-						return Response.ok().entity(Model.getInstance().getNotTakenChallengesOfUser(userID)).build();
+						return Response.ok().entity(Controller.getInstance().getNotTakenChallengesOfUser(userID)).build();
 					default:
 						return Response.status(403).entity("Type : " + typeOfChallenges + " not recognized.").build();
 				}
 			} else {
-				return Response.ok().entity(Model.getInstance().getAllChallenges().toString()).build();
+				return Response.ok().entity(Controller.getInstance().getAllChallenges().toString()).build();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
+		} catch (IncoherentDBContentException e) {
+			e.printStackTrace();
+			return Response.status(500).build();
+		} catch (NotReadableElementException e) {
+			e.printStackTrace();
+			return Response.status(500).build();
 		}
 	}
 
@@ -58,10 +70,13 @@ public class ChallengeService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllChallenges() {
 		try {
-			return Response.ok().entity(Model.getInstance().getAllChallenges().toString()).build();
-		} catch (IOException e) {
+			return Response.ok().entity(Controller.getInstance().getAllChallenges().toString()).build();
+		} catch (IncoherentDBContentException e) {
 			e.printStackTrace();
-			return Response.status(500).entity(e.getMessage()).build();
+			return Response.status(500).build();
+		} catch (NotReadableElementException e) {
+			e.printStackTrace();
+			return Response.status(500).build();
 		}
 	}
 }
