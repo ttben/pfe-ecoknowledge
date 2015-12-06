@@ -120,4 +120,32 @@ public class TimeSpanGenerator {
 	}
 
 
+	public static TimeBox generateLastWeek(Clock clock) {
+
+		DateTime start;
+		DateTime end;
+
+		start = clock.getTime().minusWeeks(1).withDayOfWeek(1)
+				.withTime(0, 0, 0, 0);
+		end = clock.createDate(start.plusWeeks(1).minusDays(1)
+				.withTime(23, 59, 59, 99));
+
+		return new TimeBox(start, end);
+
+	}
+
+	public static TimeBox generateLastMonth(Clock clock) {
+
+		DateTime start;
+		DateTime end;
+
+		start = clock.getTime().minusMonths(1).withDayOfMonth(1)
+				.withTime(0, 0, 0, 0);
+		end = clock.createDate(start.plusMonths(1).minusDays(1)
+				.withTime(23, 59, 59, 99));
+
+		return new TimeBox(start, end);
+
+	}
+
 }
