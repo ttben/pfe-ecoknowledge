@@ -22,12 +22,12 @@ public class SEND_SendTest {
 
 		Challenge.create("I want it hotter")
 				.withIcon("http://divagirl-inc.com/fitness/files/2011/11/pretty-xmas-girl.jpg")
-				.availableFrom(4).to(8)
+				.availableFrom(1,12).to(20,12)
 				.during(1, WEEK)
 				.atLevel("Pretty good")
 					.rewards(50)
 					.withConditions()
-					.increase("TEMP_443V").by(5).percent().comparedTo(OLD_PERIOD.LAST_WEEK)
+					.increase("TMP").by(5).percent().comparedTo(OLD_PERIOD.LAST_WEEK)
 				.end();
 
 		/*

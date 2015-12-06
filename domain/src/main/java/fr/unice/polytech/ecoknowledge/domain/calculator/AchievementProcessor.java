@@ -127,8 +127,13 @@ public class AchievementProcessor implements GoalVisitor {
 	public void visit(ImproveCondition condition) {
 
         //	Retrieves sensor bound for symbolic names
-        String symbolicName = condition.getSymbolicName().toString();
+        String symbolicName = condition.getSymbolicName();
         String sensorBound = goal.getSensorNameForGivenSymbolicName(symbolicName);
+
+        System.out.println(condition.getComparedPeriod().getStart());
+        System.out.println(condition.getComparedPeriod().getEnd());
+        System.out.println(goal.getStart());
+        System.out.println(goal.getEnd());
 
         // Retrieve old values of sensor
         List<Data> oldData = this.cache.getDataOfSensorBetweenDate(sensorBound,
@@ -138,8 +143,10 @@ public class AchievementProcessor implements GoalVisitor {
                 goal.getStart(), goal.getEnd());
 
 		// If we don't have the good data
-		if(oldData == null || newData == null){
+		if(oldData == null || newData == null || oldData.isEmpty() || newData.isEmpty()){
 			currentConditionResult.add(new ConditionResult(false, 0.0, condition));
+			System.out.println("oldData : " + oldData);
+			System.out.println("newData : " + newData);
 			return;
 		}
 
@@ -156,6 +163,9 @@ public class AchievementProcessor implements GoalVisitor {
         double oldAverage = oldSum / oldData.size();
         double newAverage = newSem / newData.size();
 
+        System.out.println("oldaverage : " + oldAverage);
+        System.out.println("newaverage : " + newAverage);
+
         double threshold = condition.getThreshold();
 
         double achievedRate = 0.0;
@@ -164,13 +174,13 @@ public class AchievementProcessor implements GoalVisitor {
         switch (improveType){
             case "increase":
                 if(newAverage < oldAverage) achievedRate = 0;
-                else if(newAverage/oldAverage > 1 + threshold/100) achievedRate = 1;
-                else achievedRate = (newAverage/oldAverage) / (1 + threshold/100);
+                else achievedRate = 100 * ((newAverage-oldAverage)/oldAverage)  * 100 / threshold;
+                if(achievedRate > 100) achievedRate =  100;
                 break;
             case "decrease":
                 if(newAverage > oldAverage) achievedRate = 0;
-                else if(newAverage/oldAverage < 1 - threshold/100) achievedRate = 1;
-                else achievedRate = (oldAverage/newAverage) / (1 + threshold/100);
+                else achievedRate = 100 * ((oldAverage-newAverage)/oldAverage) * 100 / threshold;
+                if(achievedRate > 100) achievedRate =  100;
         }
         boolean achieved = achievedRate == 1;
 
