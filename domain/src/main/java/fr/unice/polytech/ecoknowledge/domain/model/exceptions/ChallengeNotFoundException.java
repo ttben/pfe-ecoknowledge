@@ -1,6 +1,8 @@
 package fr.unice.polytech.ecoknowledge.domain.model.exceptions;
 
-public class ChallengeNotFoundException extends RuntimeException {
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.EcoknowledgeDataException;
+
+public class ChallengeNotFoundException extends EcoknowledgeDataException {
 	public ChallengeNotFoundException(String message) {
 		super(message);
 	}

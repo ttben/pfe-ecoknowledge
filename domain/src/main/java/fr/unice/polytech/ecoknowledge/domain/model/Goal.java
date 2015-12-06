@@ -20,13 +20,15 @@ public class Goal implements VisitableComponent {
 	private UUID id;
 	private Challenge challengeDefinition;
 	private TimeBox timeSpan;
+	private UUID goalResultID;
 	private User user;
 
 	@JsonCreator
 	public Goal(@JsonProperty(value = "id", required = false) String id,
 				@JsonProperty("challenge") Challenge definition,
 				@JsonProperty("lifeSpan") TimeBox timeSpan,
-				User user) {
+				User user,
+				String goalResultID) {
 
 		if(user == null) {
 			throw new NullPointerException("User specified is null");
@@ -40,6 +42,11 @@ public class Goal implements VisitableComponent {
 		this.challengeDefinition = definition;
 		this.timeSpan = timeSpan;
 		this.user = user;
+		if(goalResultID != null && !goalResultID.isEmpty()) {
+			this.goalResultID = UUID.fromString(goalResultID);
+		} else {
+			this.goalResultID = null;
+		}
 	}
 
 	public Challenge getChallengeDefinition() {
@@ -90,5 +97,13 @@ public class Goal implements VisitableComponent {
 
 	public void setId(UUID id) {
 		this.id = id;
+	}
+
+	public UUID getGoalResultID() {
+		return goalResultID;
+	}
+
+	public void setGoalResultID(UUID goalResultID) {
+		this.goalResultID = goalResultID;
 	}
 }

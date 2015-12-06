@@ -1,26 +1,27 @@
 package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Comparator {
 
-	public String getComparator() {
-		return comparator;
+	public String getType() {
+		return type;
 	}
 
-	public void setComparator(String comparator) {
-		this.comparator = comparator;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	private String comparator;
+	private String type;
 
 	@JsonCreator
-	public Comparator(String comparator) {
-		this.comparator = comparator;
+	public Comparator(@JsonProperty(value = "type", required = true)String type) {
+		this.type = type;
 	}
 
 	public boolean compare(Double value, Double value1) {
-		switch (comparator) {
+		switch (type) {
 			case ">":
 				return value.doubleValue() > value1.doubleValue();
 			case "<":
@@ -40,11 +41,11 @@ public class Comparator {
 		}
 
 		Comparator otherComparator = (Comparator) o;
-		return otherComparator.comparator.equals(this.comparator);
+		return otherComparator.type.equals(this.type);
 	}
 
 	@Override
 	public String toString() {
-		return this.comparator;
+		return this.type;
 	}
 }

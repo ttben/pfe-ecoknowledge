@@ -22,6 +22,10 @@ public class GoalSerializer extends JsonSerializer<Goal> {
 		jgen.writeStringField("user", value.getUser().getId().toString());
 		jgen.writeStringField("id", value.getId().toString());
 
+		if(value.getGoalResultID() != null) {
+			jgen.writeStringField("result", value.getGoalResultID().toString());
+		}
+
 		if (value.getTimeSpan() != null) {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String timeSpanDescription = objectMapper.writeValueAsString(value.getTimeSpan());

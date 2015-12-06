@@ -3,26 +3,33 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.time;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.unice.polytech.ecoknowledge.domain.model.deserializer.TargetTimeDeserializer;
+import fr.unice.polytech.ecoknowledge.domain.model.serializer.TargetTimeSerializer;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by Sébastien on 02/12/2015.
- */
+@JsonSerialize(using = TargetTimeSerializer.class)
 @JsonDeserialize(using = TargetTimeDeserializer.class)
 public class TimeFilter {
 
 	List<AbstractMap.SimpleEntry<Integer, Integer>> dayMoment;
 	AbstractMap.SimpleEntry<Integer, Integer> weekMoment;
 
+	private String hoursStr;
+	private String daysStr;
+
 	@JsonCreator
 	public TimeFilter(@JsonProperty(value = "hours", required = true) List<AbstractMap.SimpleEntry<Integer, Integer>> dayMoment,
-					  @JsonProperty(value = "days", required = true) AbstractMap.SimpleEntry<Integer, Integer> weekMoment) {
+					  @JsonProperty(value = "days", required = true) AbstractMap.SimpleEntry<Integer, Integer> weekMoment,
+					  String hourStr,
+					  String daysStr) {
 		this.dayMoment = dayMoment;
 		this.weekMoment = weekMoment;
+		this.hoursStr = hourStr;
+		this.daysStr = daysStr;
 	}
 
 	public TimeFilter() {
@@ -44,5 +51,24 @@ public class TimeFilter {
 
 	public void setWeekMoment(AbstractMap.SimpleEntry<Integer, Integer> weekMoment) {
 		this.weekMoment = weekMoment;
+	}
+
+	public String getHoursStr() {
+		return hoursStr;
+	}
+
+	public String getDaysStr() {
+		return daysStr;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof TimeFilter)) {
+			return false;
+		}
+
+		TimeFilter timeFilter = (TimeFilter)obj;
+		return dayMoment.equals(timeFilter.dayMoment)
+				&& weekMoment.equals(timeFilter.weekMoment);
 	}
 }

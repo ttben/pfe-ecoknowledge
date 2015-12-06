@@ -2,7 +2,10 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.data.DataPersistence;
+import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
+import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,8 +30,7 @@ public class UserPersistenceTest {
 
 	@AfterClass
 	public static void eraseUsers() {
-		DataPersistence.drop(DataPersistence.Collections.USER,
-				user.getId().toString());
+		// TODO: 06/12/2015 DataPersistence.drop(DataPersistence.Collections.USER, user.getId().toString());
 	}
 
 	@Test
@@ -47,24 +49,16 @@ public class UserPersistenceTest {
 	}
 
 	@Test
-	public void aUser_WhenPersist_ShouldNotThrow() throws IOException {
-		JsonObject jsonObject = this.jsonUserDescription;
-		jsonObject.addProperty("id", user.getId().toString());
-
-		DataPersistence.store(DataPersistence.Collections.USER, jsonObject);
+	public void aUser_WhenPersist_ShouldNotThrow() throws IOException, NotSavableElementException {
+		MongoDBHandler.getInstance().store(user);
 	}
 
 	@Test
-	public void aUser_WhenPersist_ShouldBeRebuilt() throws IOException {
-		JsonObject jsonObject = this.jsonUserDescription;
-		jsonObject.addProperty("id", user.getId().toString());
+	public void aUser_WhenPersist_ShouldBeRebuilt() throws IOException, NotSavableElementException, UserNotFoundException, NotReadableElementException {
+		MongoDBHandler.getInstance().store(user);
+		User anotherUser = MongoDBHandler.getInstance().readUserByID(user.getId().toString());
 
-		DataPersistence.store(DataPersistence.Collections.USER, jsonObject);
-		JsonObject result = DataPersistence.read(DataPersistence.Collections.USER, user.getId().toString());
-		ObjectMapper objectMapper = new ObjectMapper();
-		User anotherUser = (User) objectMapper.readValue(result.toString(), User.class);
-
-		DataPersistence.drop(DataPersistence.Collections.USER, jsonObject.get("id").getAsString());
+		// TODO: 06/12/2015  DataPersistence.drop(DataPersistence.Collections.USER, jsonObject.get("id").getAsString());
 
 		assertEquals(UserPersistenceTest.user, anotherUser);
 	}

@@ -4,7 +4,7 @@ import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.StandardCondition;
-import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Operand;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.SymbolicName;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCondition;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import org.joda.time.DateTime;
@@ -55,7 +55,7 @@ public class RetrieveRequiredVisitor implements GoalVisitor {
 	@Override
 	public void visit(StandardCondition condition) {
 		//	Retrieve symbolic names for condition
-		Operand requiredOperand = condition.getRequiredOperand();
+		SymbolicName requiredOperand = condition.getRequiredOperand();
 
 		//	Retrieves sensor bound for symbolic names
 		String symbolicName = requiredOperand.getSymbolicName().toString();

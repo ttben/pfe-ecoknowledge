@@ -22,14 +22,14 @@
           "type": "standard",
           "expression": {
             "leftOperand": {
-              "type": "symbolicName",
               "symbolicName": "TMP_CLI"
             },
             "rightOperand": {
-              "type": "value",
               "value": 27
             },
-            "comparator": ">"
+            "comparator": {
+              "type":">"
+            }
           },
           "counter": {
             "threshold": 50,

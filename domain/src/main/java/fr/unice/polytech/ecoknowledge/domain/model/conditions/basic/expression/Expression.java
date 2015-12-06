@@ -1,6 +1,8 @@
 package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Expression {
@@ -44,13 +46,12 @@ public class Expression {
 	}
 
 	public boolean compareWith(Double value) {
-		return (getLeftOperand().isRequired()) ?
-				this.comparator.compare(value, getRightOperand().getSymbolicName())
-				: this.comparator.compare(getRightOperand().getSymbolicName(), value);
+		return this.comparator.compare(value, getRightOperand().getValue());
 	}
 
-	public String getDescription() {
-		return "" + leftOperand.getSymbolicName() + " " + comparator.toString() + " " + rightOperand.getSymbolicName();
+	@JsonIgnoreProperties
+	public String describe() {
+		return "" + leftOperand.getSymbolicName() + " " + comparator.toString() + " " + rightOperand.getValue();
 	}
 
 	@Override

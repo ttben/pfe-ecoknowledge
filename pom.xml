@@ -19,7 +19,6 @@
         <!-- The jetty server where we'll have our service (server API) -->
         <module>server</module>
         <module>domain</module>
-        <module>data</module>
         <module>language</module>
     </modules>
 

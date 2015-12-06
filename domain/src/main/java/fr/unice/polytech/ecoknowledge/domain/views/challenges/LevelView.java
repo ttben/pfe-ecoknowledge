@@ -24,7 +24,7 @@ public class LevelView implements ViewForClient {
 		result.addProperty("name", this.level.getName());
 
 		JsonArray conditionsJsonArray = new JsonArray();
-		for (Condition condition : this.level.getConditionList()) {
+		for (Condition condition : this.level.getConditions()) {
 			ConditionView conditionView = ConditionViewFactory.getView(condition);
 			JsonObject currentJsonOfCondition = conditionView.toJsonForClient();
 			conditionsJsonArray.add(currentJsonOfCondition);

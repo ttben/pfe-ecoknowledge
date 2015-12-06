@@ -22,6 +22,8 @@ public class TargetTimeDeserializer extends JsonDeserializer<TimeFilter> {
 		String hours = (node.get("hours")).asText();
 		String days = (node.get("days")).asText();
 
-		return new TimeFilter(DayMoment.fromString(hours).getHours(), WeekMoment.fromString(days).getDays());
+		return new TimeFilter(DayMoment.fromString(hours).getHours(),
+				WeekMoment.fromString(days).getDays(),
+				hours, days);
 	}
 }

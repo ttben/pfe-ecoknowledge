@@ -1,10 +1,12 @@
 package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
-import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Operand;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.SymbolicName;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.time.TimeFilter;
 
 /**
@@ -32,24 +34,17 @@ public class StandardCondition extends BasicCondition {
 		this.counter = counter;
 	}
 
-	public Operand getRequiredOperand() {
-		if (this.expression.getLeftOperand().isRequired()) {
-			return this.expression.getLeftOperand();
-		}
-
-		if (this.expression.getRightOperand().isRequired()) {
-			return this.expression.getRightOperand();
-		}
-
-		return null;
+	@JsonIgnore
+	public SymbolicName getRequiredOperand() {
+		return this.expression.getLeftOperand();
 	}
 
 	public boolean compareWith(Double value) {
 		return this.expression.compareWith(value);
 	}
 
-	public String getDescription() {
-		String result = expression.getDescription();
+	public String describe() {
+		String result = expression.describe();
 		result = result.concat(counter.toString());
 		return result;
 	}

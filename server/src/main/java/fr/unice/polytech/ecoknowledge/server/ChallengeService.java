@@ -3,6 +3,9 @@ package fr.unice.polytech.ecoknowledge.server;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -12,48 +15,55 @@ import java.io.IOException;
 @Path("/challenges")
 public class ChallengeService {
 
-	@GET
-	public Response getAllChallenges(@PathParam("userID") String userID) {
-		System.out.println("USER ID RECEIVED : " + userID);
-		try {
-			return Response.ok().entity(Controller.getInstance().getAllChallengesForUser(userID).toString()).build();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return Response.status(500).entity(e.getMessage()).build();
-		}
-	}
-
 	@POST
 	@Consumes("application/json")
 	public Response addChallenge(String object) {
 		JsonObject json = new JsonParser().parse(object).getAsJsonObject();
-		JsonObject result = null;
+
 		try {
-			result = Controller.getInstance().createChallenge(json);
+			Controller.getInstance().createChallenge(json);
+			return Response.ok().build();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
+		} catch (NotSavableElementException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
 		}
-		return Response.ok().entity(result.toString()).build();
 	}
 
 
 	@GET
-	@Path("/{challengeId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getBadge(@PathParam("challengeId") String challengeId) {
+	public Response getAllChallenges(@PathParam("type") String typeOfChallenges, @PathParam("userID") String userID) {
+		try {
+			//	If user field is set
+			if (userID != null && !userID.isEmpty()) {
 
-		// FIXME: 01/12/2015 
-		/*
-		
-		JSONObject response = Controller.getInstance().(challengeId);
+				//	Check if user exists
+				// TODO: 05/12/2015
 
-		if(response.getBoolean("valid"))
-			return  Response.ok(response.toString()).build();
-		return Response.status(Response.Status.NOT_FOUND).build();
-		*/
-		return null;
-
+				switch (typeOfChallenges) {
+					case "taken":
+						return Response.ok().entity(Controller.getInstance().getTakenChallengesOfUser(userID)).build();
+					case "notTaken":
+						return Response.ok().entity(Controller.getInstance().getNotTakenChallengesOfUser(userID)).build();
+					default:
+						return Response.status(403).entity("Type : " + typeOfChallenges + " not recognized.").build();
+				}
+			} else {
+				return Response.ok().entity(Controller.getInstance().getAllChallenges().toString()).build();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		} catch (IncoherentDBContentException e) {
+			e.printStackTrace();
+			return Response.status(500).build();
+		} catch (NotReadableElementException e) {
+			e.printStackTrace();
+			return Response.status(500).build();
+		}
 	}
 
 	@GET
@@ -61,20 +71,12 @@ public class ChallengeService {
 	public Response getAllChallenges() {
 		try {
 			return Response.ok().entity(Controller.getInstance().getAllChallenges().toString()).build();
-		} catch (IOException e) {
+		} catch (IncoherentDBContentException e) {
 			e.printStackTrace();
-			return Response.status(500).entity(e.getMessage()).build();
+			return Response.status(500).build();
+		} catch (NotReadableElementException e) {
+			e.printStackTrace();
+			return Response.status(500).build();
 		}
-	}
-
-	@DELETE
-	public Response dropAllChallenges() {
-		return Response.ok().entity(Controller.getInstance().dropAllChallenges()).build();
-	}
-
-	@DELETE
-	@Path("/{challengeId}")
-	public Response dropAChallengeById(@PathParam("challengeId") String challengeId) {
-		return Response.ok().entity(Controller.getInstance().dropAChallenge(challengeId)).build();
 	}
 }

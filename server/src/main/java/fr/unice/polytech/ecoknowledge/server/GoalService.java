@@ -6,7 +6,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
+import fr.unice.polytech.ecoknowledge.domain.Model;
+import fr.unice.polytech.ecoknowledge.domain.data.GoalNotFoundException;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
+import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -22,7 +27,7 @@ public class GoalService {
 		JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
 
 		try {
-			JsonObject result = Controller.getInstance().createGoal(jsonObject, null);
+			JsonObject result = Controller.getInstance().takeChallenge(jsonObject);
 			return Response.ok().entity(result.toString()).build();
 		} catch (JsonMappingException | JsonParseException e) {
 			e.printStackTrace();
@@ -32,6 +37,18 @@ public class GoalService {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 			return Response.status(500).entity(e.getMessage()).build();
+		} catch (GoalNotFoundException e) {
+			e.printStackTrace();
+			return Response.status(403).entity(e.getMessage()).build();
+		} catch (NotSavableElementException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		} catch (UserNotFoundException e) {
+			e.printStackTrace();
+			return Response.status(403).entity(e.getMessage()).build();
+		} catch (NotReadableElementException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
 		}
 	}
 
@@ -40,26 +57,39 @@ public class GoalService {
 	public Response getAllGoals(@QueryParam("userID") String userID) {
 
 		try {
-			System.out.println("USER ID : " + userID);
-
 			if (userID != null && !userID.isEmpty() && !userID.equalsIgnoreCase("undefined")) {
 				System.out.println("User ID specified (" + userID + "). Displaying goals for user ...");
-				return Response.ok().entity(Controller.getInstance().getGoalsOfUserInJsonFormat(userID).toString()).build();
+				return Response.ok().entity(Controller.getInstance().getGoalsResultOfUser(userID).toString()).build();
 			} else {
-				JsonArray result = Controller.getInstance().getAllGoals();
-				return Response.ok().entity(result.toString()).build();
+				return Response.status(403).build();
 			}
-		} catch (IOException e) {
-			System.out.println("\n" + e.getMessage());
+		} catch (GoalNotFoundException e) {
 			e.printStackTrace();
-			return Response.status(500).entity(e.getMessage()).build();
+			return Response.status(404).build();
+		} catch (IncoherentDBContentException e) {
+			e.printStackTrace();
+			return Response.status(500).build();
+		} catch (NotReadableElementException e) {
+			e.printStackTrace();
+			return Response.status(500).build();
 		}
 	}
 
-	@DELETE
-	public Response deleteAllGoals() {
-		Controller.getInstance().dropAllGoals();
-		return Response.ok().build();
-	}
+	@GET
+	@Path("/{id}")
+	@Produces("application/json")
+	public Response getGoalById(@PathParam("id") String goalID) {
 
+		try {
+			JsonObject result = Controller.getInstance().getGoalResult(goalID);
+			return Response.ok().entity(result.toString()).build();
+
+		} catch (GoalNotFoundException e) {
+			e.printStackTrace();
+			return Response.status(404).build();
+		} catch (NotReadableElementException e) {
+			e.printStackTrace();
+			return Response.status(500).build();
+		}
+	}
 }

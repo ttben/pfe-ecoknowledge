@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.domain.views;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
@@ -7,5 +8,5 @@ import com.google.gson.JsonObject;
  */
 public interface ViewForClient {
 
-	JsonObject toJsonForClient();
+	JsonElement toJsonForClient();
 }

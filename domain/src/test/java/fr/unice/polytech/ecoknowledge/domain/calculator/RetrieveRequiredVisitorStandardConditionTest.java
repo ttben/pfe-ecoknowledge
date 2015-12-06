@@ -49,9 +49,9 @@ public class RetrieveRequiredVisitorStandardConditionTest {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
-		lifeSpan = challenge.getTimeSpan();
+		lifeSpan = challenge.getLifeSpan();
 
-		goal = new Goal(null, challenge, lifeSpan, user);
+		goal = new Goal(null, challenge, lifeSpan, user, null);
 	}
 
 	@Test

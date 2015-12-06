@@ -3,17 +3,20 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import fr.unice.polytech.ecoknowledge.domain.model.serializer.CounterSerializer;
 
+@JsonSerialize(using = CounterSerializer.class)
 @JsonDeserialize(using = CounterDeserializer.class)
 public class Counter {
 	private Integer threshold;
-	private CounterType counterType;
+	private CounterType type;
 
 	@JsonCreator
 	public Counter(@JsonProperty(value = "threshold", required = true) Integer threshold,
-				   @JsonProperty(value = "type", required = true) CounterType counterType) {
+				   @JsonProperty(value = "type", required = true) CounterType type) {
 		this.threshold = threshold;
-		this.counterType = counterType;
+		this.type = type;
 	}
 
 	public Integer getThreshold() {
@@ -24,17 +27,17 @@ public class Counter {
 		this.threshold = threshold;
 	}
 
-	public CounterType getCounterType() {
-		return counterType;
+	public CounterType getType() {
+		return type;
 	}
 
-	public void setCounterType(CounterType counterType) {
-		this.counterType = counterType;
+	public void setType(CounterType type) {
+		this.type = type;
 	}
 
 	@Override
 	public String toString() {
-		return (counterType.equals(CounterType.PERCENT_OF_TIME))
+		return (type.equals(CounterType.PERCENT_OF_TIME))
 				? " " + threshold + "% du temps"
 				: " " + threshold + " fois";
 	}
@@ -48,6 +51,6 @@ public class Counter {
 		Counter counter = (Counter) obj;
 
 		return threshold.equals(counter.threshold)
-				&& counterType.equals(counter.counterType);
+				&& type.equals(counter.type);
 	}
 }

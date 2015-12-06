@@ -15,7 +15,7 @@ public class StandardConditionView implements ConditionView {
 	public JsonObject toJsonForClient() {
 		JsonObject result = new JsonObject();
 
-		String description = this.standardCondition.getExpression().getDescription();
+		String description = this.standardCondition.getExpression().describe();
 		description = description.concat(this.standardCondition.getCounter().toString());
 
 		result.addProperty("condition", description);
