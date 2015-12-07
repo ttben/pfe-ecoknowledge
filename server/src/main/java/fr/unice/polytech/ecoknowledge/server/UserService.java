@@ -6,6 +6,7 @@ import fr.unice.polytech.ecoknowledge.domain.Controller;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
 import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 
 import javax.ws.rs.GET;
@@ -22,8 +23,16 @@ public class UserService {
 	@POST
 	public Response registerUser(String payload) {
 		JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
-		JsonObject result = Controller.getInstance().registerUser(jsonObject);
-		return Response.ok().entity(result.toString()).build();
+		try {
+			Controller.getInstance().registerUser(jsonObject);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(403).entity(e.getMessage()).build();
+		} catch (NotSavableElementException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		}
+		return Response.ok().build();
 	}
 
 	@GET

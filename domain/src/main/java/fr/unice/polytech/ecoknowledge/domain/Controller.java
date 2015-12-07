@@ -2,6 +2,7 @@ package fr.unice.polytech.ecoknowledge.domain;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sun.javafx.sg.prism.NGShape;
 import fr.unice.polytech.ecoknowledge.domain.data.GoalNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
@@ -31,8 +32,8 @@ public class Controller {
 	}
 
 
-	public JsonObject registerUser(JsonObject userJsonDescription) {
-		return null;
+	public void registerUser(JsonObject userJsonDescription) throws IOException, NotSavableElementException {
+		Model.getInstance().createUser(userJsonDescription);
 	}
 
 	public JsonObject takeChallenge(JsonObject description) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException {

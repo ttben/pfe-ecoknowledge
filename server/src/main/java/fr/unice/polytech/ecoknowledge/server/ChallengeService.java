@@ -65,18 +65,4 @@ public class ChallengeService {
 			return Response.status(500).build();
 		}
 	}
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllChallenges() {
-		try {
-			return Response.ok().entity(Controller.getInstance().getAllChallenges().toString()).build();
-		} catch (IncoherentDBContentException e) {
-			e.printStackTrace();
-			return Response.status(500).build();
-		} catch (NotReadableElementException e) {
-			e.printStackTrace();
-			return Response.status(500).build();
-		}
-	}
 }
