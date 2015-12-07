@@ -25,6 +25,7 @@ public class AchievementProcessor implements GoalVisitor {
 	private List<LevelResult> currentLevelResult = new ArrayList<>();
 	private GoalResult goalResult;
 
+
 	public AchievementProcessor(Goal goal, Cache cache) {
 		this.goal = goal;
 		this.cache = cache;
@@ -124,6 +125,67 @@ public class AchievementProcessor implements GoalVisitor {
 	// TODO: 27/11/2015  
 	@Override
 	public void visit(ImproveCondition condition) {
+
+        //	Retrieves sensor bound for symbolic names
+        String symbolicName = condition.getSymbolicName();
+        String sensorBound = goal.getSensorNameForGivenSymbolicName(symbolicName);
+
+        System.out.println(condition.getComparedPeriod().getStart());
+        System.out.println(condition.getComparedPeriod().getEnd());
+        System.out.println(goal.getStart());
+        System.out.println(goal.getEnd());
+
+        // Retrieve old values of sensor
+        List<Data> oldData = this.cache.getDataOfSensorBetweenDate(sensorBound,
+                condition.getComparedPeriod().getStart(), condition.getComparedPeriod().getEnd());
+
+        List<Data> newData = this.cache.getDataOfSensorBetweenDate(sensorBound,
+                goal.getStart(), goal.getEnd());
+
+		// If we don't have the good data
+		if(oldData == null || newData == null || oldData.isEmpty() || newData.isEmpty()){
+			currentConditionResult.add(new ConditionResult(false, 0.0, condition));
+			System.out.println("oldData : " + oldData);
+			System.out.println("newData : " + newData);
+			return;
+		}
+
+		System.out.println(oldData);
+		System.out.println(newData);
+		double oldSum = 0;
+        for(Data d : oldData)
+            oldSum += d.getValue();
+
+        double newSem = 0;
+        for(Data d : newData)
+            newSem += d.getValue();
+
+        double oldAverage = oldSum / oldData.size();
+        double newAverage = newSem / newData.size();
+
+        System.out.println("oldaverage : " + oldAverage);
+        System.out.println("newaverage : " + newAverage);
+
+        double threshold = condition.getThreshold();
+
+        double achievedRate = 0.0;
+
+        String improveType = condition.getType();
+        switch (improveType){
+            case "increase":
+                if(newAverage < oldAverage) achievedRate = 0;
+                else achievedRate = 100 * ((newAverage-oldAverage)/oldAverage)  * 100 / threshold;
+                if(achievedRate > 100) achievedRate =  100;
+                break;
+            case "decrease":
+                if(newAverage > oldAverage) achievedRate = 0;
+                else achievedRate = 100 * ((oldAverage-newAverage)/oldAverage) * 100 / threshold;
+                if(achievedRate > 100) achievedRate =  100;
+        }
+        boolean achieved = achievedRate == 1;
+
+        ConditionResult conditionResult = new ConditionResult(achieved, achievedRate, condition);
+        currentConditionResult.add(conditionResult);
 	}
 
 	public GoalResult getGoalResult() {
