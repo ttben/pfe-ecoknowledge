@@ -2,6 +2,7 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fr.unice.polytech.ecoknowledge.domain.Controller;
 import fr.unice.polytech.ecoknowledge.domain.data.GoalNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
 import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
@@ -9,13 +10,11 @@ import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementEx
 import fr.unice.polytech.ecoknowledge.domain.data.utils.Utils;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import org.joda.time.DateTime;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
@@ -72,6 +71,12 @@ public class TestService {
 		return Response.ok().entity(new Utils().createTable(name)).build();
 	}
 
+
+	@POST
+	@Path("/drop/{dbName}")
+	public void dropDB(@PathParam("dbName") String dbName) {
+		Controller.getInstance().drop(dbName);
+	}
 
 	@POST
 	@Path("/stub")

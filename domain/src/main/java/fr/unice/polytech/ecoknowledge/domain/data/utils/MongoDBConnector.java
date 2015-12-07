@@ -14,6 +14,8 @@ import fr.unice.polytech.ecoknowledge.domain.data.GoalNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.ChallengeNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 
 public class MongoDBConnector implements DocumentBDDConnector {
@@ -22,6 +24,8 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public static String USERS_COLLECTION = "users";
 	public static String GOALS_COLLECTION = "goals";
 	public static String RESULTS_COLLECTION = "results";
+
+	final Logger logger = LogManager.getLogger(MongoDBConnector.class);
 
 	private static MongoDBConnector instance;
 	private MongoClient mongoClient;
@@ -46,19 +50,21 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public void storeChallenge(JsonObject challengeJsonDescription) {
 		MongoCollection<Document> collection = getCollection(CHALLENGES_COLLECTION);
 		collection.insertOne(Document.parse(challengeJsonDescription.toString()));
+		logger.info("\n\t+ Just inserted challenge :\n" + challengeJsonDescription);
 	}
 
 	@Override
 	public void storeGoal(JsonObject goalJsonDescription) {
 		MongoCollection<Document> collection = getCollection(GOALS_COLLECTION);
 		collection.insertOne(Document.parse(goalJsonDescription.toString()));
+		logger.info("\n\t+ Just inserted goal :\n" + goalJsonDescription);
 	}
 
 	@Override
 	public void storeUser(JsonObject userJsonDescription) {
 		MongoCollection<Document> collection = getCollection(USERS_COLLECTION);
 		collection.insertOne(Document.parse(userJsonDescription.toString()));
-		System.out.println("\t+ Just inserted user " + userJsonDescription);
+		logger.info("\n\t+ Just inserted user :\n" + userJsonDescription);
 	}
 
 	@Override
@@ -219,5 +225,13 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
 		MongoCollection<Document> collection = mongoDatabase.getCollection(targetCollection);
 		return collection;
+	}
+
+	public void drop(String dbName) {
+		logger.info("Dropping db" + dbName);
+		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
+		MongoCollection<Document> collection = mongoDatabase.getCollection(dbName);
+		collection.drop();
+		logger.info(dbName + " dropped !");
 	}
 }
