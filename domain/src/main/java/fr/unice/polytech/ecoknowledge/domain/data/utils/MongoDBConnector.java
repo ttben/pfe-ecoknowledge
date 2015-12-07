@@ -58,6 +58,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public void storeUser(JsonObject userJsonDescription) {
 		MongoCollection<Document> collection = getCollection(USERS_COLLECTION);
 		collection.insertOne(Document.parse(userJsonDescription.toString()));
+		System.out.println("\t+ Just inserted user " + userJsonDescription);
 	}
 
 	@Override
