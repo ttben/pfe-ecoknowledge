@@ -74,13 +74,11 @@ public class GEN_ConditionTest {
 
 		Object e = JsonSearcher.lookFor(description, wanted);
 		JSONObject expression = (JSONObject) e;
-
-		assertNotNull(expression.getString("comparator"));
+		System.out.println(expression.getJSONObject("comparator").getString("type"));
+		assertNotNull(expression.getJSONObject("comparator").getString("type"));
 		assertNotNull(expression.getJSONObject("leftOperand"));
 		assertNotNull(expression.getJSONObject("leftOperand").getString("symbolicName"));
-		assertNotNull(expression.getJSONObject("leftOperand").getString("type"));
 		assertNotNull(expression.getJSONObject("rightOperand"));
-		assertNotNull(expression.getJSONObject("rightOperand").getString("type"));
 		assertNotNull(expression.getJSONObject("rightOperand").getInt("value"));
 	}
 

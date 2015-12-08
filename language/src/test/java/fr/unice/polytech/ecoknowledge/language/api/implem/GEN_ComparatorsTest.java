@@ -101,7 +101,8 @@ public class GEN_ComparatorsTest {
 		wanted.add(new AbstractMap.SimpleEntry<>("conditions", JSONArray.class));
 		wanted.add(new AbstractMap.SimpleEntry<>(0, JSONObject.class));
 		wanted.add(new AbstractMap.SimpleEntry<>("expression", JSONObject.class));
-		wanted.add(new AbstractMap.SimpleEntry<>("comparator", String.class));
+		wanted.add(new AbstractMap.SimpleEntry<>("comparator", JSONObject.class));
+		wanted.add(new AbstractMap.SimpleEntry<>("type", String.class));
 
 
 		Object c = JsonSearcher.lookFor(json, wanted);

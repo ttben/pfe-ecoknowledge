@@ -147,16 +147,17 @@ public class JSONBuilder {
 		JSONObject expression = new JSONObject();
 
 		JSONObject leftOperand = new JSONObject();
-		leftOperand.put("type", "symbolicName");
 		leftOperand.put("symbolicName", c.getSensor());
 
 		JSONObject rightOperand = new JSONObject();
-		rightOperand.put("type", "value");
 		rightOperand.put("value", c.getValue());
+
+		JSONObject comparator = new JSONObject();
+		comparator.put("type", c.getComparator());
 
 		expression.put("leftOperand", leftOperand);
 		expression.put("rightOperand", rightOperand);
-		expression.put("comparator", c.getComparator());
+		expression.put("comparator", comparator);
 
 		return expression;
 	}
