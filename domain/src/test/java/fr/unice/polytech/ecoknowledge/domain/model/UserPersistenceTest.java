@@ -5,9 +5,11 @@ import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
 import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
+import fr.unice.polytech.ecoknowledge.domain.data.utils.MongoDBConnector;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -22,14 +24,20 @@ public class UserPersistenceTest {
 	static private User user;
 	private JsonObject jsonUserDescription;
 
+	static String oldDBName;
+	static String testDBName = "challengePersistenceTest";
+
 	@Before
 	public void setUp() {
+		oldDBName = MongoDBConnector.DB_NAME;
+		MongoDBConnector.DB_NAME = testDBName;
 		this.user = getExpectedUser();
 		this.jsonUserDescription = getUserDescription();
 	}
 
 	@AfterClass
 	public static void eraseUsers() {
+		MongoDBConnector.DB_NAME = oldDBName;
 		// TODO: 06/12/2015 DataPersistence.drop(DataPersistence.Collections.USER, user.getId().toString());
 	}
 
