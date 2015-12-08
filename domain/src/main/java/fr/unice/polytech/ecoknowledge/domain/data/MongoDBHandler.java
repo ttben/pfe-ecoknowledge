@@ -28,7 +28,7 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	private static MongoDBHandler instance;
 	private MongoDBConnector bddConnector;
 
-	final Logger logger = LogManager.getLogger(MongoDBConnector.class);
+	final Logger logger = LogManager.getLogger(MongoDBHandler.class);
 
 	private MongoDBHandler() {
 		bddConnector = MongoDBConnector.getInstance();
@@ -147,12 +147,12 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 		JsonArray usersJsonArray = bddConnector.findAllUsers();
 
-		for (JsonElement currentUserJsonElementDescription : usersJsonArray) {
-			if (!currentUserJsonElementDescription.isJsonObject()) {
+		for (JsonElement currentUserElementDescription : usersJsonArray) {
+			if (!currentUserElementDescription.isJsonObject()) {
 				throw new IncoherentDBContentException("Read all users contains not json object");
 			}
 
-			JsonObject currentUserJsonDescription = currentUserJsonElementDescription.getAsJsonObject();
+			JsonObject currentUserJsonDescription = currentUserElementDescription.getAsJsonObject();
 			try {
 				User currentUser = (User) objectMapper.readValue(currentUserJsonDescription.toString(), User.class);
 				result.add(currentUser);
@@ -226,6 +226,7 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 	@Override
 	public JsonObject readGoalResultByID(String goalResultID) {
+		logger.info("Reading goal result id : " + goalResultID);
 		return bddConnector.findGoalResult(goalResultID);
 	}
 

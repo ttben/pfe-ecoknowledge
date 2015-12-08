@@ -111,13 +111,12 @@ public class Model {
 
 		goal.setTimeSpan(timeSpan);
 
-		MongoDBHandler.getInstance().store(goal);
-
 		GoalResult result = calculator.evaluate(goal);
 
 		MongoDBHandler.getInstance().store(result);
 		goal.setGoalResultID(result.getId());
-		MongoDBHandler.getInstance().updateGoal(goal);
+
+		MongoDBHandler.getInstance().store(goal);
 
 		return result;
 	}

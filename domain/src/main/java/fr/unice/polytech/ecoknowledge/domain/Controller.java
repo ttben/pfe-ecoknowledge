@@ -17,11 +17,15 @@ import fr.unice.polytech.ecoknowledge.domain.views.challenges.ChallengeViewList;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 import fr.unice.polytech.ecoknowledge.domain.views.users.UserView;
 import fr.unice.polytech.ecoknowledge.domain.views.users.UserViewList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.List;
 
 public class Controller {
+	final Logger logger = LogManager.getLogger(Controller.class);
+
 	private static Controller instance;
 
 	public static Controller getInstance() {
@@ -30,7 +34,6 @@ public class Controller {
 		}
 		return instance;
 	}
-
 
 	public void registerUser(JsonObject userJsonDescription) throws IOException, NotSavableElementException {
 		Model.getInstance().createUser(userJsonDescription);
@@ -44,9 +47,15 @@ public class Controller {
 	public JsonArray getGoalsResultOfUser(String userID) throws IncoherentDBContentException, NotReadableElementException, GoalNotFoundException {
 		List<Goal> goalList = MongoDBHandler.getInstance().readAllGoalsOfUser(userID);
 
+		logger.info("Getting goals result of user " + userID);
+		logger.info("Goals : " + goalList);
+
 		JsonArray result = new JsonArray();
 		for (Goal currentGoal : goalList) {
 			String goalResultStrID = currentGoal.getGoalResultID().toString();
+
+			logger.info("Try to retrieve goal result with ID " + goalResultStrID);
+
 			JsonObject currentGoalResultJsonDescription = MongoDBHandler.getInstance().readGoalResultByID(goalResultStrID);
 			result.add(currentGoalResultJsonDescription);
 		}
