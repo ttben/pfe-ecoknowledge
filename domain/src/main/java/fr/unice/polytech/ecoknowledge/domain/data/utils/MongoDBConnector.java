@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
@@ -115,7 +116,31 @@ public class MongoDBConnector implements DocumentBDDConnector {
 
 	@Override
 	public JsonObject findGoalResult(String goalResultID) {
-		return findOne(RESULTS_COLLECTION, goalResultID);
+		MongoCollection<Document> collection = getCollection(RESULTS_COLLECTION);
+
+		String res = "";
+		MongoCursor<Document> findIterable = collection.find().iterator();
+		while (findIterable.hasNext()) {
+			res += findIterable.next().toJson().toString() + "\n";
+		}
+
+		logger.info("DB CONTENT : " + res);
+
+		Document result = collection.find(Filters.eq("resultID", goalResultID)).projection(Projections.exclude("_id")).first();
+
+		logger.info("Document found : " + result);
+
+		JsonParser parser = new JsonParser();
+
+		if (result == null) {
+			return null;
+		}
+
+		JsonObject persistedJsonObject = parser.parse(result.toJson()).getAsJsonObject();
+
+		logger.info("Goal result found : " + persistedJsonObject);
+
+		return persistedJsonObject;
 	}
 
 	@Override

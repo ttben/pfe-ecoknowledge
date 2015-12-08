@@ -23,7 +23,7 @@ public class GoalSerializer extends JsonSerializer<Goal> {
 		jgen.writeStringField("id", value.getId().toString());
 
 		if(value.getGoalResultID() != null) {
-			jgen.writeStringField("result", value.getGoalResultID().toString());
+			jgen.writeStringField("resultID", value.getGoalResultID().toString());
 		}
 
 		if (value.getTimeSpan() != null) {

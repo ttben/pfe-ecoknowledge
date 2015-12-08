@@ -28,7 +28,7 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	private static MongoDBHandler instance;
 	private MongoDBConnector bddConnector;
 
-	final Logger logger = LogManager.getLogger(MongoDBConnector.class);
+	final Logger logger = LogManager.getLogger(MongoDBHandler.class);
 
 	private MongoDBHandler() {
 		bddConnector = MongoDBConnector.getInstance();
@@ -147,17 +147,17 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 		JsonArray usersJsonArray = bddConnector.findAllUsers();
 
-		for (JsonElement currentUserJsonDescription : usersJsonArray) {
-			if (!currentUserJsonDescription.isJsonObject()) {
+		for (JsonElement currentUserElementDescription : usersJsonArray) {
+			if (!currentUserElementDescription.isJsonObject()) {
 				throw new IncoherentDBContentException("Read all users contains not json object");
 			}
 
-			String currentGoalStrDescription = currentUserJsonDescription.getAsString();
+			JsonObject currentUserJsonDescription = currentUserElementDescription.getAsJsonObject();
 			try {
-				User currentUser = (User) objectMapper.readValue(currentGoalStrDescription, User.class);
+				User currentUser = (User) objectMapper.readValue(currentUserJsonDescription.toString(), User.class);
 				result.add(currentUser);
 			} catch (IOException e) {
-				throwNotReadableElementException("User", currentGoalStrDescription, e);
+				throwNotReadableElementException("User", currentUserJsonDescription.toString(), e);
 			}
 		}
 
@@ -226,6 +226,7 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 	@Override
 	public JsonObject readGoalResultByID(String goalResultID) {
+		logger.info("Reading goal result id : " + goalResultID);
 		return bddConnector.findGoalResult(goalResultID);
 	}
 
