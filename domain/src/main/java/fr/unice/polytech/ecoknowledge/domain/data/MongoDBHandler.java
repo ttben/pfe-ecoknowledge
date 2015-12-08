@@ -147,17 +147,17 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 		JsonArray usersJsonArray = bddConnector.findAllUsers();
 
-		for (JsonElement currentUserJsonDescription : usersJsonArray) {
-			if (!currentUserJsonDescription.isJsonObject()) {
+		for (JsonElement currentUserJsonElementDescription : usersJsonArray) {
+			if (!currentUserJsonElementDescription.isJsonObject()) {
 				throw new IncoherentDBContentException("Read all users contains not json object");
 			}
 
-			String currentGoalStrDescription = currentUserJsonDescription.getAsString();
+			JsonObject currentUserJsonDescription = currentUserJsonElementDescription.getAsJsonObject();
 			try {
-				User currentUser = (User) objectMapper.readValue(currentGoalStrDescription, User.class);
+				User currentUser = (User) objectMapper.readValue(currentUserJsonDescription.toString(), User.class);
 				result.add(currentUser);
 			} catch (IOException e) {
-				throwNotReadableElementException("User", currentGoalStrDescription, e);
+				throwNotReadableElementException("User", currentUserJsonDescription.toString(), e);
 			}
 		}
 
