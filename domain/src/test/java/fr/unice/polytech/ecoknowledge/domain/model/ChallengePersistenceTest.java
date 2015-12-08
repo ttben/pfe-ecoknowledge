@@ -2,6 +2,7 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
+import fr.unice.polytech.ecoknowledge.domain.Controller;
 import fr.unice.polytech.ecoknowledge.domain.TestUtils;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
@@ -35,6 +36,7 @@ public class ChallengePersistenceTest {
 	@AfterClass
 	public static void resetDB(){
 		MongoDBConnector.DB_NAME = oldDBName;
+		Controller.getInstance().drop(testDBName);
 	}
 
 	@Before

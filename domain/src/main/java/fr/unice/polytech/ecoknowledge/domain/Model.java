@@ -74,10 +74,11 @@ public class Model {
 		return challenges;
 	}
 
-	public void createUser(JsonObject userJsonDescription) throws NotSavableElementException, IOException {
+	public String createUser(JsonObject userJsonDescription) throws NotSavableElementException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		User user = (User) objectMapper.readValue(userJsonDescription.toString(), User.class);
 		MongoDBHandler.getInstance().store(user);
+		return user.getId().toString();
 	}
 
 	public void createChallenge(JsonObject jsonObject) throws IOException, NotSavableElementException {

@@ -23,8 +23,10 @@ public class UserService {
 	@POST
 	public Response registerUser(String payload) {
 		JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
+		JsonObject response = new JsonObject();
 		try {
-			Controller.getInstance().registerUser(jsonObject);
+			String id = Controller.getInstance().registerUser(jsonObject);
+			response.addProperty("id", id);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(403).entity(e.getMessage()).build();
@@ -32,7 +34,7 @@ public class UserService {
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
 		}
-		return Response.ok().build();
+		return Response.ok().entity(response.toString()).build();
 	}
 
 	@GET
