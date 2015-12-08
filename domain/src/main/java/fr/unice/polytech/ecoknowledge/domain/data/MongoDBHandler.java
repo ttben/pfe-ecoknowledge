@@ -16,6 +16,8 @@ import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.ChallengeNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 	private static MongoDBHandler instance;
 	private MongoDBConnector bddConnector;
+
+	final Logger logger = LogManager.getLogger(MongoDBConnector.class);
 
 	private MongoDBHandler() {
 		bddConnector = MongoDBConnector.getInstance();
@@ -95,17 +99,26 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 		JsonArray challengesJsonArray = bddConnector.findAllChallenges();
 
-		for (JsonElement currentChallengeJsonDescription : challengesJsonArray) {
-			if (!currentChallengeJsonDescription.isJsonObject()) {
+		for (JsonElement currentChallengeElementDescription : challengesJsonArray) {
+			if (!currentChallengeElementDescription.isJsonObject()) {
 				throw new IncoherentDBContentException("Read all challenges contains not json object");
 			}
 
-			String currentChallengeStrDescription = currentChallengeJsonDescription.getAsString();
+			JsonObject currentChallengeJsonDescription = currentChallengeElementDescription.getAsJsonObject();
+
+			logger.info("Deserializing all challenges with following JSON");
+			logger.info(currentChallengeJsonDescription.toString());
+
 			try {
-				Challenge currentChallenge = (Challenge) objectMapper.readValue(currentChallengeStrDescription, Challenge.class);
+				Challenge currentChallenge = (Challenge) objectMapper.readValue(currentChallengeJsonDescription.toString(), Challenge.class);
 				result.add(currentChallenge);
 			} catch (IOException e) {
-				throwNotReadableElementException("Challenge", currentChallengeStrDescription, e);
+				logger.error("Challenges deserialization has encountered an error");
+				logger.error("Json read follows : ");
+				logger.error(currentChallengeJsonDescription.toString());
+				logger.catching(e);
+
+				//	throwNotReadableElementException("Challenge", currentChallengeJsonDescription.toString(), e);
 			}
 		}
 
@@ -351,5 +364,9 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 		exceptionDescription = exceptionDescription.concat(" can not be read");
 
 		throw new NotReadableElementException(exceptionDescription, motherCause);
+	}
+
+	public void dropCollection(String dbName) {
+		bddConnector.drop(dbName);
 	}
 }

@@ -66,6 +66,7 @@ public class Controller {
 	}
 
 	public void createChallenge(JsonObject challengeJsonDescription) throws IOException, NotSavableElementException {
+		System.out.println("\nCreating challenge with json : " + challengeJsonDescription);
 		Model.getInstance().createChallenge(challengeJsonDescription);
 	}
 
@@ -103,5 +104,9 @@ public class Controller {
 		JsonArray result = userViewList.toJsonForClient();
 
 		return result;
+	}
+
+	public void drop(String dbName) {
+		MongoDBHandler.getInstance().dropCollection(dbName);
 	}
 }
