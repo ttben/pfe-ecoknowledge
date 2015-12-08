@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCondition;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
@@ -17,10 +18,11 @@ import java.io.IOException;
 /**
  * Created by Sébastien on 06/12/2015.
  */
-public class ImproveConditionDeserializer extends JsonDeserializer<ImproveCondition> {
+public class ImproveConditionDeserializer extends JsonDeserializer<Condition> {
     @Override
-    public ImproveCondition deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public Condition deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
 
+        System.out.println("DESERIALIZE !!!");
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         String referencePeriodString = null;
         try {

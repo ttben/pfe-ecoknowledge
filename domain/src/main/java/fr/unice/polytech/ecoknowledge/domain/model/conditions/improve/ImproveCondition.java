@@ -12,37 +12,35 @@ import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 public class ImproveCondition implements Condition {
 
     private final String symbolicName;
-    private final String type;
-    private TimeBox comparedPeriod;
+    private final String improvementType;
+    private TimeBox referencePeriod;
 	private Double threshold;
 
 	@JsonCreator
-	public ImproveCondition(@JsonProperty(value = "referencePeriod", required = true) TimeBox comparedPeriod,
+	public ImproveCondition(@JsonProperty(value = "referencePeriod", required = true) TimeBox referencePeriod,
 							@JsonProperty(value = "threshold", required = true) Double threshold,
                             @JsonProperty(value = "improvementType", required = true) String type,
                             @JsonProperty(value = "symbolicName", required = true) String symbolicName) {
-		this.comparedPeriod = comparedPeriod;
+		this.referencePeriod = referencePeriod;
 		this.threshold = threshold;
-        this.type = type;
+        this.improvementType = type;
         this.symbolicName = symbolicName;
 	}
 
-
-
-    public String getSymbolicName() {
-        return symbolicName;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public TimeBox getComparedPeriod() {
-		return comparedPeriod;
+	public String getSymbolicName() {
+		return symbolicName;
 	}
 
-	public void setComparedPeriod(TimeBox comparedPeriod) {
-		this.comparedPeriod = comparedPeriod;
+	public String getImprovementType() {
+		return improvementType;
+	}
+
+	public TimeBox getReferencePeriod() {
+		return referencePeriod;
+	}
+
+	public void setReferencePeriod(TimeBox referencePeriod) {
+		this.referencePeriod = referencePeriod;
 	}
 
 	public Double getThreshold() {

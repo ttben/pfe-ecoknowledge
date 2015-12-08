@@ -130,14 +130,14 @@ public class AchievementProcessor implements GoalVisitor {
         String symbolicName = condition.getSymbolicName();
         String sensorBound = goal.getSensorNameForGivenSymbolicName(symbolicName);
 
-        System.out.println(condition.getComparedPeriod().getStart());
-        System.out.println(condition.getComparedPeriod().getEnd());
+        System.out.println(condition.getReferencePeriod().getStart());
+        System.out.println(condition.getReferencePeriod().getEnd());
         System.out.println(goal.getStart());
         System.out.println(goal.getEnd());
 
         // Retrieve old values of sensor
         List<Data> oldData = this.cache.getDataOfSensorBetweenDate(sensorBound,
-                condition.getComparedPeriod().getStart(), condition.getComparedPeriod().getEnd());
+                condition.getReferencePeriod().getStart(), condition.getReferencePeriod().getEnd());
 
         List<Data> newData = this.cache.getDataOfSensorBetweenDate(sensorBound,
                 goal.getStart(), goal.getEnd());
@@ -170,7 +170,7 @@ public class AchievementProcessor implements GoalVisitor {
 
         double achievedRate = 0.0;
 
-        String improveType = condition.getType();
+        String improveType = condition.getImprovementType();
         switch (improveType){
             case "increase":
                 if(newAverage < oldAverage) achievedRate = 0;

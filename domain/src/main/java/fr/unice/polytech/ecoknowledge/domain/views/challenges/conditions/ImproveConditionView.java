@@ -16,7 +16,7 @@ public class ImproveConditionView implements ConditionView {
 	public JsonObject toJsonForClient() {
 		JsonObject result = new JsonObject();
 
-		String description = this.improveCondition.getType() + " " + this.improveCondition.getSymbolicName()
+		String description = this.improveCondition.getImprovementType() + " " + this.improveCondition.getSymbolicName()
 				+ " by " + this.improveCondition.getThreshold() + "%";
 		result.addProperty("condition", description);
 
