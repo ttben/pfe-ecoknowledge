@@ -35,7 +35,7 @@ public class ChallengeService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllChallenges(@PathParam("type") String typeOfChallenges, @PathParam("userID") String userID) {
+	public Response getAllChallenges(@QueryParam("type") String typeOfChallenges, @QueryParam("userID") String userID) {
 		try {
 			//	If user field is set
 			if (userID != null && !userID.isEmpty()) {
