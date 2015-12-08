@@ -18,6 +18,7 @@ import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import org.joda.time.DateTime;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -78,6 +79,7 @@ public class GoalEvaluationTest {
 		MongoDBHandler.getInstance().deleteUser(aUser);
 	}
 
+	@Ignore
 	@Test
 	public void checkGoalCreationAndEvaluation() throws IOException, NotReadableElementException, IncoherentDBContentException, GoalNotFoundException, UserNotFoundException, NotSavableElementException {
 		Model.getInstance().takeChallenge(goalJsonDescription);

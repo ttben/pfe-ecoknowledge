@@ -2,23 +2,42 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.improve;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
+import fr.unice.polytech.ecoknowledge.domain.model.deserializer.ImproveConditionDeserializer;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 
+@JsonDeserialize(using = ImproveConditionDeserializer.class)
 public class ImproveCondition implements Condition {
 
-	private TimeBox comparedPeriod;
+    private final String symbolicName;
+    private final String type;
+    private TimeBox comparedPeriod;
 	private Double threshold;
 
 	@JsonCreator
 	public ImproveCondition(@JsonProperty(value = "referencePeriod", required = true) TimeBox comparedPeriod,
-							@JsonProperty(value = "threshold", required = true) Double threshold) {
+							@JsonProperty(value = "threshold", required = true) Double threshold,
+                            @JsonProperty(value = "improvementType", required = true) String type,
+                            @JsonProperty(value = "symbolicName", required = true) String symbolicName) {
 		this.comparedPeriod = comparedPeriod;
 		this.threshold = threshold;
+        this.type = type;
+        this.symbolicName = symbolicName;
 	}
 
-	public TimeBox getComparedPeriod() {
+
+
+    public String getSymbolicName() {
+        return symbolicName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public TimeBox getComparedPeriod() {
 		return comparedPeriod;
 	}
 

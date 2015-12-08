@@ -2,10 +2,13 @@ package fr.unice.polytech.ecoknowledge.language.api.implem;
 
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.OLD_PERIOD;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.DAY;
+import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.MONTH;
 import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.WEEK;
 
 /**
@@ -17,6 +20,17 @@ public class SEND_SendTest {
 	@Test
 	public void sendForReal() {
 
+		Challenge.create("I want it hotter")
+				.withIcon("http://divagirl-inc.com/fitness/files/2011/11/pretty-xmas-girl.jpg")
+				.availableFrom(1,12).to(20,12)
+				.during(1, WEEK)
+				.atLevel("Pretty good")
+					.rewards(50)
+					.withConditions()
+					.increase("TMP").by(5).percent().comparedTo(OLD_PERIOD.LAST_WEEK)
+				.end();
+
+		/*
 		ChallengeBuilder cb = Challenge.create("La reine des neiges FROM DSL");
 			cb
 				.withIcon("http://static.cotemaison.fr/medias_8904/w_1024,h_445,c_crop,x_0,y_167/w_1520,h_855,c_fill,g_north/v1393340192/climatisation-nos-astuces-pour-une-maison-fraiche_4559310.jpg")
@@ -41,5 +55,6 @@ public class SEND_SendTest {
 							.valueOf("TMP_AMB").lowerThan(44)
 							.atLeast(2).times()
 				.end();
+				*/
 	}
 }

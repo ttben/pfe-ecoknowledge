@@ -22,28 +22,20 @@ public class Cache {
 
 	public List<Data> getDataOfSensorBetweenDate(String sensorName,
 												 DateTime start, DateTime end) {
-		return this.getDataOf(sensorName); // FIXME: 26/11/2015
+		ArrayList<Data> datas = new ArrayList<>();
+		for(Data d : getDataOf(sensorName)){
+			if(d.getDate().isBefore(end) && d.getDate().isAfter(start))
+				datas.add(d);
+		}
+		return datas;
+
 	}
 
 	public List<Data> getDataOfSensorBetweenDate(String sensorName, DateTime start, DateTime end,
 												 AbstractMap.SimpleEntry<Integer, Integer> weekMoment,
 												 List<AbstractMap.SimpleEntry<Integer, Integer>> dayMoment) {
-
-		/*
-		System.out.println("\n\n+\tAccessing cache ... Data saved : \n" + this.data.toString());
-		System.out.printf("\n\n+\tWant to access data of : " + sensorName);
-		*/
-
-		List<Data> result = this.getDataOf(sensorName);
-
-		if (result == null) {
-			result = new ArrayList<>();
-		}
-
-		// System.out.println("\n\n+\tReturning : \n" + result.toString());
-
-		return result;
-	}
+		return  getDataOfSensorBetweenDate(sensorName, start, end); // FIXME: 06/12/2015 
+    }
 
 	public Map<String, List<Data>> getData() {
 		return data;
