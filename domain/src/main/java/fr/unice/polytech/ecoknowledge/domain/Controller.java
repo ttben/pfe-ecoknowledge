@@ -12,6 +12,7 @@ import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
+import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.ChallengeViewList;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 import fr.unice.polytech.ecoknowledge.domain.views.users.UserView;
@@ -117,4 +118,5 @@ public class Controller {
 	public void drop(String dbName) {
 		MongoDBHandler.getInstance().dropCollection(dbName);
 	}
+
 }

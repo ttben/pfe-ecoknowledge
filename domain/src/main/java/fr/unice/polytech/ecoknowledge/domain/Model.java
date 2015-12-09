@@ -52,12 +52,8 @@ public class Model {
 	public List<Challenge> getNotTakenChallengesOfUser(String userID) throws IOException, IncoherentDBContentException, NotReadableElementException {
 		List<Challenge> challenges = MongoDBHandler.getInstance().readAllChallenges();
 		List<Challenge> takenChallenges = getTakenChallenges(userID);
-        System.out.println("\n\nCHALLENGE SIZE : " + challenges.size() + "\n\n");
-        System.out.println("\n\nTAKEN SIZE : " + takenChallenges.size() + "\n\n");
 
         challenges.removeAll(takenChallenges);
-
-        System.out.println("\n\nNOT TAKEN SIZE : " + challenges.size() + "\n\n");
 
 		return challenges;
 	}
@@ -178,4 +174,8 @@ public class Model {
 
 		return result;
 	}
+
+    public Clock getCalculatorClock(){ // FIXME: 09/12/2015 Pas tres beau
+        return calculator.getClock();
+    }
 }

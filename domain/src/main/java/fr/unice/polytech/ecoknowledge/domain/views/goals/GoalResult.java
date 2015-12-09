@@ -4,8 +4,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
+import org.joda.time.Interval;
 import org.joda.time.format.DateTimeFormat;
 
 import java.util.ArrayList;
@@ -75,9 +79,9 @@ public class GoalResult implements ViewForClient {
 		result.addProperty("id", this.goal.getId().toString());
 		result.addProperty("name", this.goal.getChallengeDefinition().getName());
 		result.addProperty("progressPercent", this.correctRate);
-		result.addProperty("timePercent", 20);    // FIXME: 03/12/2015 HARDCODED
-		result.addProperty("remaining", "5 jours");    // FIXME: 03/12/2015 HARDCODED
-		result.addProperty("startTime", this.goal.getChallengeDefinition().getLifeSpan().getStart().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
+		result.addProperty("timePercent", computePercent(this.goal.getTimeSpan()));
+		result.addProperty("remaining", computeRemainingTime(this.goal.getTimeSpan()) + " jours");
+        result.addProperty("startTime", this.goal.getChallengeDefinition().getLifeSpan().getStart().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
 		result.addProperty("endTime", this.goal.getChallengeDefinition().getLifeSpan().getEnd().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
 
 		// FIXME: 30/11/2015 unit not used
@@ -97,6 +101,22 @@ public class GoalResult implements ViewForClient {
 
 		return result;
 	}
+
+    private Double computePercent(TimeBox timeSpan) {
+
+        Interval between = new Interval(Model.getInstance().getCalculatorClock().getTime(), timeSpan.getEnd());
+        long days = between.toDuration().getStandardDays() + 1;
+
+        Interval totalInterval = new Interval(timeSpan.getStart(), timeSpan.getEnd());
+        long totalDays = totalInterval.toDuration().getStandardDays() + 1;
+
+        return  100. * (totalDays - days) / totalDays;
+    }
+
+    private long computeRemainingTime(TimeBox lifeSpan) { // FIXME: 09/12/2015 DUPLIQUE DANS CHALLENGE VIEW
+        Interval between = new Interval(Model.getInstance().getCalculatorClock().getTime(), lifeSpan.getEnd());
+        return between.toDuration().getStandardDays() + 1;
+    }
 
     public Goal getGoal() {
         return goal;

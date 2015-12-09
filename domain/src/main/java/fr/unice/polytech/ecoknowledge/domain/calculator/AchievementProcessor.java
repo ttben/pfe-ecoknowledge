@@ -183,8 +183,8 @@ public class AchievementProcessor implements GoalVisitor {
                 if(achievedRate > 100) achievedRate =  100;
         }
         boolean achieved = achievedRate == 1;
-
-        ConditionResult conditionResult = new ConditionResult(achieved, achievedRate, condition);
+		System.out.println("rate : " + achievedRate);
+		ConditionResult conditionResult = new ConditionResult(achieved, achievedRate, condition);
         currentConditionResult.add(conditionResult);
 	}
 
