@@ -22,7 +22,6 @@ public class ImproveConditionDeserializer extends JsonDeserializer<Condition> {
     @Override
     public Condition deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
 
-        System.out.println("DESERIALIZE !!!");
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         String referencePeriodString = null;
         try {

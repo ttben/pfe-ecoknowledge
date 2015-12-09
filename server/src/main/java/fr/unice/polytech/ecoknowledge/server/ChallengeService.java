@@ -6,6 +6,8 @@ import fr.unice.polytech.ecoknowledge.domain.Controller;
 import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
 import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
 import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -14,6 +16,8 @@ import java.io.IOException;
 
 @Path("/challenges")
 public class ChallengeService {
+
+    final Logger logger = LogManager.getLogger(ChallengeService.class);
 
 	@POST
 	@Consumes("application/json")
@@ -45,9 +49,9 @@ public class ChallengeService {
 
 				switch (typeOfChallenges) {
 					case "taken":
-						return Response.ok().entity(Controller.getInstance().getTakenChallengesOfUser(userID)).build();
+						return Response.ok().entity(Controller.getInstance().getTakenChallengesOfUser(userID).toString()).build();
 					case "notTaken":
-						return Response.ok().entity(Controller.getInstance().getNotTakenChallengesOfUser(userID)).build();
+						return Response.ok().entity(Controller.getInstance().getNotTakenChallengesOfUser(userID).toString()).build();
 					default:
 						return Response.status(403).entity("Type : " + typeOfChallenges + " not recognized.").build();
 				}
@@ -56,8 +60,10 @@ public class ChallengeService {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+            logger.catching(e);
 			return Response.status(500).entity(e.getMessage()).build();
 		} catch (IncoherentDBContentException e) {
+            logger.catching(e);
 			e.printStackTrace();
 			return Response.status(500).build();
 		} catch (NotReadableElementException e) {
