@@ -17,7 +17,11 @@ public class Cache {
 	private static Cache fakeCacheInstance;
 
 	public List<Data> getDataOf(String sensorName) {
-		return this.data.get(sensorName);
+		ArrayList<Data> datas = new ArrayList<>();
+
+		if(data.get(sensorName) != null)
+			datas.addAll(data.get(sensorName));
+		return datas;
 	}
 
 	public List<Data> getDataOfSensorBetweenDate(String sensorName,

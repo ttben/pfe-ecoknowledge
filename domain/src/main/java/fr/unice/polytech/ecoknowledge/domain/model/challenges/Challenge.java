@@ -101,10 +101,6 @@ public class Challenge implements VisitableComponent {
 
 		Challenge challenge = (Challenge) obj;
 
-		return challenge.id.equals(id)
-				&& challenge.name.equals(name)
-				&& challenge.levels.equals(levels)
-				&& challenge.lifeSpan.equals(lifeSpan)
-				&& challenge.recurrence.equals(recurrence);
+		return challenge.id.equals(id);
 	}
 }

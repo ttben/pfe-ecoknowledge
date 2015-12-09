@@ -1,11 +1,12 @@
 package fr.unice.polytech.ecoknowledge.domain.views.goals;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 import org.joda.time.format.DateTimeFormat;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +19,19 @@ public class GoalResult implements ViewForClient {
 	private List<LevelResult> levelResultList = new ArrayList<>();
 	private Goal goal;
 
-	public GoalResult(Goal goal, boolean achieved, double correctRate, List<LevelResult> levelResultList) {
-		this.id = UUID.randomUUID();
+
+	@JsonCreator
+	public GoalResult(@JsonProperty(value = "id", required = false) String id,
+					  Goal goal,
+					  @JsonProperty(value = "achieved", required = true) boolean achieved,
+					  @JsonProperty(value = "correctRate", required = true) double correctRate,
+					  @JsonProperty(value = "levelResultList", required = true) List<LevelResult> levelResultList) {
+		this.goal = goal;
+        if(goal != null){
+            this.id = goal.getId();
+        }
+        if(this.id == null)
+            this.id = (id != null && !id.isEmpty()) ? UUID.fromString(id) : UUID.randomUUID();
 		this.achieved = achieved;
 		this.correctRate = correctRate;
 		this.levelResultList = levelResultList;
@@ -86,7 +98,11 @@ public class GoalResult implements ViewForClient {
 		return result;
 	}
 
-	public UUID getId() {
+    public Goal getGoal() {
+        return goal;
+    }
+
+    public UUID getId() {
 		return id;
 	}
 

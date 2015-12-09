@@ -28,9 +28,13 @@ public class MosaicService {
         System.out.println("MOSAIC");
         JsonArray resultJsonArray = new JsonArray();
         try {
-            resultJsonArray.addAll(Controller.getInstance().getNotTakenChallengesOfUser(userID));
-            resultJsonArray.addAll(Controller.getInstance().getTakenChallengesOfUser(userID));
-            resultJsonArray.addAll(Controller.getInstance().getGoalsResultOfUser(userID));
+            JsonArray notTaken = Controller.getInstance().getNotTakenChallengesOfUser(userID);
+            System.out.println("\n\nNOT TAKEN :\n" + notTaken.toString() + "\n");
+            JsonArray goals = Controller.getInstance().getGoalsResultOfUser(userID);
+            System.out.println("\n\nGOALS:\n" + goals.toString() + "\n");
+
+            resultJsonArray.addAll(notTaken);
+            resultJsonArray.addAll(goals);
         } catch (IncoherentDBContentException | GoalNotFoundException | IOException | NotReadableElementException e) {
             e.printStackTrace();
             return Response.status(500).build();

@@ -88,7 +88,9 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 	@Override
 	public void store(GoalResult goalResult) {
-		bddConnector.storeResult(goalResult.toJsonForClient());
+
+		JsonObject goalResultJsonDescription = goalResult.toJsonForClient();
+		bddConnector.storeResult(goalResultJsonDescription);
 	}
 
 	@Override
@@ -369,5 +371,9 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 	public void dropCollection(String dbName) {
 		bddConnector.drop(dbName);
+	}
+
+	public void updateGoalResult(GoalResult goalResult) throws NotSavableElementException {
+		bddConnector.updateGoalResult(goalResult.toJsonForClient());
 	}
 }

@@ -62,6 +62,13 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	}
 
 	@Override
+	public void storeResult(JsonObject goalResultJsonDescription) {
+		MongoCollection<Document> collection = getCollection(RESULTS_COLLECTION);
+		collection.insertOne(Document.parse(goalResultJsonDescription.toString()));
+		logger.info("\n\t+ Just inserted result :\n" + goalResultJsonDescription);
+	}
+
+	@Override
 	public void storeUser(JsonObject userJsonDescription) {
 		MongoCollection<Document> collection = getCollection(USERS_COLLECTION);
 		collection.insertOne(Document.parse(userJsonDescription.toString()));
@@ -76,6 +83,15 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		Document newUserDocument = Document.parse(userJsonDescription.toString());
 
 		collection.replaceOne(Filters.eq("id", id), newUserDocument);
+	}
+
+	public void updateGoalResult(JsonObject goalResultJsonDescription) {
+		MongoCollection<Document> collection = getCollection(RESULTS_COLLECTION);
+
+		String id = goalResultJsonDescription.get("id").getAsString();
+		Document newGoalResultDocument = Document.parse(goalResultJsonDescription.toString());
+
+		collection.replaceOne(Filters.eq("id", id), newGoalResultDocument);
 	}
 
 	@Override
@@ -125,8 +141,9 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		}
 
 		logger.info("DB CONTENT : " + res);
+		logger.info("Searched id : " + goalResultID);
 
-		Document result = collection.find(Filters.eq("resultID", goalResultID)).projection(Projections.exclude("_id")).first();
+		Document result = collection.find(Filters.eq("id", goalResultID)).projection(Projections.exclude("_id")).first();
 
 		logger.info("Document found : " + result);
 
@@ -187,12 +204,6 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		Document newGoalDocument = Document.parse(goalJsonDescription.toString());
 
 		collection.replaceOne(Filters.eq("id", id), newGoalDocument);
-	}
-
-	@Override
-	public void storeResult(JsonObject resultJsonDescription) {
-		MongoCollection<Document> collection = getCollection(RESULTS_COLLECTION);
-		collection.insertOne(Document.parse(resultJsonDescription.toString()));
 	}
 
 	private JsonArray findAll(String targetCollection) {
@@ -259,4 +270,5 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		collection.drop();
 		logger.info(dbName + " dropped !");
 	}
+
 }

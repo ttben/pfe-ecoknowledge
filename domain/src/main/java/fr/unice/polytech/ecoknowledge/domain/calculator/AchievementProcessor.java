@@ -52,7 +52,7 @@ public class AchievementProcessor implements GoalVisitor {
 
 		double correctRate = percentageAchieved / currentLevelResult.size();
 
-		goalResult = new GoalResult(goal, achieved, correctRate, currentLevelResult);
+		goalResult = new GoalResult(null, goal, achieved, correctRate, currentLevelResult);
 		currentLevelResult = new ArrayList<>();
 	}
 

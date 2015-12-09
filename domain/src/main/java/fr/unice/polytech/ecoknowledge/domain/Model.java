@@ -50,25 +50,24 @@ public class Model {
 	}
 
 	public List<Challenge> getNotTakenChallengesOfUser(String userID) throws IOException, IncoherentDBContentException, NotReadableElementException {
-		List<Challenge> allChallenges = MongoDBHandler.getInstance().readAllChallenges();
+		List<Challenge> challenges = MongoDBHandler.getInstance().readAllChallenges();
 		List<Challenge> takenChallenges = getTakenChallenges(userID);
-		List<Challenge> notTakenChallenges = new ArrayList<>();
+        System.out.println("\n\nCHALLENGE SIZE : " + challenges.size() + "\n\n");
+        System.out.println("\n\nTAKEN SIZE : " + takenChallenges.size() + "\n\n");
 
-		for (Challenge currentChallenge : allChallenges) {
-			if (!takenChallenges.contains(currentChallenge)) {
-				notTakenChallenges.add(currentChallenge);
-			}
-		}
+        challenges.removeAll(takenChallenges);
 
-		return notTakenChallenges;
+        System.out.println("\n\nNOT TAKEN SIZE : " + challenges.size() + "\n\n");
+
+		return challenges;
 	}
 
 	public List<Challenge> getTakenChallenges(String userID) throws IOException, IncoherentDBContentException, NotReadableElementException {
 		List<Goal> goals = MongoDBHandler.getInstance().readAllGoalsOfUser(userID);
 		List<Challenge> challenges = new ArrayList<>();
 
-		for (Goal currentGoal : goals) {
-			challenges.add(currentGoal.getChallengeDefinition());
+        for (Goal currentGoal : goals) {
+            challenges.add(currentGoal.getChallengeDefinition());
 		}
 
 		return challenges;
@@ -175,9 +174,7 @@ public class Model {
 		Goal goal = MongoDBHandler.getInstance().readGoalByUserAndChallengeIDs(userId, challengeId);
 		GoalResult result = this.calculator.evaluate(goal);
 
-		MongoDBHandler.getInstance().store(result);
-		goal.setGoalResultID(result.getId());
-		MongoDBHandler.getInstance().updateGoal(goal);
+        MongoDBHandler.getInstance().updateGoalResult(result);
 
 		return result;
 	}
