@@ -13,8 +13,8 @@
                 fr.unice.polytech.ecoknowledge.server.TestService
                 fr.unice.polytech.ecoknowledge.server.ChallengeService
                 fr.unice.polytech.ecoknowledge.server.GoalService
+                fr.unice.polytech.ecoknowledge.server.MosaicService
                 fr.unice.polytech.ecoknowledge.server.UserService
-                fr.unice.polytech.ecoknowledge.server.TMP_Mosaic
                 <!-- Add your resource classes here -->
             </param-value>
         </init-param>
