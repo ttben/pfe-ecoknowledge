@@ -163,7 +163,6 @@ public class Model {
 		return this.calculator.getClock().getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"));
 	}
 
-	// used for test only
 	public GoalResult evaluate(String userId, String challengeId) throws IOException, InvalidParameterException, IncoherentDBContentException,
 			NotReadableElementException, GoalNotFoundException, UserNotFoundException, NotSavableElementException {
 

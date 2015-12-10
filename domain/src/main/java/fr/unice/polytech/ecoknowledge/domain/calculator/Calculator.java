@@ -42,11 +42,14 @@ public class Calculator {
 
         boolean isOver = goal.getTimeSpan().getEnd().isBefore(clock.getTime());
 
-        if(bestBadge != null && isOver){
-            System.out.println("Evaluation --> Badge won");
-            // Give the badge
-            Model.getInstance().giveBadge(bestBadge, goal.getUser().getId().toString());
-
+        if(isOver){
+            if(bestBadge != null) {
+                System.out.println("Evaluation --> Badge won");
+                // Give the badge
+                Model.getInstance().giveBadge(bestBadge, goal.getUser().getId().toString());
+            } else {
+                System.out.println("Evalutaion --> Badge lost");
+            }
             // Delete the goal
             Model.getInstance().deleteGoal(goal);
 

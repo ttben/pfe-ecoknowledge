@@ -54,7 +54,7 @@ public class Cache {
 			fakeCacheInstance = new Cache();
 
 			Map<String, List<Data>> fakedData = new HashMap<>();
-
+/*
 			List<Data> aListOfData = new ArrayList<>();
 			aListOfData.add(new Data(20.0, new DateTime().minusDays(1)));
 			aListOfData.add(new Data(22.0, new DateTime().minusDays(1)));
@@ -64,7 +64,7 @@ public class Cache {
 			anotherListOfData.add(new Data(20.0, new DateTime().minusDays(1)));
 			anotherListOfData.add(new Data(22.0, new DateTime().minusDays(1)));
 			fakedData.put("TEMP_555", anotherListOfData);
-
+*/
 			fakeCacheInstance.setData(fakedData);
 		}
 

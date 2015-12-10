@@ -104,6 +104,8 @@ public class GoalResult implements ViewForClient {
 
     private Double computePercent(TimeBox timeSpan) {
 
+		if(timeSpan.getEnd().isBefore(Model.getInstance().getCalculatorClock().getTime()))
+			return 100.0;
         Interval between = new Interval(Model.getInstance().getCalculatorClock().getTime(), timeSpan.getEnd());
         long days = between.toDuration().getStandardDays() + 1;
 
@@ -114,6 +116,8 @@ public class GoalResult implements ViewForClient {
     }
 
     private long computeRemainingTime(TimeBox lifeSpan) { // FIXME: 09/12/2015 DUPLIQUE DANS CHALLENGE VIEW
+		if(lifeSpan.getEnd().isBefore(Model.getInstance().getCalculatorClock().getTime()))
+			return 0;
         Interval between = new Interval(Model.getInstance().getCalculatorClock().getTime(), lifeSpan.getEnd());
         return between.toDuration().getStandardDays() + 1;
     }
