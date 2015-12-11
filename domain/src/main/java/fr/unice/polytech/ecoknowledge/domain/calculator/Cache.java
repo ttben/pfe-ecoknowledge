@@ -26,19 +26,20 @@ public class Cache {
 
 	public List<Data> getDataOfSensorBetweenDate(String sensorName,
 												 DateTime start, DateTime end) {
-		ArrayList<Data> datas = new ArrayList<>();
+		ArrayList<Data> data = new ArrayList<>();
 		for(Data d : getDataOf(sensorName)){
 			if(d.getDate().isBefore(end) && d.getDate().isAfter(start))
-				datas.add(d);
+				data.add(d);
 		}
-		return datas;
+		return data;
 
 	}
 
 	public List<Data> getDataOfSensorBetweenDate(String sensorName, DateTime start, DateTime end,
 												 AbstractMap.SimpleEntry<Integer, Integer> weekMoment,
 												 List<AbstractMap.SimpleEntry<Integer, Integer>> dayMoment) {
-		return  getDataOfSensorBetweenDate(sensorName, start, end); // FIXME: 06/12/2015 
+		List<Data> data = getDataOfSensorBetweenDate(sensorName, start, end);
+		return new Filter(weekMoment, dayMoment).filter(data);
     }
 
 	public Map<String, List<Data>> getData() {
