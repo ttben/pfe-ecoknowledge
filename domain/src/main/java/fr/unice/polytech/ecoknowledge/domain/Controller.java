@@ -11,6 +11,7 @@ import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.model.exceptions.InvalidGoalTimespanOverChallengeException;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.ChallengeViewList;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
@@ -38,7 +39,7 @@ public class Controller {
 		return Model.getInstance().createUser(userJsonDescription);
 	}
 
-	public JsonObject takeChallenge(JsonObject description) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException {
+	public JsonObject takeChallenge(JsonObject description) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {
 		GoalResult goalResult = Model.getInstance().takeChallenge(description);
 		return goalResult.toJsonForClient();
 	}

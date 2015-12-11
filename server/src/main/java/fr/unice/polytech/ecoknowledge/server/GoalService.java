@@ -12,6 +12,7 @@ import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContent
 import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
 import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.domain.data.utils.MongoDBConnector;
+import fr.unice.polytech.ecoknowledge.domain.model.exceptions.InvalidGoalTimespanOverChallengeException;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -56,6 +57,9 @@ public class GoalService {
 		} catch (NotReadableElementException e) {
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
+		} catch (InvalidGoalTimespanOverChallengeException e) {
+			e.printStackTrace();
+			return Response.status(403).entity(e.getMessage()).build();
 		}
 	}
 

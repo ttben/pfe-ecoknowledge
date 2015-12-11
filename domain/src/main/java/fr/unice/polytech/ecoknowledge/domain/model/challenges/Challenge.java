@@ -2,10 +2,13 @@ package fr.unice.polytech.ecoknowledge.domain.model.challenges;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.VisitableComponent;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Recurrence;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +85,30 @@ public class Challenge implements VisitableComponent {
 
 	public void setRecurrence(Recurrence recurrence) {
 		this.recurrence = recurrence;
+	}
+
+	public boolean canTake() {
+		if(lifeSpan.getEnd().isBefore(Model.getInstance().getCalculatorClock().getTime()))
+			return false;
+		DateTime end;
+		switch(recurrence.getRecurrenceType()){
+			case DAY:
+				return new Interval(
+						Model.getInstance().getCalculatorClock().getTime(),
+						lifeSpan.getEnd())
+						.toDuration().getStandardDays()
+						> 0;
+			case WEEK:
+				end = Model.getInstance().getCalculatorClock().getTime().withDayOfWeek(7);
+				return end.isBefore(lifeSpan.getEnd());
+			case MONTH:
+				end = Model.getInstance().getCalculatorClock().getTime()
+						.plusMonths(1)
+						.withDayOfMonth(1)
+						.minusDays(1);
+				return end.isBefore(lifeSpan.getEnd());
+		}
+		return false;
 	}
 
 	@Override

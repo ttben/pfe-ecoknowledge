@@ -32,31 +32,21 @@ public class SEND_SendTest {
 				.end()
 		;
 
-		ChallengeBuilder cb2 = Challenge.create("La reine des neiges FROM DSL");
-			cb2
-                    .dontSend()
-				.withIcon("http://static.cotemaison.fr/medias_8904/w_1024,h_445,c_crop,x_0,y_167/w_1520,h_855,c_fill,g_north/v1393340192/climatisation-nos-astuces-pour-une-maison-fraiche_4559310.jpg")
-				.availableFrom(30, 11, 2015).to(20, 12, 2015)
-				.during(1, DURATION_TYPE.WEEK)
-					.atLevel("Sven")
-						.withImage("http://media.melty.fr/article-2414899-ajust_930/sven-est-deja-tout-content-a-cette-idee.jpg")
-						.rewards(100)
-						.withConditions()
-							.valueOf("TMP").greaterThan(27)
-							.atLeast(50).percent()
-						.and()
-							.valueOf("TMP").lowerThan(44)
-							.atLeast(2).times()
-					.atLevel("OLAF")
-						.withImage("http://www.tvhland.com/vignette/image/201312/52becf9e1fd16.jpg")
-						.rewards(200)
-						.withConditions()
-							.valueOf("TMP").greaterThan(27)
-							.atLeast(60).percent()
-						.and()
-							.valueOf("TMP").lowerThan(44)
-							.atLeast(2).times()
+		Challenge.create("Make it frozen")
+				//.dontSend()
+				.withIcon("https://s-media-cache-ak0.pinimg.com/736x/84/b5/85/84b585907446906a7b55d1b698a83160.jpg")
+				.availableFrom(7,12,2015).to(22,12,2015)
+				.during(1, WEEK)
+				.atLevel("Pretty cold")
+				.withImage("http://snowbrains.com/wp-content/uploads/2013/05/w031230b033.jpg")
+				.rewards(10)
+				.withConditions()
+				.valueOf("TMP").lowerThan(25).atLeast(80).percent()
+				.atLevel("Really the north")
+				.withImage("http://svowebmaster.free.fr/images_site_svo/armes/armes_picardie.gif")
+				.rewards(20)
+				.withConditions()
+				.valueOf("TMP").lowerThan(22).atLeast(90).percent()
 				.end();
-
 	}
 }

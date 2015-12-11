@@ -17,6 +17,7 @@ import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.model.exceptions.InvalidGoalTimespanOverChallengeException;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Recurrence;
@@ -82,11 +83,11 @@ public class Model {
 		MongoDBHandler.getInstance().store(challenge);
 	}
 
-	public GoalResult takeChallenge(JsonObject goalJsonDescription) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException {
+	public GoalResult takeChallenge(JsonObject goalJsonDescription) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {
 		return this.takeChallenge(goalJsonDescription, null);
 	}
 
-	public GoalResult takeChallenge(JsonObject jsonObject, TimeBox next) throws IOException, JsonParseException, JsonMappingException, GoalNotFoundException, NotSavableElementException, UserNotFoundException, NotReadableElementException {
+	public GoalResult takeChallenge(JsonObject jsonObject, TimeBox next) throws IOException, JsonParseException, JsonMappingException, GoalNotFoundException, NotSavableElementException, UserNotFoundException, NotReadableElementException, InvalidGoalTimespanOverChallengeException {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		//	Build goal with custom deserializer
@@ -95,6 +96,16 @@ public class Model {
 		System.out.println("GOAL???" + goal);
 
 		Recurrence goalRecurrence = goal.getChallengeDefinition().getRecurrence();
+		if(!goal.getChallengeDefinition().canTake()){
+            if(next != null){
+                throw new InvalidGoalTimespanOverChallengeException("Cannot take a goal until " + next.getEnd()
+                        + " when the challenge ends the " + goal.getChallengeDefinition().getLifeSpan().getEnd());
+            } else {
+                throw new InvalidGoalTimespanOverChallengeException("Cannot take a goal when the challenge ends the " +
+                        goal.getChallengeDefinition().getLifeSpan().getEnd());
+            }
+		}
+
 		Clock clock = calculator.getClock();
 
 		//	Generate a timeSpan and set it into the goal
