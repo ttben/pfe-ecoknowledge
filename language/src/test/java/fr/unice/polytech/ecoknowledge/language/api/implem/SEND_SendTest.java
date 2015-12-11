@@ -33,7 +33,7 @@ public class SEND_SendTest {
 		;
 
 		Challenge.create("Make it frozen")
-				//.dontSend()
+				.dontSend()
 				.withIcon("https://s-media-cache-ak0.pinimg.com/736x/84/b5/85/84b585907446906a7b55d1b698a83160.jpg")
 				.availableFrom(7,12,2015).to(22,12,2015)
 				.during(1, WEEK)
