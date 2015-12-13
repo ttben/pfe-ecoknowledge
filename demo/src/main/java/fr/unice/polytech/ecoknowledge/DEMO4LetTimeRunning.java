@@ -16,7 +16,7 @@ public class DEMO4LetTimeRunning {
 
 
     public static void main(String[] args){
-/*
+
         JsonObject date = new JsonObject();
         date.addProperty("date", "2015-12-18T12:00:00Z");
 
@@ -38,7 +38,7 @@ public class DEMO4LetTimeRunning {
         fakeData2.addProperty("date", "2015-12-15T18:10:10Z");
 
         POST("http://localhost:8080/Ecoknowledge/", "test/stub",
-                Entity.entity(fakeData2.toString(), MediaType.APPLICATION_JSON));*/
+                Entity.entity(fakeData2.toString(), MediaType.APPLICATION_JSON));
 
         String output = GET("http://localhost:8080/Ecoknowledge/", "challenges").readEntity(String.class);
         String challenge = output.split("\"")[3];
