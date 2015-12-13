@@ -29,7 +29,7 @@ public class UserService {
 			response.addProperty("id", id);
 		} catch (IOException e) {
 			e.printStackTrace();
-			return Response.status(403).entity(e.getMessage()).build();
+			return Response.status(403).entity(e.getStackTrace()).build();
 		} catch (NotSavableElementException e) {
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
