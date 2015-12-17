@@ -10,10 +10,7 @@ import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementEx
 import fr.unice.polytech.ecoknowledge.domain.data.utils.MongoDBConnector;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.ChallengeNotFoundException;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.IOException;
 
@@ -28,18 +25,21 @@ public class ChallengePersistenceTest {
 	static String testDBName = "challengePersistenceTest";
 
 	@BeforeClass
+	@Ignore
 	public static void changeDB(){
 		oldDBName = MongoDBConnector.DB_NAME;
 		MongoDBConnector.DB_NAME = testDBName;
 	}
 
 	@AfterClass
+	@Ignore
 	public static void resetDB(){
 		MongoDBConnector.DB_NAME = oldDBName;
 		Controller.getInstance().drop(testDBName);
 	}
 
 	@Before
+	@Ignore
 	public void loadJsonFile() {
 
 		jsonObject = TestUtils.getFakeJson(1);
@@ -47,6 +47,7 @@ public class ChallengePersistenceTest {
 
 
 	@Test
+	@Ignore
 	public void aChallenge_WhenCreatedAndPersisted_CanBeCreatedAndIsTheSame() throws IOException, NotSavableElementException, ChallengeNotFoundException, NotReadableElementException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
