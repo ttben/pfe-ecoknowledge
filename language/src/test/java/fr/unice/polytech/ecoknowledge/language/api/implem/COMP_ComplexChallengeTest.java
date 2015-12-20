@@ -25,7 +25,7 @@ public class COMP_ComplexChallengeTest {
 				.and()
 				.valueOf("SOMETHING_ELSE").lowerThan(2)
 				.and()
-				.valueOf("SOMETHING_ELSE_AGAIN").lowerThan(30).on(WEEK_PERIOD.WEEK_DAYS).atLeast(3).percent()
+				.valueOf("SOMETHING_ELSE_AGAIN").lowerThan(30).on(WEEK_PERIOD.WEEK_DAYS).atLeast(3).percentOfTime()
 				.endChallenge();
 
 	}

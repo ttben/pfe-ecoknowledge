@@ -31,12 +31,12 @@ public class SEND_SendTest {
 				.withImage("http://snowbrains.com/wp-content/uploads/2013/05/w031230b033.jpg")
 				.rewards(10)
 				.withConditions()
-				.valueOf("TMP").lowerThan(25).atLeast(80).percent()
+				.valueOf("TMP").lowerThan(25).atLeast(80).percentOfTime()
 				.addLevel("Really the north")
 				.withImage("http://svowebmaster.free.fr/images_site_svo/armes/armes_picardie.gif")
 				.rewards(20)
 				.withConditions()
-				.valueOf("TMP").lowerThan(22).atLeast(90).percent()
+				.valueOf("TMP").lowerThan(22).atLeast(90).percentOfTime()
 				.endChallenge();
 
 	}

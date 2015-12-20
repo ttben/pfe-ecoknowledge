@@ -134,7 +134,7 @@ public class JSONBuilder {
 		if (wfv == null) {
 
 			targetTime.put("hours", DAY_MOMENT.ALL.toString());
-			targetTime.put("days", WEEK_PERIOD.ALL.toString());
+			targetTime.put("days", WEEK_PERIOD.ALWAYS.toString());
 		} else {
 			targetTime.put("hours", wfv.getMoment().toString());
 			targetTime.put("days", wfv.getPeriod().toString());

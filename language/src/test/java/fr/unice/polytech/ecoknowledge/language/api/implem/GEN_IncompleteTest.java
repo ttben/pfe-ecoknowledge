@@ -69,7 +69,7 @@ public class GEN_IncompleteTest {
 		Object t = JsonSearcher.lookFor(description, wanted);
 		JSONObject targetTime = (JSONObject) t;
 
-		assertEquals(WEEK_PERIOD.ALL.toString(), targetTime.getString("days"));
+		assertEquals(WEEK_PERIOD.ALWAYS.toString(), targetTime.getString("days"));
 		assertEquals(DAY_MOMENT.ALL.toString(), targetTime.getString("hours"));
 
 	}
