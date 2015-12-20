@@ -39,6 +39,5 @@ public class SEND_SendTest {
 				.valueOf("TMP").lowerThan(22).atLeast(90).percent()
 				.endChallenge();
 
-		challenge.send();
 	}
 }
