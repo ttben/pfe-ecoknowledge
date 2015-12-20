@@ -25,19 +25,17 @@ public class GEN_IncompleteTest {
 
 	@Before
 	public void createDescription() {
-		ChallengeBuilder cb = Challenge.create("Without period");
-		cb
-				.dontSend() // Just because it's a test
+		Challenge c = Challenge.create("Without period")
 				.availableFrom(2)
 				.to(4)
-				.during(3, WEEK)
-				.atLevel("level")
+				.repeatEvery(3, WEEK)
+				.addLevel("level")
 				.rewards(1)
 				.withConditions()
 				.valueOf("SENSOR").greaterThan(2)
-				.end();
+				.endChallenge();
 
-		description = cb.getDescription();
+		description = c.getDescription();
 	}
 
 	@Test

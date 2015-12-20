@@ -25,11 +25,10 @@ public class GEN_MultipleLevels {
 	@Before
 	public void createChallenge() {
 
-		ChallengeBuilder cb = Challenge.create("La reine des neiges");
-		cb.dontSend() // Just because it's a test
+		Challenge c = Challenge.create("La reine des neiges")
 				.availableFrom(21, 12, 2015).to(21, 3, 2016)
-				.during(1, DURATION_TYPE.MONTH)
-				.atLevel("Sven")
+				.repeatEvery(1, DURATION_TYPE.MONTH)
+				.addLevel("Sven")
 				.rewards(50)
 				.withConditions()
 				.averageOf("TEMP_SENS").lowerThan(20)
@@ -37,13 +36,13 @@ public class GEN_MultipleLevels {
 				.and()
 				.valueOf("TEMP_SENS").lowerThan(18)
 				.on(WEEK_PERIOD.WEEK_END)
-				.atLevel("Elsa")
+				.addLevel("Elsa")
 				.withImage("http://emea.lum.dolimg.com/v1/images/6d7454cea6644379adc7e529c5790a28078a2823.jpeg?region=0,0,450,450")
 				.rewards(100)
 				.withConditions()
 				.averageOf("TEMP_SENS").lowerThan(18)
-				.end();
-		description = cb.getDescription();
+				.endChallenge();
+		description = c.getDescription();
 	}
 
 	@Test

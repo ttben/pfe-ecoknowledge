@@ -5,6 +5,6 @@ package fr.unice.polytech.ecoknowledge.language.api.interfaces;
  */
 public interface ILevelable extends IBuildable {
 
-	public IRewardableWithIcon atLevel(String levelName);
+	public IRewardableWithIcon addLevel(String levelName);
 
 }

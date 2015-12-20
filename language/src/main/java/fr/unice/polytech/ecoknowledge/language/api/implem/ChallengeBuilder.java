@@ -19,10 +19,6 @@ public class ChallengeBuilder implements IChallengeableIcon {
 
 	// ------- FIELDS ------- //
 
-	// Configs to end the request
-	private static final String path = "challenges";
-	private boolean send = true;
-
 	// Specific fields of the challenge builder
 	private String name;
 	private String iconURL = null;
@@ -30,9 +26,6 @@ public class ChallengeBuilder implements IChallengeableIcon {
 	private Integer time = null;
 	private DURATION_TYPE type = null;
 	private List<Level> levels = new ArrayList<>();
-
-	// Output
-	private JSONObject description = null;
 
 
 	// ------- CONSTRUCTOR ------- //
@@ -71,17 +64,8 @@ public class ChallengeBuilder implements IChallengeableIcon {
 		return this;
 	}
 
-	void end() {
-		String IPAddress = AddressReacher.getAddress();
-		System.out.println("/----- Generating description -----/");
-		description = JSONBuilder.parse(this);
-		if (IPAddress != null && send) {
-			Response r = HTTPCall.POST(IPAddress, path, description);
-			System.out.println(r.getStatus() == 200 ?
-					"\t---> Success sending the challenge" +
-							"\nResult :\n" + r.readEntity(String.class)
-					: "\t---> Challenge Failed : \n\t" + r.getStatusInfo());
-		}
+	Challenge end() {
+		return new Challenge(JSONBuilder.parse(this), this);
 	}
 
 	// ------- Accessors ------- //
@@ -90,17 +74,10 @@ public class ChallengeBuilder implements IChallengeableIcon {
 		p = period;
 	}
 
-	// For tests
-	ChallengeBuilder dontSend() {
-		send = false;
-		return this;
-	}
-
 	private void reinit() {
 		p = null;
 		time = null;
 		type = null;
-		description = null;
 	}
 
 	Period getP() {
@@ -117,10 +94,6 @@ public class ChallengeBuilder implements IChallengeableIcon {
 
 	String getName() {
 		return name;
-	}
-
-	JSONObject getDescription() {
-		return description;
 	}
 
 	void setTime(Integer time) {

@@ -41,8 +41,8 @@ public class WaitForValue extends LevelBuilderGettable implements IActiveDuratio
 	}
 
 	@Override
-	public void end() {
-		getLevel().end();
+	public Challenge endChallenge() {
+		return getLevel().endChallenge();
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class WaitForValue extends LevelBuilderGettable implements IActiveDuratio
 	}
 
 	@Override
-	public IRewardableWithIcon atLevel(String levelName) {
+	public IRewardableWithIcon addLevel(String levelName) {
 		return getLevel().newLevel(levelName);
 	}
 }

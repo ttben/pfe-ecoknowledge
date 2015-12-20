@@ -27,12 +27,10 @@ public class GEN_ConditionTest {
 	@Before
 	public void createChallenge() {
 
-		ChallengeBuilder cb = Challenge.create("DSL done");
-		cb
-				.dontSend() // Just because it's a test
+		Challenge c = Challenge.create("DSL done")
 				.availableFrom(23, 11, 2015).to(7, 3, 2016)
-				.during(1, WEEK)
-				.atLevel("level")
+				.repeatEvery(1, WEEK)
+				.addLevel("level")
 				.rewards(2)
 				.withConditions()
 				.valueOf("BENNI_RAGE_QUIT").lowerThan(1)
@@ -40,9 +38,9 @@ public class GEN_ConditionTest {
 				.atLeast(5).times()
 				.and()
 				.increase("OLD").by(50).percent().comparedTo(LAST_MONTH)
-				.end();
+				.endChallenge();
 
-		description = cb.getDescription();
+		description = c.getDescription();
 	}
 
 	@Test

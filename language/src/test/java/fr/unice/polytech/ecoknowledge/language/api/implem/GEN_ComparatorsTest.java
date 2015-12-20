@@ -20,18 +20,16 @@ public class GEN_ComparatorsTest {
 	@Test
 	public void comparatorLowerThan() {
 
-		ChallengeBuilder cb = Challenge.create("comparatorLT");
-		cb
-				.dontSend() // Just because it's a test
+		Challenge c = Challenge.create("comparatorLT")
 				.availableFrom(1).to(2)
-				.during(2, WEEK)
-				.atLevel("level")
+				.repeatEvery(2, WEEK)
+				.addLevel("level")
 				.rewards(2)
 				.withConditions()
 				.valueOf("Sensor").lowerThan(5)
-				.end();
+				.endChallenge();
 
-		String comparator = getComparatorForSimpleChallenge(cb.getDescription());
+		String comparator = getComparatorForSimpleChallenge(c.getDescription());
 		assertEquals("<", comparator);
 
 	}
@@ -39,18 +37,16 @@ public class GEN_ComparatorsTest {
 	@Test
 	public void comparatorGreaterThan() {
 
-		ChallengeBuilder cb = Challenge.create("comparatorGT");
-		cb
-				.dontSend() // Just because it's a test
+		Challenge c = Challenge.create("comparatorGT")
 				.availableFrom(1).to(2)
-				.during(2, WEEK)
-				.atLevel("level")
+				.repeatEvery(2, WEEK)
+				.addLevel("level")
 				.rewards(2)
 				.withConditions()
 				.valueOf("Sensor").greaterThan(5)
-				.end();
+				.endChallenge();
 
-		String comparator = getComparatorForSimpleChallenge(cb.getDescription());
+		String comparator = getComparatorForSimpleChallenge(c.getDescription());
 		assertEquals(">", comparator);
 
 	}
@@ -58,18 +54,16 @@ public class GEN_ComparatorsTest {
 	@Test
 	public void comparatorEqualsTo() {
 
-		ChallengeBuilder cb = Challenge.create("comparatorLT");
-		cb
-				.dontSend() // Just because it's a test
+		Challenge c = Challenge.create("comparatorLT")
 				.availableFrom(1).to(2)
-				.during(2, WEEK)
-				.atLevel("level")
+				.repeatEvery(2, WEEK)
+				.addLevel("level")
 				.rewards(2)
 				.withConditions()
 				.valueOf("Sensor").equalsTo(5)
-				.end();
+				.endChallenge();
 
-		String comparator = getComparatorForSimpleChallenge(cb.getDescription());
+		String comparator = getComparatorForSimpleChallenge(c.getDescription());
 		assertEquals("=", comparator);
 
 	}
@@ -77,18 +71,16 @@ public class GEN_ComparatorsTest {
 	@Test
 	public void comparatorDifferentFrom() {
 
-		ChallengeBuilder cb = Challenge.create("comparatorDF");
-		cb
-				.dontSend() // Just because it's a test
+		Challenge c = Challenge.create("comparatorDF")
 				.availableFrom(1).to(2)
-				.during(2, WEEK)
-				.atLevel("level")
+				.repeatEvery(2, WEEK)
+				.addLevel("level")
 				.rewards(2)
 				.withConditions()
 				.valueOf("Sensor").differentFrom(5)
-				.end();
+				.endChallenge();
 
-		String comparator = getComparatorForSimpleChallenge(cb.getDescription());
+		String comparator = getComparatorForSimpleChallenge(c.getDescription());
 		assertEquals("!=", comparator);
 
 	}
