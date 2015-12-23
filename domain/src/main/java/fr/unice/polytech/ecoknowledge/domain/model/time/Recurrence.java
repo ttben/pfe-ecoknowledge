@@ -50,6 +50,8 @@ public class Recurrence {
 			case MONTH:
 				res = res.concat(" (se lance chaque mois) ");
 				break;
+			case NONE:
+				res = res.concat(" (ne se repete pas) ");
 			default:
 				break;
 		}

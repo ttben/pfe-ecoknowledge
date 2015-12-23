@@ -22,6 +22,13 @@ public class During implements IDuringable {
 		return new Level(this);
 	}
 
+	@Override
+	public ILevelable noRepeat() {
+		cb.setTime(1);
+		cb.setType(DURATION_TYPE.NONE);
+		return new Level(this);
+	}
+
 	ChallengeBuilder getChallengeBuilder() {
 		return cb;
 	}

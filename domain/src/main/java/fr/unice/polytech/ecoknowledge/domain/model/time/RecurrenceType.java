@@ -7,7 +7,8 @@ public enum RecurrenceType {
 
 	DAY("day"),
 	WEEK("week"),
-	MONTH("month");
+	MONTH("month"),
+	NONE("none");
 
 	private String recurrenceType;
 

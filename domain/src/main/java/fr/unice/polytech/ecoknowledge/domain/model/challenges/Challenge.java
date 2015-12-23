@@ -88,8 +88,18 @@ public class Challenge implements VisitableComponent {
 	}
 
 	public boolean canTake() {
+
+		// If we are not in the lifespan yet
+
+		if(Model.getInstance().getCalculatorClock().getTime().isBefore(lifeSpan.getStart()))
+			return false;
+
+		// If we are after the lifespan
+
 		if(lifeSpan.getEnd().isBefore(Model.getInstance().getCalculatorClock().getTime()))
 			return false;
+
+		// Test time remaining
 		DateTime end;
 		switch(recurrence.getRecurrenceType()){
 			case DAY:
@@ -107,6 +117,9 @@ public class Challenge implements VisitableComponent {
 						.withDayOfMonth(1)
 						.minusDays(1);
 				return end.isBefore(lifeSpan.getEnd());
+			case NONE:
+				// Because we only use the lifespan
+				return true;
 		}
 		return false;
 	}

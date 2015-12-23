@@ -13,15 +13,16 @@ public class SEND_SendTest {
 	@Test
 	public void sendForReal() {
 
-		Challenge c = Challenge.create("I want it hotter")
+		Challenge c = Challenge.create("I don't want it hot")
 				.withIcon("http://divagirl-inc.com/fitness/files/2011/11/pretty-xmas-girl.jpg")
-				.availableFrom(1,12).to(20,12)
-				.repeatEvery(1, WEEK)
+				.availableFrom(1,12).to(8,4,2016)
+				.noRepeat()
 				.addLevel("Pretty good")
 					.rewards(50)
 					.withConditions()
-					.increase("TMP").by(5).percent().comparedTo(OLD_PERIOD.LAST_WEEK)
+					.valueOf("TMP").lowerThan(32)
 				.endChallenge();
+		//c.send();
 
 		Challenge challenge = Challenge.create("Make it frozen")
 				.withIcon("https://s-media-cache-ak0.pinimg.com/736x/84/b5/85/84b585907446906a7b55d1b698a83160.jpg")

@@ -19,10 +19,7 @@ import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.InvalidGoalTimespanOverChallengeException;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
-import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
-import fr.unice.polytech.ecoknowledge.domain.model.time.Recurrence;
-import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
-import fr.unice.polytech.ecoknowledge.domain.model.time.TimeSpanGenerator;
+import fr.unice.polytech.ecoknowledge.domain.model.time.*;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -113,7 +110,11 @@ public class Model {
 		if (next != null) {
 			timeSpan = TimeSpanGenerator.generateNextTimeSpan(goalRecurrence, clock, next);
 		} else {
-			timeSpan = TimeSpanGenerator.generateTimeSpan(goalRecurrence, clock);
+			if(goal.getChallengeDefinition().getRecurrence().getRecurrenceType().equals(RecurrenceType.NONE)){
+				timeSpan = goal.getChallengeDefinition().getLifeSpan();
+			} else {
+				timeSpan = TimeSpanGenerator.generateTimeSpan(goalRecurrence, clock);
+			}
 		}
 
 		goal.setTimeSpan(timeSpan);

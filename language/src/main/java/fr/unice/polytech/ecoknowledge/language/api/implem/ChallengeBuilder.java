@@ -115,4 +115,5 @@ public class ChallengeBuilder implements IChallengeableIcon {
 	void addLevel(Level level) {
 		levels.add(level);
 	}
+
 }

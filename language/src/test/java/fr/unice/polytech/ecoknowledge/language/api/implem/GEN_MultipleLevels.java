@@ -27,7 +27,7 @@ public class GEN_MultipleLevels {
 
 		Challenge c = Challenge.create("La reine des neiges")
 				.availableFrom(21, 12, 2015).to(21, 3, 2016)
-				.repeatEvery(1, DURATION_TYPE.MONTH)
+				.noRepeat()
 				.addLevel("Sven")
 				.rewards(50)
 				.withConditions()
