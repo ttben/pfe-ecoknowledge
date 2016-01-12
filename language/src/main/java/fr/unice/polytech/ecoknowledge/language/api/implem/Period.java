@@ -66,7 +66,7 @@ public class Period implements IDurationnable {
 
 		return new DateTime(
 				(year == null) ? Calendar.getInstance().get(Calendar.YEAR) : year,
-				(month == null) ? Calendar.getInstance().get(Calendar.MONTH) : month,
+				(month == null) ? Calendar.getInstance().get(Calendar.MONTH)+1 : month,
 				day, end ? 23 : 0, end ? 59 : 0, end ? 59 : 0
 		);
 	}
