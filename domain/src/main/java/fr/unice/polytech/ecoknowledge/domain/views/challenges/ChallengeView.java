@@ -50,6 +50,8 @@ public class ChallengeView implements ViewForClient {
 			case MONTH:
 				result.addProperty("length", "1 month");
 				break;
+			case NONE:
+				result.addProperty("length", "ne se repete pas");
 			default:
 				break;
 		}
@@ -63,13 +65,23 @@ public class ChallengeView implements ViewForClient {
 		}
 
 		result.add("levels", levelJson);
-		result.addProperty("remaining", computeRemainingTime(challenge.getLifeSpan()) + " jours");
+		Long remaining = computeRemainingTime(challenge.getLifeSpan());
+		if(remaining == null){
+			result.addProperty("remaining", "Defi termine");
+		} else {
+			result.addProperty("remaining", remaining + " jours");
+		}
 		result.addProperty("image", this.challenge.getImage());
 		return result;
 	}
 
-	private long computeRemainingTime(TimeBox lifeSpan) {
-		Interval between = new Interval(Model.getInstance().getCalculatorClock().getTime(), lifeSpan.getEnd());
+	private Long computeRemainingTime(TimeBox lifeSpan) {
+		Interval between;
+		try {
+			between = new Interval(Model.getInstance().getCalculatorClock().getTime(), lifeSpan.getEnd());
+		} catch (Throwable t){
+			return null;
+		}
 		return between.toDuration().getStandardDays();
 	}
 }

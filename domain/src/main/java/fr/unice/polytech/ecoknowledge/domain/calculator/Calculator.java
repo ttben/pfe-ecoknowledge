@@ -49,10 +49,18 @@ public class Calculator {
         // Get results
         GoalResult goalResult = achievementProcessor.getGoalResult();
 
+        System.out.println(goalResult.getCorrectRate());
+
         // Look for the best badge
         Badge bestBadge = getBestBadge(goalResult.getLevelResultList());
 
-        boolean isOver = goal.getTimeSpan().getEnd().isBefore(clock.getTime());
+        boolean isOver;
+
+        if(goal.getChallengeDefinition().getRecurrence().getRecurrenceType().equals(RecurrenceType.NONE)){
+            isOver = goal.getChallengeDefinition().getLifeSpan().getEnd().isBefore(clock.getTime());
+        } else {
+            isOver = goal.getTimeSpan().getEnd().isBefore(clock.getTime());
+        }
 
         if(isOver){
             if(bestBadge != null) {

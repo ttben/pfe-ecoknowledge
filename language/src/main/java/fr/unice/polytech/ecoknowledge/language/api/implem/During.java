@@ -16,9 +16,16 @@ public class During implements IDuringable {
 	}
 
 	@Override
-	public ILevelable during(Integer value, DURATION_TYPE type) {
+	public ILevelable repeatEvery(Integer value, DURATION_TYPE type) {
 		cb.setTime(value);
 		cb.setType(type);
+		return new Level(this);
+	}
+
+	@Override
+	public ILevelable noRepeat() {
+		cb.setTime(1);
+		cb.setType(DURATION_TYPE.NONE);
 		return new Level(this);
 	}
 

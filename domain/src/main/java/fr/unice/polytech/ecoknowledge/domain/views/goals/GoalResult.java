@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
+import fr.unice.polytech.ecoknowledge.domain.model.time.RecurrenceType;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 import org.joda.time.Interval;
@@ -31,11 +32,11 @@ public class GoalResult implements ViewForClient {
 					  @JsonProperty(value = "correctRate", required = true) double correctRate,
 					  @JsonProperty(value = "levelResultList", required = true) List<LevelResult> levelResultList) {
 		this.goal = goal;
-        if(goal != null){
-            this.id = goal.getId();
-        }
-        if(this.id == null)
-            this.id = (id != null && !id.isEmpty()) ? UUID.fromString(id) : UUID.randomUUID();
+		if(goal != null){
+			this.id = goal.getId();
+		}
+		if(this.id == null)
+			this.id = (id != null && !id.isEmpty()) ? UUID.fromString(id) : UUID.randomUUID();
 		this.achieved = achieved;
 		this.correctRate = correctRate;
 		this.levelResultList = levelResultList;
@@ -79,9 +80,20 @@ public class GoalResult implements ViewForClient {
 		result.addProperty("id", this.goal.getId().toString());
 		result.addProperty("name", this.goal.getChallengeDefinition().getName());
 		result.addProperty("progressPercent", this.correctRate);
-		result.addProperty("timePercent", computePercent(this.goal.getTimeSpan()));
-		result.addProperty("remaining", computeRemainingTime(this.goal.getTimeSpan()) + " jours");
-        result.addProperty("startTime", this.goal.getChallengeDefinition().getLifeSpan().getStart().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
+
+		TimeBox box;
+		if(goal.getChallengeDefinition().getRecurrence().getRecurrenceType().equals(RecurrenceType.NONE)){
+			box = goal.getChallengeDefinition().getLifeSpan();
+		} else {
+			box = goal.getTimeSpan();
+		}
+		Long remaining = computeRemainingTime(box);
+
+		result.addProperty("remaining", remaining + " jours");
+		result.addProperty("timePercent", computePercent(box));
+
+
+		result.addProperty("startTime", this.goal.getChallengeDefinition().getLifeSpan().getStart().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
 		result.addProperty("endTime", this.goal.getChallengeDefinition().getLifeSpan().getEnd().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
 
 		// FIXME: 30/11/2015 unit not used
@@ -95,6 +107,8 @@ public class GoalResult implements ViewForClient {
 			case MONTH:
 				result.addProperty("length", "1 month");
 				break;
+			case NONE:
+				result.addProperty("length", "ne se repete pas");
 			default:
 				break;
 		}
@@ -102,31 +116,34 @@ public class GoalResult implements ViewForClient {
 		return result;
 	}
 
-    private Double computePercent(TimeBox timeSpan) {
+	private Double computePercent(TimeBox timeSpan) {
 
 		if(timeSpan.getEnd().isBefore(Model.getInstance().getCalculatorClock().getTime()))
 			return 100.0;
-        Interval between = new Interval(Model.getInstance().getCalculatorClock().getTime(), timeSpan.getEnd());
-        long days = between.toDuration().getStandardDays() + 1;
+		Interval between = new Interval(Model.getInstance().getCalculatorClock().getTime(), timeSpan.getEnd());
+		long days = between.toDuration().getStandardDays() + 1;
 
-        Interval totalInterval = new Interval(timeSpan.getStart(), timeSpan.getEnd());
-        long totalDays = totalInterval.toDuration().getStandardDays() + 1;
+		Interval totalInterval = new Interval(timeSpan.getStart(), timeSpan.getEnd());
+		long totalDays = totalInterval.toDuration().getStandardDays() + 1;
 
-        return  100. * (totalDays - days) / totalDays;
-    }
+		return  100. * (totalDays - days) / totalDays;
+	}
 
-    private long computeRemainingTime(TimeBox lifeSpan) { // FIXME: 09/12/2015 DUPLIQUE DANS CHALLENGE VIEW
-		if(lifeSpan.getEnd().isBefore(Model.getInstance().getCalculatorClock().getTime()))
-			return 0;
-        Interval between = new Interval(Model.getInstance().getCalculatorClock().getTime(), lifeSpan.getEnd());
-        return between.toDuration().getStandardDays() + 1;
-    }
+	private Long computeRemainingTime(TimeBox lifeSpan) {// FIXME: 09/12/2015 DUPLIQUE DANS CHALLENGE VIEW
+		Interval between;
+		try {
+			between = new Interval(Model.getInstance().getCalculatorClock().getTime(), lifeSpan.getEnd());
+		} catch (Throwable t){
+			return null;
+		}
+		return between.toDuration().getStandardDays();
+	}
 
-    public Goal getGoal() {
-        return goal;
-    }
+	public Goal getGoal() {
+		return goal;
+	}
 
-    public UUID getId() {
+	public UUID getId() {
 		return id;
 	}
 

@@ -23,21 +23,18 @@ public class GEN_BadgeTest {
 	@Before
 	public void createChallenge() {
 
-		ChallengeBuilder cb = Challenge.create("DSL done");
-		cb
-
-				.dontSend() // Just because it's a test
+		Challenge c = Challenge.create("DSL done")
 				.withIcon("http://d75822.medialib.glogster.com/media/dc/" +
 						"dcc6f991541e0ea8462e6d3de93f9f69e4a5d43be170ec4b25fdc113549843b0/happy-jpg.jpg")
 				.availableFrom(23, 11, 2015).to(7, 3, 2016)
-				.during(1, WEEK)
-				.atLevel("level")
+				.repeatEvery(1, WEEK)
+				.addLevel("level")
 				.rewards(2)
 				.withConditions()
 				.valueOf("BENNI_RAGE_QUIT").lowerThan(1).atLeast(5).times()
-				.end();
+				.endChallenge();
 
-		description = cb.getDescription();
+		description = c.getDescription();
 	}
 
 	@Test

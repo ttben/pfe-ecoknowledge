@@ -24,7 +24,7 @@ public class Level implements ILevelable {
 	}
 
 	@Override
-	public IRewardableWithIcon atLevel(String levelName) {
+	public IRewardableWithIcon addLevel(String levelName) {
 		this.name = levelName;
 		Rewards r = new Rewards(this);
 		return r;
@@ -50,8 +50,8 @@ public class Level implements ILevelable {
 	}
 
 	@Override
-	public void end() {
-		d.getChallengeBuilder().end();
+	public Challenge endChallenge() {
+		return d.getChallengeBuilder().end();
 	}
 
 	String getName() {

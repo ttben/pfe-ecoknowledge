@@ -17,7 +17,7 @@ public class ConditionLeast extends LevelBuilderGettable implements IAtLeastable
 	}
 
 	@Override
-	public ISecondActiveDurationnableAndAndable percent() {
+	public ISecondActiveDurationnableAndAndable percentOfTime() {
 		if (wfv.getAtLeast() > 100) {
 			throw new IllegalArgumentException("Can't have more than 100% time condition");
 		} else if (wfv.getAtLeast() < 1) {

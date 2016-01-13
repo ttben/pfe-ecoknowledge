@@ -11,6 +11,8 @@ public class TimeSpanGenerator {
 	public static TimeBox generateTimeSpan(Recurrence recurrence, Clock clock) {
 
 		switch (recurrence.getRecurrenceType()) {
+			case NONE:
+				return null;
 			case DAY:
 				return generateTimeSpanForDay(recurrence.getUnit(), clock);
 			case WEEK:
@@ -66,6 +68,8 @@ public class TimeSpanGenerator {
 				return generateTimeSpanForDay(recurrence.getUnit(), clock, next);
 			case WEEK:
 				return generateTimeSpanForWeek(recurrence.getUnit(), clock, next);
+			case NONE:
+				return null;
 			default:
 				return generateTimeSpanForMonth(recurrence.getUnit(), clock, next);
 		}

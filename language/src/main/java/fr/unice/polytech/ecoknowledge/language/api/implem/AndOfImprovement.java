@@ -23,12 +23,12 @@ public class AndOfImprovement extends LevelBuilderGettable implements IAndable {
 	}
 
 	@Override
-	public void end() {
-		getLevel().end();
+	public Challenge endChallenge() {
+		return getLevel().endChallenge();
 	}
 
 	@Override
-	public IRewardableWithIcon atLevel(String levelName) {
+	public IRewardableWithIcon addLevel(String levelName) {
 		return getLevel().newLevel(levelName);
 	}
 

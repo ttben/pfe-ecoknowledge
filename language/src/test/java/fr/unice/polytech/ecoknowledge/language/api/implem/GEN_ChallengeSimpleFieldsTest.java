@@ -22,18 +22,16 @@ public class GEN_ChallengeSimpleFieldsTest {
 	@Before
 	public void createChallenge() {
 
-		ChallengeBuilder cb = Challenge.create("DSL done");
-		cb
-				.dontSend() // Just because it's a test
+		Challenge c = Challenge.create("DSL done")
 				.availableFrom(23, 11, 2015).to(7, 3, 2016)
-				.during(1, WEEK)
-				.atLevel("level")
+				.repeatEvery(1, WEEK)
+				.addLevel("level")
 				.rewards(2)
 				.withConditions()
 				.valueOf("BENNI_RAGE_QUIT").lowerThan(1).atLeast(5).times()
-				.end();
+				.endChallenge();
 
-		description = cb.getDescription();
+		description = c.getDescription();
 	}
 
 	@Test
