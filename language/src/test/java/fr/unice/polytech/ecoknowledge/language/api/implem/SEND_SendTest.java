@@ -15,7 +15,7 @@ public class SEND_SendTest {
 
 		Challenge c = Challenge.create("I don't want it hot")
 				.withIcon("http://divagirl-inc.com/fitness/files/2011/11/pretty-xmas-girl.jpg")
-				.availableFrom(1,12).to(8,4,2016)
+				.availableFrom(1,1,2015).to(8,4,2016)
 				.noRepeat()
 				.addLevel("Pretty good")
 					.rewards(50)
