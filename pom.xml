@@ -21,6 +21,7 @@
         <module>domain</module>
         <module>language</module>
         <module>demo</module>
+        <module>feeder</module>
     </modules>
 
     <build>
