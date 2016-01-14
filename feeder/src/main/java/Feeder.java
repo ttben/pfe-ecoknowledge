@@ -1,3 +1,6 @@
+import fr.unice.polytech.ecoknowledge.domain.data.EcoknowledgeDataHandler;
+import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,6 +11,9 @@ import java.net.URLConnection;
  * Created by Benjamin on 14/01/2016.
  */
 public class Feeder implements Runnable {
+
+	EcoknowledgeDataHandler ecoknowledgeDataHandler = MongoDBHandler.getInstance();
+
 	static int number = 1;
 
 	int current = 0;

@@ -11,6 +11,13 @@
 
     <groupId>fr.unice.polytech.ecoknowledge</groupId>
     <artifactId>feeder</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>fr.unice.polytech.ecoknowledge</groupId>
+            <artifactId>domain</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 
 </project>
