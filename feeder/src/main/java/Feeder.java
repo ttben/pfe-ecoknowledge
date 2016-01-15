@@ -1,3 +1,5 @@
+import sun.util.resources.cldr.ja.TimeZoneNames_ja;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,10 +14,9 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Benjamin on 14/01/2016.
  */
-public class Feeder implements Runnable {
+public class Feeder extends Thread {
 
 	//EcoknowledgeDataHandler ecoknowledgeDataHandler = MongoDBHandler.getInstance();
-	private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
 	static int number = 0;
 
@@ -24,6 +25,9 @@ public class Feeder implements Runnable {
 
 	Feeder() {
 		current = ++number;
+		this.setName("Thread ["+current+"]");
+		System.out.printf("Thread [%s] - Built\n",this.getName());
+
 	}
 
 	Feeder(List<String> targetSensor) {
@@ -32,7 +36,6 @@ public class Feeder implements Runnable {
 		}
 
 		current = ++number;
-		executorService.scheduleWithFixedDelay(this, 0, 1, TimeUnit.SECONDS);
 
 	}
 
@@ -56,7 +59,7 @@ public class Feeder implements Runnable {
 //System.out.println("Received" + inputLine);
 					res += inputLine;
 				}
-				System.out.printf("Thread [%d] - Tracking sensor %s and received %s\n",current, sensorName,res);
+				System.out.printf("Thread [%s] - Tracking sensor %s and received %s\n",this.getName(), sensorName,res);
 
 				in.close();
 			}
@@ -66,38 +69,21 @@ public class Feeder implements Runnable {
 
 	}
 
-	public void stopToTrack(String targetSensor) {
-		System.out.printf("Thread [%d] - Stop tracking sensor %s\n",current, targetSensor);
+	public boolean stopToTrack(String targetSensor) {
+		System.out.printf("Thread [%s] - Stop tracking sensor %s\n",this.getName(), targetSensor);
 		this.targetSensor.remove(targetSensor);
 		if(this.targetSensor.size() == 0) {
-			System.out.printf("Thread [%d] - has nothing left to track -> kill\n",current);
-			kill();
-		}
-	}
-
-	public void kill() {
-		try {
-			System.out.printf("Thread [%d] - attempt to shutdown executor\n",current);
-			executorService.shutdown();
-			executorService.awaitTermination(5, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			System.err.printf("Thread [%d] - tasks interrupted\n",current);
-		} finally {
-			if (!executorService.isTerminated()) {
-				System.err.printf("Thread [%d] - cancel non-finished tasks\n",current);
-			}
-			executorService.shutdownNow();
-			System.out.printf("Thread [%d] - shutdown finished\n",current);
+			System.out.printf("Thread [%s] - has nothing left to track -> kill\n",this.getName());
+			this.interrupt();
+			return false;
+		} else {
+			System.out.printf("Thread [%s] - Remaining track %s\n",this.getName(), this.targetSensor);
+			return true;
 		}
 	}
 
 	public void startToTrack(String sensor) {
-		System.out.printf("Thread [%d] - Start tracking sensor %s\n",current, sensor);
-
+		System.out.printf("Thread [%s] - Start tracking sensor %s\n",this.getName(), sensor);
 		this.targetSensor.offer(sensor);
-		if(targetSensor.size() == 1) {
-			executorService = Executors.newScheduledThreadPool(1);
-			executorService.scheduleWithFixedDelay(this, 1,1, TimeUnit.SECONDS);
-		}
 	}
 }
