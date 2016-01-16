@@ -26,8 +26,8 @@ public class GEN_IncompleteTest {
 	@Before
 	public void createDescription() {
 		Challenge c = Challenge.create("Without period")
-				.availableFrom(2)
-				.to(4)
+				.availableFrom(2, 10, 2020)
+				.to(4, 10, 2020)
 				.repeatEvery(3, WEEK)
 				.addLevel("level")
 				.rewards(1)
