@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.server;
+package server;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

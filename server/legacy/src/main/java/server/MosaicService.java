@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.server;
+package server;
 
 import com.google.gson.JsonArray;
 import fr.unice.polytech.ecoknowledge.domain.Controller;

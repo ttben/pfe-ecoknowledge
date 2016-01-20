@@ -23,6 +23,7 @@
         <module>demo</module>
         <module>feeder</module>
         <module>fakeDataSource</module>
+        <module>data</module>
     </modules>
 
     <build>
