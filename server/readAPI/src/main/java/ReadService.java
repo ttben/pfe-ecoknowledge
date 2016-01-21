@@ -21,6 +21,8 @@ public class ReadService {
 	@Path("/badges/")
 	@Produces("application/json")
 	public Response getBadges(@QueryParam("userID") String userID) {
+		return null;
+		/*
 		try {
 			if (userID != null && !userID.isEmpty() && !userID.equalsIgnoreCase("undefined")) {
 				return Response.ok().entity(Model.getInstance().getBadgesOfUser(userID).toString()).build();
@@ -40,12 +42,15 @@ public class ReadService {
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
 		}
+		*/
 	}
 
 	@GET
 	@Path("/challenges")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllChallenges(@QueryParam("type") String typeOfChallenges, @QueryParam("userID") String userID) {
+		return null;
+		/*
 		try {
 			//	If user field is set
 			if (userID != null && !userID.isEmpty()) {
@@ -76,6 +81,7 @@ public class ReadService {
 			e.printStackTrace();
 			return Response.status(500).build();
 		}
+		*/
 	}
 
 	@GET
