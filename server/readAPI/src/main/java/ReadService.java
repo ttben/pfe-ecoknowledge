@@ -82,24 +82,13 @@ public class ReadService {
 	@Path("/goals/")
 	@Produces("application/json")
 	public Response getAllGoals(@QueryParam("userID") String userID) {
-
-		try {
-			if (userID != null && !userID.isEmpty() && !userID.equalsIgnoreCase("undefined")) {
-				System.out.println("User ID specified (" + userID + "). Displaying goals for user ...");
-				return Response.ok().entity(Controller.getInstance().getGoalsResultOfUser(userID).toString()).build();
-			} else {
-				return Response.status(403).build();
-			}
-		} catch (GoalNotFoundException e) {
-			e.printStackTrace();
-			return Response.status(404).build();
-		} catch (IncoherentDBContentException e) {
-			e.printStackTrace();
-			return Response.status(500).build();
-		} catch (NotReadableElementException e) {
-			e.printStackTrace();
-			return Response.status(500).build();
+		if (userID != null && !userID.isEmpty() && !userID.equalsIgnoreCase("undefined")) {
+			JsonArray goalResultArray = bdd.findGoalsOfUser(userID);
+			return Response.ok().entity(goalResultArray).build();
+		} else {
+			return Response.status(403).build();
 		}
+
 	}
 
 	@GET
@@ -108,15 +97,17 @@ public class ReadService {
 	public Response getGoalById(@PathParam("id") String goalID) {
 
 		try {
-			JsonObject result = Controller.getInstance().getGoalResult(goalID);
+			JsonObject result = bdd.findGoalResult(goalID);
+
+			if (result == null) {
+				throw new GoalNotFoundException(goalID);
+			}
+
 			return Response.ok().entity(result.toString()).build();
 
 		} catch (GoalNotFoundException e) {
 			e.printStackTrace();
 			return Response.status(404).build();
-		} catch (NotReadableElementException e) {
-			e.printStackTrace();
-			return Response.status(500).build();
 		}
 	}
 
@@ -125,35 +116,31 @@ public class ReadService {
 	@Path("/users/{id}/profile")
 	public Response getUser(@PathParam("id") String id) {
 		try {
-			return Response.ok().entity(Controller.getInstance().getUserProfile(id).toString()).build();
+			JsonObject user = bdd.findUser(id); // TODO: 20/01/2016 transform data for client
+
+			if (user == null) {
+				throw new UserNotFoundException(id);
+			}
+
+			return Response.ok().entity(user).build();
 		} catch (InvalidParameterException e) {
 			e.printStackTrace();
 			return Response.status(403).entity(e.getMessage()).build();
 		} catch (UserNotFoundException e) {
 			e.printStackTrace();
 			return Response.status(404).build();
-		} catch (NotReadableElementException e) {
-			e.printStackTrace();
-			return Response.status(500).build();
 		}
 	}
 
 	@GET
 	@Path("/users")
+	@Produces("application/json")
 	public Response getAllUsers() {
 		try {
-			return Response.ok().entity(Controller.getInstance().getAllUserProfiles().toString()).build();
+			JsonArray usersJsonArray = bdd.findAllUsers();
+			return Response.ok().entity(usersJsonArray).build();
 		} catch (InvalidParameterException e) {
 			return Response.status(403).entity(e.getMessage()).build();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return Response.status(500).entity(e.getMessage()).build();
-		} catch (IncoherentDBContentException e) {
-			e.printStackTrace();
-			return Response.status(500).build();
-		} catch (NotReadableElementException e) {
-			e.printStackTrace();
-			return Response.status(500).build();
 		}
 	}
 }

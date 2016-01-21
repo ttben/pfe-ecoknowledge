@@ -14,6 +14,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MongoDBConnector implements DocumentBDDConnector {
 	public static String DB_NAME = "pfe";
 	public static String CHALLENGES_COLLECTION = "challenges";
@@ -92,7 +95,6 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	@Override
 	public JsonArray findAllChallenges() {
 		return findAll(CHALLENGES_COLLECTION);
-
 	}
 
 	@Override
@@ -123,6 +125,25 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	@Override
 	public JsonObject findUser(String userID) {
 		return findOne(USERS_COLLECTION, userID);
+	}
+
+	public JsonArray findNotTakenChallengeForUser(String userID) {
+		JsonArray result = new JsonArray();
+
+		List<Document> challengesIDCursor =
+				getCollection(GOALS_COLLECTION)
+						.find(Filters.eq("user", userID))
+						.projection(Projections.include("challenge"))
+						.into(new ArrayList<Document>());
+
+
+		MongoCursor<Document> challengesCollection =
+				getCollection(CHALLENGES_COLLECTION)
+						.find(Filters.in("id", challengesIDCursor))
+						.iterator();
+
+
+		return result;
 	}
 
 	@Override
