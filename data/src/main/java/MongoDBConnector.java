@@ -19,6 +19,7 @@ import java.util.List;
 
 public class MongoDBConnector implements DocumentBDDConnector {
 	public static String DB_NAME = "pfe";
+	public static String TRACKING_REQUESTS_COLLECTION = "trackingRequests";
 	public static String CHALLENGES_COLLECTION = "challenges";
 	public static String USERS_COLLECTION = "users";
 	public static String GOALS_COLLECTION = "goals";
@@ -44,6 +45,18 @@ public class MongoDBConnector implements DocumentBDDConnector {
 
 		return instance;
 	}
+
+	public void storeTrackingRequest(JsonObject trackingRequestsDescription) {
+		MongoCollection<Document> collection = getCollection(TRACKING_REQUESTS_COLLECTION);
+		collection.insertOne(Document.parse(trackingRequestsDescription.toString()));
+		logger.info("\n\t+ Saved new tracking request :\n" + trackingRequestsDescription);
+	}
+
+	public JsonArray findAllTrackingRequest() {
+		// TODO: 24/01/2016 filter db requests where now between start and end dates, and where now - lastTimeUpdated >= THRESHOLD_TO_DEFINE
+		return findAll(TRACKING_REQUESTS_COLLECTION);
+	}
+
 
 	@Override
 	public void storeChallenge(JsonObject challengeJsonDescription) {
