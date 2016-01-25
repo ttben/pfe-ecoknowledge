@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>fr.unice.polytech.ecoknowledge</groupId>
-            <artifactId>domain</artifactId>
+            <artifactId>data</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
