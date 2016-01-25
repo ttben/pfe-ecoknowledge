@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.server;
+package server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -39,6 +39,7 @@ public class UserService {
 
 	@GET
 	@Path("/{id}/profile")
+	@Deprecated
 	public Response getUser(@PathParam("id") String id) {
 		try {
 			return Response.ok().entity(Controller.getInstance().getUserProfile(id).toString()).build();
@@ -55,6 +56,7 @@ public class UserService {
 	}
 
 	@GET
+	@Deprecated
 	public Response getAllUsers() {
 		try {
 			return Response.ok().entity(Controller.getInstance().getAllUserProfiles().toString()).build();

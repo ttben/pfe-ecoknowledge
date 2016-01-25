@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.server.config;
+package server.config;
 
 import java.io.IOException;
 import java.io.InputStream;

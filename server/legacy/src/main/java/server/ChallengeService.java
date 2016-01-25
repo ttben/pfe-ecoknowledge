@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.server;
+package server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -39,6 +39,7 @@ public class ChallengeService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Deprecated
 	public Response getAllChallenges(@QueryParam("type") String typeOfChallenges, @QueryParam("userID") String userID) {
 		try {
 			//	If user field is set
