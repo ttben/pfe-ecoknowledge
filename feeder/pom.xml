@@ -40,7 +40,7 @@
                 <configuration>
                     <configUri>
                     </configUri>
-                    <fork>true</fork>
+                    <fork>false</fork>
                 </configuration>
                 <dependencies>
                     <dependency>

@@ -16,7 +16,7 @@ public class Producer implements Runnable {
 	public void run() {
 		try {
 			// Create a ConnectionFactory
-			ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://lenovo:61616");
+			ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://127.0.0.1:61616");
 
 			// Create a Connection
 			Connection connection = connectionFactory.createConnection();
@@ -47,7 +47,6 @@ public class Producer implements Runnable {
 					}
 				}
 				Thread.sleep(10000);
-
 			}
 
 			/*

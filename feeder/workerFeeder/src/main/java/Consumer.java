@@ -43,7 +43,7 @@ public class Consumer implements Runnable, ExceptionListener, MessageListener {
 		try {
 
 			// Create a ConnectionFactory
-			ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://lenovo:61616");
+			ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://127.0.0.1:61616");
 
 			// Create a Connection
 			Connection connection = connectionFactory.createConnection();
