@@ -12,8 +12,11 @@ import exceptions.GoalNotFoundException;
 import exceptions.UserNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bson.BsonDocument;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,8 +56,20 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	}
 
 	public JsonArray findAllTrackingRequest() {
-		// TODO: 24/01/2016 filter db requests where now between start and end dates, and where now - lastTimeUpdated >= THRESHOLD_TO_DEFINE
-		return findAll(TRACKING_REQUESTS_COLLECTION);
+		JsonArray jsonArray = new JsonArray();
+
+		MongoCollection<Document> collection = getCollection(TRACKING_REQUESTS_COLLECTION);
+		MongoCursor<Document> cursor = collection.find().iterator();
+
+		try {
+			while (cursor.hasNext()) {
+				jsonArray.add(new JsonParser().parse(cursor.next().toJson()).getAsJsonObject());
+			}
+		} finally {
+			cursor.close();
+		}
+
+		return jsonArray;
 	}
 
 
@@ -302,5 +317,15 @@ public class MongoDBConnector implements DocumentBDDConnector {
 
 	public void deleteAllTrackingRequests() {
 		getCollection(TRACKING_REQUESTS_COLLECTION).drop();
+	}
+
+	public void updateTrackingRequest(JsonObject newDocument) {
+		System.out.println("UPDATING DOCUMENT : " + newDocument);
+		MongoCollection<Document> collection = getCollection(TRACKING_REQUESTS_COLLECTION);
+
+		String id = newDocument.get("_id").getAsString();
+		newDocument.remove("_id");
+
+		collection.replaceOne(Filters.eq("_id",new ObjectId(id)), Document.parse(newDocument.toString()));    // FIXME: 26/01/2016 DO NOTHING
 	}
 }
