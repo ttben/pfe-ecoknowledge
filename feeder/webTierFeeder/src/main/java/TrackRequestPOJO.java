@@ -1,10 +1,13 @@
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bson.types.ObjectId;
 
 /**
  * Created by Benjamin on 26/01/2016.
  */
 public class TrackRequestPOJO {
-	private String trackingID;
+	private String _id;
 	private String targetSensor;
 	private long dateStart;
 	private long dateEnd;
@@ -12,14 +15,14 @@ public class TrackRequestPOJO {
 	private long lastTimeUpdated;
 	private boolean beingUpdated;
 
-	public TrackRequestPOJO(@JsonProperty(value = "_id", required = false) String trackingID,
+	public TrackRequestPOJO(@JsonProperty(value = "_id", required = false) String _id,
 							@JsonProperty(value = "targetSensor", required = true) String targetSensor,
 							@JsonProperty(value = "dateStart", required = true) long dateStart,
 							@JsonProperty(value = "dateEnd", required = true) long dateEnd,
 							@JsonProperty(value = "frequency", required = true) long frequency,
 							@JsonProperty(value = "lastTimeUpdated", required = false) long lastTimeUpdated,
 							@JsonProperty(value = "beingUpdated", required = false) boolean beingUpdated) {
-		this.trackingID = trackingID;
+		this._id = _id;
 		this.targetSensor = targetSensor;
 		this.dateStart = dateStart;
 		this.dateEnd = dateEnd;
@@ -32,12 +35,15 @@ public class TrackRequestPOJO {
 		return this.targetSensor.equals(otherTrackingRequest.targetSensor);
 	}
 
-	public String getTrackingID() {
-		return trackingID;
+	public String get_id() {
+		if(_id == null) {
+			return new ObjectId().toString();
+		}
+		return _id;
 	}
 
-	public void setTrackingID(String trackingID) {
-		this.trackingID = trackingID;
+	public void set_id(String _id) {
+		this._id = _id;
 	}
 
 	public String getTargetSensor() {
@@ -86,5 +92,16 @@ public class TrackRequestPOJO {
 
 	public void setBeingUpdated(boolean beingUpdated) {
 		this.beingUpdated = beingUpdated;
+	}
+
+	@Override
+	public String toString() {
+		try {
+			return new ObjectMapper().writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		return "";
 	}
 }
