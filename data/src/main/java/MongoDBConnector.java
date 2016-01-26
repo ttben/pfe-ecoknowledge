@@ -300,4 +300,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		logger.info(dbName + " dropped !");
 	}
 
+	public void deleteAllTrackingRequests() {
+		getCollection(TRACKING_REQUESTS_COLLECTION).drop();
+	}
 }
