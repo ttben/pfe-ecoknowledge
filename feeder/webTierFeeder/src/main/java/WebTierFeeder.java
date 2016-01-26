@@ -40,6 +40,11 @@ public class WebTierFeeder {
 		return Response.ok().build();
 	}
 
+	@GET
+	public Response getAllTrackingRequests() {
+		return Response.ok().entity(bdd.findAllTrackingRequest().toString()).build();
+	}
+
 	@DELETE
 	public Response deleteAllTrackingRequests() {
 		bdd.deleteAllTrackingRequests();
