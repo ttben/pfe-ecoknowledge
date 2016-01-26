@@ -27,15 +27,31 @@ public class WebTierFeeder {
 
 			//	Check if sensor is already tracked
 			if(currentTrackingRequest.hasSameTargetThan(newTrackingRequest)) {
+				System.out.println("New tracking request collide with previous tracking request");
+				long newStartDate, newEndDate;
+
+				System.out.println("startdate?" + (newTrackingRequest.getDateStart() < currentTrackingRequest.getDateStart()));
+				System.out.println("enddate?" + (newTrackingRequest.getDateEnd() > currentTrackingRequest.getDateEnd()));
+
+				newStartDate = (newTrackingRequest.getDateStart() < currentTrackingRequest.getDateStart()) ? newTrackingRequest.getDateStart() : currentTrackingRequest.getDateStart();
+				newEndDate = (newTrackingRequest.getDateEnd() > currentTrackingRequest.getDateEnd()) ? newTrackingRequest.getDateEnd() : currentTrackingRequest.getDateEnd();
+
+				System.out.println("OLD TRACKING REQUEST " + currentTrackingRequest);
+
+				currentTrackingRequest.setDateEnd(newEndDate);
+				currentTrackingRequest.setDateStart(newStartDate);
+				System.out.println("NEW TRACKING REQUEST " + currentTrackingRequest);
+
+				JsonObject newTrackingRequestJsonObject = new JsonParser().parse(new ObjectMapper().writeValueAsString(currentTrackingRequest)).getAsJsonObject();
+				bdd.updateTrackingRequest(newTrackingRequestJsonObject);
+
 				return Response.ok().build();
 			}
 		}
 
-
-
 		// System.out.println(trackingRequestJsonDescription);
-
-		bdd.storeTrackingRequest(trackingRequestJsonDescription);
+		JsonObject newTrackingRequestJsonObject = new JsonParser().parse(new ObjectMapper().writeValueAsString(newTrackingRequest)).getAsJsonObject();
+		bdd.storeTrackingRequest(newTrackingRequestJsonObject);
 
 		return Response.ok().build();
 	}
