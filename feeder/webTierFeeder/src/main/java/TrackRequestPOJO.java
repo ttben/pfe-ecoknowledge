@@ -3,11 +3,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.types.ObjectId;
 
+import java.util.UUID;
+
 /**
  * Created by Benjamin on 26/01/2016.
  */
 public class TrackRequestPOJO {
-	private String _id;
+	private String id;
 	private String targetSensor;
 	private long dateStart;
 	private long dateEnd;
@@ -15,14 +17,14 @@ public class TrackRequestPOJO {
 	private long lastTimeUpdated;
 	private boolean beingUpdated;
 
-	public TrackRequestPOJO(@JsonProperty(value = "_id", required = false) String _id,
+	public TrackRequestPOJO(@JsonProperty(value = "id", required = false) String id,
 							@JsonProperty(value = "targetSensor", required = true) String targetSensor,
 							@JsonProperty(value = "dateStart", required = true) long dateStart,
 							@JsonProperty(value = "dateEnd", required = true) long dateEnd,
 							@JsonProperty(value = "frequency", required = true) long frequency,
 							@JsonProperty(value = "lastTimeUpdated", required = false) long lastTimeUpdated,
 							@JsonProperty(value = "beingUpdated", required = false) boolean beingUpdated) {
-		this._id = _id;
+		this.id = (id == null) ? UUID.randomUUID().toString() : id;
 		this.targetSensor = targetSensor;
 		this.dateStart = dateStart;
 		this.dateEnd = dateEnd;
@@ -35,15 +37,15 @@ public class TrackRequestPOJO {
 		return this.targetSensor.equals(otherTrackingRequest.targetSensor);
 	}
 
-	public String get_id() {
-		if(_id == null) {
+	public String getId() {
+		if(id == null) {
 			return new ObjectId().toString();
 		}
-		return _id;
+		return id;
 	}
 
-	public void set_id(String _id) {
-		this._id = _id;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getTargetSensor() {

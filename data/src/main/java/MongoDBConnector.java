@@ -12,11 +12,8 @@ import exceptions.GoalNotFoundException;
 import exceptions.UserNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bson.BsonDocument;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,20 +53,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	}
 
 	public JsonArray findAllTrackingRequest() {
-		JsonArray jsonArray = new JsonArray();
-
-		MongoCollection<Document> collection = getCollection(TRACKING_REQUESTS_COLLECTION);
-		MongoCursor<Document> cursor = collection.find().iterator();
-
-		try {
-			while (cursor.hasNext()) {
-				jsonArray.add(new JsonParser().parse(cursor.next().toJson()).getAsJsonObject());
-			}
-		} finally {
-			cursor.close();
-		}
-
-		return jsonArray;
+		return findAll(TRACKING_REQUESTS_COLLECTION);
 	}
 
 
@@ -209,7 +193,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		MongoCollection<Document> collection = getCollection(GOALS_COLLECTION);
 		Document result = collection.find(Filters.eq("id", goalID)).projection(Projections.exclude("_id")).first();
 
-		if(result != null) {
+		if (result != null) {
 			collection.deleteOne(result);
 		} else {
 			throw new GoalNotFoundException(goalID);
@@ -221,7 +205,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		MongoCollection<Document> collection = getCollection(CHALLENGES_COLLECTION);
 		Document result = collection.find(Filters.eq("id", challengeID)).projection(Projections.exclude("_id")).first();
 
-		if(result != null) {
+		if (result != null) {
 			collection.deleteOne(result);
 		} else {
 			throw new ChallengeNotFoundException(challengeID);
@@ -233,7 +217,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		MongoCollection<Document> collection = getCollection(USERS_COLLECTION);
 		Document result = collection.find(Filters.eq("id", userID)).projection(Projections.exclude("_id")).first();
 
-		if(result != null) {
+		if (result != null) {
 			collection.deleteOne(result);
 		} else {
 			throw new UserNotFoundException(userID);
@@ -319,13 +303,14 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		getCollection(TRACKING_REQUESTS_COLLECTION).drop();
 	}
 
-	public void updateTrackingRequest(JsonObject newDocument) {
-		System.out.println("UPDATING DOCUMENT : " + newDocument);
+	public void updateTrackingRequest(JsonObject newDocumentJsonDescription) {
+		System.out.println("UPDATING DOCUMENT : " + newDocumentJsonDescription);
+
 		MongoCollection<Document> collection = getCollection(TRACKING_REQUESTS_COLLECTION);
+		Document newDocument = Document.parse(newDocumentJsonDescription.toString());
 
-		String id = newDocument.get("_id").getAsString();
-		newDocument.remove("_id");
+		String id = newDocumentJsonDescription.get("id").getAsString();
 
-		collection.replaceOne(Filters.eq("_id",new ObjectId(id)), Document.parse(newDocument.toString()));    // FIXME: 26/01/2016 DO NOTHING
+		collection.updateOne(Filters.eq("id", id),new Document("$set", newDocument));    // FIXME: 26/01/2016 DO NOTHING
 	}
 }
