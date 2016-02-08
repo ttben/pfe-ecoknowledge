@@ -18,22 +18,21 @@ public class ExpressionTest {
 	JsonObject jsonExpression = new JsonObject();
 	JsonObject jsonLeftValueOperand = new JsonObject();
 	JsonObject jsonRightValueOperand = new JsonObject();
+	JsonObject jsonComparator = new JsonObject();
 
 	String symbolicName = "TMP_CLI";
 	Double value = 20.0;
-	String comparator =  ">";
+	String comparator = ">";
 
 	@Before
 	public void setUp() {
 		jsonLeftValueOperand.addProperty("symbolicName", symbolicName);
-		jsonLeftValueOperand.addProperty("type", "symbolicName");
-
 		jsonRightValueOperand.addProperty("value", value);
-		jsonRightValueOperand.addProperty("type", "value");
+		jsonComparator.addProperty("type", comparator);
 
 		jsonExpression.add("leftOperand", jsonLeftValueOperand);
 		jsonExpression.add("rightOperand", jsonRightValueOperand);
-		jsonExpression.addProperty("comparator", comparator);
+		jsonExpression.add("comparator", jsonComparator);
 	}
 
 	@Test
@@ -47,14 +46,14 @@ public class ExpressionTest {
 	public void anExpression_WhenBuilt_ShouldHaveProperTypeOfLeftOperand() throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Expression result = objectMapper.readValue(jsonExpression.toString(), Expression.class);
-		assertTrue(result.getLeftOperand().getValue() instanceof String);
+		assertTrue(result.getLeftOperand().getSymbolicName() instanceof String);
 	}
 
 	@Test
 	public void anExpression_WhenBuilt_ShouldHaveProperValueOfLeftOperand() throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Expression result = objectMapper.readValue(jsonExpression.toString(), Expression.class);
-		assertEquals(symbolicName, result.getLeftOperand().getValue());
+		assertEquals(symbolicName, result.getLeftOperand().getSymbolicName());
 	}
 
 	@Test

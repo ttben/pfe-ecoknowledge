@@ -3,22 +3,27 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SymbolicName implements Operand {
+public class SymbolicName {
 
-	private String name;
+	private String symbolicName;
 
 	@JsonCreator
 	public SymbolicName(@JsonProperty(value = "symbolicName", required = true) String name) {
-		this.name = name;
+		this.symbolicName = name;
+	}
+
+	public String getSymbolicName() {
+		return this.symbolicName;
 	}
 
 	@Override
-	public boolean isRequired() {
-		return true;
-	}
+	public boolean equals(Object obj) {
+		if (!(obj instanceof SymbolicName)) {
+			return false;
+		}
 
-	@Override
-	public String getValue() {
-		return this.name;
+		SymbolicName symbolicName = (SymbolicName) obj;
+
+		return this.symbolicName.equals(symbolicName.symbolicName);
 	}
 }

@@ -1,27 +1,27 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
-import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
-import fr.unice.polytech.ecoknowledge.domain.model.Level;
-import fr.unice.polytech.ecoknowledge.domain.model.TimeBox;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.StandardCondition;
-import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Operand;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.SymbolicName;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCondition;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import org.joda.time.DateTime;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class RetrieveRequiredVisitor implements GoalVisitor{
+public class RetrieveRequiredVisitor implements GoalVisitor {
 
 	private Goal goal;
 
 	/**
 	 * Symbolic Name : [
-	 * 		{
-	 * 		 	start : ___
-	 * 		 	end : ___
-	 * 		}
+	 * {
+	 * start : ___
+	 * end : ___
+	 * }
 	 * ]
 	 */
 	private Map<String, TimeBox> result = new HashMap<>();
@@ -55,17 +55,17 @@ public class RetrieveRequiredVisitor implements GoalVisitor{
 	@Override
 	public void visit(StandardCondition condition) {
 		//	Retrieve symbolic names for condition
-		Operand requiredOperand = condition.getRequiredOperand();
+		SymbolicName requiredOperand = condition.getRequiredOperand();
 
 		//	Retrieves sensor bound for symbolic names
-		String symbolicName = requiredOperand.getValue().toString();
+		String symbolicName = requiredOperand.getSymbolicName().toString();
 		String sensorBound = goal.getSensorNameForGivenSymbolicName(symbolicName);
 
 		TimeBox timeBox = goal.getTimeSpan();
 		TimeBox oldTimeBox = this.result.get(sensorBound);
 
 		TimeBox mergedTimeBox = timeBox;
-		if(oldTimeBox != null) {
+		if (oldTimeBox != null) {
 			mergedTimeBox = merge(timeBox, oldTimeBox);
 		}
 

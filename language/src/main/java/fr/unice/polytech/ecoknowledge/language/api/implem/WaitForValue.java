@@ -1,85 +1,126 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.LevelBuilderGettable;
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.AT_LEAST_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IActiveDurationnableAndConditionsable;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionable;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionsable;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.ISecondActiveDurationnableAndAndable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.*;
 
 /**
  * Created by Sébastien on 25/11/2015.
  */
-public class WaitForValue extends ChallengeBuilderGettable implements IActiveDurationnableAndConditionsable {
+public class WaitForValue extends LevelBuilderGettable implements IActiveDurationnableAndConditionsable {
 
-    private Condition condition;
-    private WEEK_PERIOD period = null;
-    private DAY_MOMENT moment = null;
-    private WaitAfterOn wao = null;
+	private Condition condition;
+	private WEEK_PERIOD period = null;
+	private DAY_MOMENT moment = null;
+	private WaitAfterOn wao = null;
 
-    public WaitForValue(Condition condition) {
-        this.condition = condition;
-    }
+	private Integer atLeast = null;
+	private AT_LEAST_TYPE type = null;
 
-    @Override
-    public ISecondActiveDurationnableAndAndable on(WEEK_PERIOD period, DAY_MOMENT moment) {
-        this.period = period;
-        this.moment = moment;
-        getCondition().setWaitForValue(this);
-        return new WaitAfterOn(this);
-    }
+	public WaitForValue(Condition condition) {
+		this.condition = condition;
+		period = WEEK_PERIOD.ALWAYS;
+		moment = DAY_MOMENT.ALL;
+	}
 
-    @Override
-    public ISecondActiveDurationnableAndAndable on(WEEK_PERIOD period) {
-        this.period = period;
-        getCondition().setWaitForValue(this);
-        return new WaitAfterOn(this);
-    }
+	@Override
+	public ISecondActiveDurationnableAndAndable on(WEEK_PERIOD period, DAY_MOMENT moment) {
+		this.period = period;
+		this.moment = moment;
+		getCondition().setWaitForValue(this);
+		return new WaitAfterOn(this);
+	}
 
-    @Override
-    public void end() {
-        getChallengeBuilder().end();
+	@Override
+	public ISecondActiveDurationnableAndAndable on(WEEK_PERIOD period) {
+		this.period = period;
+		getCondition().setWaitForValue(this);
+		return new WaitAfterOn(this);
+	}
 
-    }
+	@Override
+	public Challenge endChallenge() {
+		return getLevel().endChallenge();
+	}
 
-    @Override
-    public IConditionable averageOf(String sensor) {
-        Condition c = new Condition(this.getCondition().getConditions(), ConditionType.AVERAGE, sensor);
-        getChallengeBuilder().addCondition(c);
-        return c;
-    }
+	@Override
+	public IConditionable averageOf(String sensor) {
+		Condition c = new Condition(this.getCondition().getConditions(), ConditionType.AVERAGE, sensor);
+		getLevel().addCondition(c);
+		return c;
+	}
 
-    @Override
-    public IConditionable valueOf(String sensor) {
-        Condition c = new Condition(this.getCondition().getConditions(), ConditionType.VALUE_OF, sensor);
-        getChallengeBuilder().addCondition(c);
-        return c;
-    }
+	@Override
+	public IConditionable valueOf(String sensor) {
+		Condition c = new Condition(this.getCondition().getConditions(), ConditionType.VALUE_OF, sensor);
+		getLevel().addCondition(c);
+		return c;
+	}
 
-    @Override
-    ChallengeBuilder getChallengeBuilder() {
-        return condition.getChallengeBuilder();
-    }
+	@Override
+	public IImprovable increase(String sensor) {
+		Improvement i = new Improvement(condition.getConditions(), sensor, IMPROVEMENT_TYPE.INCREASE);
+		return i;
+	}
 
-    void addWaitAfterOn(WaitAfterOn wao){
-        this.wao = wao;
-    }
+	@Override
+	public IImprovable decrease(String sensor) {
+		Improvement i = new Improvement(condition.getConditions(), sensor, IMPROVEMENT_TYPE.DECREASE);
+		return i;
+	}
 
-    Condition getCondition(){
-        return condition;
-    }
+	void addWaitAfterOn(WaitAfterOn wao) {
+		this.wao = wao;
+	}
 
-    @Override
-    public String toString() {
-        return "WaitForValue{" +
-                "wao=" + wao +
-                ", moment=" + moment +
-                ", period=" + period +
-                '}';
-    }
+	Condition getCondition() {
+		return condition;
+	}
 
-    @Override
-    public IConditionsable and() {
-        return getCondition().getConditions();
-    }
+	@Override
+	public IConditionsable and() {
+		return getCondition().getConditions();
+	}
+
+	@Override
+	public IAtLeastable atLeast(Integer value) {
+		setAtLeast(value);
+		return new ConditionLeast(this);
+	}
+
+	void setAtLeast(Integer atLeast) {
+		this.atLeast = atLeast;
+	}
+
+	void setType(AT_LEAST_TYPE type) {
+		this.type = type;
+	}
+
+	Integer getAtLeast() {
+		return atLeast;
+	}
+
+	AT_LEAST_TYPE getType() {
+		return type;
+	}
+
+	WEEK_PERIOD getPeriod() {
+		return period;
+	}
+
+	DAY_MOMENT getMoment() {
+		return moment;
+	}
+
+	@Override
+	protected Level getLevel() {
+		return condition.getLevel();
+	}
+
+	@Override
+	public IRewardableWithIcon addLevel(String levelName) {
+		return getLevel().newLevel(levelName);
+	}
 }

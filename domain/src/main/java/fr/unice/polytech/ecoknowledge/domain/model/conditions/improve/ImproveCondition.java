@@ -2,29 +2,45 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.improve;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
-import fr.unice.polytech.ecoknowledge.domain.model.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
-import fr.unice.polytech.ecoknowledge.domain.calculator.ConditionResult;
+import fr.unice.polytech.ecoknowledge.domain.model.deserializer.ImproveConditionDeserializer;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 
-public class ImproveCondition implements Condition{
+@JsonDeserialize(using = ImproveConditionDeserializer.class)
+public class ImproveCondition implements Condition {
 
-	private TimeBox comparedPeriod;
+    private final String symbolicName;
+    private final String improvementType;
+    private TimeBox referencePeriod;
 	private Double threshold;
 
 	@JsonCreator
-	public ImproveCondition(@JsonProperty(value = "referencePeriod", required = true) TimeBox comparedPeriod,
-							@JsonProperty(value = "threshold", required = true) Double threshold) {
-		this.comparedPeriod = comparedPeriod;
+	public ImproveCondition(@JsonProperty(value = "referencePeriod", required = true) TimeBox referencePeriod,
+							@JsonProperty(value = "threshold", required = true) Double threshold,
+                            @JsonProperty(value = "improvementType", required = true) String type,
+                            @JsonProperty(value = "symbolicName", required = true) String symbolicName) {
+		this.referencePeriod = referencePeriod;
 		this.threshold = threshold;
+        this.improvementType = type;
+        this.symbolicName = symbolicName;
 	}
 
-	public TimeBox getComparedPeriod() {
-		return comparedPeriod;
+	public String getSymbolicName() {
+		return symbolicName;
 	}
 
-	public void setComparedPeriod(TimeBox comparedPeriod) {
-		this.comparedPeriod = comparedPeriod;
+	public String getImprovementType() {
+		return improvementType;
+	}
+
+	public TimeBox getReferencePeriod() {
+		return referencePeriod;
+	}
+
+	public void setReferencePeriod(TimeBox referencePeriod) {
+		this.referencePeriod = referencePeriod;
 	}
 
 	public Double getThreshold() {

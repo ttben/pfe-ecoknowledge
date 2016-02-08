@@ -1,109 +1,119 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
+import fr.unice.polytech.ecoknowledge.language.api.config.AddressReacher;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IBuildable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IChallengeable;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IConditionsable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.IChallengeableIcon;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDurationnable;
-
-import java.util.ArrayList;
+import fr.unice.polytech.ecoknowledge.language.api.util.HTTPCall;
 import org.json.JSONObject;
+
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Sébastien on 25/11/2015.
  */
-public class ChallengeBuilder implements IChallengeable {
+public class ChallengeBuilder implements IChallengeableIcon {
 
-    private String name;
-    private Period p = null;
-    private Integer time = null;
-    private DURATION_TYPE type = null;
-    private Integer points = null;
-    private List<Condition> conditions = new ArrayList<>();
+	// ------- FIELDS ------- //
 
-    private JSONObject description = null;
+	// Specific fields of the challenge builder
+	private String name;
+	private String iconURL = null;
+	private Period p = null;
+	private Integer time = null;
+	private DURATION_TYPE type = null;
+	private List<Level> levels = new ArrayList<>();
 
-    ChallengeBuilder(String name){
-        this.name = name;
-    }
 
-    void end() {
-        description = JSONBuilder.parse(this);
-    }
+	// ------- CONSTRUCTOR ------- //
 
-    @Override
-    public IDurationnable from(int day) {
-        Period p = new Period(this, "" + day);
-        return p;
-    }
-    @Override
-    public IDurationnable from(int day, int month) {
-        Period p = new Period(this, day + "/" + month);
-        return p;
-    }
-    @Override
-    public IDurationnable from(int day, int month, int year) {
-        Period p = new Period(this, day + "/" + month + "/" + year);
-        return p;
-    }
+	public ChallengeBuilder(String name) {
+		this.name = name;
+	}
 
-    void addPeriod(Period period) {
-        p = period;
-    }
 
-    void addCondition(Condition c) {
-        conditions.add(c);
-    }
+	// ------- API Methods ------- //
 
-    @Override
-    public String toString() {
-        return "ChallengeBuilder{" +
-                "p=" + p +
-                ", time=" + time +
-                ", type=" + type +
-                ", points=" + points +
-                ", conditions=" + conditions +
-                '}';
-    }
+	@Override
+	public IDurationnable availableFrom(int day) {
+		reinit();
+		Period p = new Period(this, day);
+		return p;
+	}
 
-    Period getP() {
-        return p;
-    }
+	@Override
+	public IDurationnable availableFrom(int day, int month) {
+		reinit();
+		Period p = new Period(this, day, month);
+		return p;
+	}
 
-    Integer getTime() {
-        return time;
-    }
+	@Override
+	public IDurationnable availableFrom(int day, int month, int year) {
+		reinit();
+		Period p = new Period(this, day, month, year);
+		return p;
+	}
 
-    DURATION_TYPE getType() {
-        return type;
-    }
+	@Override
+	public IChallengeable withIcon(String url) {
+		this.iconURL = url;
+		return this;
+	}
 
-    Integer getPoints() {
-        return points;
-    }
+	Challenge end() {
+		return new Challenge(JSONBuilder.parse(this), this);
+	}
 
-    List<Condition> getConditions() {
-        return conditions;
-    }
+	// ------- Accessors ------- //
 
-    String getName() {
-        return name;
-    }
+	void addPeriod(Period period) {
+		p = period;
+	}
 
-    public JSONObject getDescription() {
-        return description;
-    }
+	private void reinit() {
+		p = null;
+		time = null;
+		type = null;
+	}
 
-    void setTime(Integer time) {
-        this.time = time;
-    }
+	Period getP() {
+		return p;
+	}
 
-    void setType(DURATION_TYPE type) {
-        this.type = type;
-    }
+	Integer getTime() {
+		return time;
+	}
 
-    void setPoints(Integer points) {
-        this.points = points;
-    }
+	DURATION_TYPE getType() {
+		return type;
+	}
+
+	String getName() {
+		return name;
+	}
+
+	void setTime(Integer time) {
+		this.time = time;
+	}
+
+	void setType(DURATION_TYPE type) {
+		this.type = type;
+	}
+
+	String getIcon() {
+		return iconURL;
+	}
+
+	List<Level> getLevels() {
+		return levels;
+	}
+
+	void addLevel(Level level) {
+		levels.add(level);
+	}
+
 }

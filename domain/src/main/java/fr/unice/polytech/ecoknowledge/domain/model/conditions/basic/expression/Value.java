@@ -3,7 +3,7 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Value implements Operand {
+public class Value {
 
 	private double value;
 
@@ -12,13 +12,18 @@ public class Value implements Operand {
 		this.value = value;
 	}
 
-	@Override
-	public boolean isRequired() {
-		return false;
+	public Double getValue() {
+		return this.value;
 	}
 
 	@Override
-	public Double getValue() {
-		return this.value;
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Value)) {
+			return false;
+		}
+
+		Value value = (Value) obj;
+
+		return this.value == value.value;
 	}
 }

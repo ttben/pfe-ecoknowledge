@@ -9,7 +9,7 @@ public class Variation {
 
 	@JsonCreator
 	public Variation(@JsonProperty(value = "variation-type", required = true) VariationType variationType,
-					 @JsonProperty(value = "value", required = true)Double threshold) {
+					 @JsonProperty(value = "value", required = true) Double threshold) {
 		this.variationType = variationType;
 		this.threshold = threshold;
 	}

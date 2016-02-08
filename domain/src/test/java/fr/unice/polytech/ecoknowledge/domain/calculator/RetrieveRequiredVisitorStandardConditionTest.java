@@ -2,20 +2,17 @@ package fr.unice.polytech.ecoknowledge.domain.calculator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.TestUtils;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
-import fr.unice.polytech.ecoknowledge.domain.model.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,41 +39,19 @@ public class RetrieveRequiredVisitorStandardConditionTest {
 
 	@Before
 	public void setUp() throws Exception {
-		BufferedReader br = null;
-		String result = "";
-
-		try {
-
-			String currentLine;
-
-			br = new BufferedReader(new FileReader("./src/test/java/fr/unice/polytech/ecoknowledge/domain/calculator/challenge-example-sample1.json"));
-
-			while ((currentLine = br.readLine()) != null) {
-				result = result.concat(currentLine);
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null) br.close();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
 
 		Map<String, String> fakedSymbolicNameToSensorNamesMap = new HashMap<>();
 		fakedSymbolicNameToSensorNamesMap.put("TMP_CLI", aSensorName);
 		fakedSymbolicNameToSensorNamesMap.put("TMP_AMB", anotherSensorName);
 		willReturn(fakedSymbolicNameToSensorNamesMap).given(user).getSymbolicNameToSensorNameMap();
 
-		jsonObject = new JsonParser().parse(result).getAsJsonObject();
+		jsonObject = TestUtils.getFakeJson(1);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
-		lifeSpan = challenge.getTimeSpan();
+		lifeSpan = challenge.getLifeSpan();
 
-		goal = new Goal(challenge, lifeSpan, user);
+		goal = new Goal(null, challenge, lifeSpan, user, null);
 	}
 
 	@Test

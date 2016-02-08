@@ -1,8 +1,8 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IChallengeable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDurationnable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDuringable;
+import org.joda.time.DateTime;
 
 import java.util.Calendar;
 
@@ -11,75 +11,71 @@ import java.util.Calendar;
  */
 public class Period implements IDurationnable {
 
-    private ChallengeBuilder cb;
+	private ChallengeBuilder cb;
 
-    private Calendar start = null;
-    private Calendar end = null;
+	private DateTime start = null;
+	private DateTime end = null;
 
-    Period(ChallengeBuilder challengeBuilder, String date) {
-        start = parseDate(date, false);
-        cb = challengeBuilder;
-        challengeBuilder.addPeriod(this);
-    }
+	Period(ChallengeBuilder challengeBuilder, int day) {
+		start = parseDate(day, null, null, false);
+		cb = challengeBuilder;
+		challengeBuilder.addPeriod(this);
+	}
 
-    @Override
-    public IDuringable to(int day) {
-        end = parseDate("" + day, true);
-        return new During(cb);
-    }
-    @Override
-    public IDuringable to(int day, int month) {
-        end = parseDate(day + "/" + month, true);
-        return new During(cb);
-    }
-    @Override
-    public IDuringable to(int day, int month, int year) {
-        end = parseDate(day + "/" + month + "/" + year, true);
-        return new During(cb);
-    }
+	Period(ChallengeBuilder challengeBuilder, int day, int month) {
+		start = parseDate(day, month, null, false);
+		cb = challengeBuilder;
+		challengeBuilder.addPeriod(this);
+	}
+
+	Period(ChallengeBuilder challengeBuilder, int day, int month, int year) {
+		start = parseDate(day, month, year, false);
+		cb = challengeBuilder;
+		challengeBuilder.addPeriod(this);
+	}
+
+	@Override
+	public IDuringable to(int day) {
+		end = parseDate(day, null, null, true);
+		if (end.isBefore(start))
+			throw new IllegalArgumentException("Can't have a end date before a start date : "
+					+ start.toString() + ", " + end.toString());
+		return new During(cb);
+	}
+
+	@Override
+	public IDuringable to(int day, int month) {
+		end = parseDate(day, month, null, true);
+		if (end.isBefore(start))
+			throw new IllegalArgumentException("Can't have a end date before a start date : "
+					+ start.toString() + ", " + end.toString());
+		return new During(cb);
+	}
+
+	@Override
+	public IDuringable to(int day, int month, int year) {
+		end = parseDate(day, month, year, true);
+		if (end.isBefore(start))
+			throw new IllegalArgumentException("Can't have a end date before a start date : "
+					+ start.toString() + ", " + end.toString());
+		return new During(cb);
+	}
 
 
-    private Calendar parseDate(String d, boolean endDay){
-        Calendar date = Calendar.getInstance();
-        try {
-            String[] args = d.split("/");
-            if(args.length > 0)
-                date.set(Calendar.DAY_OF_MONTH, Integer.parseInt(args[0]));
-            if(args.length > 1)
-                date.set(Calendar.MONTH, Integer.parseInt(args[1]) - 1);
-            if(args.length > 2)
-                date.set(Calendar.YEAR, Integer.parseInt(args[2]));
-            if(endDay) {
-                date.set(Calendar.HOUR_OF_DAY, 23);
-                date.set(Calendar.MINUTE, 59);
-                date.set(Calendar.SECOND, 59);
-                date.set(Calendar.MILLISECOND, 0);
-            }
-            else{
-                date.set(Calendar.HOUR_OF_DAY, 0);
-                date.set(Calendar.MINUTE, 0);
-                date.set(Calendar.SECOND, 1);
-                date.set(Calendar.MILLISECOND, 0);
-            }
-        }catch (Throwable t){
-            return null;
-        }
-        return date;
-    }
+	private DateTime parseDate(int day, Integer month, Integer year, boolean end) {
 
-    @Override
-    public String toString() {
-        return "Period{" +
-                ", start=" + start.getTime().toString() +
-                ", end=" + end.getTime().toString() +
-                '}';
-    }
+		return new DateTime(
+				(year == null) ? Calendar.getInstance().get(Calendar.YEAR) : year,
+				(month == null) ? Calendar.getInstance().get(Calendar.MONTH)+1 : month,
+				day, end ? 23 : 0, end ? 59 : 0, end ? 59 : 0
+		);
+	}
 
-    Calendar getStart() {
-        return start;
-    }
+	DateTime getStart() {
+		return start;
+	}
 
-    Calendar getEnd() {
-        return end;
-    }
+	DateTime getEnd() {
+		return end;
+	}
 }

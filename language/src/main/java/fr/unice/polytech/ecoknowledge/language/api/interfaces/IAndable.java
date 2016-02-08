@@ -3,8 +3,8 @@ package fr.unice.polytech.ecoknowledge.language.api.interfaces;
 /**
  * Created by Sébastien on 25/11/2015.
  */
-public interface IAndable extends IBuildable {
+public interface IAndable extends IBuildable, ILevelable {
 
-    public IConditionsable and();
+	public IConditionsable and();
 
 }

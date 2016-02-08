@@ -1,18 +1,15 @@
 package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
-import fr.unice.polytech.ecoknowledge.domain.model.conditions.Day;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
-
-import java.util.ArrayList;
-import java.util.List;
+import fr.unice.polytech.ecoknowledge.domain.model.conditions.time.TimeFilter;
 
 public abstract class BasicCondition implements Condition {
 
 	protected Expression expression;
-	protected List<Day> targetDays = new ArrayList<>();
+	protected TimeFilter targetDays;
 
-	public BasicCondition(Expression expression, List<Day> targetDays) {
+	public BasicCondition(Expression expression, TimeFilter targetDays) {
 
 		this.expression = expression;
 		this.targetDays = targetDays;
@@ -26,11 +23,30 @@ public abstract class BasicCondition implements Condition {
 		this.expression = expression;
 	}
 
-	public List<Day> getTargetDays() {
+	public TimeFilter getTargetDays() {
+		if (targetDays == null) return new TimeFilter();
 		return targetDays;
 	}
 
-	public void setTargetDays(List<Day> targetDays) {
+	public void setTargetDays(TimeFilter targetDays) {
 		this.targetDays = targetDays;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof BasicCondition)) {
+			return false;
+		}
+
+		BasicCondition basicCondition = (BasicCondition) obj;
+
+		// FIXME: 30/11/2015 targetDays can not be null (not yet implemented)
+		if (targetDays != null) {
+			return expression.equals(basicCondition.expression)
+					&& targetDays.equals(basicCondition.targetDays);
+		} else {
+			return expression.equals(basicCondition.expression);
+		}
+	}
+
 }

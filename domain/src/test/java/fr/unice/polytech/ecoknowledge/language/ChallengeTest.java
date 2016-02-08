@@ -1,7 +1,7 @@
 package fr.unice.polytech.ecoknowledge.language;
 
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.model.Challenge;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 
 public class ChallengeTest {
 

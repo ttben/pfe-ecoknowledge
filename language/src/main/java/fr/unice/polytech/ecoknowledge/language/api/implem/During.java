@@ -2,28 +2,35 @@ package fr.unice.polytech.ecoknowledge.language.api.implem;
 
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDuringable;
-import fr.unice.polytech.ecoknowledge.language.api.interfaces.IRewardable;
+import fr.unice.polytech.ecoknowledge.language.api.interfaces.ILevelable;
 
 /**
  * Created by Sébastien on 27/11/2015.
  */
-public class During extends ChallengeBuilderGettable implements IDuringable {
+public class During implements IDuringable {
 
-    ChallengeBuilder cb;
+	ChallengeBuilder cb;
 
-    During(ChallengeBuilder cb){
-        this.cb = cb;
-    }
+	During(ChallengeBuilder cb) {
+		this.cb = cb;
+	}
 
-    @Override
-    public IRewardable during(Integer value, DURATION_TYPE type) {
-        getChallengeBuilder().setTime(value);
-        getChallengeBuilder().setType(type);
-        return new Rewards(this);
-    }
+	@Override
+	public ILevelable repeatEvery(Integer value, DURATION_TYPE type) {
+		cb.setTime(value);
+		cb.setType(type);
+		return new Level(this);
+	}
 
-    @Override
-    ChallengeBuilder getChallengeBuilder() {
-        return cb;
-    }
+	@Override
+	public ILevelable noRepeat() {
+		cb.setTime(1);
+		cb.setType(DURATION_TYPE.NONE);
+		return new Level(this);
+	}
+
+	ChallengeBuilder getChallengeBuilder() {
+		return cb;
+	}
+
 }
