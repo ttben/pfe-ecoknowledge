@@ -27,6 +27,7 @@
         <module>feeder</module>
         <module>fakeDataSource</module>
         <module>data</module>
+        <module>calculator</module>
     </modules>
 
     <build>
