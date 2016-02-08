@@ -7,15 +7,15 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fr.unice.polytech.ecoknowledge</groupId>
+    <groupId>fr.unice.polytech.ecoknowledge.calculator</groupId>
     <artifactId>calculator</artifactId>
     <packaging>pom</packaging>
 
     <name>calculator</name>
     <url>http://maven.apache.org</url>
     <modules>
-        <module>workerCalculator</module>
-        <module>producerCalculator</module>
+        <module>worker</module>
+        <module>producer</module>
     </modules>
 
     <properties>
