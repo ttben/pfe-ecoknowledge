@@ -1,0 +1,1 @@
+cd ..\data & mvn clean install & cd ..\feeder & mvn clean install & xcopy /Y .\webTierFeeder\target\webTiersFeeder-1.0-SNAPSHOT.war "C:\Program Files (x86)\apache-tomcat-8.0.29\webapps"
