@@ -1,10 +1,11 @@
-package fr.unice.polytech.ecoknowledge.domain.data;
+package core;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.model.Goal;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.ChallengeNotFoundException;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
+import exceptions.ChallengeNotFoundException;
+import exceptions.GoalNotFoundException;
+import exceptions.UserNotFoundException;
+
 
 public interface DocumentBDDConnector {
 	void storeChallenge(JsonObject challengeJsonDescription);

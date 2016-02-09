@@ -1,22 +1,14 @@
 package fr.unice.polytech.ecoknowledge;
 
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.Model;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
 
-import javax.swing.text.html.parser.*;
-import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 
 /**
  * Created by Sébastien on 13/12/2015.
  */
-
-
-import javax.ws.rs.client.*;
-import javax.ws.rs.core.Response;
 
 public class DEMO1CreateUser {
 

@@ -1,6 +1,7 @@
 package fr.unice.polytech.ecoknowledge.domain.model.exceptions;
 
-import fr.unice.polytech.ecoknowledge.domain.exceptions.EcoKnowledgeException;
+
+import exceptions.EcoKnowledgeException;
 
 /**
  * Created by Sébastien on 11/12/2015.

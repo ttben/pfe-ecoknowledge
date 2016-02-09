@@ -1,26 +1,27 @@
-package fr.unice.polytech.ecoknowledge.domain.data.utils;
+package core;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
-import fr.unice.polytech.ecoknowledge.domain.data.DocumentBDDConnector;
-import fr.unice.polytech.ecoknowledge.domain.data.GoalNotFoundException;
-import fr.unice.polytech.ecoknowledge.domain.model.Goal;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.ChallengeNotFoundException;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
+import exceptions.ChallengeNotFoundException;
+import exceptions.GoalNotFoundException;
+import exceptions.UserNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MongoDBConnector implements DocumentBDDConnector {
 	public static String DB_NAME = "pfe";
+	public static String TRACKING_REQUESTS_COLLECTION = "trackingRequests";
 	public static String CHALLENGES_COLLECTION = "challenges";
 	public static String USERS_COLLECTION = "users";
 	public static String GOALS_COLLECTION = "goals";
@@ -46,6 +47,17 @@ public class MongoDBConnector implements DocumentBDDConnector {
 
 		return instance;
 	}
+
+	public void storeTrackingRequest(JsonObject trackingRequestsDescription) {
+		MongoCollection<Document> collection = getCollection(TRACKING_REQUESTS_COLLECTION);
+		collection.insertOne(Document.parse(trackingRequestsDescription.toString()));
+		logger.info("\n\t+ Saved new tracking request :\n" + trackingRequestsDescription);
+	}
+
+	public JsonArray findAllTrackingRequest() {
+		return findAll(TRACKING_REQUESTS_COLLECTION);
+	}
+
 
 	@Override
 	public void storeChallenge(JsonObject challengeJsonDescription) {
@@ -97,7 +109,6 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	@Override
 	public JsonArray findAllChallenges() {
 		return findAll(CHALLENGES_COLLECTION);
-
 	}
 
 	@Override
@@ -128,6 +139,25 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	@Override
 	public JsonObject findUser(String userID) {
 		return findOne(USERS_COLLECTION, userID);
+	}
+
+	public JsonArray findNotTakenChallengeForUser(String userID) {
+		JsonArray result = new JsonArray();
+
+		List<Document> challengesIDCursor =
+				getCollection(GOALS_COLLECTION)
+						.find(Filters.eq("user", userID))
+						.projection(Projections.include("challenge"))
+						.into(new ArrayList<Document>());
+
+
+		MongoCursor<Document> challengesCollection =
+				getCollection(CHALLENGES_COLLECTION)
+						.find(Filters.in("id", challengesIDCursor))
+						.iterator();
+
+
+		return result;
 	}
 
 	@Override
@@ -165,7 +195,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		MongoCollection<Document> collection = getCollection(GOALS_COLLECTION);
 		Document result = collection.find(Filters.eq("id", goalID)).projection(Projections.exclude("_id")).first();
 
-		if(result != null) {
+		if (result != null) {
 			collection.deleteOne(result);
 		} else {
 			throw new GoalNotFoundException(goalID);
@@ -177,7 +207,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		MongoCollection<Document> collection = getCollection(CHALLENGES_COLLECTION);
 		Document result = collection.find(Filters.eq("id", challengeID)).projection(Projections.exclude("_id")).first();
 
-		if(result != null) {
+		if (result != null) {
 			collection.deleteOne(result);
 		} else {
 			throw new ChallengeNotFoundException(challengeID);
@@ -189,7 +219,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		MongoCollection<Document> collection = getCollection(USERS_COLLECTION);
 		Document result = collection.find(Filters.eq("id", userID)).projection(Projections.exclude("_id")).first();
 
-		if(result != null) {
+		if (result != null) {
 			collection.deleteOne(result);
 		} else {
 			throw new UserNotFoundException(userID);
@@ -271,4 +301,18 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		logger.info(dbName + " dropped !");
 	}
 
+	public void deleteAllTrackingRequests() {
+		getCollection(TRACKING_REQUESTS_COLLECTION).drop();
+	}
+
+	public void updateTrackingRequest(JsonObject newDocumentJsonDescription) {
+		System.out.println("UPDATING DOCUMENT : " + newDocumentJsonDescription);
+
+		MongoCollection<Document> collection = getCollection(TRACKING_REQUESTS_COLLECTION);
+		Document newDocument = Document.parse(newDocumentJsonDescription.toString());
+
+		String id = newDocumentJsonDescription.get("id").getAsString();
+
+		collection.updateOne(Filters.eq("id", id),new Document("$set", newDocument));    // FIXME: 26/01/2016 DO NOTHING
+	}
 }

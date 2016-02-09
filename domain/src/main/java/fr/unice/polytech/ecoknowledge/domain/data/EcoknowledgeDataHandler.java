@@ -1,14 +1,10 @@
 package fr.unice.polytech.ecoknowledge.domain.data;
 
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
+import exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.ChallengeNotFoundException;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 
 import java.util.List;
@@ -17,12 +13,12 @@ import java.util.List;
  * Created by Benjamin on 05/12/2015.
  */
 public interface EcoknowledgeDataHandler {
-	void store(Challenge challenge) throws NotSavableElementException;
+	void store(Challenge challenge) throws NotSavableElementException, NotSavableElementException;
 	void store(User user) throws NotSavableElementException;
 	void store(Goal goal) throws NotSavableElementException;
 	void store(GoalResult goalResult);
 
-	List<Challenge> readAllChallenges() throws IncoherentDBContentException, NotReadableElementException;
+	List<Challenge> readAllChallenges() throws IncoherentDBContentException, NotReadableElementException, IncoherentDBContentException, NotReadableElementException;
 	List<Goal> readAllGoals() throws NotReadableElementException, IncoherentDBContentException;
 	List<User> readAllUsers() throws IncoherentDBContentException, NotReadableElementException;
 
@@ -34,7 +30,7 @@ public interface EcoknowledgeDataHandler {
 	JsonObject readGoalResultByID(String goalResultID);
 
 	Goal readGoalByUserAndChallengeIDs(String userID, String challengeID) throws IncoherentDBContentException, NotReadableElementException, GoalNotFoundException;
-	JsonObject readGoalResultByGoalID(String goalID) throws GoalNotFoundException, NotReadableElementException;
+	JsonObject readGoalResultByGoalID(String goalID) throws GoalNotFoundException, NotReadableElementException, GoalNotFoundException;
 
 	void deleteGoal(Goal goal) throws GoalNotFoundException;
 	void deleteChallenge(Challenge challenge) throws ChallengeNotFoundException;

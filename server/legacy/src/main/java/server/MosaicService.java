@@ -1,10 +1,10 @@
 package server;
 
 import com.google.gson.JsonArray;
+import exceptions.GoalNotFoundException;
+import exceptions.IncoherentDBContentException;
+import exceptions.NotReadableElementException;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
-import fr.unice.polytech.ecoknowledge.domain.data.GoalNotFoundException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

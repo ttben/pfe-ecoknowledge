@@ -2,12 +2,11 @@ package server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import exceptions.IncoherentDBContentException;
+import exceptions.NotReadableElementException;
+import exceptions.NotSavableElementException;
+import exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
-import fr.unice.polytech.ecoknowledge.domain.Model;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;

@@ -2,11 +2,11 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
+import core.MongoDBConnector;
+import exceptions.NotReadableElementException;
+import exceptions.NotSavableElementException;
+import exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.utils.MongoDBConnector;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import org.junit.*;
 
 import java.io.IOException;

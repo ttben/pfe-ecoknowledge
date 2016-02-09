@@ -7,11 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fr.unice.polytech.ecoknowledge.calculator</groupId>
     <artifactId>worker</artifactId>
     <packaging>jar</packaging>
 
-    <name>workerCalculator</name>
+    <name>worker</name>
     <url>http://maven.apache.org</url>
 
     <properties>

@@ -2,24 +2,18 @@ package server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import core.MongoDBConnector;
+import core.Utils;
+import exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
-import fr.unice.polytech.ecoknowledge.domain.data.GoalNotFoundException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.utils.MongoDBConnector;
-import fr.unice.polytech.ecoknowledge.domain.data.utils.Utils;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
-import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.logging.LogManager;
 
 @Path("/test")
 public class TestService {

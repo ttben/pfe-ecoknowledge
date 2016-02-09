@@ -2,10 +2,10 @@ package server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import exceptions.IncoherentDBContentException;
+import exceptions.NotReadableElementException;
+import exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
