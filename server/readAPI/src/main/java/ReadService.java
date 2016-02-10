@@ -1,5 +1,7 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import core.DocumentBDDConnector;
+import core.MongoDBConnector;
 import exceptions.GoalNotFoundException;
 import exceptions.IncoherentDBContentException;
 import exceptions.NotReadableElementException;
