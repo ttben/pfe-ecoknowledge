@@ -1,5 +1,6 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import core.MongoDBConnector;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
