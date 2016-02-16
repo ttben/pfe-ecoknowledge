@@ -2,8 +2,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import core.MongoDBConnector;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -14,6 +14,18 @@ import java.util.List;
 public class WebTierFeeder {
 	private static MongoDBConnector bdd = MongoDBConnector.getInstance();
 	final Logger logger = LogManager.getLogger(WebTierFeeder.class);
+
+	@POST
+	@Path("init")
+	public Response init() {
+		try {
+			App.main(null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		}
+		return Response.ok().build();
+	}
 
 	@POST
 	@Consumes("application/json")

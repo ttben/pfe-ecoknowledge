@@ -12,14 +12,11 @@
     <name>Ecoknowledge</name>
 
     <properties>
-        <!-- Version for dependencies (CXF + JUnit) -->
-        <junit.version>4.12</junit.version>
-        <jersey.version>2.22.1</jersey.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <modules>
-        <!-- The jetty server where we'll have our service (server API) -->
         <module>server</module>
         <module>domain</module>
         <module>language</module>
