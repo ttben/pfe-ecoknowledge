@@ -322,6 +322,12 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 		}
 	}
 
+	@Override
+	public JsonArray readAllSensorData() {
+		// TODO: 18/02/2016 IMPLEMENTS IT 
+		return new JsonArray();
+	}
+
 	private List<Goal> convertGoalsJsonArrayIntoGoalsList(JsonArray goalsJsonArray) throws IncoherentDBContentException, NotReadableElementException {
 		List<Goal> result = new ArrayList<>();
 

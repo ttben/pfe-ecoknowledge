@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.domain.data;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
@@ -54,4 +55,6 @@ public interface EcoknowledgeDataHandler {
 	void updateUser(User user) throws NotSavableElementException;
 
 	void updateGoal(Goal goal) throws NotSavableElementException;
+
+	JsonArray readAllSensorData();
 }

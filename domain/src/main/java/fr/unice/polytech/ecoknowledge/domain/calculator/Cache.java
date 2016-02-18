@@ -1,6 +1,7 @@
 package fr.unice.polytech.ecoknowledge.domain.calculator;
 
 import com.google.gson.JsonObject;
+import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import org.joda.time.DateTime;
 
 import java.util.*;
@@ -48,6 +49,9 @@ public class Cache {
 
 	public List<Data> getDataOfSensorBetweenDate(String sensorName,
 												 DateTime start, DateTime end) {
+
+		MongoDBHandler.getInstance().readAllSensorData();
+
 		ArrayList<Data> data = new ArrayList<>();
 		for (Data d : getDataOf(sensorName)) {
 			if (d.getDate().isBefore(end) && d.getDate().isAfter(start))
