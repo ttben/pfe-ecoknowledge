@@ -1,7 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DAY_MOMENT;
-import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.WEEK_PERIOD;
 import fr.unice.polytech.ecoknowledge.language.api.implem.util.JsonSearcher;
 import org.json.JSONArray;

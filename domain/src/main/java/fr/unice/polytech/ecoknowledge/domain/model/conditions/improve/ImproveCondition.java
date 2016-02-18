@@ -11,20 +11,20 @@ import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 @JsonDeserialize(using = ImproveConditionDeserializer.class)
 public class ImproveCondition implements Condition {
 
-    private final String symbolicName;
-    private final String improvementType;
-    private TimeBox referencePeriod;
+	private final String symbolicName;
+	private final String improvementType;
+	private TimeBox referencePeriod;
 	private Double threshold;
 
 	@JsonCreator
 	public ImproveCondition(@JsonProperty(value = "referencePeriod", required = true) TimeBox referencePeriod,
 							@JsonProperty(value = "threshold", required = true) Double threshold,
-                            @JsonProperty(value = "improvementType", required = true) String type,
-                            @JsonProperty(value = "symbolicName", required = true) String symbolicName) {
+							@JsonProperty(value = "improvementType", required = true) String type,
+							@JsonProperty(value = "symbolicName", required = true) String symbolicName) {
 		this.referencePeriod = referencePeriod;
 		this.threshold = threshold;
-        this.improvementType = type;
-        this.symbolicName = symbolicName;
+		this.improvementType = type;
+		this.symbolicName = symbolicName;
 	}
 
 	public String getSymbolicName() {

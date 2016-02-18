@@ -2,9 +2,9 @@ package server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import exceptions.IncoherentDBContentException;
-import exceptions.NotReadableElementException;
-import exceptions.NotSavableElementException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.IncoherentDBContentException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +17,7 @@ import java.io.IOException;
 @Path("/challenges")
 public class ChallengeService {
 
-    final Logger logger = LogManager.getLogger(ChallengeService.class);
+	final Logger logger = LogManager.getLogger(ChallengeService.class);
 
 	@POST
 	@Consumes("application/json")
@@ -61,10 +61,10 @@ public class ChallengeService {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-            logger.catching(e);
+			logger.catching(e);
 			return Response.status(500).entity(e.getMessage()).build();
 		} catch (IncoherentDBContentException e) {
-            logger.catching(e);
+			logger.catching(e);
 			e.printStackTrace();
 			return Response.status(500).build();
 		} catch (NotReadableElementException e) {

@@ -27,8 +27,8 @@
             "rightOperand": {
               "value": 27
             },
-            "comparator":  {
-              "type":">"
+            "comparator": {
+              "type": ">"
             }
           },
           "counter": {
@@ -50,7 +50,7 @@
               "value": 44
             },
             "comparator": {
-              "type":"<"
+              "type": "<"
             }
           },
           "counter": {

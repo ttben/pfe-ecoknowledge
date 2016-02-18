@@ -5,10 +5,10 @@ import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 
 public class ChallengeTest {
 
-	private Challenge challenge;
 	JsonObject challengeJsonObject = new JsonObject();
 	JsonObject lifeSpanJsonObject = new JsonObject();
 	JsonObject badgeJsonObject = new JsonObject();
+	private Challenge challenge;
 
 	// FIXME: 25/11/2015 
 	/*

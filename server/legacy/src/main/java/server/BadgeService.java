@@ -1,8 +1,8 @@
 package server;
 
 import com.google.gson.JsonArray;
-import exceptions.NotReadableElementException;
-import exceptions.UserNotFoundException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 
 import javax.ws.rs.GET;

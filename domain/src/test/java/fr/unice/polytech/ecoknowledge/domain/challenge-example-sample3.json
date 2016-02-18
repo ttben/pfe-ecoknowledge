@@ -28,7 +28,7 @@
               "value": 27
             },
             "comparator": {
-              "type":"<"
+              "type": "<"
             }
           },
           "counter": {

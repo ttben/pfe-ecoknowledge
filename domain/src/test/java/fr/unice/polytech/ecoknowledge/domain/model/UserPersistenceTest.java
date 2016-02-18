@@ -2,12 +2,15 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import core.MongoDBConnector;
-import exceptions.NotReadableElementException;
-import exceptions.NotSavableElementException;
-import exceptions.UserNotFoundException;
+import fr.unice.polytech.ecoknowledge.data.core.MongoDBConnector;
+import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.NotSavableElementException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,11 +21,17 @@ import static org.junit.Assert.assertNotNull;
 
 public class UserPersistenceTest {
 
+	static String oldDBName;
+	static String testDBName = "challengePersistenceTest";
 	static private User user;
 	private JsonObject jsonUserDescription;
 
-	static String oldDBName;
-	static String testDBName = "challengePersistenceTest";
+	@AfterClass
+	@Ignore
+	public static void eraseUsers() {
+		MongoDBConnector.DB_NAME = oldDBName;
+		// TODO: 06/12/2015 DataPersistence.drop(DataPersistence.Collections.USER, user.getId().toString());
+	}
 
 	@Before
 	@Ignore
@@ -31,13 +40,6 @@ public class UserPersistenceTest {
 		MongoDBConnector.DB_NAME = testDBName;
 		this.user = getExpectedUser();
 		this.jsonUserDescription = getUserDescription();
-	}
-
-	@AfterClass
-	@Ignore
-	public static void eraseUsers() {
-		MongoDBConnector.DB_NAME = oldDBName;
-		// TODO: 06/12/2015 DataPersistence.drop(DataPersistence.Collections.USER, user.getId().toString());
 	}
 
 	@Test

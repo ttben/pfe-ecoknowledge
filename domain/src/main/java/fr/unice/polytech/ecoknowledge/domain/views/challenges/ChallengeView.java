@@ -2,11 +2,9 @@ package fr.unice.polytech.ecoknowledge.domain.views.challenges;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.Controller;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
-import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 import org.joda.time.Interval;
@@ -66,7 +64,7 @@ public class ChallengeView implements ViewForClient {
 
 		result.add("levels", levelJson);
 		Long remaining = computeRemainingTime(challenge.getLifeSpan());
-		if(remaining == null){
+		if (remaining == null) {
 			result.addProperty("remaining", "Defi termine");
 		} else {
 			result.addProperty("remaining", remaining + " jours");
@@ -79,7 +77,7 @@ public class ChallengeView implements ViewForClient {
 		Interval between;
 		try {
 			between = new Interval(Model.getInstance().getCalculatorClock().getTime(), lifeSpan.getEnd());
-		} catch (Throwable t){
+		} catch (Throwable t) {
 			return null;
 		}
 		return between.toDuration().getStandardDays();

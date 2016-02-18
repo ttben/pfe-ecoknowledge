@@ -2,8 +2,7 @@ package fr.unice.polytech.ecoknowledge.domain;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import exceptions.*;
-
+import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
@@ -21,9 +20,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class Controller {
-	final Logger logger = LogManager.getLogger(Controller.class);
-
 	private static Controller instance;
+	final Logger logger = LogManager.getLogger(Controller.class);
 
 	public static Controller getInstance() {
 		if (instance == null) {

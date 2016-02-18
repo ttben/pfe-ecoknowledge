@@ -1,12 +1,11 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import core.DocumentBDDConnector;
-import core.MongoDBConnector;
-import exceptions.GoalNotFoundException;
-import exceptions.UserNotFoundException;
+import fr.unice.polytech.ecoknowledge.data.core.DocumentBDDConnector;
+import fr.unice.polytech.ecoknowledge.data.core.MongoDBConnector;
+import fr.unice.polytech.ecoknowledge.data.exceptions.GoalNotFoundException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.UserNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

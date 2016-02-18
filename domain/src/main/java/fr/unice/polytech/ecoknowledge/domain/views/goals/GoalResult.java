@@ -6,7 +6,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
-import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import fr.unice.polytech.ecoknowledge.domain.model.time.RecurrenceType;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
@@ -32,10 +31,10 @@ public class GoalResult implements ViewForClient {
 					  @JsonProperty(value = "correctRate", required = true) double correctRate,
 					  @JsonProperty(value = "levelResultList", required = true) List<LevelResult> levelResultList) {
 		this.goal = goal;
-		if(goal != null){
+		if (goal != null) {
 			this.id = goal.getId();
 		}
-		if(this.id == null)
+		if (this.id == null)
 			this.id = (id != null && !id.isEmpty()) ? UUID.fromString(id) : UUID.randomUUID();
 		this.achieved = achieved;
 		this.correctRate = correctRate;
@@ -71,7 +70,7 @@ public class GoalResult implements ViewForClient {
 		JsonObject result = new JsonObject();
 
 		JsonArray levelsJsonArray = new JsonArray();
-		for(LevelResult levelResult : this.levelResultList) {
+		for (LevelResult levelResult : this.levelResultList) {
 			JsonObject currentLevelResultDescription = levelResult.toJsonForClient();
 			levelsJsonArray.add(currentLevelResultDescription);
 		}
@@ -82,7 +81,7 @@ public class GoalResult implements ViewForClient {
 		result.addProperty("progressPercent", this.correctRate);
 
 		TimeBox box;
-		if(goal.getChallengeDefinition().getRecurrence().getRecurrenceType().equals(RecurrenceType.NONE)){
+		if (goal.getChallengeDefinition().getRecurrence().getRecurrenceType().equals(RecurrenceType.NONE)) {
 			box = goal.getChallengeDefinition().getLifeSpan();
 		} else {
 			box = goal.getTimeSpan();
@@ -118,7 +117,7 @@ public class GoalResult implements ViewForClient {
 
 	private Double computePercent(TimeBox timeSpan) {
 
-		if(timeSpan.getEnd().isBefore(Model.getInstance().getCalculatorClock().getTime()))
+		if (timeSpan.getEnd().isBefore(Model.getInstance().getCalculatorClock().getTime()))
 			return 100.0;
 		Interval between = new Interval(Model.getInstance().getCalculatorClock().getTime(), timeSpan.getEnd());
 		long days = between.toDuration().getStandardDays() + 1;
@@ -126,14 +125,14 @@ public class GoalResult implements ViewForClient {
 		Interval totalInterval = new Interval(timeSpan.getStart(), timeSpan.getEnd());
 		long totalDays = totalInterval.toDuration().getStandardDays() + 1;
 
-		return  100. * (totalDays - days) / totalDays;
+		return 100. * (totalDays - days) / totalDays;
 	}
 
 	private Long computeRemainingTime(TimeBox lifeSpan) {// FIXME: 09/12/2015 DUPLIQUE DANS CHALLENGE VIEW
 		Interval between;
 		try {
 			between = new Interval(Model.getInstance().getCalculatorClock().getTime(), lifeSpan.getEnd());
-		} catch (Throwable t){
+		} catch (Throwable t) {
 			return null;
 		}
 		return between.toDuration().getStandardDays();

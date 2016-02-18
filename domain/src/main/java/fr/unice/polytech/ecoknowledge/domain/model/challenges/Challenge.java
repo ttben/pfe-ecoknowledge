@@ -91,17 +91,17 @@ public class Challenge implements VisitableComponent {
 
 		// If we are not in the lifespan yet
 
-		if(Model.getInstance().getCalculatorClock().getTime().isBefore(lifeSpan.getStart()))
+		if (Model.getInstance().getCalculatorClock().getTime().isBefore(lifeSpan.getStart()))
 			return false;
 
 		// If we are after the lifespan
 
-		if(lifeSpan.getEnd().isBefore(Model.getInstance().getCalculatorClock().getTime()))
+		if (lifeSpan.getEnd().isBefore(Model.getInstance().getCalculatorClock().getTime()))
 			return false;
 
 		// Test time remaining
 		DateTime end;
-		switch(recurrence.getRecurrenceType()){
+		switch (recurrence.getRecurrenceType()) {
 			case DAY:
 				return new Interval(
 						Model.getInstance().getCalculatorClock().getTime(),

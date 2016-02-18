@@ -11,11 +11,12 @@ import fr.unice.polytech.ecoknowledge.domain.model.serializer.GoalSerializer;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import org.joda.time.DateTime;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @JsonSerialize(using = GoalSerializer.class)
 @JsonDeserialize(using = GoalDeserializer.class)
-public class Goal implements VisitableComponent {
+public class Goal implements VisitableComponent, Serializable {
 
 	private UUID id;
 	private Challenge challengeDefinition;
@@ -30,11 +31,11 @@ public class Goal implements VisitableComponent {
 				User user,
 				String goalResultID) {
 
-		if(user == null) {
+		if (user == null) {
 			throw new NullPointerException("User specified is null");
 		}
 
-		if(definition == null) {
+		if (definition == null) {
 			throw new NullPointerException("Challenge specified is null");
 		}
 
@@ -42,7 +43,7 @@ public class Goal implements VisitableComponent {
 		this.challengeDefinition = definition;
 		this.timeSpan = timeSpan;
 		this.user = user;
-		if(goalResultID != null && !goalResultID.isEmpty()) {
+		if (goalResultID != null && !goalResultID.isEmpty()) {
 			this.goalResultID = UUID.fromString(goalResultID);
 		} else {
 			this.goalResultID = null;

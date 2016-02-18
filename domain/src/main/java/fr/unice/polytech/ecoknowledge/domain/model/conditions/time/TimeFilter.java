@@ -63,11 +63,11 @@ public class TimeFilter {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof TimeFilter)) {
+		if (!(obj instanceof TimeFilter)) {
 			return false;
 		}
 
-		TimeFilter timeFilter = (TimeFilter)obj;
+		TimeFilter timeFilter = (TimeFilter) obj;
 		return dayMoment.equals(timeFilter.dayMoment)
 				&& weekMoment.equals(timeFilter.weekMoment);
 	}

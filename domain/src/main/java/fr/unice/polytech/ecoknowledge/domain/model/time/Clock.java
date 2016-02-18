@@ -13,17 +13,16 @@ import java.util.TimeZone;
 public class Clock {
 
 	private DateTime fakeTime = null;
+	private TimeZone middleWareTZ = TimeZone.getTimeZone("Europe/Paris");
 
 	public Clock() {
 	}
 
-	public DateTime getTime(){
-		if(fakeTime == null)
+	public DateTime getTime() {
+		if (fakeTime == null)
 			return createDate(DateTime.now());
 		return fakeTime;
 	}
-
-	private TimeZone middleWareTZ = TimeZone.getTimeZone("Europe/Paris");
 
 	public DateTime parseDate(String date) {
 
@@ -47,7 +46,7 @@ public class Clock {
 		return date;
 	}
 
-	public void setFakeTime(DateTime time){
+	public void setFakeTime(DateTime time) {
 		System.out.println("\n+ Setting fake time ... ");
 		System.out.println("\n+ Time before setting : " + this.getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")));
 		this.fakeTime = createDate(time);

@@ -1,7 +1,6 @@
 package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

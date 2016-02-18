@@ -26,7 +26,7 @@ public class UserView implements ViewForClient {
 		profilePic = user.getPicUrl();
 		id = user.getId().toString();
 
-		if(user.getBadges() != null) {
+		if (user.getBadges() != null) {
 			badges = new ArrayList<>(user.getBadges());
 		}
 
@@ -46,7 +46,7 @@ public class UserView implements ViewForClient {
 		int points = 1;
 
 		JsonArray badgesJsonArray = new JsonArray();
-		for(Badge currentBadge : this.badges) {
+		for (Badge currentBadge : this.badges) {
 			JsonObject currentBadgeJsonDescription = new JsonObject();
 			// TODO: 04/12/2015 badgeview
 			currentBadgeJsonDescription.addProperty("name", currentBadge.getName());

@@ -6,8 +6,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import core.MongoDBConnector;
-import exceptions.*;
+import fr.unice.polytech.ecoknowledge.data.core.MongoDBConnector;
+import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
@@ -22,9 +22,8 @@ import java.util.List;
 public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 	private static MongoDBHandler instance;
-	private MongoDBConnector bddConnector;
-
 	final Logger logger = LogManager.getLogger(MongoDBHandler.class);
+	private MongoDBConnector bddConnector;
 
 	private MongoDBHandler() {
 		bddConnector = MongoDBConnector.getInstance();
@@ -232,10 +231,10 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	public Goal readGoalByUserAndChallengeIDs(String userID, String challengeID) throws IncoherentDBContentException, NotReadableElementException, GoalNotFoundException {
 		List<Goal> goalList = readAllGoalsOfUser(userID);
 
-		System.out.println("\n+ALL GOALS FOR USER:"+userID+" :\n" +goalList);
+		System.out.println("\n+ALL GOALS FOR USER:" + userID + " :\n" + goalList);
 
-		for(Goal currentGoal : goalList) {
-			if(currentGoal.getChallengeDefinition().getId().toString().equals(challengeID)) {
+		for (Goal currentGoal : goalList) {
+			if (currentGoal.getChallengeDefinition().getId().toString().equals(challengeID)) {
 				return currentGoal;
 			}
 		}
@@ -245,7 +244,7 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 		description = description.concat(" and challenge:");
 		description = description.concat(challengeID);
 
-	 	throw new GoalNotFoundException(description);
+		throw new GoalNotFoundException(description);
 	}
 
 	@Override
@@ -275,8 +274,8 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	public boolean userHasGoal(String userID, String goalID) throws IncoherentDBContentException, NotReadableElementException {
 		List<Goal> goalList = this.readAllGoalsOfUser(userID);
 
-		for(Goal currentGoal : goalList) {
-			if(currentGoal.getId().equals(goalID)) {
+		for (Goal currentGoal : goalList) {
+			if (currentGoal.getId().equals(goalID)) {
 				return true;
 			}
 		}
@@ -288,8 +287,8 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	public boolean userHasTakenChallenge(String userID, String challengeID) throws IncoherentDBContentException, NotReadableElementException {
 		List<Goal> goalList = this.readAllGoalsOfUser(userID);
 
-		for(Goal currentGoal : goalList) {
-			if(currentGoal.getChallengeDefinition().getId().equals(challengeID)) {
+		for (Goal currentGoal : goalList) {
+			if (currentGoal.getChallengeDefinition().getId().equals(challengeID)) {
 				return true;
 			}
 		}

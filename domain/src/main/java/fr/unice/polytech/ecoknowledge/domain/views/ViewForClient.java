@@ -1,7 +1,6 @@
 package fr.unice.polytech.ecoknowledge.domain.views;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 /**
  * Created by Sébastien on 02/12/2015.

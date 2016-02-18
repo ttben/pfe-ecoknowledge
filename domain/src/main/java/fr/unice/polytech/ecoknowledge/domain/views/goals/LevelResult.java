@@ -3,10 +3,6 @@ package fr.unice.polytech.ecoknowledge.domain.views.goals;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
-import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
-import fr.unice.polytech.ecoknowledge.domain.views.challenges.LevelView;
-import fr.unice.polytech.ecoknowledge.domain.views.challenges.conditions.ConditionView;
-import fr.unice.polytech.ecoknowledge.domain.views.challenges.conditions.ConditionViewFactory;
 
 import java.util.ArrayList;
 import java.util.List;

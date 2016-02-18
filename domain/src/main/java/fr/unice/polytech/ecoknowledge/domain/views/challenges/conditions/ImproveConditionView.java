@@ -1,7 +1,6 @@
 package fr.unice.polytech.ecoknowledge.domain.views.challenges.conditions;
 
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.StandardCondition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCondition;
 
 public class ImproveConditionView implements ConditionView {

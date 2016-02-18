@@ -5,5 +5,6 @@ package fr.unice.polytech.ecoknowledge.language.api.interfaces;
  */
 public interface IAtLeastable {
 	public IAndable percentOfTime();
+
 	public IAndable times();
 }

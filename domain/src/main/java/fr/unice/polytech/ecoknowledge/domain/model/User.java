@@ -103,7 +103,7 @@ public class User {
 	}
 
 	public void addBadge(Badge bestBadge) {
-		if(badges == null)
+		if (badges == null)
 			badges = new ArrayList<>();
 		badges.add(bestBadge);
 	}

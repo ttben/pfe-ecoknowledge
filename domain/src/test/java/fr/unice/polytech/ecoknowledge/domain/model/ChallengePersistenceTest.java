@@ -2,10 +2,10 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import core.MongoDBConnector;
-import exceptions.ChallengeNotFoundException;
-import exceptions.NotReadableElementException;
-import exceptions.NotSavableElementException;
+import fr.unice.polytech.ecoknowledge.data.core.MongoDBConnector;
+import fr.unice.polytech.ecoknowledge.data.exceptions.ChallengeNotFoundException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
 import fr.unice.polytech.ecoknowledge.domain.TestUtils;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
@@ -18,24 +18,28 @@ import static org.junit.Assert.assertEquals;
 
 public class ChallengePersistenceTest {
 
-	JsonObject jsonObject = null;
-
 	static Challenge aChallenge = null;
 	static String oldDBName;
 	static String testDBName = "challengePersistenceTest";
+	JsonObject jsonObject = null;
 
 	@BeforeClass
 	@Ignore
-	public static void changeDB(){
+	public static void changeDB() {
 		oldDBName = MongoDBConnector.DB_NAME;
 		MongoDBConnector.DB_NAME = testDBName;
 	}
 
 	@AfterClass
 	@Ignore
-	public static void resetDB(){
+	public static void resetDB() {
 		MongoDBConnector.DB_NAME = oldDBName;
 		Controller.getInstance().drop(testDBName);
+	}
+
+	@AfterClass
+	public static void tearDown() {
+		// TODO: 06/12/2015 clean bdd
 	}
 
 	@Before
@@ -44,7 +48,6 @@ public class ChallengePersistenceTest {
 
 		jsonObject = TestUtils.getFakeJson(1);
 	}
-
 
 	@Test
 	@Ignore
@@ -55,10 +58,5 @@ public class ChallengePersistenceTest {
 		aChallenge = MongoDBHandler.getInstance().readChallengeByID(challenge.getId().toString());
 
 		assertEquals(challenge, aChallenge);
-	}
-
-	@AfterClass
-	public static void tearDown() {
-		// TODO: 06/12/2015 clean bdd
 	}
 }

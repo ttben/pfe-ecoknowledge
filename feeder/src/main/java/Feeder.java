@@ -1,15 +1,11 @@
-import sun.util.resources.cldr.ja.TimeZoneNames_ja;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Benjamin on 14/01/2016.
@@ -25,13 +21,13 @@ public class Feeder extends Thread {
 
 	Feeder() {
 		current = ++number;
-		this.setName("Thread ["+current+"]");
-		System.out.printf("Thread [%s] - Built\n",this.getName());
+		this.setName("Thread [" + current + "]");
+		System.out.printf("Thread [%s] - Built\n", this.getName());
 
 	}
 
 	Feeder(List<String> targetSensor) {
-		for(String sensorName : targetSensor) {
+		for (String sensorName : targetSensor) {
 			this.targetSensor.offer(sensorName);
 		}
 
@@ -46,10 +42,10 @@ public class Feeder extends Thread {
 		URLConnection connection = null;
 		try {
 			Iterator<String> iterator = targetSensor.iterator();
-			for(int i = 0 ; i < targetSensor.size() ; i ++) {
+			for (int i = 0; i < targetSensor.size(); i++) {
 				String sensorName = iterator.next();
 
-				URL oracle = new URL("http://localhost:8081/fakeDataSource/sensors/"+sensorName+"/data");
+				URL oracle = new URL("http://localhost:8081/fakeDataSource/sensors/" + sensorName + "/data");
 				BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
 				String inputLine;
 
@@ -59,7 +55,7 @@ public class Feeder extends Thread {
 //System.out.println("Received" + inputLine);
 					res += inputLine;
 				}
-				System.out.printf("Thread [%s] - Tracking sensor %s and received %s\n",this.getName(), sensorName,res);
+				System.out.printf("Thread [%s] - Tracking sensor %s and received %s\n", this.getName(), sensorName, res);
 
 				in.close();
 			}
@@ -70,20 +66,20 @@ public class Feeder extends Thread {
 	}
 
 	public boolean stopToTrack(String targetSensor) {
-		System.out.printf("Thread [%s] - Stop tracking sensor %s\n",this.getName(), targetSensor);
+		System.out.printf("Thread [%s] - Stop tracking sensor %s\n", this.getName(), targetSensor);
 		this.targetSensor.remove(targetSensor);
-		if(this.targetSensor.size() == 0) {
-			System.out.printf("Thread [%s] - has nothing left to track -> kill\n",this.getName());
+		if (this.targetSensor.size() == 0) {
+			System.out.printf("Thread [%s] - has nothing left to track -> kill\n", this.getName());
 			this.interrupt();
 			return false;
 		} else {
-			System.out.printf("Thread [%s] - Remaining track %s\n",this.getName(), this.targetSensor);
+			System.out.printf("Thread [%s] - Remaining track %s\n", this.getName(), this.targetSensor);
 			return true;
 		}
 	}
 
 	public void startToTrack(String sensor) {
-		System.out.printf("Thread [%s] - Start tracking sensor %s\n",this.getName(), sensor);
+		System.out.printf("Thread [%s] - Start tracking sensor %s\n", this.getName(), sensor);
 		this.targetSensor.offer(sensor);
 	}
 }

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import exceptions.*;
+import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
@@ -47,7 +47,7 @@ public class Model {
 		List<Challenge> challenges = MongoDBHandler.getInstance().readAllChallenges();
 		List<Challenge> takenChallenges = getTakenChallenges(userID);
 
-        challenges.removeAll(takenChallenges);
+		challenges.removeAll(takenChallenges);
 
 		return challenges;
 	}
@@ -56,8 +56,8 @@ public class Model {
 		List<Goal> goals = MongoDBHandler.getInstance().readAllGoalsOfUser(userID);
 		List<Challenge> challenges = new ArrayList<>();
 
-        for (Goal currentGoal : goals) {
-            challenges.add(currentGoal.getChallengeDefinition());
+		for (Goal currentGoal : goals) {
+			challenges.add(currentGoal.getChallengeDefinition());
 		}
 
 		return challenges;
@@ -89,14 +89,14 @@ public class Model {
 		System.out.println("GOAL???" + goal);
 
 		Recurrence goalRecurrence = goal.getChallengeDefinition().getRecurrence();
-		if(!goal.getChallengeDefinition().canTake()){
-            if(next != null){
-                throw new InvalidGoalTimespanOverChallengeException("Cannot take a goal until " + next.getEnd()
-                        + " when the challenge ends the " + goal.getChallengeDefinition().getLifeSpan().getEnd());
-            } else {
-                throw new InvalidGoalTimespanOverChallengeException("Cannot take a goal when the challenge ends the " +
-                        goal.getChallengeDefinition().getLifeSpan().getEnd());
-            }
+		if (!goal.getChallengeDefinition().canTake()) {
+			if (next != null) {
+				throw new InvalidGoalTimespanOverChallengeException("Cannot take a goal until " + next.getEnd()
+						+ " when the challenge ends the " + goal.getChallengeDefinition().getLifeSpan().getEnd());
+			} else {
+				throw new InvalidGoalTimespanOverChallengeException("Cannot take a goal when the challenge ends the " +
+						goal.getChallengeDefinition().getLifeSpan().getEnd());
+			}
 		}
 
 		Clock clock = calculator.getClock();
@@ -106,7 +106,7 @@ public class Model {
 		if (next != null) {
 			timeSpan = TimeSpanGenerator.generateNextTimeSpan(goalRecurrence, clock, next);
 		} else {
-			if(goal.getChallengeDefinition().getRecurrence().getRecurrenceType().equals(RecurrenceType.NONE)){
+			if (goal.getChallengeDefinition().getRecurrence().getRecurrenceType().equals(RecurrenceType.NONE)) {
 				timeSpan = goal.getChallengeDefinition().getLifeSpan();
 			} else {
 				timeSpan = TimeSpanGenerator.generateTimeSpan(goalRecurrence, clock);
@@ -177,12 +177,12 @@ public class Model {
 		Goal goal = MongoDBHandler.getInstance().readGoalByUserAndChallengeIDs(userId, challengeId);
 		GoalResult result = this.calculator.evaluate(goal);
 
-        MongoDBHandler.getInstance().updateGoalResult(result);
+		MongoDBHandler.getInstance().updateGoalResult(result);
 
 		return result;
 	}
 
-    public Clock getCalculatorClock(){ // FIXME: 09/12/2015 Pas tres beau
-        return calculator.getClock();
-    }
+	public Clock getCalculatorClock() { // FIXME: 09/12/2015 Pas tres beau
+		return calculator.getClock();
+	}
 }

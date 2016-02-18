@@ -2,9 +2,9 @@ package server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import core.MongoDBConnector;
-import core.Utils;
-import exceptions.*;
+import fr.unice.polytech.ecoknowledge.data.core.MongoDBConnector;
+import fr.unice.polytech.ecoknowledge.data.core.Utils;
+import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;

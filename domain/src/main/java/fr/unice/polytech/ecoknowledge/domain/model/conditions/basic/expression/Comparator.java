@@ -5,18 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Comparator {
 
+	private String type;
+
+	@JsonCreator
+	public Comparator(@JsonProperty(value = "type", required = true) String type) {
+		this.type = type;
+	}
+
 	public String getType() {
 		return type;
 	}
 
 	public void setType(String type) {
-		this.type = type;
-	}
-
-	private String type;
-
-	@JsonCreator
-	public Comparator(@JsonProperty(value = "type", required = true)String type) {
 		this.type = type;
 	}
 
