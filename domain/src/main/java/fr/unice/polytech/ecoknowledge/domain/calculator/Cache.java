@@ -50,7 +50,7 @@ public class Cache {
 	public List<Data> getDataOfSensorBetweenDate(String sensorName,
 												 DateTime start, DateTime end) {
 
-		MongoDBHandler.getInstance().readAllSensorData();
+		MongoDBHandler.getInstance().readAllSensorData();    // TODO: 18/02/2016 Make a filter request in order to retrieve a smaller amount of data
 
 		ArrayList<Data> data = new ArrayList<>();
 		for (Data d : getDataOf(sensorName)) {

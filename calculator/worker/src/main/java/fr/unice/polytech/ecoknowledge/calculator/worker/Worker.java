@@ -4,6 +4,7 @@ import fr.unice.polytech.ecoknowledge.data.exceptions.GoalNotFoundException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.UserNotFoundException;
+import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -53,7 +54,7 @@ public class Worker implements Runnable, ExceptionListener, MessageListener {
 				Goal goal = (Goal) obj;
 
 				System.out.println(name + " received: " + goal.getId() + ". Now sleeping for " + fakeProcessingTime + " ms");
-				Calculator calculator = new Calculator(null);
+				Calculator calculator = new Calculator(new Cache());
 				calculator.evaluate(goal);
 
 				Thread.sleep(fakeProcessingTime);
