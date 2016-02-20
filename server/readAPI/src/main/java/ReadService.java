@@ -12,9 +12,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.security.InvalidParameterException;
 
+@Path("/readAPI")
 public class ReadService {
 	private static DocumentBDDConnector bdd = MongoDBConnector.getInstance();
 	final Logger logger = LogManager.getLogger(ReadService.class);
+
+	@GET
+	@Path("/")
+	public Response getTest() {
+		return Response.ok().entity("Tout est Ok").build();
+	}
 
 	@GET
 	@Path("/badges/")
@@ -116,6 +123,13 @@ public class ReadService {
 		}
 	}
 
+
+	@GET
+	@Path("/goals/results")
+	@Produces("application/json")
+	public Response getAllGoalsResult() {
+		return Response.ok().entity(MongoDBConnector.getInstance().findAllGoals().toString()).build();
+	}
 
 	@GET
 	@Path("/users/{id}/profile")
