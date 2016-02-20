@@ -16,6 +16,7 @@
     <modules>
         <module>worker</module>
         <module>producer</module>
+        <module>mainTest</module>
     </modules>
 
     <properties>

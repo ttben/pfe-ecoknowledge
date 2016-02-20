@@ -1,12 +1,15 @@
 package fr.unice.polytech.ecoknowledge.calculator.worker;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.ecoknowledge.data.exceptions.GoalNotFoundException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
 import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
+import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,30 +35,24 @@ public class Worker implements Runnable, ExceptionListener, MessageListener {
 	}
 
 	public synchronized void onException(JMSException ex) {
-		System.out.println("JMS Exception occured.  Shutting down client.");
+		System.out.println("JMS Exception occurred.  Shutting down client.");
 	}
 
 	public void onMessage(Message message) {
 
 		try {
-			if (message instanceof ObjectMessage) {
-				ObjectMessage objectMessage = (ObjectMessage) message;
-				Object obj = objectMessage.getObject();
+			if (message instanceof TextMessage) {
+				TextMessage objectMessage = (TextMessage) message;
+				String obj = objectMessage.getText();
 
-				if(!(obj instanceof Goal)) {
-					String errorDescription = "A calculator worker just received a non Goal object: ";
-					errorDescription = errorDescription.concat(obj.getClass().getName());
-
-					logger.fatal(errorDescription);
-
-					throw new IllegalArgumentException(errorDescription);
-				}
-
-				Goal goal = (Goal) obj;
+				ObjectMapper mapper = new ObjectMapper();
+				Goal goal = mapper.readValue(obj, Goal.class);
 
 				System.out.println(name + " received: " + goal.getId() + ". Now sleeping for " + fakeProcessingTime + " ms");
 				Calculator calculator = new Calculator(new Cache());
-				calculator.evaluate(goal);
+				GoalResult currentGoalResult = calculator.evaluate(goal);
+
+				MongoDBHandler.getInstance().updateGoalResult(currentGoalResult);
 
 				Thread.sleep(fakeProcessingTime);
 
@@ -64,20 +61,19 @@ public class Worker implements Runnable, ExceptionListener, MessageListener {
 			}
 		}
 		// TODO: 18/02/2016 LOG AND HANDLE IT
-		catch (JMSException e) {
+		catch (JMSException | InterruptedException | IOException | GoalNotFoundException
+				| UserNotFoundException | NotSavableElementException | NotReadableElementException e) {
+
+			String errorDescription = "A calculator worker just raised an error ";
+			errorDescription = errorDescription.concat(e.getMessage());
+			errorDescription = errorDescription.concat("Caused by");
+			errorDescription = errorDescription.concat(e.getMessage());
+
+			logger.fatal(errorDescription);
 			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (GoalNotFoundException e) {
-			e.printStackTrace();
-		} catch (UserNotFoundException e) {
-			e.printStackTrace();
-		} catch (NotSavableElementException e) {
-			e.printStackTrace();
-		} catch (NotReadableElementException e) {
-			e.printStackTrace();
+
+			throw new IllegalArgumentException(errorDescription);
+
 		}
 	}
 
