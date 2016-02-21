@@ -115,7 +115,7 @@ public class Model {
 
 		goal.setTimeSpan(timeSpan);
 
-		GoalResult result = calculator.evaluate(goal);
+		GoalResult result = calculator.evaluate(goal);	//	FIXME goal is evaluated before being stored (line 123)
 
 		MongoDBHandler.getInstance().store(result);
 		goal.setGoalResultID(result.getId());

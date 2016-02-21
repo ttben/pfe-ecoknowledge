@@ -107,4 +107,19 @@ public class Goal implements VisitableComponent, Serializable {
 	public void setGoalResultID(UUID goalResultID) {
 		this.goalResultID = goalResultID;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder();
+
+		stringBuilder.append("( Goal [");
+		stringBuilder.append(id.toString());
+		stringBuilder.append("] ");
+		stringBuilder.append(challengeDefinition.getName());
+		stringBuilder.append(" taken by ");
+		stringBuilder.append(user.getFirstName());
+
+		return stringBuilder.toString();
+	}
+
 }

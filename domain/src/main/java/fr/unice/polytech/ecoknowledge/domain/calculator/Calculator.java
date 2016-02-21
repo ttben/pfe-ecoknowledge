@@ -32,6 +32,8 @@ public class Calculator {
 
 	public GoalResult evaluate(Goal goal) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException {
 
+		logger.info("Evaluating goal " + goal);
+
 		// Creating processor to evaluate
 		AchievementProcessor achievementProcessor = new AchievementProcessor(goal, cache);
 
@@ -41,13 +43,14 @@ public class Calculator {
 		// Get results
 		GoalResult goalResult = achievementProcessor.getGoalResult();
 
-		System.out.println(goalResult.getCorrectRate());
+		logger.info(goalResult.getCorrectRate());
 
 		// Look for the best badge
 		Badge bestBadge = getBestBadge(goalResult.getLevelResultList());
 
 		boolean isOver;
 
+		//	Check if there is a recurrence
 		if (goal.getChallengeDefinition().getRecurrence().getRecurrenceType().equals(RecurrenceType.NONE)) {
 			isOver = goal.getChallengeDefinition().getLifeSpan().getEnd().isBefore(clock.getTime());
 		} else {
@@ -62,6 +65,9 @@ public class Calculator {
 			} else {
 				System.out.println("Evalutaion --> Badge lost");
 			}
+
+			logger.warn("Goal is over. Deleting goal : " + goal.getId());
+
 			// Delete the goal
 			Model.getInstance().deleteGoal(goal);
 
