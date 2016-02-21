@@ -12,19 +12,18 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.security.InvalidParameterException;
 
-@Path("/readAPI")
+@Path("/")
 public class ReadService {
 	private static DocumentBDDConnector bdd = MongoDBConnector.getInstance();
 	final Logger logger = LogManager.getLogger(ReadService.class);
 
 	@GET
-	@Path("/")
 	public Response getTest() {
 		return Response.ok().entity("Tout est Ok").build();
 	}
 
 	@GET
-	@Path("/badges/")
+	@Path("badges/")
 	@Produces("application/json")
 	public Response getBadges(@QueryParam("userID") String userID) {
 		return null;
@@ -52,7 +51,7 @@ public class ReadService {
 	}
 
 	@GET
-	@Path("/challenges")
+	@Path("challenges")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllChallenges(@QueryParam("type") String typeOfChallenges, @QueryParam("userID") String userID) {
 		return null;
@@ -91,7 +90,7 @@ public class ReadService {
 	}
 
 	@GET
-	@Path("/goals/")
+	@Path("goals/")
 	@Produces("application/json")
 	public Response getAllGoals(@QueryParam("userID") String userID) {
 		if (userID != null && !userID.isEmpty() && !userID.equalsIgnoreCase("undefined")) {
@@ -104,7 +103,7 @@ public class ReadService {
 	}
 
 	@GET
-	@Path("/goals/{id}")
+	@Path("goals/{id}")
 	@Produces("application/json")
 	public Response getGoalById(@PathParam("id") String goalID) {
 
@@ -125,14 +124,14 @@ public class ReadService {
 
 
 	@GET
-	@Path("/goals/results")
+	@Path("goals/results")
 	@Produces("application/json")
 	public Response getAllGoalsResult() {
 		return Response.ok().entity(MongoDBConnector.getInstance().findAllGoals().toString()).build();
 	}
 
 	@GET
-	@Path("/users/{id}/profile")
+	@Path("users/{id}/profile")
 	public Response getUser(@PathParam("id") String id) {
 		try {
 			JsonObject user = bdd.findUser(id); // TODO: 20/01/2016 transform data for client
@@ -152,7 +151,7 @@ public class ReadService {
 	}
 
 	@GET
-	@Path("/users")
+	@Path("users")
 	@Produces("application/json")
 	public Response getAllUsers() {
 		try {
