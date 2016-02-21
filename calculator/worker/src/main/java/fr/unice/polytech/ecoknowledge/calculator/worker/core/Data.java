@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.domain.calculator;
+package fr.unice.polytech.ecoknowledge.calculator.worker.core;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;

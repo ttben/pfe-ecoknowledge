@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.domain.calculator;
+package fr.unice.polytech.ecoknowledge.calculator.worker.core;
 
 import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import junit.framework.Assert;

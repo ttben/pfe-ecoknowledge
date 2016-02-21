@@ -1,6 +1,7 @@
-package fr.unice.polytech.ecoknowledge.domain.calculator;
+package fr.unice.polytech.ecoknowledge.calculator.worker.core;
 
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.model.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.StandardCondition;

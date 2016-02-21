@@ -1,2 +1,0 @@
-2016-02-21 16:39:04.598 [http-nio-8081-exec-1] INFO  server.GoalService - POST goal service with payload : 
-2016-02-21 16:39:04.604 [http-nio-8081-exec-1] INFO  server.GoalService - {"user":"7efd2e8a-71ac-43e8-824d-c2fb703aca14","challenge":"08235a4e-8f6c-49e3-b378-8db92e7e41c0"}

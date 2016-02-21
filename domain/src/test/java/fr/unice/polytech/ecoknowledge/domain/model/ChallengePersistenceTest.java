@@ -7,7 +7,6 @@ import fr.unice.polytech.ecoknowledge.data.exceptions.ChallengeNotFoundException
 import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
-import fr.unice.polytech.ecoknowledge.domain.TestUtils;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import org.junit.*;

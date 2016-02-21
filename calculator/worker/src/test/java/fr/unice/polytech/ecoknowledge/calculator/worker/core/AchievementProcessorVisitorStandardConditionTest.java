@@ -1,15 +1,14 @@
-package fr.unice.polytech.ecoknowledge.domain.calculator;
+package fr.unice.polytech.ecoknowledge.calculator.worker.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.TestUtils;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.ConditionResult;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.LevelResult;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.ConditionResult;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.GoalResult;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.LevelResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

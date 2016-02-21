@@ -11,7 +11,6 @@ import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -81,12 +80,6 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 		}
 	}
 
-	@Override
-	public void store(GoalResult goalResult) {
-
-		JsonObject goalResultJsonDescription = goalResult.toJsonForClient();
-		bddConnector.storeResult(goalResultJsonDescription);
-	}
 
 	@Override
 	public List<Challenge> readAllChallenges() throws IncoherentDBContentException, NotReadableElementException {
@@ -372,9 +365,5 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 	public void dropCollection(String dbName) {
 		bddConnector.drop(dbName);
-	}
-
-	public void updateGoalResult(GoalResult goalResult) throws NotSavableElementException {
-		bddConnector.updateGoalResult(goalResult.toJsonForClient());
 	}
 }

@@ -1,14 +1,11 @@
 package fr.unice.polytech.ecoknowledge.domain;
 
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.exceptions.*;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
@@ -16,24 +13,14 @@ import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.InvalidGoalTimespanOverChallengeException;
 import fr.unice.polytech.ecoknowledge.domain.model.time.*;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 
 import java.io.IOException;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
 
 	private static Model instance;
-
-	private Calculator calculator;
-
-	public Model() {
-		this.calculator = new Calculator(Cache.getFakeCache());
-	}
 
 	public static Model getInstance() {
 		if (instance == null) {
@@ -76,11 +63,11 @@ public class Model {
 		MongoDBHandler.getInstance().store(challenge);
 	}
 
-	public GoalResult takeChallenge(JsonObject goalJsonDescription) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {
-		return this.takeChallenge(goalJsonDescription, null);
+	public void takeChallenge(JsonObject goalJsonDescription) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {
+		this.takeChallenge(goalJsonDescription, null);
 	}
 
-	public GoalResult takeChallenge(JsonObject jsonObject, TimeBox next) throws IOException, JsonParseException, JsonMappingException, GoalNotFoundException, NotSavableElementException, UserNotFoundException, NotReadableElementException, InvalidGoalTimespanOverChallengeException {
+	public void takeChallenge(JsonObject jsonObject, TimeBox next) throws IOException, JsonParseException, JsonMappingException, GoalNotFoundException, NotSavableElementException, UserNotFoundException, NotReadableElementException, InvalidGoalTimespanOverChallengeException {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		//	Build goal with custom deserializer
@@ -99,6 +86,8 @@ public class Model {
 			}
 		}
 
+		//	FIXME #140 delete direct use of GoalResult and Calculator
+		/*
 		Clock clock = calculator.getClock();
 
 		//	Generate a timeSpan and set it into the goal
@@ -119,10 +108,9 @@ public class Model {
 
 		MongoDBHandler.getInstance().store(result);
 		goal.setGoalResultID(result.getId());
+		*/
 
 		MongoDBHandler.getInstance().store(goal);
-
-		return result;
 	}
 
 	// TODO: 06/12/2015
@@ -163,13 +151,17 @@ public class Model {
 		MongoDBHandler.getInstance().deleteGoal(goal);
 	}
 
+	//	FIXME #140 delete direct use of GoalResult and Calculator
+	/*
 	public void setTime(DateTime time) {
 		this.calculator.getClock().setFakeTime(time);
 	}
 
+
 	public String getTimeDescription() {
 		return this.calculator.getClock().getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"));
 	}
+
 
 	public GoalResult evaluate(String userId, String challengeId) throws IOException, InvalidParameterException, IncoherentDBContentException,
 			NotReadableElementException, GoalNotFoundException, UserNotFoundException, NotSavableElementException {
@@ -185,4 +177,5 @@ public class Model {
 	public Clock getCalculatorClock() { // FIXME: 09/12/2015 Pas tres beau
 		return calculator.getClock();
 	}
+	*/
 }

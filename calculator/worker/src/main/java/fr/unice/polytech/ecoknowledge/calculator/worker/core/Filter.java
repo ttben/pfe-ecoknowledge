@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.domain.calculator;
+package fr.unice.polytech.ecoknowledge.calculator.worker.core;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;

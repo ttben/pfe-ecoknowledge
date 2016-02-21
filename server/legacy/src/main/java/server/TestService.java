@@ -4,19 +4,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.data.core.MongoDBConnector;
 import fr.unice.polytech.ecoknowledge.data.core.Utils;
-import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
-import fr.unice.polytech.ecoknowledge.domain.Model;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
 import org.apache.logging.log4j.Logger;
-import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 
 @Path("/test")
 public class TestService {
+
+
+	// // FIXME: 21/02/2016 #140
+	/*
 
 	@POST
 	@Path("/evaluate")
@@ -47,6 +46,29 @@ public class TestService {
 		}
 		return Response.ok().build();
 	}
+
+
+	@POST
+	@Path("/stub")
+	@Consumes("application/json")
+	public Response addFakeData(String obj) {
+		JsonObject object = new JsonParser().parse(obj).getAsJsonObject();
+		Cache.getFakeCache().addData(object);
+		return Response.ok().entity(Cache.getFakeCache().getData().toString()).build();
+	}
+
+	@POST
+	@Path("/clock")
+	@Consumes("application/json")
+	public Response setClock(String obj) {
+		JsonObject object = new JsonParser().parse(obj).getAsJsonObject();
+		String newDate = object.get("date").getAsString();
+		DateTime newDateTime = DateTime.parse(newDate);
+		Model.getInstance().setTime(newDateTime);
+		return Response.ok().entity(Model.getInstance().getTimeDescription()).build();
+	}
+
+	*/
 
 	@GET
 	@Path("/db/names")
@@ -81,23 +103,4 @@ public class TestService {
 		return Response.ok().build();
 	}
 
-	@POST
-	@Path("/stub")
-	@Consumes("application/json")
-	public Response addFakeData(String obj) {
-		JsonObject object = new JsonParser().parse(obj).getAsJsonObject();
-		Cache.getFakeCache().addData(object);
-		return Response.ok().entity(Cache.getFakeCache().getData().toString()).build();
-	}
-
-	@POST
-	@Path("/clock")
-	@Consumes("application/json")
-	public Response setClock(String obj) {
-		JsonObject object = new JsonParser().parse(obj).getAsJsonObject();
-		String newDate = object.get("date").getAsString();
-		DateTime newDateTime = DateTime.parse(newDate);
-		Model.getInstance().setTime(newDateTime);
-		return Response.ok().entity(Model.getInstance().getTimeDescription()).build();
-	}
 }

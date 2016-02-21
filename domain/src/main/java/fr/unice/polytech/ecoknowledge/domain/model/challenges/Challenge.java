@@ -3,7 +3,7 @@ package fr.unice.polytech.ecoknowledge.domain.model.challenges;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.unice.polytech.ecoknowledge.domain.Model;
-import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
+import fr.unice.polytech.ecoknowledge.domain.model.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.VisitableComponent;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Recurrence;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
@@ -89,6 +89,9 @@ public class Challenge implements VisitableComponent {
 
 	public boolean canTake() {
 
+		// FIXME: 21/02/2016 #141 MOVE CLOCK IN A SPECIFIC MODULE
+		/*
+
 		// If we are not in the lifespan yet
 
 		if (Model.getInstance().getCalculatorClock().getTime().isBefore(lifeSpan.getStart()))
@@ -121,6 +124,8 @@ public class Challenge implements VisitableComponent {
 				// Because we only use the lifespan
 				return true;
 		}
+		*/
+
 		return false;
 	}
 

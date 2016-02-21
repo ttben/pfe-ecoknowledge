@@ -1,14 +1,15 @@
-package fr.unice.polytech.ecoknowledge.domain.views.goals;
+package fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.Calculator;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.ViewForClient;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.time.RecurrenceType;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
-import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 import org.joda.time.Interval;
 import org.joda.time.format.DateTimeFormat;
 
@@ -117,9 +118,9 @@ public class GoalResult implements ViewForClient {
 
 	private Double computePercent(TimeBox timeSpan) {
 
-		if (timeSpan.getEnd().isBefore(Model.getInstance().getCalculatorClock().getTime()))
+		if (timeSpan.getEnd().isBefore(Calculator.getClock().getTime()))
 			return 100.0;
-		Interval between = new Interval(Model.getInstance().getCalculatorClock().getTime(), timeSpan.getEnd());
+		Interval between = new Interval(Calculator.getClock().getTime(), timeSpan.getEnd());
 		long days = between.toDuration().getStandardDays() + 1;
 
 		Interval totalInterval = new Interval(timeSpan.getStart(), timeSpan.getEnd());
@@ -131,7 +132,7 @@ public class GoalResult implements ViewForClient {
 	private Long computeRemainingTime(TimeBox lifeSpan) {// FIXME: 09/12/2015 DUPLIQUE DANS CHALLENGE VIEW
 		Interval between;
 		try {
-			between = new Interval(Model.getInstance().getCalculatorClock().getTime(), lifeSpan.getEnd());
+			between = new Interval(Calculator.getClock().getTime(), lifeSpan.getEnd());
 		} catch (Throwable t) {
 			return null;
 		}

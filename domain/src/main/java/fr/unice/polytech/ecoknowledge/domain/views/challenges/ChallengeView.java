@@ -76,7 +76,8 @@ public class ChallengeView implements ViewForClient {
 	private Long computeRemainingTime(TimeBox lifeSpan) {
 		Interval between;
 		try {
-			between = new Interval(Model.getInstance().getCalculatorClock().getTime(), lifeSpan.getEnd());
+			// FIXME: 21/02/2016 between = new Interval(Model.getInstance().getCalculatorClock().getTime(), lifeSpan.getEnd());
+			between = new Interval(lifeSpan.getStart(), lifeSpan.getEnd());
 		} catch (Throwable t) {
 			return null;
 		}

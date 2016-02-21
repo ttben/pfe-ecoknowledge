@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.domain.views.goals;
+package fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

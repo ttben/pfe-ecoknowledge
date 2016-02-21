@@ -1,15 +1,16 @@
 package fr.unice.polytech.ecoknowledge.calculator.worker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.GoalResultHandler;
 import fr.unice.polytech.ecoknowledge.data.exceptions.GoalNotFoundException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.UserNotFoundException;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.Cache;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.Calculator;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.GoalResult;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,7 +53,7 @@ public class Worker implements Runnable, ExceptionListener, MessageListener {
 				Calculator calculator = new Calculator(new Cache());
 				GoalResult currentGoalResult = calculator.evaluate(goal);
 
-				MongoDBHandler.getInstance().updateGoalResult(currentGoalResult);
+				// FIXME: 21/02/2016 MongoDBHandler.getInstance().updateGoalResult(currentGoalResult);
 
 				Thread.sleep(fakeProcessingTime);
 

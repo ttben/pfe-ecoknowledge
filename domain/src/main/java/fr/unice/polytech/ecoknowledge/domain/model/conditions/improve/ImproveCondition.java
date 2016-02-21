@@ -3,7 +3,7 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.improve;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
+import fr.unice.polytech.ecoknowledge.domain.model.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.model.deserializer.ImproveConditionDeserializer;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;

@@ -1,4 +1,4 @@
-package fr.unice.polytech.ecoknowledge.domain.calculator;
+package fr.unice.polytech.ecoknowledge.calculator.worker.core;
 
 import com.google.gson.JsonObject;
 import org.joda.time.DateTime;

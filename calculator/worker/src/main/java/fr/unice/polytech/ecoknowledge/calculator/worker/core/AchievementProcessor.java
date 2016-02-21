@@ -1,14 +1,15 @@
-package fr.unice.polytech.ecoknowledge.domain.calculator;
+package fr.unice.polytech.ecoknowledge.calculator.worker.core;
 
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.model.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.StandardCondition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.SymbolicName;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCondition;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.ConditionResult;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.LevelResult;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.ConditionResult;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.GoalResult;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.LevelResult;
 
 import java.util.ArrayList;
 import java.util.List;

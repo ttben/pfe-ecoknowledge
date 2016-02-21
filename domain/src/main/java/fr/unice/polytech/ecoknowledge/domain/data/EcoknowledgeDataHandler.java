@@ -6,7 +6,6 @@ import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 
 import java.util.List;
 
@@ -19,8 +18,6 @@ public interface EcoknowledgeDataHandler {
 	void store(User user) throws NotSavableElementException;
 
 	void store(Goal goal) throws NotSavableElementException;
-
-	void store(GoalResult goalResult);
 
 	List<Challenge> readAllChallenges() throws IncoherentDBContentException, NotReadableElementException, IncoherentDBContentException, NotReadableElementException;
 

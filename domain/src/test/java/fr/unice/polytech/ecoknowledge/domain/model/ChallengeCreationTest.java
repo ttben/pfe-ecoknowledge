@@ -2,7 +2,6 @@ package fr.unice.polytech.ecoknowledge.domain.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.TestUtils;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.StandardCondition;
 import org.junit.Before;

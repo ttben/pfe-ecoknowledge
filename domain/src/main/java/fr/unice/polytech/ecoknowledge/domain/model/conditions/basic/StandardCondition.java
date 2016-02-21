@@ -3,7 +3,7 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
+import fr.unice.polytech.ecoknowledge.domain.model.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.SymbolicName;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.time.TimeFilter;
