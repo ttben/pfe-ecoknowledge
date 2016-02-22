@@ -10,7 +10,7 @@
         <init-param>
             <param-name>jersey.config.server.provider.classnames</param-name>
             <param-value>
-                WebTierFeeder
+                fr.unice.polytech.ecoknowledge.feeder.webtiers.WebTierFeeder
                 <!-- Add your resource classes here -->
             </param-value>
         </init-param>
