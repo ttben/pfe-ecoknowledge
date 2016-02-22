@@ -11,7 +11,7 @@ SET SOURCE_NAME=fakeDataSource
 SET SOURCE_WAR_NAME=fakeDataSource.war
 SET TOMCAT_HOST=http://localhost:8080/
 SET TOMCAT_SERVICE=fakeDataSource/
-
+SET TIMEOUT=20
 
 SET "INTEGRATION_HOME=%CD%"
 ECHO INTEGRATION_HOME : %INTEGRATION_HOME% > %INTEGRATION_HOME%\%LOG_FILE%
@@ -63,24 +63,23 @@ RMDIR /Q /S "%CATALINA_HOME%\webapps\%SOURCE_NAME%" >> %INTEGRATION_HOME%\%LOG_F
 COPY target\%SOURCE_WAR_NAME% "%CATALINA_HOME%\webapps\%SOURCE_WAR_NAME%" >> %INTEGRATION_HOME%\%LOG_FILE%
 ECHO War copied.
 
-ping 127.0.0.1 -n 10 > nul
+:: Wait for tomcat to be ready
+ping 127.0.0.1 -n %TIMEOUT% > nul
 
-:: Test tomcat is up
+
 ECHO Calling %TOMCAT_HOST%%TOMCAT_SERVICE% >> %INTEGRATION_HOME%\%LOG_FILE%
-
 CALL "%CURL_HOME%\curl.exe" -get %TOMCAT_HOST%%TOMCAT_SERVICE% >> %INTEGRATION_HOME%\%LOG_FILE%
 CALL "%CURL_HOME%\curl.exe" -get %TOMCAT_HOST%%TOMCAT_SERVICE% > %INTEGRATION_HOME%\tomcatResponse
 SET /P tomcatResponse=<%INTEGRATION_HOME%\tomcatResponse
 DEL "%INTEGRATION_HOME%\tomcatResponse"
-ECHO res : %tomcatResponse%
 
 IF NOT ["%tomcatResponse%"] == ["{"testOk":true}"] (
 	ECHO ERROR : Tomcat can't be reached >> %INTEGRATION_HOME%\%LOG_FILE%
 	ECHO ERROR : Tomcat can't be reached
 	GOTO :end
 )
-ECHO Tomcat reached
-
+ECHO Service Avalaible
+ECHO Service Avalaible >> %INTEGRATION_HOME%\%LOG_FILE%
 
 :end
 CD %INTEGRATION_HOME%
