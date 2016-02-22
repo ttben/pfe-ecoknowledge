@@ -10,7 +10,7 @@
         <init-param>
             <param-name>jersey.config.server.provider.classnames</param-name>
             <param-value>
-                fakeDataSource.DataService
+                fr.unice.polytech.ecoknowledge.fakeDataSource.DataService
                 <!-- Add your resource classes here -->
             </param-value>
         </init-param>

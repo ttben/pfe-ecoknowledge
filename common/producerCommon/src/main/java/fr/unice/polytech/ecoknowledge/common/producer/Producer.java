@@ -76,8 +76,6 @@ public abstract class Producer implements Runnable {
 	protected Properties getProperties() throws IOException {
 		urlToResourceFile = getURLProperties();
 
-		System.out.println("URL TO RESOURCE FILE : " + urlToResourceFile);
-
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlToResourceFile.openStream()));
 
 		Properties prop = new Properties();
