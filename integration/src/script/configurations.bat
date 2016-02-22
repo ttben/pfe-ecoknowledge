@@ -1,5 +1,5 @@
 ECHO Configurations ...
-SET datetimef=%date:~-4%_%date:~3,2%_%date:~0,2%__%time:~0,2%_%time:~3,2%_%time:~6,2%
+SET datetimef=%date:~-4%_%date:~3,2%_%date:~0,2%
 SET LOG_FILE=logs\%datetimef%.log
 SET LOG_FILE_TOMCAT_START=logs\%datetimef%_tomcat_start.log
 SET LOG_FILE_TOMCAT_STOP=logs\%datetimef%_tomcat_stop.log
@@ -11,4 +11,4 @@ SET TOMCAT_HOST=http://localhost:8080/
 SET TOMCAT_SERVICE=fakeDataSource/
 SET ACTIVEMQ_HOST=http://localhost:8161/
 SET TIMEOUT_TOMCAT=30
-SET TIMEOUT_ACTIVEMQ=30
+SET TIMEOUT_ACTIVEMQ=40
