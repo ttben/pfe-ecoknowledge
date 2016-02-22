@@ -25,6 +25,7 @@
         <module>fakeDataSource</module>
         <module>data</module>
         <module>calculator</module>
+        <module>common</module>
     </modules>
 
     <build>
