@@ -13,17 +13,14 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by Sébastien on 02/12/2015.
- */
 public class ChallengeCreationTest {
+	public static final String FILENAME = "challenge-example-sample2.json";
 
 	JsonObject jsonObject2 = null;
 
 	@Before
-	public void loadJsonFile() {
-
-		jsonObject2 = TestUtils.getFakeJson(2);
+	public void loadJsonFile() throws Exception {
+		jsonObject2 = TestUtils.getFakeJson(FILENAME);
 	}
 
 	@Test

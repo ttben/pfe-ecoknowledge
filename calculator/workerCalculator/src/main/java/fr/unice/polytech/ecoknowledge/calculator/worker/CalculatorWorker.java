@@ -45,7 +45,6 @@ public class CalculatorWorker extends Worker {
 				System.out.println("OTHER Received: " + message);
 			}
 		}
-		// TODO: 18/02/2016 LOG AND HANDLE IT
 		catch (JMSException | InterruptedException | IOException | GoalNotFoundException
 				| UserNotFoundException | NotSavableElementException | NotReadableElementException e) {
 

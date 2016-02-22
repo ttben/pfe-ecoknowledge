@@ -79,7 +79,6 @@ public class RetrieveRequiredVisitor implements GoalVisitor {
 
 	}
 
-
 	public TimeBox merge(TimeBox aTimeSpan, TimeBox anotherTimeSpan) {
 		DateTime startOfATimeSpan = aTimeSpan.getStart();
 		DateTime endOfATimeSpan = aTimeSpan.getStart();
@@ -87,12 +86,10 @@ public class RetrieveRequiredVisitor implements GoalVisitor {
 		DateTime startOfAnotherTimeSpan = anotherTimeSpan.getStart();
 		DateTime endOfAnotherTimeSpan = anotherTimeSpan.getStart();
 
-		// FIXME: 27/11/2015
 		DateTime newStart = (startOfATimeSpan.getMillis() < startOfAnotherTimeSpan.getMillis())
 				? startOfATimeSpan
 				: startOfAnotherTimeSpan;
 
-		// FIXME: 27/11/2015
 		DateTime newEnd = (endOfATimeSpan.getMillis() > endOfAnotherTimeSpan.getMillis())
 				? endOfATimeSpan
 				: endOfAnotherTimeSpan;

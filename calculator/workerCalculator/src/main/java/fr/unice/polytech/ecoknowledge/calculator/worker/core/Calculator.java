@@ -98,6 +98,6 @@ public class Calculator {
 	}
 
 	public static Clock getClock() {
-		return clock;
+		return Clock.getClock();
 	}
 }

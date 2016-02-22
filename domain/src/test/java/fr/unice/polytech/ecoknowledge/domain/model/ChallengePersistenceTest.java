@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 public class ChallengePersistenceTest {
 
+	public static final String FILENAME = "challenge-example-sample1.json";
 	static Challenge aChallenge = null;
 	static String oldDBName;
 	static String testDBName = "challengePersistenceTest";
@@ -43,9 +44,9 @@ public class ChallengePersistenceTest {
 
 	@Before
 	@Ignore
-	public void loadJsonFile() {
+	public void loadJsonFile() throws Exception {
 
-		jsonObject = TestUtils.getFakeJson(1);
+		jsonObject = TestUtils.getFakeJson(FILENAME);
 	}
 
 	@Test

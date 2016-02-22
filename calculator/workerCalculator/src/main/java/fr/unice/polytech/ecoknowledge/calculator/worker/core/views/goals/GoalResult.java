@@ -8,6 +8,7 @@ import fr.unice.polytech.ecoknowledge.calculator.worker.core.Calculator;
 import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.ViewForClient;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import fr.unice.polytech.ecoknowledge.domain.model.time.RecurrenceType;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import org.joda.time.Interval;
@@ -118,9 +119,9 @@ public class GoalResult implements ViewForClient {
 
 	private Double computePercent(TimeBox timeSpan) {
 
-		if (timeSpan.getEnd().isBefore(Calculator.getClock().getTime()))
+		if (timeSpan.getEnd().isBefore(Clock.getClock().getTime()))
 			return 100.0;
-		Interval between = new Interval(Calculator.getClock().getTime(), timeSpan.getEnd());
+		Interval between = new Interval(Clock.getClock().getTime(), timeSpan.getEnd());
 		long days = between.toDuration().getStandardDays() + 1;
 
 		Interval totalInterval = new Interval(timeSpan.getStart(), timeSpan.getEnd());
@@ -132,7 +133,7 @@ public class GoalResult implements ViewForClient {
 	private Long computeRemainingTime(TimeBox lifeSpan) {// FIXME: 09/12/2015 DUPLIQUE DANS CHALLENGE VIEW
 		Interval between;
 		try {
-			between = new Interval(Calculator.getClock().getTime(), lifeSpan.getEnd());
+			between = new Interval(Clock.getClock().getTime(), lifeSpan.getEnd());
 		} catch (Throwable t) {
 			return null;
 		}

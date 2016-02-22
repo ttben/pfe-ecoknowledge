@@ -15,7 +15,17 @@ public class Clock {
 	private DateTime fakeTime = null;
 	private TimeZone middleWareTZ = TimeZone.getTimeZone("Europe/Paris");
 
+	private static Clock instance;
+
 	public Clock() {
+	}
+
+	public static Clock getClock() {
+		if(instance == null) {
+			instance = new Clock();
+		}
+
+		return instance;
 	}
 
 	public DateTime getTime() {

@@ -1,7 +1,16 @@
 package fr.unice.polytech.ecoknowledge.language;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
+import org.codehaus.jackson.map.SerializationConfig;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
 
 public class ChallengeTest {
 
@@ -10,12 +19,19 @@ public class ChallengeTest {
 	JsonObject badgeJsonObject = new JsonObject();
 	private Challenge challenge;
 
-	// FIXME: 25/11/2015 
 	/*
 	@Before
 	public void setUp() {
-		challengeJsonObject.addProperty("recurrence", "oui récurent ma gueuele");
+
+
+
+		JsonObject recurrence = new JsonObject();
+		recurrence.addProperty("type", "week");
+		recurrence.addProperty("unit", 2);
+		challengeJsonObject.add("recurrence", recurrence);
 		challengeJsonObject.addProperty("type", "standard");
+		challengeJsonObject.addProperty("name", "aChallenge");
+		challengeJsonObject.addProperty("image", "http://www.paysdesreves.com");
 
 		lifeSpanJsonObject.addProperty("start", "2001-07-04T12:08:56.235-0700");
 		lifeSpanJsonObject.addProperty("end", "2001-11-04T02:08:56.235-0700");
@@ -55,5 +71,6 @@ public class ChallengeTest {
 		System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schema));
 
 	}
+
 	*/
 }

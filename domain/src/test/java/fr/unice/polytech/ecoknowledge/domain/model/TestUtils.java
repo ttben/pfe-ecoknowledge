@@ -6,26 +6,17 @@ import com.google.gson.JsonParser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 
-/**
- * Created by Benjamin on 30/11/2015.
- */
 public class TestUtils {
-	public static JsonObject getFakeJson(int filenumber) {
+	public static JsonObject getFakeJson(String filename) throws Exception {
 		BufferedReader br = null;
-		String result = "";
+		URL url = ClassLoader.getSystemClassLoader().getResource(filename);
 
 		try {
-
-			String currentLine;
-
-			br = new BufferedReader(new FileReader("./src/test/java/fr/unice/polytech/ecoknowledge/domain/model/challenge-example-sample"
-					+ filenumber + ".json"));
-
-			while ((currentLine = br.readLine()) != null) {
-				result = result.concat(currentLine);
-			}
-
+			br = new BufferedReader(new InputStreamReader(url.openStream()));
+			return new JsonParser().parse(br).getAsJsonObject();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -35,6 +26,7 @@ public class TestUtils {
 				ex.printStackTrace();
 			}
 		}
-		return new JsonParser().parse(result).getAsJsonObject();
+
+		throw new Exception();
 	}
 }
