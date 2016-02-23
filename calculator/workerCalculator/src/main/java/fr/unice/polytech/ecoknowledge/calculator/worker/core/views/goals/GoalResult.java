@@ -105,11 +105,14 @@ public class GoalResult implements ViewForClient {
 		result.addProperty("remaining", remaining + " jours");
 		result.addProperty("timePercent", computePercent(box));
 
-
 		result.addProperty("startTime", this.goal.getChallengeDefinition().getLifeSpan().getStart().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
 		result.addProperty("endTime", this.goal.getChallengeDefinition().getLifeSpan().getEnd().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
 
-		// FIXME: 30/11/2015 unit not used
+		RecurrenceType recurrenceType = this.goal.getChallengeDefinition().getRecurrence().getRecurrenceType();
+		result.addProperty("length", recurrenceType.toString());
+
+		// #147
+		/*
 		switch (this.goal.getChallengeDefinition().getRecurrence().getRecurrenceType()) {
 			case DAY:
 				result.addProperty("length", "1 jour");
@@ -125,6 +128,7 @@ public class GoalResult implements ViewForClient {
 			default:
 				break;
 		}
+		*/
 
 		return result;
 	}
@@ -142,7 +146,11 @@ public class GoalResult implements ViewForClient {
 		return 100. * (totalDays - days) / totalDays;
 	}
 
-	private Long computeRemainingTime(TimeBox lifeSpan) {// FIXME: 09/12/2015 DUPLIQUE DANS CHALLENGE VIEW
+	private Long computeRemainingTime(TimeBox lifeSpan) {
+
+		return Clock.getClock().getTime().getMillis() - lifeSpan.getStart().getMillis();
+		/*
+		#146
 		Interval between;
 		try {
 			between = new Interval(Clock.getClock().getTime(), lifeSpan.getEnd());
@@ -150,6 +158,7 @@ public class GoalResult implements ViewForClient {
 			return null;
 		}
 		return between.toDuration().getStandardDays();
+		*/
 	}
 
 	public Goal getGoal() {
