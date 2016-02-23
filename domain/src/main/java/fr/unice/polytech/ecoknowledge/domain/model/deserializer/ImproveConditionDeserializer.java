@@ -33,11 +33,9 @@ public class ImproveConditionDeserializer extends JsonDeserializer<Condition> {
 		if (referencePeriodString != null
 				&& (referencePeriodString.equals("week") || referencePeriodString.equals("month"))) {
 			if (referencePeriodString.equals("week")) {
-				// FIXME: 06/12/2015
-				tb = TimeSpanGenerator.generateLastWeek(new Clock());
+				tb = TimeSpanGenerator.generateLastWeek(Clock.getClock());
 			} else {
-				// FIXME: 06/12/2015
-				tb = TimeSpanGenerator.generateLastMonth(new Clock());
+				tb = TimeSpanGenerator.generateLastMonth(Clock.getClock());
 			}
 		} else {
 			ObjectMapper mapper = new ObjectMapper();
