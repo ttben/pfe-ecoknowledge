@@ -43,8 +43,6 @@ public class Calculator {
 		// Get results
 		GoalResult goalResult = achievementProcessor.getGoalResult();
 
-		logger.info(goalResult.getCorrectRate());
-
 		// Look for the best badge
 		Badge bestBadge = getBestBadge(goalResult.getLevelResultList());
 
@@ -59,11 +57,11 @@ public class Calculator {
 
 		if (isOver) {
 			if (bestBadge != null) {
-				System.out.println("Evaluation --> Badge won");
+				logger.warn("Goal is over. Badge won !");
 				// Give the badge
 				Model.getInstance().giveBadge(bestBadge, goal.getUser().getId().toString());
 			} else {
-				System.out.println("Evalutaion --> Badge lost");
+				logger.warn("Goal is over. Badge lost ...");
 			}
 
 			logger.warn("Goal is over. Deleting goal : " + goal.getId());
@@ -72,6 +70,7 @@ public class Calculator {
 			Model.getInstance().deleteGoal(goal);
 
 			try {
+				logger.info("Giving a new goal ...");
 				// Give a new goal
 				JsonObject json = new JsonObject();
 				json.addProperty("user", goal.getUser().getId().toString());
