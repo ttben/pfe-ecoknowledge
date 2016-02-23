@@ -34,11 +34,14 @@ public class CalculatorWorker extends Worker {
 				ObjectMapper mapper = new ObjectMapper();
 				Goal goal = mapper.readValue(obj, Goal.class);
 
-				logger.warn("WORKER CALCULATOR !! " + name + " received: " + goal.getId() + ". Now sleeping for " + fakeProcessingTime + " ms");
+				String logs = name + " received goal (" + goal.getId() + ") user (" + goal.getUser().getId()+")";
+				logger.warn(logs);
 
-				System.out.println(name + " received: " + goal.getChallengeDefinition().getId() + " User : " + goal.getUser().getId());
+
 				Calculator calculator = new Calculator(new Cache());
 				GoalResult currentGoalResult = calculator.evaluate(goal);
+
+				currentGoalResult.setId(goal.getId());
 
 				//	Storing goal result
 				MongoDBHandler.getInstance().getBddConnector()
