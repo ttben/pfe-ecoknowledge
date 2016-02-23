@@ -11,7 +11,11 @@ import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.Conditi
 import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.GoalResult;
 import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.LevelResult;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,7 +39,6 @@ public class AchievementProcessor implements GoalVisitor {
 	@Override
 	public void visit(Goal goal) {
 		this.goal = goal;
-		Challenge challengeToEvaluate = goal.getChallengeDefinition();
 	}
 
 	@Override
@@ -54,6 +57,17 @@ public class AchievementProcessor implements GoalVisitor {
 		double correctRate = percentageAchieved / currentLevelResult.size();
 
 		goalResult = new GoalResult(goal.getId().toString(), goal, achieved, correctRate, currentLevelResult);
+
+		//	Generate creation time
+		/*
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		Date today = Calendar.getInstance().getTime();
+		String reportDate = df.format(today);
+		*/
+
+		long todayInSeconds = Calendar.getInstance().getTime().getTime()/1000;
+		goalResult.setUpdateTime(todayInSeconds);
+
 		currentLevelResult = new ArrayList<>();
 	}
 
@@ -126,7 +140,6 @@ public class AchievementProcessor implements GoalVisitor {
 		currentConditionResult.add(conditionResult);
 	}
 
-	// TODO: 27/11/2015  
 	@Override
 	public void visit(ImproveCondition condition) {
 

@@ -25,6 +25,15 @@ public class GoalResult implements ViewForClient {
 	private List<LevelResult> levelResultList = new ArrayList<>();
 	private Goal goal;
 
+	public long getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(long updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	private long updateTime;
 
 	@JsonCreator
 	public GoalResult(@JsonProperty(value = "id", required = false) String id,
@@ -78,8 +87,11 @@ public class GoalResult implements ViewForClient {
 		}
 		result.add("levels", levelsJsonArray);
 
-		result.addProperty("id", this.goal.getId().toString());
+		result.addProperty("id", this.getId().toString());
 		result.addProperty("name", this.goal.getChallengeDefinition().getName());
+
+		result.addProperty("updateTime", this.updateTime);
+
 		result.addProperty("progressPercent", this.correctRate);
 
 		TimeBox box;
