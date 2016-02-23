@@ -9,6 +9,7 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.UpdateOptions;
 import fr.unice.polytech.ecoknowledge.data.exceptions.ChallengeNotFoundException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.GoalNotFoundException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.UserNotFoundException;
@@ -96,12 +97,18 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	}
 
 	public void updateGoalResult(JsonObject goalResultJsonDescription) {
+		String goalResultID = goalResultJsonDescription.get("id").getAsString();
+		logger.warn("Storing goal result (" + goalResultID + ")");
+
 		MongoCollection<Document> collection = getCollection(RESULTS_COLLECTION);
 
 		String id = goalResultJsonDescription.get("id").getAsString();
 		Document newGoalResultDocument = Document.parse(goalResultJsonDescription.toString());
 
-		collection.replaceOne(Filters.eq("id", id), newGoalResultDocument);
+		collection.updateOne(Filters.eq("id", id), new Document("$set", newGoalResultDocument),new UpdateOptions().upsert(true));
+
+		JsonArray allGoalResult = this.findAllGoalResult();
+		logger.info("\n\nNumberOfGoalResults:"+allGoalResult.size() + "\n\nGoalResultDBContent\n " +  allGoalResult+"\n");
 	}
 
 	@Override
@@ -113,6 +120,8 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public JsonArray findAllGoals() {
 		return findAll(GOALS_COLLECTION);
 	}
+
+	public JsonArray findAllGoalResult() { return findAll(RESULTS_COLLECTION);}
 
 	@Override
 	public JsonArray findAllUsers() {
