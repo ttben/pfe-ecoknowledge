@@ -9,6 +9,7 @@ import fr.unice.polytech.ecoknowledge.data.exceptions.GoalNotFoundException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.UserNotFoundException;
+import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 
 import javax.jms.JMSException;
@@ -33,11 +34,19 @@ public class CalculatorWorker extends Worker {
 				ObjectMapper mapper = new ObjectMapper();
 				Goal goal = mapper.readValue(obj, Goal.class);
 
-				System.out.println(name + " received: " + goal.getId() + ". Now sleeping for " + fakeProcessingTime + " ms");
+				logger.warn("WORKER CALCULATOR !! " + name + " received: " + goal.getId() + ". Now sleeping for " + fakeProcessingTime + " ms");
+
+				System.out.println(name + " received: " + goal.getChallengeDefinition().getId() + " User : " + goal.getUser().getId());
 				Calculator calculator = new Calculator(new Cache());
 				GoalResult currentGoalResult = calculator.evaluate(goal);
 
-				// FIXME: 21/02/2016 MongoDBHandler.getInstance().updateGoalResult(currentGoalResult);
+				//	Storing goal result
+				MongoDBHandler.getInstance().getBddConnector()
+						.updateGoalResult(currentGoalResult.toJsonForClient());
+
+				//	Set goal result of goal
+				goal.setGoalResultID(currentGoalResult.getId());
+				MongoDBHandler.getInstance().updateGoal(goal);
 
 				Thread.sleep(fakeProcessingTime);
 
