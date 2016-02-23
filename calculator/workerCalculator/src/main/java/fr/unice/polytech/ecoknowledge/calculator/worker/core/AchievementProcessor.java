@@ -11,11 +11,8 @@ import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.Conditi
 import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.GoalResult;
 import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.LevelResult;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -102,7 +99,7 @@ public class AchievementProcessor implements GoalVisitor {
 		//System.out.println(goal.getStart() + ", " + goal.getEnd());
 		//	Retrieves values of sensors
 		List<Data> data = this.cache.getDataOfSensorBetweenDate(sensorBound, goal.getStart(), goal.getEnd(),
-				condition.getTargetDays().getWeekMoment(), condition.getTargetDays().getDayMoment());
+				condition.getTargetTime().getWeekMoment(), condition.getTargetTime().getDayMoment());
 
 		//System.out.println("data :" + data);
 

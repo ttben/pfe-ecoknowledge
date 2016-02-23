@@ -7,20 +7,25 @@ import fr.unice.polytech.ecoknowledge.domain.model.conditions.time.TimeFilter;
 public abstract class BasicCondition implements Condition {
 
 	protected Expression expression;
-	protected TimeFilter targetDays;
+
+	protected TimeFilter targetTime;
 
 	public BasicCondition(Expression expression, TimeFilter targetDays) {
 
 		this.expression = expression;
-		this.targetDays = targetDays;
+		this.targetTime = targetDays;
 	}
 
 	public Expression getExpression() {
 		return expression;
 	}
 
-	public TimeFilter getTargetDays() {
-		return targetDays;
+	public TimeFilter getTargetTime() {
+		return targetTime;
+	}
+
+	public void setTargetTime(TimeFilter targetTime) {
+		this.targetTime = targetTime;
 	}
 
 	@Override
@@ -32,7 +37,7 @@ public abstract class BasicCondition implements Condition {
 		BasicCondition basicCondition = (BasicCondition) obj;
 
 			return expression.equals(basicCondition.expression)
-					&& targetDays.equals(basicCondition.targetDays);
+					&& targetTime.equals(basicCondition.targetTime);
 
 	}
 }

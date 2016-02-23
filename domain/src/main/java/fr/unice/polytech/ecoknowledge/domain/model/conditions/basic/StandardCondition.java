@@ -10,7 +10,7 @@ import fr.unice.polytech.ecoknowledge.domain.model.conditions.time.TimeFilter;
 
 /**
  * a < b, 		week days		80% of time
- * expression		targetDays		thresholdRate
+ * expression		targetTime		thresholdRate
  */
 public class StandardCondition extends BasicCondition {
 
@@ -18,10 +18,10 @@ public class StandardCondition extends BasicCondition {
 
 	@JsonCreator
 	public StandardCondition(@JsonProperty(value = "expression", required = true) Expression expression,
-							 @JsonProperty(value = "targetTime", required = true) TimeFilter targetDays,
+							 @JsonProperty(value = "targetTime", required = true) TimeFilter targetTime,
 							 @JsonProperty(value = "counter", required = true) Counter counter) {
 
-		super(expression, targetDays);
+		super(expression, targetTime);
 		this.counter = counter;
 	}
 

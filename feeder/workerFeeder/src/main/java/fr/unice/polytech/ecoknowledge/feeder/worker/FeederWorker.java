@@ -3,6 +3,7 @@ package fr.unice.polytech.ecoknowledge.feeder.worker;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.common.worker.Worker;
+import fr.unice.polytech.ecoknowledge.data.core.MongoDBConnector;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -32,7 +33,10 @@ public class FeederWorker extends Worker {
 
 				String result = new HTTPCaller().sendGet(sensorName);
 
-				// Thread.sleep(fakeProcessingTime);
+				JsonObject dataJsonObject = new JsonParser().parse(result).getAsJsonObject();
+				MongoDBConnector.getInstance().storeData(dataJsonObject);
+
+				Thread.sleep(fakeProcessingTime);
 
 			} else {
 				System.out.println("OTHER Received: " + message);

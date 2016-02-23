@@ -6,8 +6,8 @@ import fr.unice.polytech.ecoknowledge.feeder.worker.FeederWorker;
 public class App {
 
 	public static void main(String[] args) throws Exception {
-		thread(new FeederProducer(10), false);
-		thread(new FeederWorker("task2", 100), false);
+		thread(new FeederProducer(1000), false);
+		thread(new FeederWorker("task2", 0), false);
 		//thread(new FeederWorker("task1", 100), false);
 	}
 

@@ -30,8 +30,8 @@ public class ChallengeCreationTest {
 
 		StandardCondition sc = (StandardCondition) challenge.getLevels().get(0).getConditions().get(0);
 
-		assertEquals(Arrays.asList(new AbstractMap.SimpleEntry<Integer, Integer>(8, 11)), sc.getTargetDays().getDayMoment());
-		assertEquals(new AbstractMap.SimpleEntry<Integer, Integer>(1, 5), sc.getTargetDays().getWeekMoment());
+		assertEquals(Arrays.asList(new AbstractMap.SimpleEntry<Integer, Integer>(8, 11)), sc.getTargetTime().getDayMoment());
+		assertEquals(new AbstractMap.SimpleEntry<Integer, Integer>(1, 5), sc.getTargetTime().getWeekMoment());
 	}
 
 }

@@ -65,11 +65,11 @@ public class Model {
 		MongoDBHandler.getInstance().store(challenge);
 	}
 
-	public void takeChallenge(JsonObject goalJsonDescription) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {
-		this.takeChallenge(goalJsonDescription, null);
+	public Goal takeChallenge(JsonObject goalJsonDescription) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {
+		return this.takeChallenge(goalJsonDescription, null);
 	}
 
-	public void takeChallenge(JsonObject jsonObject, TimeBox next) throws IOException, JsonParseException, JsonMappingException, GoalNotFoundException, NotSavableElementException, UserNotFoundException, NotReadableElementException, InvalidGoalTimespanOverChallengeException {
+	public Goal takeChallenge(JsonObject jsonObject, TimeBox next) throws IOException, JsonParseException, JsonMappingException, GoalNotFoundException, NotSavableElementException, UserNotFoundException, NotReadableElementException, InvalidGoalTimespanOverChallengeException {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		//	Build goal with custom deserializer
@@ -103,6 +103,7 @@ public class Model {
 		goal.setTimeSpan(timeSpan);
 
 		MongoDBHandler.getInstance().store(goal);
+		return goal;
 	}
 
 	// TODO: 06/12/2015
