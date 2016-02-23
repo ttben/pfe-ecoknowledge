@@ -363,6 +363,10 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 		throw new NotReadableElementException(exceptionDescription, motherCause);
 	}
 
+	public MongoDBConnector getBddConnector() {
+		return bddConnector;
+	}
+
 	public void dropCollection(String dbName) {
 		bddConnector.drop(dbName);
 	}

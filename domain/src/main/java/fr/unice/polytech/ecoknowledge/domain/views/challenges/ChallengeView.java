@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
+import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 import org.joda.time.Interval;
@@ -76,8 +77,8 @@ public class ChallengeView implements ViewForClient {
 	private Long computeRemainingTime(TimeBox lifeSpan) {
 		Interval between;
 		try {
-			// FIXME: 21/02/2016 between = new Interval(Model.getInstance().getCalculatorClock().getTime(), lifeSpan.getEnd());
-			between = new Interval(lifeSpan.getStart(), lifeSpan.getEnd());
+			between = new Interval(Clock.getClock().getTime(), lifeSpan.getEnd());
+			//between = new Interval(lifeSpan.getStart(), lifeSpan.getEnd());
 		} catch (Throwable t) {
 			return null;
 		}
