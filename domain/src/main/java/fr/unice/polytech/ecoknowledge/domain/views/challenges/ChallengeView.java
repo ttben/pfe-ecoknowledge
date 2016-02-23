@@ -6,6 +6,7 @@ import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
+import fr.unice.polytech.ecoknowledge.domain.model.time.RecurrenceType;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import fr.unice.polytech.ecoknowledge.domain.views.ViewForClient;
 import org.joda.time.Interval;
@@ -36,10 +37,12 @@ public class ChallengeView implements ViewForClient {
 		result.addProperty("startTime", this.challenge.getLifeSpan().getStart().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
 		result.addProperty("endTime", this.challenge.getLifeSpan().getEnd().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
 
-		String recurrence = "";
+		RecurrenceType recurrenceType = this.challenge.getRecurrence().getRecurrenceType();
+		result.addProperty("length", recurrenceType.toString());
 
-		// FIXME: 30/11/2015 unit not used
-		switch (this.challenge.getRecurrence().getRecurrenceType()) {
+		// #147
+		/*
+		switch (this.goal.getChallengeDefinition().getRecurrence().getRecurrenceType()) {
 			case DAY:
 				result.addProperty("length", "1 jour");
 				break;
@@ -54,6 +57,7 @@ public class ChallengeView implements ViewForClient {
 			default:
 				break;
 		}
+		*/
 
 		JsonArray levelJson = new JsonArray();
 		int index = 1;
@@ -75,14 +79,18 @@ public class ChallengeView implements ViewForClient {
 	}
 
 	private Long computeRemainingTime(TimeBox lifeSpan) {
+
+		return Clock.getClock().getTime().getMillis() - lifeSpan.getStart().getMillis();
+		/*
+		#146
 		Interval between;
 		try {
 			between = new Interval(Clock.getClock().getTime(), lifeSpan.getEnd());
-			//between = new Interval(lifeSpan.getStart(), lifeSpan.getEnd());
 		} catch (Throwable t) {
 			return null;
 		}
 		return between.toDuration().getStandardDays();
+		*/
 	}
 }
 

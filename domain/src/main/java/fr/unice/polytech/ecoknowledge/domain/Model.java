@@ -102,14 +102,6 @@ public class Model {
 
 		goal.setTimeSpan(timeSpan);
 
-		/*
-		FIXME #140 delete direct use of GoalResult and Calculator
-		GoalResult result = calculator.evaluate(goal);
-
-		MongoDBHandler.getInstance().store(result);
-		goal.setGoalResultID(result.getId());
-		*/
-
 		MongoDBHandler.getInstance().store(goal);
 	}
 

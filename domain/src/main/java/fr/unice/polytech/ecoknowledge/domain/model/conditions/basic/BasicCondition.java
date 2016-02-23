@@ -19,17 +19,8 @@ public abstract class BasicCondition implements Condition {
 		return expression;
 	}
 
-	public void setExpression(Expression expression) {
-		this.expression = expression;
-	}
-
 	public TimeFilter getTargetDays() {
-		if (targetDays == null) return new TimeFilter();
 		return targetDays;
-	}
-
-	public void setTargetDays(TimeFilter targetDays) {
-		this.targetDays = targetDays;
 	}
 
 	@Override
@@ -40,13 +31,8 @@ public abstract class BasicCondition implements Condition {
 
 		BasicCondition basicCondition = (BasicCondition) obj;
 
-		// FIXME: 30/11/2015 targetDays can not be null (not yet implemented)
-		if (targetDays != null) {
 			return expression.equals(basicCondition.expression)
 					&& targetDays.equals(basicCondition.targetDays);
-		} else {
-			return expression.equals(basicCondition.expression);
-		}
-	}
 
+	}
 }

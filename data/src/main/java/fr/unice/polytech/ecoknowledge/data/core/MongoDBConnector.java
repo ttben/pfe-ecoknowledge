@@ -320,6 +320,6 @@ public class MongoDBConnector implements DocumentBDDConnector {
 
 		String id = newDocumentJsonDescription.get("id").getAsString();
 
-		collection.updateOne(Filters.eq("id", id), new Document("$set", newDocument));    // FIXME: 26/01/2016 DO NOTHING
+		collection.updateOne(Filters.eq("id", id), new Document("$set", newDocument));
 	}
 }

@@ -13,63 +13,6 @@ import javax.ws.rs.core.Response;
 @Path("/test")
 public class TestService {
 
-
-	// // FIXME: 21/02/2016 #140
-	/*
-
-	@POST
-	@Path("/evaluate")
-	@Consumes("application/json")
-	public Response evaluate(String object) {
-		JsonObject json = new JsonParser().parse(object).getAsJsonObject();
-		try {
-			Model.getInstance().evaluate(
-					json.get("userId").getAsString(),
-					json.get("challengeId").getAsString());
-		} catch (IOException e) {
-			return Response.status(500).entity(e.getMessage()).build();
-		} catch (GoalNotFoundException e) {
-			e.printStackTrace();
-			return Response.status(403).entity(e.getMessage()).build();
-		} catch (UserNotFoundException e) {
-			e.printStackTrace();
-			return Response.status(403).entity(e.getMessage()).build();
-		} catch (IncoherentDBContentException e) {
-			e.printStackTrace();
-			return Response.status(500).entity(e.getMessage()).build();
-		} catch (NotSavableElementException e) {
-			e.printStackTrace();
-			return Response.status(500).entity(e.getMessage()).build();
-		} catch (NotReadableElementException e) {
-			e.printStackTrace();
-			return Response.status(500).entity(e.getMessage()).build();
-		}
-		return Response.ok().build();
-	}
-
-
-	@POST
-	@Path("/stub")
-	@Consumes("application/json")
-	public Response addFakeData(String obj) {
-		JsonObject object = new JsonParser().parse(obj).getAsJsonObject();
-		Cache.getFakeCache().addData(object);
-		return Response.ok().entity(Cache.getFakeCache().getData().toString()).build();
-	}
-
-	@POST
-	@Path("/clock")
-	@Consumes("application/json")
-	public Response setClock(String obj) {
-		JsonObject object = new JsonParser().parse(obj).getAsJsonObject();
-		String newDate = object.get("date").getAsString();
-		DateTime newDateTime = DateTime.parse(newDate);
-		Model.getInstance().setTime(newDateTime);
-		return Response.ok().entity(Model.getInstance().getTimeDescription()).build();
-	}
-
-	*/
-
 	@GET
 	@Path("/db/names")
 	public Response getDBNames() {

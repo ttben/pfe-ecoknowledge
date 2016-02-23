@@ -18,7 +18,7 @@ public class StandardCondition extends BasicCondition {
 
 	@JsonCreator
 	public StandardCondition(@JsonProperty(value = "expression", required = true) Expression expression,
-							 @JsonProperty(value = "targetTime", required = false) TimeFilter targetDays,    // FIXME: 25/11/2015 required must be true
+							 @JsonProperty(value = "targetTime", required = true) TimeFilter targetDays,
 							 @JsonProperty(value = "counter", required = true) Counter counter) {
 
 		super(expression, targetDays);
