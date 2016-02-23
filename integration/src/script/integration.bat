@@ -23,19 +23,7 @@ CALL %INTEGRATION_HOME%\checkTomcat.bat
 CALL %INTEGRATION_HOME%\startActiveMQ.bat
 
 CALL %INTEGRATION_HOME%\waitActiveMQ.bat
-::CALL %INTEGRATION_HOME%\checkActiveMQ.bat
-
-ECHO Calling %ACTIVEMQ_HOST% >> %INTEGRATION_HOME%\%LOG_FILE%
-CALL "%CURL_HOME%\curl.exe" -get %ACTIVEMQ_HOST% >> %INTEGRATION_HOME%\%LOG_FILE%
-CALL "%CURL_HOME%\curl.exe" -get %ACTIVEMQ_HOST% > %INTEGRATION_HOME%\activeMQResponse
-SET /P activeMQResponse=<%INTEGRATION_HOME%\activeMQResponse
-
-ECHO %activeMQResponse%
-
-::DEL "%INTEGRATION_HOME%\activeMQResponse"
+CALL %INTEGRATION_HOME%\checkActiveMQ.bat
 
 CALL %INTEGRATION_HOME%\stopActiveMQ.bat
 CALL %INTEGRATION_HOME%\stopTomcat.bat
-
-
-:: CLOSE EVERYTHING

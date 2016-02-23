@@ -1,4 +1,5 @@
 ECHO Configurations ...
+
 SET datetimef=%date:~-4%_%date:~3,2%_%date:~0,2%
 SET LOG_FILE=logs\%datetimef%.log
 SET LOG_FILE_TOMCAT_START=logs\%datetimef%_tomcat_start.log
