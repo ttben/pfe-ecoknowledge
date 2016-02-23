@@ -10,12 +10,12 @@
         <init-param>
             <param-name>jersey.config.server.provider.classnames</param-name>
             <param-value>
-                server.TestService
-                server.ChallengeService
-                server.GoalService
-                server.MosaicService
-                server.UserService
-                server.MyExampleService
+                fr.unice.polytech.ecoknowledge.server.TestService
+                fr.unice.polytech.ecoknowledge.server.ChallengeService
+                fr.unice.polytech.ecoknowledge.server.GoalService
+                fr.unice.polytech.ecoknowledge.server.MosaicService
+                fr.unice.polytech.ecoknowledge.server.UserService
+                fr.unice.polytech.ecoknowledge.server.MyExampleService
                 <!-- Add your resource classes here -->
             </param-value>
         </init-param>

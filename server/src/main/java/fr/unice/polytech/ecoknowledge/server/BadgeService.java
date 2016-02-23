@@ -1,4 +1,4 @@
-package server;
+package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonArray;
 import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;

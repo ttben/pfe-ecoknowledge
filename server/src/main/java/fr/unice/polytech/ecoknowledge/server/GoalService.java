@@ -1,4 +1,4 @@
-package server;
+package fr.unice.polytech.ecoknowledge.server;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
