@@ -46,6 +46,13 @@ public class Controller {
 
 		JsonArray result = new JsonArray();
 		for (Goal currentGoal : goalList) {
+			//	Handling case when current goal has never been
+			//	evaluated by calculator (happens once it its lifetime)
+			if(currentGoal.getGoalResultID() == null) {
+				logger.warn("No goal result for goal " + currentGoal.getId() + " skipping it ...");
+				continue;
+			}
+
 			String goalResultStrID = currentGoal.getGoalResultID().toString();
 
 			logger.info("Try to retrieve goal result with ID " + goalResultStrID);
