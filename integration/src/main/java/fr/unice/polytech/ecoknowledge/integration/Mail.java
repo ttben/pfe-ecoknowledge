@@ -2,42 +2,32 @@ package fr.unice.polytech.ecoknowledge.integration;
 
 import javax.mail.*;
 import javax.mail.internet.*;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URLDecoder;
 import java.util.Properties;
 
 /**
- * Created by Sébastien on 23/02/2016.
+ * Created by Sebastien on 23/02/2016.
  */
 public class Mail {
-    
+
+    public static void main(String args[]){
+
+        String body = args[0];
+        String adresses = args[1];
+        String subject = body.contains("FAIL")?"[FAIL] pfe-ecoknowledge Integration":"[SUCCESS] pfe-ecoknowledge Integration";
+
+        sendMail(subject, body, adresses);
+    }
+
     public static void sendMail(String subject, String text, String addresses)
     {
-        Properties accountProperties = new Properties();
-
-        try {
-
-            //Locale locale = new Locale("fr", "FR");
-            //Locale.setDefault(locale);
-            InputStream inputStream = new FileInputStream(
-                    URLDecoder.decode(
-                            Mail.class.getClassLoader().getResource("account.properties").toString().replace("file:", "")
-                            , "UTF-8"));
-            accountProperties.load(inputStream);
-        } catch (FileNotFoundException e ) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         Properties props = System.getProperties();
         props.put("mail.smtp.starttls.enable", true); // added this line
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.user", "pfe.ecoknowledge@gmail.com");
-        props.put("mail.smtp.password", accountProperties.getProperty("password"));
+        props.put("mail.smtp.password", "hugoBosse");
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
 

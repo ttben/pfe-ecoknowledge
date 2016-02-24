@@ -10,7 +10,7 @@ firstLine=$(head -n 1 "$INTEGRATION_HOME/tomcatResponse")
 if [ "$firstLine" !=  "{\"testOk\":true}" ]
 then
 	echo ERROR : Tomcat cant be reached
-    echo ERROR : Tomcat cant be reached >> "$LOG_FILE"
+    echo ERROR : Tomcat cant be reached ... FAIL >> "$LOG_FILE"
 	exit 1
 fi
 

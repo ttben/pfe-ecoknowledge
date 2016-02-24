@@ -12,11 +12,6 @@ public class Integration {
     @Test
     public void sendMail(){
 
-        String integrationPath = System.getenv("INTEGRATION_HOME");
-        System.out.println(integrationPath);
-        String resultPath = integrationPath + "\\src\\script\\result\\success.result";
-        System.out.println(resultPath);
-        File resultFile = new File(resultPath);
 
         /*
         Mail.sendMail("[SUCCESS] pfe-ecoknowledge Integration",
