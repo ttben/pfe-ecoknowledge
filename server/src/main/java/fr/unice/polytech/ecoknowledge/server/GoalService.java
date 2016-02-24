@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fr.unice.polytech.ecoknowledge.data.core.MongoDBConnector;
 import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.InvalidGoalTimespanOverChallengeException;
@@ -66,7 +67,8 @@ public class GoalService {
 				System.out.println("User ID specified (" + userID + "). Displaying goals for user ...");
 				return Response.ok().entity(Controller.getInstance().getGoalsResultOfUser(userID).toString()).build();
 			} else {
-				return Response.status(403).build();
+				return Response.ok().entity(MongoDBConnector.getInstance().findAllGoals().toString()).build();
+				// return Response.status(403).build();
 			}
 		} catch (GoalNotFoundException e) {
 			e.printStackTrace();

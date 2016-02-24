@@ -2,13 +2,13 @@ package fr.unice.polytech.ecoknowledge.calculator.worker.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.ConditionResult;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.GoalResult;
+import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.LevelResult;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
-import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.ConditionResult;
-import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.GoalResult;
-import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.LevelResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +26,6 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Matchers.any;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AchievementProcessorVisitorStandardConditionTest {
@@ -74,8 +73,12 @@ public class AchievementProcessorVisitorStandardConditionTest {
 		secondSensorFakedData.add(new Data(60.0, lifeSpan.getStart().plusDays(3)));
 		secondSensorFakedData.add(new Data(25.0, lifeSpan.getStart().plusDays(5)));
 
-		willReturn(firstSensorFakedData).given(cache).getDataOfSensorBetweenDate(Matchers.matches(aSensorName), any(), any(), any(), any());
-		willReturn(secondSensorFakedData).given(cache).getDataOfSensorBetweenDate(Matchers.matches(anotherSensorName), any(), any(), any(), any());
+		List<Data> listOfData = new ArrayList<>();
+		listOfData.addAll(firstSensorFakedData);
+		listOfData.addAll(secondSensorFakedData);
+
+		willReturn(firstSensorFakedData).given(cache).getDataOfSensorBetweenDates(Matchers.matches(aSensorName), Matchers.any(), Matchers.any());
+		willReturn(secondSensorFakedData).given(cache).getDataOfSensorBetweenDates(Matchers.matches(anotherSensorName), Matchers.any(), Matchers.any());
 
 		AchievementProcessor achievementProcessor = new AchievementProcessor(goal, cache);
 		goal.accept(achievementProcessor);
@@ -87,6 +90,7 @@ public class AchievementProcessorVisitorStandardConditionTest {
 		assertFalse(goalResult.isAchieved());
 		assertEquals(75.0, goalResult.getCorrectRate());
 	}
+
 
 	@Test
 	public void aProcessor_WhenProcessGoal_ShouldHaveReturnProperNumberOfLevelsDescription() {
@@ -142,4 +146,5 @@ public class AchievementProcessorVisitorStandardConditionTest {
 		assertFalse(secondConditionResult.isAchieved());
 		assertEquals(50.0, secondConditionResult.getCorrectRate());
 	}
+
 }
