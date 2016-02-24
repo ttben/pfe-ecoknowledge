@@ -20,7 +20,6 @@ curl -get "$TOMCAT_HOST$ECOKNOWLEDGE_SERVICE" > "$INTEGRATION_HOME/ecoknowledgeR
 
 firstLineEcoknowledge=$(head -n 1 "$INTEGRATION_HOME/ecoknowledgeResponse")
 
-echo $firstLineEcoknowledge
 if [[ $firstLineEcoknowledge == *"Tables"* ]]
 then
 	echo ERROR : Ecoknowledge cant be reached
