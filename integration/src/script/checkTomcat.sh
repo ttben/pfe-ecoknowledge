@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 echo
 echo // ----- Checking Tomcat
+echo // ----- Checking Tomcat >> "$LOG_FILE"
 
 curl -get "$TOMCAT_HOST$TOMCAT_SERVICE" >> "$LOG_FILE"
 curl -get "$TOMCAT_HOST$TOMCAT_SERVICE" > "$INTEGRATION_HOME/tomcatResponse"
@@ -17,4 +18,4 @@ fi
 echo // Tomcat Avalaible
 echo // Tomcat Avalaible >> "$LOG_FILE"
 
-rm -rf "$INTEGRATION_HOME/tomcatResponse" >> "$LOG_FILE" 2>> "$LOG_FILE"
+rm -rf "$INTEGRATION_HOME/tomcatResponse" >> /dev/null 2>> "$LOG_FILE"

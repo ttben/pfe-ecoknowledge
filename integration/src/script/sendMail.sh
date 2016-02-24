@@ -2,12 +2,11 @@
 echo
 echo // ----- Send Mail
 
-subject=$(head "$INTEGRATION_HOME/$LOG_FILE")
 addresses=petillon.sebastien@gmail.com
 
 echo addresses : $addresses
 
 cd ~
-java -jar Mail.jar $subject $addresses
+java -jar Mail.jar "$INTEGRATION_HOME/$LOG_FILE" $addresses
 
 cd $INTEGRATION_HOME

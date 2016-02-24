@@ -4,6 +4,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import java.io.*;
 import java.net.URLDecoder;
+import java.util.Date;
 import java.util.Properties;
 
 /**
@@ -13,11 +14,29 @@ public class Mail {
 
     public static void main(String args[]){
 
-        String body = args[0];
-        String adresses = args[1];
-        String subject = body.contains("FAIL")?"[FAIL] pfe-ecoknowledge Integration":"[SUCCESS] pfe-ecoknowledge Integration";
+        String file = args[0];
+        String addresses = args[1];
 
-        sendMail(subject, body, adresses);
+        String content ="";
+        String subject ="";
+
+        File log = new File(file);
+        DataInputStream dis =
+                null;
+        try {
+            dis = new DataInputStream(
+                    new FileInputStream(log));
+            byte[] datainBytes = new byte[dis.available()];
+            dis.readFully(datainBytes);
+            dis.close();
+            content = new String(datainBytes, 0, datainBytes.length);
+            subject = content.contains("FAIL")?"[FAIL] pfe-ecoknowledge Integration":"[SUCCESS] pfe-ecoknowledge Integration";
+            subject+= " " + new Date().toString();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        sendMail(subject, content, addresses);
     }
 
     public static void sendMail(String subject, String text, String addresses)
@@ -51,16 +70,10 @@ public class Mail {
 
             // Create your text message part
             BodyPart messageBodyPart = new MimeBodyPart();
-            messageBodyPart.setText("");
+            messageBodyPart.setText(text);
 
             // Add the text part to the multipart
             multipart.addBodyPart(messageBodyPart);
-
-            // Create the html part
-            messageBodyPart = new MimeBodyPart();
-            String htmlMessage = text;
-            messageBodyPart.setContent(htmlMessage, "text/html");
-
 
             // Add html part to multi part
             multipart.addBodyPart(messageBodyPart);

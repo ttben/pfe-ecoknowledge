@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 echo
-echo // ----- Check environment
+echo // ----- Check environment >> "$LOG_FILE"
+echo // ----- Check environment >> "$LOG_FILE"
 
 if [ "$CATALINA_HOME" == "" ]
 then

@@ -2,7 +2,6 @@
 echo
 echo // ----- Checking ActiveMQ
 
-curl -get "$ACTIVEMQ_HOST" >> "$LOG_FILE"
 curl -get "$ACTIVEMQ_HOST" > "$INTEGRATION_HOME/activeMQResponse"
 
 if [[ "$firstLine" ==  "404" ]]
