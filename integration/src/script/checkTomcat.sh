@@ -14,7 +14,7 @@ then
 	exit 1
 fi
 
-curl -get "$TOMCAT_HOST$TOMCAT_SERVICE" >> "$LOG_FILE"
+curl -get "$TOMCAT_HOST$ECOKNOWLEDGE_SERVICE" >> "$LOG_FILE"
 echo >> "$LOG_FILE"
 curl -get "$TOMCAT_HOST$ECOKNOWLEDGE_SERVICE" > "$INTEGRATION_HOME/ecoknowledgeResponse"
 
@@ -27,4 +27,4 @@ echo // Tomcat Avalaible
 echo // Tomcat Avalaible >> "$LOG_FILE"
 
 rm -rf "$INTEGRATION_HOME/tomcatResponse" >> /dev/null 2>> "$LOG_FILE"
-rm -rf "$INTEGRATION_HOME/ecoknowledgeResponse" >> /dev/null 2>> "$LOG_FILE"
+#rm -rf "$INTEGRATION_HOME/ecoknowledgeResponse" >> /dev/null 2>> "$LOG_FILE"
