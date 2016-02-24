@@ -16,12 +16,11 @@ fi
 
 curl -get "$TOMCAT_HOST$TOMCAT_SERVICE" >> "$LOG_FILE"
 echo >> "$LOG_FILE"
-curl -get "$TOMCAT_HOST$TOMCAT_SERVICE" > "$INTEGRATION_HOME/ecoknowledgeResponse"
+curl -get "$TOMCAT_HOST$ECOKNOWLEDGE_SERVICE" > "$INTEGRATION_HOME/ecoknowledgeResponse"
 
+firstLineEcoknowledge=$(head -n 1 "$INTEGRATION_HOME/ecoknowledgeResponse")
 
-firstLine=$(head -n 1 "$INTEGRATION_HOME/ecoknowledgeResponse")
-
-echo $firstLine
+echo $firstLineEcoknowledge
 
 echo
 echo // Tomcat Avalaible
