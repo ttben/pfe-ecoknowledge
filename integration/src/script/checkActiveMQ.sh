@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 echo
 echo // ----- Checking ActiveMQ
+echo // ----- Checking ActiveMQ >> "$LOG_FILE"
 
 curl -get "$ACTIVEMQ_HOST" > "$INTEGRATION_HOME/activeMQResponse"
 

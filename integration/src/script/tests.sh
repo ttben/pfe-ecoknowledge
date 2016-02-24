@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 echo
 echo // ----- Launching tests
+echo // ----- Launching tests >> "$LOG_FILE"
 
 cd ../..
 
