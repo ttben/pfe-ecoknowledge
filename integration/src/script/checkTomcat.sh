@@ -3,7 +3,6 @@ echo
 echo // ----- Checking Tomcat
 echo // ----- Checking Tomcat >> "$LOG_FILE"
 
-curl -get "$TOMCAT_HOST$TOMCAT_SERVICE" >> "$LOG_FILE"
 curl -get "$TOMCAT_HOST$TOMCAT_SERVICE" > "$INTEGRATION_HOME/tomcatResponse"
 
 firstLine=$(head -n 1 "$INTEGRATION_HOME/tomcatResponse")
@@ -15,8 +14,16 @@ then
 	exit 1
 fi
 
+curl -get "$TOMCAT_HOST$TOMCAT_SERVICE" >> "$LOG_FILE"
+echo >> "$LOG_FILE"
+curl -get "$TOMCAT_HOST$TOMCAT_SERVICE" > "$INTEGRATION_HOME/ecoknowledgeResponse"
+
+
+firstLine=$(head -n 1 "$INTEGRATION_HOME/ecoknowledgeResponse")
+
 echo
 echo // Tomcat Avalaible
 echo // Tomcat Avalaible >> "$LOG_FILE"
 
 rm -rf "$INTEGRATION_HOME/tomcatResponse" >> /dev/null 2>> "$LOG_FILE"
+rm -rf "$INTEGRATION_HOME/ecoknowledgeResponse" >> /dev/null 2>> "$LOG_FILE"
