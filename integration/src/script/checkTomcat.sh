@@ -10,21 +10,21 @@ firstLine=$(head -n 1 "$INTEGRATION_HOME/tomcatResponse")
 if [ "$firstLine" !=  "{\"testOk\":true}" ]
 then
 	echo ERROR : Tomcat cant be reached
-    echo ERROR : Tomcat cant be reached ... FAIL >> "$LOG_FILE"
+    echo ERROR : Tomcat cant be reached ... FAIL >> "$INTEGRATION_HOME/$LOG_FILE"
 	exit 1
 fi
 
-curl -get "$TOMCAT_HOST$ECOKNOWLEDGE_SERVICE" >> "$LOG_FILE"
+curl -get "$TOMCAT_HOST$ECOKNOWLEDGE_SERVICE" >> "$$INTEGRATION_HOME/LOG_FILE"
 echo >> "$LOG_FILE"
 curl -get "$TOMCAT_HOST$ECOKNOWLEDGE_SERVICE" > "$INTEGRATION_HOME/ecoknowledgeResponse"
 
-firstLineEcoknowledge=$(head "$INTEGRATION_HOME/ecoknowledgeResponse")
+firstLineEcoknowledge=$(head -n 1 "$INTEGRATION_HOME/ecoknowledgeResponse")
 
 echo $firstLineEcoknowledge
-if [[ "$firstLine" !=  "Tables" ]]
+if [ "$firstLine" !=  "============================================== Tables =======================================" ]
 then
 	echo ERROR : Ecoknowledge cant be reached
-    echo ERROR : Ecoknowledge cant be reached ... FAIL >> "$LOG_FILE"
+    echo ERROR : Ecoknowledge cant be reached ... FAIL >> "$INTEGRATION_HOME/$LOG_FILE"
 	exit 1
 fi
 
