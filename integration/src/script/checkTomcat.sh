@@ -21,6 +21,8 @@ curl -get "$TOMCAT_HOST$TOMCAT_SERVICE" > "$INTEGRATION_HOME/ecoknowledgeRespons
 
 firstLine=$(head -n 1 "$INTEGRATION_HOME/ecoknowledgeResponse")
 
+echo $firstLine
+
 echo
 echo // Tomcat Avalaible
 echo // Tomcat Avalaible >> "$LOG_FILE"
