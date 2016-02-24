@@ -22,8 +22,11 @@ public class CalculatorProducer extends Producer {
 
 	private MongoDBHandler db = MongoDBHandler.getInstance();
 
-	public CalculatorProducer(int refreshingFrequency) {
+	int nbOfGoalsToPush;
+
+	public CalculatorProducer(int refreshingFrequency, int nbOfGoalsToPush) {
 		super(refreshingFrequency);
+		this.nbOfGoalsToPush = nbOfGoalsToPush;
 	}
 
 	@Override
@@ -37,9 +40,14 @@ public class CalculatorProducer extends Producer {
 		try {
 			createProducer();
 
+			int nbOfGoalsDone = 0;
+
 			while (isRunning) {
 				updateGoals(session, producer);
 				Thread.sleep(this.refreshingFrequency);
+				if(++nbOfGoalsDone >=  nbOfGoalsToPush) {
+					isRunning = false;
+				}
 			}
 
 			// Clean up
@@ -57,20 +65,15 @@ public class CalculatorProducer extends Producer {
 		if (goalList.size() == 0) {
 			System.out.println("Nothing to do here, lets sleep for a while ...");
 		} else {
-			for (Goal currentGoalDescription : goalList) {
-				// TODO: 18/02/2016 CHECK IF GOAL MUST BE UPDATED OR NOT
-				/*
-					This method can be, at least for a start, a 'simple' scheduled task
-					that does not check if goal must be updated or not, but simply ask
-					to update every goal every 2 minutes (for example)
-				 */
 
+			for (Goal currentGoalDescription : goalList) {
 				TextMessage message = session.createTextMessage();
 
 				ObjectMapper mapper = new ObjectMapper();
 				try {
 					String goalStrDescription = mapper.writeValueAsString(currentGoalDescription);
 					message.setText(goalStrDescription);
+					//logger.warn("Producer sending new message : (" + currentGoalDescription.getId() + ")");
 					producer.send(message);
 				} catch (JsonProcessingException e) {
 					e.printStackTrace();

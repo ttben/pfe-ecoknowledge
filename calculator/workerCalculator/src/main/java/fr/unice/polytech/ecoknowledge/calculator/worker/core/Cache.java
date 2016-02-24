@@ -4,6 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
+import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.model.SensorExtractor;
+import fr.unice.polytech.ecoknowledge.domain.model.SensorNeeds;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import org.joda.time.DateTime;
 
@@ -17,41 +20,57 @@ public class Cache {
 	private static Cache fakeCacheInstance;
 	private Map<String, List<Data>> data = new HashMap<>();
 
-	public static Cache getFakeCache() {
-		if (fakeCacheInstance == null) {
-			fakeCacheInstance = new Cache();
+	public Cache(Goal goal) {
 
-			Map<String, List<Data>> fakedData = new HashMap<>();
-			fakedData.put("TEMP_443V", new ArrayList<>());
-			fakedData.put("TEMP_555", new ArrayList<>());
+		SensorExtractor sensorExtractor = new SensorExtractor(goal);
+		goal.accept(sensorExtractor);
 
-/*
-			List<Data> aListOfData = new ArrayList<>();
-			aListOfData.add(new Data(20.0, new DateTime().minusDays(1)));
-			aListOfData.add(new Data(22.0, new DateTime().minusDays(1)));
-			fakedData.put("TEMP_443V", aListOfData);
+		List<SensorNeeds> listOfSensorNeeds = sensorExtractor.getSensorNeedsList();
+		for(SensorNeeds sensorNeeds : listOfSensorNeeds) {
+			List<Data> currentData = getDataOf(sensorNeeds);
 
-			List<Data> anotherListOfData = new ArrayList<>();
-			anotherListOfData.add(new Data(20.0, new DateTime().minusDays(1)));
-			anotherListOfData.add(new Data(22.0, new DateTime().minusDays(1)));
-			fakedData.put("TEMP_555", anotherListOfData);
-*/
-			fakeCacheInstance.setData(fakedData);
+			//System.out.println("Needs :  " + sensorNeeds.getTargetSensor() + " from " + sensorNeeds.getDateStart() + " to " + sensorNeeds.getDateEnd());
+
+			data.put(sensorNeeds.getTargetSensor(), currentData);
+		}
+	}
+
+	// TODO: 24/02/2016 ADD FILTER FOR DAY TIMES
+	public List<Data> getDataOfSensorBetweenDates(String sensorName,
+												  DateTime start, DateTime end) {
+
+		List<Data> result = new ArrayList<>();
+
+
+		List<Data> listOfDataForGivenSensor = this.getData().get(sensorName);
+		if(listOfDataForGivenSensor.size() == 0) {
+			//System.out.println("THERES NO DATA FOR SPECIFIC SENSOR : " + sensorName);
+			return result;
 		}
 
-		return fakeCacheInstance;
+		for(Data currentData : listOfDataForGivenSensor) {
+			if(currentData.getDate().isAfter(start) && currentData.getDate().isBefore(end)) {
+				result.add(currentData);
+			}
+		}
+
+		return result;
 	}
 
-	public List<Data> getDataOf(String sensorName) {
-		ArrayList<Data> datas = new ArrayList<>();
+	public List<Data> getDataOf(SensorNeeds sensorNeeds) {
+		DateTime start = new DateTime(sensorNeeds.getDateStart());
+		DateTime end = new DateTime(sensorNeeds.getDateEnd());
+		String sensorName = sensorNeeds.getTargetSensor();
 
-		if (data.get(sensorName) != null)
-			datas.addAll(data.get(sensorName));
-		return datas;
+		//System.out.println("SENSOR NAME ASKED : " + sensorName);
+
+		return readDataOfSensorBetweenDateFromDB(sensorName, start, end);
 	}
 
-	public List<Data> getDataOfSensorBetweenDate(String sensorName,
-												 DateTime start, DateTime end) {
+	public List<Data> readDataOfSensorBetweenDateFromDB(String sensorName,
+														 DateTime start, DateTime end) {
+
+		//System.out.println("GETTING DATA OF SENSOR " + sensorName + " BETWEEN DATES " + start.getMillis() + " and " + end.getMillis());
 
 		JsonObject sensorData = MongoDBHandler.getInstance().getBddConnector().getSensorDataBetweenDates(sensorName, start.getMillis()/1000, end.getMillis()/1000);
 		JsonArray sensorDataValues = sensorData.getAsJsonArray("values");
@@ -60,21 +79,14 @@ public class Cache {
 
 		for(JsonElement sensorDataValuesElement : sensorDataValues) {
 			JsonObject sensorDataValuesObject = sensorDataValuesElement.getAsJsonObject();
-			double value = sensorData.get("value").getAsDouble();
-			String date = sensorData.get("date").getAsLong() + "";
+			double value = sensorDataValuesObject.get("value").getAsDouble();
+			String date = sensorDataValuesObject.get("date").getAsLong() + "";
 
-			Data data = new Data(value, Clock.getClock().parseDate(date));
-			result.add(data);
+			Data currentData = new Data(value, Clock.getClock().parseDate(date));
+			result.add(currentData);
 		}
 
-		MongoDBHandler.getInstance().readAllSensorData();    // TODO: 18/02/2016 Make a filter request in order to retrieve a smaller amount of data
-
-		ArrayList<Data> data = new ArrayList<>();
-		for (Data d : getDataOf(sensorName)) {
-			if (d.getDate().isBefore(end) && d.getDate().isAfter(start))
-				data.add(d);
-		}
-		return data;
+		return result;
 
 	}
 
@@ -82,7 +94,7 @@ public class Cache {
 	public List<Data> getDataOfSensorBetweenDate(String sensorName, DateTime start, DateTime end,
 												 AbstractMap.SimpleEntry<Integer, Integer> weekMoment,
 												 List<AbstractMap.SimpleEntry<Integer, Integer>> dayMoment) {
-		List<Data> data = getDataOfSensorBetweenDate(sensorName, start, end);
+		List<Data> data = readDataOfSensorBetweenDateFromDB(sensorName, start, end);
 		return new Filter(weekMoment, dayMoment).filter(data);
 	}
 

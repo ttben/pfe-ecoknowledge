@@ -70,6 +70,7 @@ public class AchievementProcessor implements GoalVisitor {
 
 	@Override
 	public void visit(Level level) {
+
 		double percentageAchieved = 0;
 
 		for (ConditionResult conditionResult : currentConditionResult) {
@@ -88,7 +89,6 @@ public class AchievementProcessor implements GoalVisitor {
 
 	@Override
 	public void visit(StandardCondition condition) {
-
 		//	Retrieve symbolic names for condition
 		SymbolicName requiredOperand = condition.getRequiredOperand();
 
@@ -98,8 +98,7 @@ public class AchievementProcessor implements GoalVisitor {
 
 		//System.out.println(goal.getStart() + ", " + goal.getEnd());
 		//	Retrieves values of sensors
-		List<Data> data = this.cache.getDataOfSensorBetweenDate(sensorBound, goal.getStart(), goal.getEnd(),
-				condition.getTargetTime().getWeekMoment(), condition.getTargetTime().getDayMoment());
+		List<Data> data = this.cache.getDataOfSensorBetweenDates(sensorBound, goal.getStart(), goal.getEnd());
 
 		//System.out.println("data :" + data);
 
@@ -150,10 +149,10 @@ public class AchievementProcessor implements GoalVisitor {
 		System.out.println(goal.getEnd());
 
 		// Retrieve old values of sensor
-		List<Data> oldData = this.cache.getDataOfSensorBetweenDate(sensorBound,
+		List<Data> oldData = this.cache.getDataOfSensorBetweenDates(sensorBound,
 				condition.getReferencePeriod().getStart(), condition.getReferencePeriod().getEnd());
 
-		List<Data> newData = this.cache.getDataOfSensorBetweenDate(sensorBound,
+		List<Data> newData = this.cache.getDataOfSensorBetweenDates(sensorBound,
 				goal.getStart(), goal.getEnd());
 
 		// If we don't have the good data

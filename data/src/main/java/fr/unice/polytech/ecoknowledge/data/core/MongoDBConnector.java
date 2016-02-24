@@ -102,7 +102,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 
 	public void updateGoalResult(JsonObject goalResultJsonDescription) {
 		String goalResultID = goalResultJsonDescription.get("id").getAsString();
-		logger.warn("Storing goal result (" + goalResultID + ")");
+		//logger.warn("Storing goal result (" + goalResultID + ")");
 
 		MongoCollection<Document> collection = getCollection(RESULTS_COLLECTION);
 
@@ -112,7 +112,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		collection.updateOne(Filters.eq("id", id), new Document("$set", newGoalResultDocument),new UpdateOptions().upsert(true));
 
 		JsonArray allGoalResult = this.findAllGoalResult();
-		logger.info("\n\nNumberOfGoalResults:"+allGoalResult.size() + "\n\nGoalResultDBContent\n " +  allGoalResult+"\n");
+		//logger.info("\n\nNumberOfGoalResults:"+allGoalResult.size() + "\n\nGoalResultDBContent\n " +  allGoalResult+"\n");
 	}
 
 	@Override
@@ -317,7 +317,6 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	}
 
 	public void updateTrackingRequest(JsonObject newDocumentJsonDescription) {
-		System.out.println("UPDATING DOCUMENT : " + newDocumentJsonDescription);
 
 		MongoCollection<Document> collection = getCollection(TRACKING_REQUESTS_COLLECTION);
 		Document newDocument = Document.parse(newDocumentJsonDescription.toString());
@@ -344,20 +343,25 @@ public class MongoDBConnector implements DocumentBDDConnector {
 
 	public JsonObject getSensorDataBetweenDates(String sensorName, long dateStart, long dateEnd) {
 		JsonObject allSensorData = getSensorData(sensorName);
-		JsonArray sensorDataValues = allSensorData.getAsJsonArray("values");
 
 		JsonArray remainingDataValues = new JsonArray();
 
-		for(JsonElement elementDataValue : sensorDataValues) {
-			JsonObject currentDataValue = elementDataValue.getAsJsonObject();
-			long currentDate = currentDataValue.get("date").getAsLong();
+		//	Handle case where no value has ever been stored
+		if(allSensorData != null) {
 
-			if(currentDate <= dateEnd && currentDate >= dateStart) {
-				JsonObject remainingDataValue = new JsonObject();
-				remainingDataValue.addProperty("date", currentDate);
-				remainingDataValue.addProperty("value", currentDataValue.get("value").getAsDouble());
+			JsonArray sensorDataValues = allSensorData.getAsJsonArray("values");
 
-				remainingDataValues.add(remainingDataValue);
+			for (JsonElement elementDataValue : sensorDataValues) {
+				JsonObject currentDataValue = elementDataValue.getAsJsonObject();
+				long currentDate = currentDataValue.get("date").getAsLong();
+
+				if (currentDate <= dateEnd && currentDate >= dateStart) {
+					JsonObject remainingDataValue = new JsonObject();
+					remainingDataValue.addProperty("date", currentDate);
+					remainingDataValue.addProperty("value", currentDataValue.get("value").getAsDouble());
+
+					remainingDataValues.add(remainingDataValue);
+				}
 			}
 		}
 

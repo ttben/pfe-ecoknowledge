@@ -1,7 +1,6 @@
 package fr.unice.polytech.ecoknowledge.calculator.worker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.unice.polytech.ecoknowledge.calculator.worker.core.Cache;
 import fr.unice.polytech.ecoknowledge.calculator.worker.core.Calculator;
 import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.GoalResult;
 import fr.unice.polytech.ecoknowledge.common.worker.Worker;
@@ -34,12 +33,14 @@ public class CalculatorWorker extends Worker {
 				ObjectMapper mapper = new ObjectMapper();
 				Goal goal = mapper.readValue(obj, Goal.class);
 
-				String logs = name + " received goal (" + goal.getId() + ") user (" + goal.getUser().getId()+")";
-				logger.warn(logs);
+				String logs = getClass().getSimpleName() + " " + name + " received goal (" + goal.getId() + ") user (" + goal.getUser().getId() + ")";
+				//logger.warn(logs);
 
 
-				Calculator calculator = new Calculator(new Cache());
+				Calculator calculator = new Calculator();
 				GoalResult currentGoalResult = calculator.evaluate(goal);
+
+				//logger.info("Calculator has processed result");
 
 				currentGoalResult.setId(goal.getId());
 
@@ -47,17 +48,20 @@ public class CalculatorWorker extends Worker {
 				MongoDBHandler.getInstance().getBddConnector()
 						.updateGoalResult(currentGoalResult.toJsonForClient());
 
+				//logger.info("Calculator has stored result");
+
 				//	Set goal result of goal
 				goal.setGoalResultID(currentGoalResult.getId());
 				MongoDBHandler.getInstance().updateGoal(goal);
 
-				Thread.sleep(fakeProcessingTime);
+				//logger.warn("Calculator has update goal with new result");
+
+				//Thread.sleep(fakeProcessingTime);
 
 			} else {
-				System.out.println("OTHER Received: " + message);
+				//System.out.println("OTHER Received: " + message);
 			}
-		}
-		catch (JMSException | InterruptedException | IOException | GoalNotFoundException
+		} catch (JMSException | IOException | GoalNotFoundException
 				| UserNotFoundException | NotSavableElementException | NotReadableElementException e) {
 
 			String errorDescription = "A calculator worker just raised an error ";
@@ -65,15 +69,17 @@ public class CalculatorWorker extends Worker {
 			errorDescription = errorDescription.concat("Caused by");
 			errorDescription = errorDescription.concat(e.getMessage());
 
-			logger.fatal(errorDescription);
+			//logger.fatal(errorDescription);
 			e.printStackTrace();
 
 			throw new IllegalArgumentException(errorDescription);
-
 		}
+
+
+		String logs = name + " has finished processing";
+		//logger.warn(logs);
 	}
 
-	@Override
 	protected URL getURLProperties() {
 		URL url = ClassLoader.getSystemClassLoader().getResource("calculator.properties");
 		return url;

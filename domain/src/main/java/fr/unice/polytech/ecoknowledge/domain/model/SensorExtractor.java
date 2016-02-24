@@ -44,7 +44,7 @@ public class SensorExtractor implements GoalVisitor{
 		String sensorBound = currentGoal.getSensorNameForGivenSymbolicName(symbolicName);
 
 		SensorNeeds sensorNeeds = new SensorNeeds(sensorBound, currentGoal.getStart().getMillis()/1000, currentGoal.getEnd().getMillis()/1000);
-		sensorNeedsList.add(sensorNeeds);
+		mergeWithExistingNeeds(sensorNeeds);
 	}
 
 	@Override
@@ -54,6 +54,29 @@ public class SensorExtractor implements GoalVisitor{
 		String sensorBound = currentGoal.getSensorNameForGivenSymbolicName(symbolicName);
 
 		SensorNeeds sensorNeeds = new SensorNeeds(sensorBound, condition.getReferencePeriod().getStart().getMillis()/1000, currentGoal.getEnd().getMillis()/1000);
-		sensorNeedsList.add(sensorNeeds);
+		mergeWithExistingNeeds(sensorNeeds);
 	}
+
+	private void mergeWithExistingNeeds(SensorNeeds newSensorNeedsToAdd) {
+		for(int i = 0 ; i < this.sensorNeedsList.size() ; i ++) {
+			SensorNeeds currentSensorNeeds = this.sensorNeedsList.get(i);
+
+			if(currentSensorNeeds.getTargetSensor().equals(newSensorNeedsToAdd.getTargetSensor())) {
+
+				long mergedDateStart = (newSensorNeedsToAdd.getDateStart() < currentSensorNeeds.getDateStart()) ?
+						newSensorNeedsToAdd.getDateStart() : currentSensorNeeds.getDateStart();
+
+				long mergedDateEnd = (newSensorNeedsToAdd.getDateEnd() > currentSensorNeeds.getDateEnd()) ?
+						newSensorNeedsToAdd.getDateEnd() : currentSensorNeeds.getDateEnd();
+
+				SensorNeeds mergedSensorNeeds = new SensorNeeds(newSensorNeedsToAdd.getTargetSensor(), mergedDateStart, mergedDateEnd);
+				this.sensorNeedsList.remove(i);
+				this.sensorNeedsList.add(i, mergedSensorNeeds);
+				return;
+			}
+		}
+
+		this.sensorNeedsList.add(newSensorNeedsToAdd);
+	}
+
 }

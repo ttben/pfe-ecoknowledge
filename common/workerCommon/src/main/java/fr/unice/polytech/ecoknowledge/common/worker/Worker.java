@@ -77,7 +77,7 @@ public abstract class Worker implements Runnable, ExceptionListener, MessageList
 		// Create the destination (Topic or Queue)
 		Destination destination = session.createQueue(nameOfCalculatorQueue);
 
-		logger.info("Creating a producer in a non persistent message mode");
+		logger.info("Creating a worker in a non persistent message mode");
 
 		// Create a MessageConsumer from the Session to the Topic or Queue
 		consumer = session.createConsumer(destination);

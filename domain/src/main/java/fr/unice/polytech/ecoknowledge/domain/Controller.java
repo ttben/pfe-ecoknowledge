@@ -39,13 +39,15 @@ public class Controller {
 	public JsonObject takeChallenge(JsonObject description) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {
 		Goal goal = Model.getInstance().takeChallenge(description);
 
+		/*
 		SensorExtractor sensorExtractor = new SensorExtractor(goal);
 		goal.accept(sensorExtractor);
 
 		List<SensorNeeds> listOfSensorNeeds = sensorExtractor.getSensorNeedsList();
 		for(SensorNeeds sensorNeeds : listOfSensorNeeds) {
-
+			System.out.println("Needs :  " + sensorNeeds.getTargetSensor() + " from " + sensorNeeds.getDateStart() + " to " + sensorNeeds.getDateEnd());
 		}
+		*/
 
 		return new JsonObject();
 	}

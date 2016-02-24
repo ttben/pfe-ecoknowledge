@@ -310,7 +310,7 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 			String goalStrDescription = objectMapper.writeValueAsString(goal);
 			JsonObject goalJsonDescription = new JsonParser().parse(goalStrDescription).getAsJsonObject();
 
-			logger.warn("Updating goal : " + goal + " goalResult: " + goal.getGoalResultID().toString());
+			//logger.warn("Updating goal : " + goal + " goalResult: " + goal.getGoalResultID().toString());
 			this.bddConnector.updateGoal(goalJsonDescription);
 		} catch (JsonProcessingException e) {
 			throwNotSavableElementException("Goal", goal.getId().toString(), e);
