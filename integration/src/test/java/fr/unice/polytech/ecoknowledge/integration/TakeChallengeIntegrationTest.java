@@ -9,7 +9,11 @@ import fr.unice.polytech.ecoknowledge.feeder.producer.FeederProducer;
 import fr.unice.polytech.ecoknowledge.feeder.worker.FeederWorker;
 import org.joda.time.DateTime;
 import org.junit.Before;
+import org.junit.Test;
 
+import javax.ws.rs.client.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,11 +26,16 @@ import java.net.URL;
  */
 public class TakeChallengeIntegrationTest {
 
+	public static final String RESOURCE_NAME_CHALLENGE_EXAMPLE_JSON = "challenge-example.json";
+
 	public static final String NAME_OF_FEEDER_WORKER = "feederworker1";
 	public static final int FEEDER_REFRESHING_FREQUENCY = 2500;
-	public static final int CALCULATOR_REFRESHING_FREQUENCY = 2500;
+
 	public static final String NAME_OF_CALCULATOR_WORKER = "calculator1";
-	public static final String RESOURCE_NAME_CHALLENGE_EXAMPLE_JSON = "challenge-example.json";
+	public static final int CALCULATOR_REFRESHING_FREQUENCY = 2500;
+
+	public static final String URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER = "";
+	private static final String SERVICE_NAME_TO_POST_A_CHALLENGE = "challenges";
 
 	private JsonObject fakePostChallengePayload;
 
@@ -35,6 +44,13 @@ public class TakeChallengeIntegrationTest {
 		loadChallengeJsonDescription();
 		setUpCalculator();
 		setUpFeeder();
+	}
+
+	@Test
+	public void postChallenge() {
+		Response response = POST(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_CHALLENGE, fakePostChallengePayload);
+
+		Response.StatusType statusInfo = response.getStatusInfo();
 	}
 
 	private JsonObject loadChallengeJsonDescription() throws IOException {
@@ -59,8 +75,8 @@ public class TakeChallengeIntegrationTest {
 	 * In order to make the test pass day and nigh, from monday to sunday,
 	 * we generate a "fake" lifeSpan from the challenge description
 	 * in order to create a goal
-	 * @param jsonObject
-	 * 		Full challenge json description
+	 *
+	 * @param jsonObject Full challenge json description
 	 */
 	private void generateLifeSpan(JsonObject jsonObject) {
 		JsonObject generatedLifeSpan = new JsonObject();
@@ -101,4 +117,14 @@ public class TakeChallengeIntegrationTest {
 		brokerThread.start();
 	}
 
+	public static Response POST(String ipAddress, String service, JsonObject media) {
+		Client client = ClientBuilder.newClient();
+		WebTarget resource = client.target(ipAddress + service);
+		Invocation.Builder b = resource.request();
+		System.out.println("\t---> Sending request to '" + ipAddress + service + "'");
+
+		Entity e = Entity.entity(media.toString(), MediaType.APPLICATION_JSON);
+
+		return b.post(e);
+	}
 }
