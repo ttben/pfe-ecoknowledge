@@ -15,6 +15,7 @@ then
 	exit 1
 fi
 
+echo
 echo // Tomcat Avalaible
 echo // Tomcat Avalaible >> "$LOG_FILE"
 
