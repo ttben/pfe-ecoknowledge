@@ -24,6 +24,12 @@ public class CalculatorProducer extends Producer {
 
 	int nbOfGoalsToPush;
 
+	/**
+	 *
+	 * @param refreshingFrequency
+	 * @param nbOfGoalsToPush
+	 * 		For test purpose. Send -1 for infinite loop
+	 */
 	public CalculatorProducer(int refreshingFrequency, int nbOfGoalsToPush) {
 		super(refreshingFrequency);
 		this.nbOfGoalsToPush = nbOfGoalsToPush;
@@ -45,7 +51,7 @@ public class CalculatorProducer extends Producer {
 			while (isRunning) {
 				updateGoals(session, producer);
 				Thread.sleep(this.refreshingFrequency);
-				if(++nbOfGoalsDone >=  nbOfGoalsToPush) {
+				if(nbOfGoalsToPush > 0 && ++nbOfGoalsDone >=  nbOfGoalsToPush) {
 					isRunning = false;
 				}
 			}
