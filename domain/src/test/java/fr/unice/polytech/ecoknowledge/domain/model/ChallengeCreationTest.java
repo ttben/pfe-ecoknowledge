@@ -13,17 +13,14 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by Sébastien on 02/12/2015.
- */
 public class ChallengeCreationTest {
+	public static final String FILENAME = "challenge-example-sample2.json";
 
 	JsonObject jsonObject2 = null;
 
 	@Before
-	public void loadJsonFile() {
-
-		jsonObject2 = TestUtils.getFakeJson(2);
+	public void loadJsonFile() throws Exception {
+		jsonObject2 = TestUtils.getFakeJson(FILENAME);
 	}
 
 	@Test
@@ -33,8 +30,8 @@ public class ChallengeCreationTest {
 
 		StandardCondition sc = (StandardCondition) challenge.getLevels().get(0).getConditions().get(0);
 
-		assertEquals(Arrays.asList(new AbstractMap.SimpleEntry<Integer, Integer>(8, 11)), sc.getTargetDays().getDayMoment());
-		assertEquals(new AbstractMap.SimpleEntry<Integer, Integer>(1, 5), sc.getTargetDays().getWeekMoment());
+		assertEquals(Arrays.asList(new AbstractMap.SimpleEntry<Integer, Integer>(8, 11)), sc.getTargetTime().getDayMoment());
+		assertEquals(new AbstractMap.SimpleEntry<Integer, Integer>(1, 5), sc.getTargetTime().getWeekMoment());
 	}
 
 }

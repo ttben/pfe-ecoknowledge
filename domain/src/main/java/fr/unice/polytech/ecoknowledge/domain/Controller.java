@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.model.SensorExtractor;
+import fr.unice.polytech.ecoknowledge.domain.model.SensorNeeds;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
@@ -14,6 +16,7 @@ import fr.unice.polytech.ecoknowledge.domain.views.users.UserView;
 import fr.unice.polytech.ecoknowledge.domain.views.users.UserViewList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sun.management.Sensor;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,7 +37,16 @@ public class Controller {
 	}
 
 	public JsonObject takeChallenge(JsonObject description) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {
-		Model.getInstance().takeChallenge(description);
+		Goal goal = Model.getInstance().takeChallenge(description);
+
+		SensorExtractor sensorExtractor = new SensorExtractor(goal);
+		goal.accept(sensorExtractor);
+
+		List<SensorNeeds> listOfSensorNeeds = sensorExtractor.getSensorNeedsList();
+		for(SensorNeeds sensorNeeds : listOfSensorNeeds) {
+
+		}
+
 		return new JsonObject();
 	}
 
@@ -46,6 +58,13 @@ public class Controller {
 
 		JsonArray result = new JsonArray();
 		for (Goal currentGoal : goalList) {
+			//	Handling case when current goal has never been
+			//	evaluated by calculator (happens once it its lifetime)
+			if(currentGoal.getGoalResultID() == null) {
+				logger.warn("No goal result for goal " + currentGoal.getId() + " skipping it ...");
+				continue;
+			}
+
 			String goalResultStrID = currentGoal.getGoalResultID().toString();
 
 			logger.info("Try to retrieve goal result with ID " + goalResultStrID);

@@ -309,6 +309,8 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 		try {
 			String goalStrDescription = objectMapper.writeValueAsString(goal);
 			JsonObject goalJsonDescription = new JsonParser().parse(goalStrDescription).getAsJsonObject();
+
+			logger.warn("Updating goal : " + goal + " goalResult: " + goal.getGoalResultID().toString());
 			this.bddConnector.updateGoal(goalJsonDescription);
 		} catch (JsonProcessingException e) {
 			throwNotSavableElementException("Goal", goal.getId().toString(), e);
@@ -361,6 +363,10 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 		exceptionDescription = exceptionDescription.concat(" can not be read");
 
 		throw new NotReadableElementException(exceptionDescription, motherCause);
+	}
+
+	public MongoDBConnector getBddConnector() {
+		return bddConnector;
 	}
 
 	public void dropCollection(String dbName) {

@@ -12,5 +12,13 @@
     <groupId>fr.unice.polytech.ecoknowledge</groupId>
     <artifactId>producerFeeder</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>fr.unice.polytech.ecoknowledge.common</groupId>
+            <artifactId>producerCommon</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 
 </project>

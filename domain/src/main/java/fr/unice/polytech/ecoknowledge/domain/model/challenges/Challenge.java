@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.unice.polytech.ecoknowledge.domain.Model;
 import fr.unice.polytech.ecoknowledge.domain.model.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.VisitableComponent;
+import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Recurrence;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import org.joda.time.DateTime;
@@ -89,17 +90,15 @@ public class Challenge implements VisitableComponent {
 
 	public boolean canTake() {
 
-		// FIXME: 21/02/2016 #141 MOVE CLOCK IN A SPECIFIC MODULE
-		/*
 
 		// If we are not in the lifespan yet
 
-		if (Model.getInstance().getCalculatorClock().getTime().isBefore(lifeSpan.getStart()))
+		if (Clock.getClock().getTime().isBefore(lifeSpan.getStart()))
 			return false;
 
 		// If we are after the lifespan
 
-		if (lifeSpan.getEnd().isBefore(Model.getInstance().getCalculatorClock().getTime()))
+		if (lifeSpan.getEnd().isBefore(Clock.getClock().getTime()))
 			return false;
 
 		// Test time remaining
@@ -107,15 +106,15 @@ public class Challenge implements VisitableComponent {
 		switch (recurrence.getRecurrenceType()) {
 			case DAY:
 				return new Interval(
-						Model.getInstance().getCalculatorClock().getTime(),
+						Clock.getClock().getTime(),
 						lifeSpan.getEnd())
 						.toDuration().getStandardDays()
 						> 0;
 			case WEEK:
-				end = Model.getInstance().getCalculatorClock().getTime().withDayOfWeek(7);
+				end = Clock.getClock().getTime().withDayOfWeek(7);
 				return end.isBefore(lifeSpan.getEnd());
 			case MONTH:
-				end = Model.getInstance().getCalculatorClock().getTime()
+				end = Clock.getClock().getTime()
 						.plusMonths(1)
 						.withDayOfMonth(1)
 						.minusDays(1);
@@ -124,7 +123,6 @@ public class Challenge implements VisitableComponent {
 				// Because we only use the lifespan
 				return true;
 		}
-		*/
 
 		return false;
 	}

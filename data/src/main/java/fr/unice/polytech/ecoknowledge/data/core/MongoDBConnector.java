@@ -1,6 +1,7 @@
 package fr.unice.polytech.ecoknowledge.data.core;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongodb.MongoClient;
@@ -9,6 +10,7 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.UpdateOptions;
 import fr.unice.polytech.ecoknowledge.data.exceptions.ChallengeNotFoundException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.GoalNotFoundException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.UserNotFoundException;
@@ -26,6 +28,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public static String USERS_COLLECTION = "users";
 	public static String GOALS_COLLECTION = "goals";
 	public static String RESULTS_COLLECTION = "results";
+	public static String SENSOR_DATA_COLLECTION = "sensorData";
 	private static MongoDBConnector instance;
 	final Logger logger = LogManager.getLogger(MongoDBConnector.class);
 	private MongoClient mongoClient;
@@ -59,6 +62,8 @@ public class MongoDBConnector implements DocumentBDDConnector {
 
 	@Override
 	public void storeChallenge(JsonObject challengeJsonDescription) {
+		System.out.println("\n\nCHALLENGE\n\n" + challengeJsonDescription);
+
 		MongoCollection<Document> collection = getCollection(CHALLENGES_COLLECTION);
 		collection.insertOne(Document.parse(challengeJsonDescription.toString()));
 		logger.info("\n\t+ Just inserted challenge :\n" + challengeJsonDescription);
@@ -96,12 +101,18 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	}
 
 	public void updateGoalResult(JsonObject goalResultJsonDescription) {
+		String goalResultID = goalResultJsonDescription.get("id").getAsString();
+		logger.warn("Storing goal result (" + goalResultID + ")");
+
 		MongoCollection<Document> collection = getCollection(RESULTS_COLLECTION);
 
 		String id = goalResultJsonDescription.get("id").getAsString();
 		Document newGoalResultDocument = Document.parse(goalResultJsonDescription.toString());
 
-		collection.replaceOne(Filters.eq("id", id), newGoalResultDocument);
+		collection.updateOne(Filters.eq("id", id), new Document("$set", newGoalResultDocument),new UpdateOptions().upsert(true));
+
+		JsonArray allGoalResult = this.findAllGoalResult();
+		logger.info("\n\nNumberOfGoalResults:"+allGoalResult.size() + "\n\nGoalResultDBContent\n " +  allGoalResult+"\n");
 	}
 
 	@Override
@@ -113,6 +124,8 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public JsonArray findAllGoals() {
 		return findAll(GOALS_COLLECTION);
 	}
+
+	public JsonArray findAllGoalResult() { return findAll(RESULTS_COLLECTION);}
 
 	@Override
 	public JsonArray findAllUsers() {
@@ -311,6 +324,47 @@ public class MongoDBConnector implements DocumentBDDConnector {
 
 		String id = newDocumentJsonDescription.get("id").getAsString();
 
-		collection.updateOne(Filters.eq("id", id), new Document("$set", newDocument));    // FIXME: 26/01/2016 DO NOTHING
+		collection.updateOne(Filters.eq("id", id), new Document("$set", newDocument));
+	}
+
+	public void storeData(JsonObject newDocumentJsonDescription) {
+		MongoCollection<Document> collection = getCollection(SENSOR_DATA_COLLECTION);
+		Document newDocument = Document.parse(newDocumentJsonDescription.toString());
+
+		String id = newDocumentJsonDescription.get("id").getAsString();
+
+		collection.updateOne(Filters.eq("id", id), new Document("$set", newDocument));
+
+		logger.info("\n\t+ Saved new sensor data :\n" + newDocumentJsonDescription);
+	}
+
+	public JsonObject getSensorData(String sensorName) {
+		return findOne(SENSOR_DATA_COLLECTION, sensorName);
+	}
+
+	public JsonObject getSensorDataBetweenDates(String sensorName, long dateStart, long dateEnd) {
+		JsonObject allSensorData = getSensorData(sensorName);
+		JsonArray sensorDataValues = allSensorData.getAsJsonArray("values");
+
+		JsonArray remainingDataValues = new JsonArray();
+
+		for(JsonElement elementDataValue : sensorDataValues) {
+			JsonObject currentDataValue = elementDataValue.getAsJsonObject();
+			long currentDate = currentDataValue.get("date").getAsLong();
+
+			if(currentDate <= dateEnd && currentDate >= dateStart) {
+				JsonObject remainingDataValue = new JsonObject();
+				remainingDataValue.addProperty("date", currentDate);
+				remainingDataValue.addProperty("value", currentDataValue.get("value").getAsDouble());
+
+				remainingDataValues.add(remainingDataValue);
+			}
+		}
+
+		JsonObject result = new JsonObject();
+		result.addProperty("id", sensorName);
+		result.add("values", remainingDataValues);
+
+		return result;
 	}
 }
