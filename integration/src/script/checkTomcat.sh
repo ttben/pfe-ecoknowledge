@@ -18,9 +18,15 @@ curl -get "$TOMCAT_HOST$ECOKNOWLEDGE_SERVICE" >> "$LOG_FILE"
 echo >> "$LOG_FILE"
 curl -get "$TOMCAT_HOST$ECOKNOWLEDGE_SERVICE" > "$INTEGRATION_HOME/ecoknowledgeResponse"
 
-firstLineEcoknowledge=$(head -n 1 "$INTEGRATION_HOME/ecoknowledgeResponse")
+firstLineEcoknowledge=$(head "$INTEGRATION_HOME/ecoknowledgeResponse")
 
 echo $firstLineEcoknowledge
+if [[ "$firstLine" !=  "Tables" ]]
+then
+	echo ERROR : Ecoknowledge cant be reached
+    echo ERROR : Ecoknowledge cant be reached ... FAIL >> "$LOG_FILE"
+	exit 1
+fi
 
 echo
 echo // Tomcat Avalaible
