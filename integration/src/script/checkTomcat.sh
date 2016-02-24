@@ -14,14 +14,14 @@ then
 	exit 1
 fi
 
-curl -get "$TOMCAT_HOST$ECOKNOWLEDGE_SERVICE" >> "$$INTEGRATION_HOME/$LOG_FILE"
+curl -get "$TOMCAT_HOST$ECOKNOWLEDGE_SERVICE" >> "$INTEGRATION_HOME/$LOG_FILE"
 echo >> "$LOG_FILE"
 curl -get "$TOMCAT_HOST$ECOKNOWLEDGE_SERVICE" > "$INTEGRATION_HOME/ecoknowledgeResponse"
 
 firstLineEcoknowledge=$(head -n 1 "$INTEGRATION_HOME/ecoknowledgeResponse")
 
 echo $firstLineEcoknowledge
-if [ "$firstLine" !=  "============================================== Tables =======================================" ]
+if [ "$firstLineEcoknowledge" !=  "============================================== Tables =======================================" ]
 then
 	echo ERROR : Ecoknowledge cant be reached
     echo ERROR : Ecoknowledge cant be reached ... FAIL >> "$INTEGRATION_HOME/$LOG_FILE"
