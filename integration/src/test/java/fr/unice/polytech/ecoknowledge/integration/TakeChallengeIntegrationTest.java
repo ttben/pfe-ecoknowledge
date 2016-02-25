@@ -47,6 +47,8 @@ public class TakeChallengeIntegrationTest {
 	private static final String SERVICE_NAME_TO_POST_A_USER = "users";
 	public static final String TEST_DB_NAME = "test";
 	private static final String SERVICE_NAME_TO_TAKE_A_CHALLENGE = "goals";
+	public static final int WAITING_TIME_BETWEEN_REQUESTS = 500;
+	public static final int INITIAL_WAITING_TIME = 1500;
 
 	private JsonObject fakePostChallengePayload;
 	private JsonObject fakePostUserPayload;
@@ -54,34 +56,48 @@ public class TakeChallengeIntegrationTest {
 	private List<Thread> listOfThread = new ArrayList<>();
 
 	@Before
-	public void setUp() throws IOException {
-		MongoDBHandler.getInstance().getBddConnector().DB_NAME = TEST_DB_NAME;
+	public void setUp() throws IOException, InterruptedException {
+		setDBToUse();
+
+		Thread.sleep(1000);
 
 		loadChallengeJsonDescription();
 		loadUserJsonDescription();
 
 		setUpCalculator();
-		setUpFeeder();
+		//setUpFeeder();
+
+	}
+
+	private void setDBToUse() throws InterruptedException {
+		MongoDBHandler.getInstance().getBddConnector().DB_NAME = "test";
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("dbName", "test");
+
+		postRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, "test/db/use", jsonObject);
 	}
 
 
 	@Test
 	public void testWhenUserTakeGoal() throws InterruptedException {
-		Thread.sleep(1500);
+		Thread.sleep(INITIAL_WAITING_TIME);
+
 		String challengeID = postChallenge();
 		assertNotNull(challengeID);
+		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
 
-		Thread.sleep(500);
-
-		//	-------------------------------------
 		String userID = postAUser();
 		assertNotNull(userID);
+		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
 
 		String goalID = takeAChallenge(challengeID, userID);
-
 		assertNotNull(goalID);
+		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
 
 		System.out.printf("challengeID %s, UserID %s, GoalID %s\n", challengeID, userID, goalID);
+
+		Thread.sleep(10000);
+
 		MongoDBHandler.getInstance().getBddConnector().drop(TEST_DB_NAME);
 	}
 
