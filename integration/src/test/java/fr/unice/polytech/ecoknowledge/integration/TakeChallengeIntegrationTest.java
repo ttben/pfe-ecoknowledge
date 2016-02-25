@@ -22,6 +22,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.TestCase.assertEquals;
+
 /**
  * This test assumes that mongodb, activeMQ, and Ecoknowledge
  * front-end server are reachable and in a stable state
@@ -38,6 +41,7 @@ public class TakeChallengeIntegrationTest {
 
 	public static final String URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER = "http://localhost:8081/Ecoknowledge/";
 	private static final String SERVICE_NAME_TO_POST_A_CHALLENGE = "challenges";
+	public static final String TEST_DB_NAME = "test";
 
 	private JsonObject fakePostChallengePayload;
 
@@ -45,7 +49,7 @@ public class TakeChallengeIntegrationTest {
 
 	@Before
 	public void setUp() throws IOException {
-		MongoDBHandler.getInstance().getBddConnector().DB_NAME = "test";
+		MongoDBHandler.getInstance().getBddConnector().DB_NAME = TEST_DB_NAME;
 		loadChallengeJsonDescription();
 		setUpCalculator();
 		setUpFeeder();
@@ -54,11 +58,24 @@ public class TakeChallengeIntegrationTest {
 
 	@Test
 	public void postChallenge() throws InterruptedException {
-		Thread.sleep(2500);
-		//Response response = POST(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_CHALLENGE, fakePostChallengePayload);
+		Thread.sleep(1500);
+		Response response = POST(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_CHALLENGE, fakePostChallengePayload);
+		Thread.sleep(500);
 
-		//Response.StatusType statusInfo = response.getStatusInfo();
+		assertEquals(200, response.getStatus());
+
+		Object entity = response.readEntity(String.class);
+		String challengeID = entity.toString();
+
+		assertNotNull(challengeID);
+
+
+
+		MongoDBHandler.getInstance().getBddConnector().drop(TEST_DB_NAME);
 	}
+
+
+
 
 	private JsonObject loadChallengeJsonDescription() throws IOException {
 		URL url = ClassLoader.getSystemClassLoader().getResource(RESOURCE_NAME_CHALLENGE_EXAMPLE_JSON);
@@ -115,7 +132,6 @@ public class TakeChallengeIntegrationTest {
 	}
 
 	private void setUpCalculator() {
-		System.out.println("BEgOEZHGFUOZUOGHZRUOGUOZRHG");
 		CalculatorWorker calculatorWorker = new CalculatorWorker(NAME_OF_CALCULATOR_WORKER, 0);
 		CalculatorProducer calculatorProducer = new CalculatorProducer(CALCULATOR_REFRESHING_FREQUENCY, -1);
 
