@@ -6,11 +6,13 @@ import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 
 @Path("/users")
+@Produces(MediaType.APPLICATION_JSON)
 public class UserService {
 
 	@POST
@@ -22,12 +24,27 @@ public class UserService {
 			response.addProperty("id", id);
 		} catch (IOException e) {
 			e.printStackTrace();
-			return Response.status(403).entity(e.getStackTrace()).build();
+			return Response.status(403).entity(e.getStackTrace())
+					.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                    .header("Access-Control-Max-Age", "1209600")
+					.build();
 		} catch (NotSavableElementException e) {
 			e.printStackTrace();
-			return Response.status(500).entity(e.getMessage()).build();
+			return Response.status(500).entity(e.getMessage())
+                    .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                    .header("Access-Control-Max-Age", "1209600")
+					.build();
 		}
-		return Response.ok().entity(response.toString()).build();
+		return Response.ok().entity(response.toString())
+                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .header("Access-Control-Max-Age", "1209600")
+				.build();
 	}
 
 	@GET
