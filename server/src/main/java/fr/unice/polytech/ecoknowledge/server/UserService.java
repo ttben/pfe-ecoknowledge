@@ -25,7 +25,7 @@ public class UserService {
 		JsonObject response = new JsonObject();
 		try {
 			String id = Controller.getInstance().registerUser(jsonObject);
-			response.addProperty("id", id);
+			return Response.ok().entity(id.toString()).build();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(403).entity(e.getStackTrace()).build();
@@ -33,7 +33,6 @@ public class UserService {
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
 		}
-		return Response.ok().entity(response.toString()).build();
 	}
 
 	@GET
