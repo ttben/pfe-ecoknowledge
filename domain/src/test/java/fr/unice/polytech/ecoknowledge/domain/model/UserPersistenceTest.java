@@ -84,6 +84,8 @@ public class UserPersistenceTest {
 		personalMapping.addProperty("TMP_CLI", "TEMP_433V");
 
 		jsonObject.addProperty("firstName", "johnny");
+		jsonObject.addProperty("mail", "johny@depp.com");
+		jsonObject.addProperty("password", "pwd");
 		jsonObject.addProperty("lastName", "depp");
 		jsonObject.add("symbolicNameToSensorNameMap", personalMapping);
 
@@ -93,7 +95,7 @@ public class UserPersistenceTest {
 	private User getExpectedUser() {
 		Map<String, String> expectedMap = new HashMap<>();
 		expectedMap.put("TMP_CLI", "TEMP_433V");
-		User expectedUser = new User(null, "johnny", "depp", null, null, null, expectedMap);
+		User expectedUser = new User(null, "johny@depp.com", "pwd", "johnny", "depp", null, null, null, expectedMap);
 		return expectedUser;
 	}
 }
