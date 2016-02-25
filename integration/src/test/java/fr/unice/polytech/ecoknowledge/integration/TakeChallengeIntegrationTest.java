@@ -1,5 +1,6 @@
 package fr.unice.polytech.ecoknowledge.integration;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.calculator.producer.CalculatorProducer;
@@ -32,6 +33,7 @@ import static junit.framework.TestCase.assertEquals;
 public class TakeChallengeIntegrationTest {
 
 	public static final String RESOURCE_NAME_CHALLENGE_EXAMPLE_JSON = "challenge-example.json";
+	public static final String RESOURCE_NAME_USER_EXAMPLE_JSON = "user-example.json";
 
 	public static final String NAME_OF_FEEDER_WORKER = "feederworker1";
 	public static final int FEEDER_REFRESHING_FREQUENCY = 2500;
@@ -41,42 +43,95 @@ public class TakeChallengeIntegrationTest {
 
 	public static final String URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER = "http://localhost:8081/Ecoknowledge/";
 	private static final String SERVICE_NAME_TO_POST_A_CHALLENGE = "challenges";
+	private static final String SERVICE_NAME_TO_POST_A_USER = "users";
 	public static final String TEST_DB_NAME = "test";
+	private static final String SERVICE_NAME_TO_TAKE_A_CHALLENGE = "goals";
 
 	private JsonObject fakePostChallengePayload;
+	private JsonObject fakePostUserPayload;
 
 	private List<Thread> listOfThread = new ArrayList<>();
 
 	@Before
 	public void setUp() throws IOException {
 		MongoDBHandler.getInstance().getBddConnector().DB_NAME = TEST_DB_NAME;
+
 		loadChallengeJsonDescription();
+		loadUserJsonDescription();
+
 		setUpCalculator();
 		setUpFeeder();
 	}
 
 
 	@Test
-	public void postChallenge() throws InterruptedException {
+	public void testWhenUserTakeGoal() throws InterruptedException {
 		Thread.sleep(1500);
+		String challengeID = postChallenge();
+		assertNotNull(challengeID);
+
+		Thread.sleep(500);
+
+		//	-------------------------------------
+		String userID = postAUser();
+		assertNotNull(userID);
+
+		String goalID = takeAChallenge(challengeID, userID);
+
+		assertNotNull(goalID);
+
+		System.out.printf("challengeID %s, UserID %s, GoalID %s\n", challengeID, userID, goalID);
+		MongoDBHandler.getInstance().getBddConnector().drop(TEST_DB_NAME);
+	}
+
+	private String takeAChallenge(String challengeID, String userID) throws InterruptedException {
+		JsonObject takeChallengePayload = new JsonObject();
+		takeChallengePayload.addProperty("challenge", challengeID);
+		takeChallengePayload.addProperty("user", userID);
+
+		Response goalPostResponse = POST(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_TAKE_A_CHALLENGE, takeChallengePayload);
+		Thread.sleep(500);
+
+		assertEquals(200, goalPostResponse.getStatus());
+
+		Object goalPostEntity = goalPostResponse.readEntity(String.class);
+		return goalPostEntity.toString();
+	}
+
+	private String postAUser() throws InterruptedException {
+		Response userPostResponse = POST(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_USER, fakePostUserPayload);
+		Thread.sleep(500);
+
+		assertEquals(200, userPostResponse.getStatus());
+
+		Object userPostEntity = userPostResponse.readEntity(String.class);
+		return userPostEntity.toString();
+	}
+
+	private String postChallenge() throws InterruptedException {
 		Response challengePostResponse = POST(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_CHALLENGE, fakePostChallengePayload);
 		Thread.sleep(500);
 
 		assertEquals(200, challengePostResponse.getStatus());
 
 		Object challengeEntity = challengePostResponse.readEntity(String.class);
-		String challengeID = challengeEntity.toString();
-
-		assertNotNull(challengeID);
-
-		MongoDBHandler.getInstance().getBddConnector().drop(TEST_DB_NAME);
+		return challengeEntity.toString();
 	}
 
 
-
+	private JsonObject loadUserJsonDescription() throws IOException {
+		fakePostUserPayload = loadResource(RESOURCE_NAME_USER_EXAMPLE_JSON);
+		return fakePostUserPayload;
+	}
 
 	private JsonObject loadChallengeJsonDescription() throws IOException {
-		URL url = ClassLoader.getSystemClassLoader().getResource(RESOURCE_NAME_CHALLENGE_EXAMPLE_JSON);
+		fakePostChallengePayload = loadResource(RESOURCE_NAME_CHALLENGE_EXAMPLE_JSON);
+		generateLifeSpan(fakePostChallengePayload);
+		return fakePostChallengePayload;
+	}
+
+	private JsonObject loadResource(String resourceName) throws IOException {
+		URL url = ClassLoader.getSystemClassLoader().getResource(resourceName);
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
 
 		if (bufferedReader == null) {
@@ -85,10 +140,6 @@ public class TakeChallengeIntegrationTest {
 		}
 
 		JsonObject jsonObject = new JsonParser().parse(bufferedReader).getAsJsonObject();
-
-		generateLifeSpan(jsonObject);
-
-		fakePostChallengePayload = jsonObject;
 
 		return jsonObject;
 	}
@@ -147,7 +198,7 @@ public class TakeChallengeIntegrationTest {
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(ipAddress + service);
 		Invocation.Builder b = resource.request();
-		System.out.println("\t---> Sending request to '" + ipAddress + service + "'");
+		System.out.println("\t---> Sending request " + media.toString() + " to " + ipAddress + service + "'");
 
 		Entity e = Entity.entity(media.toString(), MediaType.APPLICATION_JSON);
 
