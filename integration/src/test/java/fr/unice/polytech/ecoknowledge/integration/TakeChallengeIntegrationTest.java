@@ -59,17 +59,15 @@ public class TakeChallengeIntegrationTest {
 	@Test
 	public void postChallenge() throws InterruptedException {
 		Thread.sleep(1500);
-		Response response = POST(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_CHALLENGE, fakePostChallengePayload);
+		Response challengePostResponse = POST(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_CHALLENGE, fakePostChallengePayload);
 		Thread.sleep(500);
 
-		assertEquals(200, response.getStatus());
+		assertEquals(200, challengePostResponse.getStatus());
 
-		Object entity = response.readEntity(String.class);
-		String challengeID = entity.toString();
+		Object challengeEntity = challengePostResponse.readEntity(String.class);
+		String challengeID = challengeEntity.toString();
 
 		assertNotNull(challengeID);
-
-
 
 		MongoDBHandler.getInstance().getBddConnector().drop(TEST_DB_NAME);
 	}
