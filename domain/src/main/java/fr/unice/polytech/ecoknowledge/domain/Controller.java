@@ -49,7 +49,10 @@ public class Controller {
 		}
 		*/
 
-		return new JsonObject();
+		JsonObject result = new JsonObject();
+		result.addProperty("id", goal.getId().toString());
+
+		return result;
 	}
 
 	public JsonArray getGoalsResultOfUser(String userID) throws IncoherentDBContentException, NotReadableElementException, GoalNotFoundException {
