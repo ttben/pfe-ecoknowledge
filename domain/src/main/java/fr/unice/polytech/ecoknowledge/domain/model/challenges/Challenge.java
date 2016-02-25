@@ -111,7 +111,7 @@ public class Challenge implements VisitableComponent {
 						.toDuration().getStandardDays()
 						> 0;
 			case WEEK:
-				end = Clock.getClock().getTime().withDayOfWeek(7);
+				end = Clock.getClock().getTime().withDayOfWeek(5);
 				return end.isBefore(lifeSpan.getEnd());
 			case MONTH:
 				end = Clock.getClock().getTime()

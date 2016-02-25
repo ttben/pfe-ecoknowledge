@@ -59,10 +59,11 @@ public class Model {
 		return user.getId().toString();
 	}
 
-	public void createChallenge(JsonObject jsonObject) throws IOException, NotSavableElementException {
+	public Challenge createChallenge(JsonObject jsonObject) throws IOException, NotSavableElementException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
 		MongoDBHandler.getInstance().store(challenge);
+		return challenge;
 	}
 
 	public Goal takeChallenge(JsonObject goalJsonDescription) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {

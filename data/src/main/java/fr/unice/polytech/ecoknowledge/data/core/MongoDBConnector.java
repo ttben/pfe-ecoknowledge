@@ -39,11 +39,21 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	}
 
 	public static MongoDBConnector getInstance() {
-		if (instance == null) {
-			instance = new MongoDBConnector();
-		}
 
-		return instance;
+		//Le "Double-Checked Singleton"/"Singleton doublement vérifié" permet
+		//d'éviter un appel coûteux à synchronized,
+		//une fois que l'instanciation est faite.
+		if (MongoDBConnector.instance == null) {
+			// Le mot-clé synchronized sur ce bloc empêche toute instanciation
+			// multiple même par différents "threads".
+			// Il est TRES important.
+			synchronized(MongoDBConnector.class) {
+				if (MongoDBConnector.instance == null) {
+					MongoDBConnector.instance = new MongoDBConnector();
+				}
+			}
+		}
+		return MongoDBConnector.instance;
 	}
 
 	public MongoClient getMongoConnection() {
@@ -67,28 +77,32 @@ public class MongoDBConnector implements DocumentBDDConnector {
 
 		MongoCollection<Document> collection = getCollection(CHALLENGES_COLLECTION);
 		collection.insertOne(Document.parse(challengeJsonDescription.toString()));
-		logger.info("\n\t+ Just inserted challenge :\n" + challengeJsonDescription);
+		logger.info("\n\t+ Just inserted challenge :\n" + challengeJsonDescription
+				+ " into " + collection.getNamespace().getDatabaseName() + "/" + collection.getNamespace().getCollectionName());
 	}
 
 	@Override
 	public void storeGoal(JsonObject goalJsonDescription) {
 		MongoCollection<Document> collection = getCollection(GOALS_COLLECTION);
 		collection.insertOne(Document.parse(goalJsonDescription.toString()));
-		logger.info("\n\t+ Just inserted goal :\n" + goalJsonDescription);
+		logger.info("\n\t+ Just inserted goal :\n" + goalJsonDescription
+				+ " into " + collection.getNamespace().getDatabaseName() + "/" + collection.getNamespace().getCollectionName());
 	}
 
 	@Override
 	public void storeResult(JsonObject goalResultJsonDescription) {
 		MongoCollection<Document> collection = getCollection(RESULTS_COLLECTION);
 		collection.insertOne(Document.parse(goalResultJsonDescription.toString()));
-		logger.info("\n\t+ Just inserted result :\n" + goalResultJsonDescription);
+		logger.info("\n\t+ Just inserted result :\n" + goalResultJsonDescription
+				+ " into " + collection.getNamespace().getDatabaseName() + "/" + collection.getNamespace().getCollectionName());
 	}
 
 	@Override
 	public void storeUser(JsonObject userJsonDescription) {
 		MongoCollection<Document> collection = getCollection(USERS_COLLECTION);
 		collection.insertOne(Document.parse(userJsonDescription.toString()));
-		logger.info("\n\t+ Just inserted user :\n" + userJsonDescription);
+		logger.info("\n\t+ Just inserted user :\n" + userJsonDescription
+				+ " into " + collection.getNamespace().getDatabaseName() + "/" + collection.getNamespace().getCollectionName());
 	}
 
 	@Override
@@ -238,6 +252,17 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		}
 	}
 
+	public void deleteGoalResultByID(String goalResult) throws GoalNotFoundException {
+		MongoCollection<Document> collection = getCollection(RESULTS_COLLECTION);
+		Document result = collection.find(Filters.eq("id", goalResult)).projection(Projections.exclude("_id")).first();
+
+		if (result != null) {
+			collection.deleteOne(result);
+		} else {
+			throw new GoalNotFoundException("Goal result : " + goalResult);
+		}
+	}
+
 	@Override
 	public void updateGoal(JsonObject goalJsonDescription) {
 		MongoCollection<Document> collection = getCollection(GOALS_COLLECTION);
@@ -305,12 +330,14 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		return collection;
 	}
 
-	public void drop(String dbName) {
-		logger.info("Dropping db" + dbName);
+	public void drop(String collectionName) {
+		logger.info("Dropping db" + DB_NAME + "/"+collectionName+" ! ");
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
-		MongoCollection<Document> collection = mongoDatabase.getCollection(dbName);
+
+		MongoCollection collection = mongoDatabase.getCollection(collectionName);
 		collection.drop();
-		logger.info(dbName + " dropped !");
+
+		logger.info(collectionName + " dropped !");
 	}
 
 	public void deleteAllTrackingRequests() {

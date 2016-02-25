@@ -51,7 +51,7 @@ public abstract class Worker implements Runnable, ExceptionListener, MessageList
 	}
 
 	protected void createWorker() throws JMSException, IOException {
-		logger.warn("Creating worker ...");
+		logger.warn("Creating worker " + getClass().getSimpleName() + " ...");
 
 		Properties prop = getProperties();
 		String brokerURL = getBrokerURL(prop);

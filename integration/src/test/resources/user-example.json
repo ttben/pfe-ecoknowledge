@@ -1,0 +1,8 @@
+{
+  "firstName" : "johnny",
+  "lastName":"cash",
+  "symbolicNameToSensorNameMap" : {
+    "TMP_CLI" : "TEMP_443V",
+    "TMP_AMB" : "TEMP_555"
+  }
+}

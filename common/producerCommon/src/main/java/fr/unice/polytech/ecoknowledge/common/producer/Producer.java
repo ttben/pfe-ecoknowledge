@@ -41,7 +41,7 @@ public abstract class Producer implements Runnable {
 	}
 
 	protected void createProducer() throws JMSException, IOException {
-		logger.warn("Creating producer ...");
+		logger.warn("Creating producer "  + getClass().getSimpleName() + " ...");
 
 		Properties prop = getProperties();
 		String brokerURL = getBrokerURL(prop);

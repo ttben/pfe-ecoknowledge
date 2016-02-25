@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.data.core.MongoDBConnector;
 import fr.unice.polytech.ecoknowledge.data.core.Utils;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
+import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import org.apache.logging.log4j.Logger;
 
 import javax.ws.rs.*;
