@@ -29,10 +29,21 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	}
 
 	public static MongoDBHandler getInstance() {
-		if (instance == null) {
-			instance = new MongoDBHandler();
+
+		//Le "Double-Checked Singleton"/"Singleton doublement vérifié" permet
+		//d'éviter un appel coûteux à synchronized,
+		//une fois que l'instanciation est faite.
+		if (MongoDBHandler.instance == null) {
+			// Le mot-clé synchronized sur ce bloc empêche toute instanciation
+			// multiple même par différents "threads".
+			// Il est TRES important.
+			synchronized(MongoDBHandler.class) {
+				if (MongoDBHandler.instance == null) {
+					MongoDBHandler.instance = new MongoDBHandler();
+				}
+			}
 		}
-		return instance;
+		return MongoDBHandler.instance;
 	}
 
 	@Override
