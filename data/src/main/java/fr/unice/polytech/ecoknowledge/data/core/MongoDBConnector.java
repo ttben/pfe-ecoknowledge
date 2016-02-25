@@ -251,6 +251,17 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		}
 	}
 
+	public void deleteGoalResultByID(String goalResult) throws GoalNotFoundException {
+		MongoCollection<Document> collection = getCollection(RESULTS_COLLECTION);
+		Document result = collection.find(Filters.eq("id", goalResult)).projection(Projections.exclude("_id")).first();
+
+		if (result != null) {
+			collection.deleteOne(result);
+		} else {
+			throw new GoalNotFoundException("Goal result : " + goalResult);
+		}
+	}
+
 	@Override
 	public void updateGoal(JsonObject goalJsonDescription) {
 		MongoCollection<Document> collection = getCollection(GOALS_COLLECTION);
