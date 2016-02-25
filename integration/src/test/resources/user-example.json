@@ -1,6 +1,8 @@
 {
   "firstName" : "johnny",
   "lastName":"cash",
+  "mail":"johnny@cash.com",
+  "password":"pwd",
   "symbolicNameToSensorNameMap" : {
     "TMP_CLI" : "TEMP_443V",
     "TMP_AMB" : "TEMP_555"
