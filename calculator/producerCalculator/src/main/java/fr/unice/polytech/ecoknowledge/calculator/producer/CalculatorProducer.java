@@ -73,6 +73,7 @@ public class CalculatorProducer extends Producer {
 		} else {
 
 			for (Goal currentGoalDescription : goalList) {
+				System.out.println("Calculator producer sending goal to handle ...");
 				TextMessage message = session.createTextMessage();
 
 				ObjectMapper mapper = new ObjectMapper();

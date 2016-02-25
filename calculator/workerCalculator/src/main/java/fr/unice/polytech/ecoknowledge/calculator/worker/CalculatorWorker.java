@@ -34,13 +34,13 @@ public class CalculatorWorker extends Worker {
 				Goal goal = mapper.readValue(obj, Goal.class);
 
 				String logs = getClass().getSimpleName() + " " + name + " received goal (" + goal.getId() + ") user (" + goal.getUser().getId() + ")";
-				//logger.warn(logs);
+				logger.warn(logs);
 
 
 				Calculator calculator = new Calculator();
 				GoalResult currentGoalResult = calculator.evaluate(goal);
 
-				//logger.info("Calculator has processed result");
+				logger.info("Calculator has processed result");
 
 				currentGoalResult.setId(goal.getId());
 
