@@ -3,4 +3,4 @@ echo
 echo // ----- Launching mongoDB
 echo // ----- Launching mongoDB >> "$LOG_FILE"
 
-mongod --dbpath ~ & >> /dev/null 2>> "$INTEGRATION_HOME/$LOG_FILE"
+mongod --dbpath "$DB_PATH" & >> /dev/null 2>> "$INTEGRATION_HOME/$LOG_FILE"
