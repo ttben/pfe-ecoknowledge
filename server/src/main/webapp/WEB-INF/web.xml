@@ -15,6 +15,7 @@
                 fr.unice.polytech.ecoknowledge.server.GoalService
                 fr.unice.polytech.ecoknowledge.server.MosaicService
                 fr.unice.polytech.ecoknowledge.server.UserService
+                fr.unice.polytech.ecoknowledge.server.BadgeService
                 fr.unice.polytech.ecoknowledge.server.MyExampleService
                 <!-- Add your resource classes here -->
             </param-value>
