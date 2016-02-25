@@ -21,7 +21,12 @@ public class UserService {
 		JsonObject response = new JsonObject();
 		try {
 			String id = Controller.getInstance().registerUser(jsonObject);
-			return Response.ok().entity(id.toString()).build();
+			return Response.ok().entity(id.toString())
+					.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+					.header("Access-Control-Allow-Credentials", "true")
+					.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+					.header("Access-Control-Max-Age", "1209600")
+					.build();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(403).entity(e.getStackTrace())
@@ -39,12 +44,6 @@ public class UserService {
                     .header("Access-Control-Max-Age", "1209600")
 					.build();
 		}
-		return Response.ok().entity(response.toString())
-                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-                .header("Access-Control-Max-Age", "1209600")
-				.build();
 	}
 
 	@GET
