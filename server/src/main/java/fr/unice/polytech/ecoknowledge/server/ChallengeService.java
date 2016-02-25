@@ -6,6 +6,7 @@ import fr.unice.polytech.ecoknowledge.data.exceptions.IncoherentDBContentExcepti
 import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,8 +26,9 @@ public class ChallengeService {
 		JsonObject json = new JsonParser().parse(object).getAsJsonObject();
 
 		try {
-			Controller.getInstance().createChallenge(json);
-			return Response.ok().build();
+			Challenge challenge = Controller.getInstance().createChallenge(json);
+			String challengeID = challenge.getId().toString();
+			return Response.ok().entity(challengeID).build();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();

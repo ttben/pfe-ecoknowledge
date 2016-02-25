@@ -89,9 +89,9 @@ public class Controller {
 		return null;
 	}
 
-	public void createChallenge(JsonObject challengeJsonDescription) throws IOException, NotSavableElementException {
+	public Challenge createChallenge(JsonObject challengeJsonDescription) throws IOException, NotSavableElementException {
 		System.out.println("\nCreating challenge with json : " + challengeJsonDescription);
-		Model.getInstance().createChallenge(challengeJsonDescription);
+		return Model.getInstance().createChallenge(challengeJsonDescription);
 	}
 
 	public JsonArray getTakenChallengesOfUser(String userID) throws IOException, IncoherentDBContentException, NotReadableElementException {
