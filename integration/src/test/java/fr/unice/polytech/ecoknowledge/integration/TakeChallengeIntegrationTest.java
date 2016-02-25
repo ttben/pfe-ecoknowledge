@@ -5,6 +5,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.calculator.producer.CalculatorProducer;
 import fr.unice.polytech.ecoknowledge.calculator.worker.CalculatorWorker;
+import fr.unice.polytech.ecoknowledge.data.exceptions.ChallengeNotFoundException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.GoalNotFoundException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.model.time.*;
 import fr.unice.polytech.ecoknowledge.feeder.producer.FeederProducer;
@@ -21,7 +24,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
@@ -45,22 +50,25 @@ public class TakeChallengeIntegrationTest {
 	public static final String URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER = "http://localhost:8081/Ecoknowledge/";
 	private static final String SERVICE_NAME_TO_POST_A_CHALLENGE = "challenges";
 	private static final String SERVICE_NAME_TO_POST_A_USER = "users";
-	public static final String TEST_DB_NAME = "test";
 	private static final String SERVICE_NAME_TO_TAKE_A_CHALLENGE = "goals";
 	public static final int WAITING_TIME_BETWEEN_REQUESTS = 500;
 	public static final int INITIAL_WAITING_TIME = 1500;
+	private static final String SERVICE_NAME_TO_GET_GOALS_RESULT = "goals";
+	public static final int WAITING_TIME_AFTER_GET = 500;
+	public static final int WAITING_TIME_AFTER_POST = 500;
 
 	private JsonObject fakePostChallengePayload;
 	private JsonObject fakePostUserPayload;
 
+	private String challengeID;
+	private String userID;
+	private String goalID;
+
 	private List<Thread> listOfThread = new ArrayList<>();
+	private String goalResultID;
 
 	@Before
 	public void setUp() throws IOException, InterruptedException {
-		setDBToUse();
-
-		Thread.sleep(1000);
-
 		loadChallengeJsonDescription();
 		loadUserJsonDescription();
 
@@ -69,12 +77,12 @@ public class TakeChallengeIntegrationTest {
 
 	}
 
-	private void setDBToUse() throws InterruptedException {
-		MongoDBHandler.getInstance().getBddConnector().DB_NAME = "test";
-		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty("dbName", "test");
-
-		postRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, "test/db/use", jsonObject);
+	@After
+	public void tearDown() throws GoalNotFoundException, ChallengeNotFoundException, UserNotFoundException {
+		MongoDBHandler.getInstance().getBddConnector().deleteGoalByID(goalID);
+		MongoDBHandler.getInstance().getBddConnector().deleteChallengeByID(challengeID);
+		MongoDBHandler.getInstance().getBddConnector().deleteUserByID(userID);
+		MongoDBHandler.getInstance().getBddConnector().deleteGoalResultByID(goalResultID);
 	}
 
 
@@ -82,23 +90,61 @@ public class TakeChallengeIntegrationTest {
 	public void testWhenUserTakeGoal() throws InterruptedException {
 		Thread.sleep(INITIAL_WAITING_TIME);
 
-		String challengeID = postChallenge();
+		challengeID = postChallenge();
 		assertNotNull(challengeID);
 		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
 
-		String userID = postAUser();
+		userID = postAUser();
 		assertNotNull(userID);
 		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
 
-		String goalID = takeAChallenge(challengeID, userID);
+		goalID = takeAChallenge(challengeID, userID);
 		assertNotNull(goalID);
 		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
 
 		System.out.printf("challengeID %s, UserID %s, GoalID %s\n", challengeID, userID, goalID);
 
-		Thread.sleep(10000);
+		Thread.sleep(CALCULATOR_REFRESHING_FREQUENCY*2);
 
-		MongoDBHandler.getInstance().getBddConnector().drop(TEST_DB_NAME);
+		JsonArray allGoalResult = getGoalResult();
+		assertNotNull(allGoalResult);
+
+		int expectedNumberOfGoalsResult = 1;
+		int actualNumberOfGoalsResult = allGoalResult.size();
+		assertEquals(expectedNumberOfGoalsResult, actualNumberOfGoalsResult);
+
+		JsonObject goalResult = allGoalResult.get(0).getAsJsonObject();
+		assertNotNull(goalResult);
+
+		String expectedGoalResultID = goalID;
+		String actualGoalResultID = goalResult.get("id").getAsString();
+		assertEquals(expectedGoalResultID, actualGoalResultID);
+
+		goalResultID = goalID;
+
+		int expectedNumberOfLevels = fakePostChallengePayload.get("levels").getAsJsonArray().size();
+		int actualNumberOfLevels = goalResult.get("levels").getAsJsonArray().size();
+		assertEquals(expectedNumberOfLevels, actualNumberOfLevels);
+
+		String expectedGoalName = fakePostChallengePayload.get("name").getAsString();
+		String actualGoalName = goalResult.get("name").getAsString();
+		assertEquals(expectedGoalName, actualGoalName);
+
+		int expectedTimePercent = 20;
+		int actualTimePercent = goalResult.get("timePercent").getAsInt();
+		assertEquals(expectedTimePercent, actualTimePercent);
+	}
+
+	private JsonArray getGoalResult() throws InterruptedException {
+		Map<String, Object> urlParameters = new HashMap<>();
+		urlParameters.put("userID", userID);
+		
+		Response response = GET(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_GET_GOALS_RESULT,urlParameters);
+		Thread.sleep(WAITING_TIME_AFTER_GET);
+
+		assertEquals(200, response.getStatus());
+
+		return new JsonParser().parse(response.getEntity().toString()).getAsJsonArray();
 	}
 
 	private String takeAChallenge(String challengeID, String userID) throws InterruptedException {
@@ -106,7 +152,9 @@ public class TakeChallengeIntegrationTest {
 		takeChallengePayload.addProperty("challenge", challengeID);
 		takeChallengePayload.addProperty("user", userID);
 
-		return postRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_TAKE_A_CHALLENGE, takeChallengePayload);
+		JsonObject goal= new JsonParser().parse(postRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_TAKE_A_CHALLENGE, takeChallengePayload)).getAsJsonObject();
+
+		return goal.get("id").getAsString();
 	}
 
 	private String postAUser() throws InterruptedException {
@@ -119,7 +167,7 @@ public class TakeChallengeIntegrationTest {
 
 	private String postRequest(String url, String service, JsonObject payload) throws InterruptedException {
 		Response statusPostResponse = POST(url, service, payload);
-		Thread.sleep(500);
+		Thread.sleep(WAITING_TIME_AFTER_POST);
 
 		assertEquals(200, statusPostResponse.getStatus());
 
@@ -201,6 +249,25 @@ public class TakeChallengeIntegrationTest {
 		Thread brokerThread = new Thread(runnable);
 		brokerThread.setDaemon(daemon);
 		brokerThread.start();
+	}
+
+	public static Response GET(String ipAddress, String service, Map<String, Object> urlParameters) {
+		Client client = ClientBuilder.newClient();
+
+		String parameters = "";
+
+		for(String currentParameterName : urlParameters.keySet()) {
+			parameters = parameters.concat(currentParameterName);
+			parameters = parameters.concat("=");
+			parameters = parameters.concat(urlParameters.get(currentParameterName).toString());
+			parameters = parameters.concat("&");
+		}
+
+		WebTarget resource = client.target(ipAddress + service + "?" + parameters);
+		Invocation.Builder b = resource.request();
+		System.out.println("\t---> Sending request to " + ipAddress +  service + parameters);
+
+		return b.get();
 	}
 
 	public static Response POST(String ipAddress, String service, JsonObject media) {
