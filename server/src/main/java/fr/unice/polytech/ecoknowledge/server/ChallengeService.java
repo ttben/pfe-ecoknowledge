@@ -28,7 +28,7 @@ public class ChallengeService {
 		try {
 			Challenge challenge = Controller.getInstance().createChallenge(json);
 			String challengeID = challenge.getId().toString();
-			return Response.ok().entity(challengeID).build();
+			return Response.ok(challengeID).entity(challengeID).build();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
