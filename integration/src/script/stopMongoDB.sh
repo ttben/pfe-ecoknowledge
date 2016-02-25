@@ -3,6 +3,6 @@ echo
 echo // ----- Stopping mongoDB
 echo // ----- Stopping mongoDB >> "$LOG_FILE"
 
-mongod --dbpath "$DB_PATH" --shutdown >> /dev/null 2>> "$LOG_FILE_TOMCAT"
+mongod --dbpath "DB_LOCATION" --shutdown >> /dev/null 2>> "$LOG_FILE_TOMCAT"
 
-rm -rf "$DB_PATH"
+rm -rf "DB_LOCATION"
