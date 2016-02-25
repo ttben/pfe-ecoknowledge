@@ -14,16 +14,6 @@ import javax.ws.rs.core.Response;
 @Path("/test")
 public class TestService {
 
-	@POST
-	@Path("/db/use")
-	public Response setDBNameToUse(String payloadJson) {
-		JsonObject payload = new JsonParser().parse(payloadJson).getAsJsonObject();
-		String dbNameToUse = payload.get("dbName").getAsString();
-
-		MongoDBHandler.getInstance().getBddConnector().DB_NAME = dbNameToUse;
-		return Response.ok().build();
-	}
-
 	@GET
 	@Path("/db/names")
 	public Response getDBNames() {
