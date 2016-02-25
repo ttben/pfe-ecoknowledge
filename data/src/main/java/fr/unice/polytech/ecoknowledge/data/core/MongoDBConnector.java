@@ -318,11 +318,14 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		return collection;
 	}
 
-	public void drop(String dbName) {
-		logger.info("Dropping db" + DB_NAME + " ! ");
+	public void drop(String collectionName) {
+		logger.info("Dropping db" + DB_NAME + "/"+collectionName+" ! ");
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(DB_NAME);
-		mongoClient.getDatabase(DB_NAME).drop();
-		logger.info(DB_NAME + " dropped !");
+
+		MongoCollection collection = mongoDatabase.getCollection(collectionName);
+		collection.drop();
+
+		logger.info(collectionName + " dropped !");
 	}
 
 	public void deleteAllTrackingRequests() {
