@@ -12,6 +12,7 @@ import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.model.time.*;
 import fr.unice.polytech.ecoknowledge.feeder.producer.FeederProducer;
 import fr.unice.polytech.ecoknowledge.feeder.worker.FeederWorker;
+import org.glassfish.jersey.client.ClientResponse;
 import org.joda.time.DateTime;
 import org.junit.*;
 
@@ -144,7 +145,9 @@ public class TakeChallengeIntegrationTest {
 
 		assertEquals(200, response.getStatus());
 
-		return new JsonParser().parse(response.getEntity().toString()).getAsJsonArray();
+		String entity = response.readEntity(String.class).toString();
+
+		return new JsonParser().parse(entity).getAsJsonArray();
 	}
 
 	private String takeAChallenge(String challengeID, String userID) throws InterruptedException {
@@ -252,20 +255,14 @@ public class TakeChallengeIntegrationTest {
 	}
 
 	public static Response GET(String ipAddress, String service, Map<String, Object> urlParameters) {
+
 		Client client = ClientBuilder.newClient();
 
-		String parameters = "";
+		WebTarget resource = client.target(ipAddress + service).queryParam("userID",urlParameters.get("userID").toString());
 
-		for(String currentParameterName : urlParameters.keySet()) {
-			parameters = parameters.concat(currentParameterName);
-			parameters = parameters.concat("=");
-			parameters = parameters.concat(urlParameters.get(currentParameterName).toString());
-			parameters = parameters.concat("&");
-		}
-
-		WebTarget resource = client.target(ipAddress + service + "?" + parameters);
 		Invocation.Builder b = resource.request();
-		System.out.println("\t---> Sending request to " + ipAddress +  service + parameters);
+
+		System.out.println("\t---> Sending request to " + ipAddress +  service + " URI : " + resource.toString());
 
 		return b.get();
 	}
