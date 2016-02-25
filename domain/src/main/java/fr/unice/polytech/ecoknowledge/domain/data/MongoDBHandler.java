@@ -372,4 +372,23 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	public void dropCollection(String dbName) {
 		bddConnector.drop(dbName);
 	}
+
+	public User readUserByLogging(String mail, String password) throws UserNotFoundException, NotReadableElementException, UserBadPasswordException {
+		JsonObject jsonObject =	bddConnector.findUserByLogging(mail, password);
+
+		if (jsonObject == null) {
+			String description = "user with loggin ".concat(mail).concat(" and this password").concat(" not found");
+			throw new UserNotFoundException(description);
+		}
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		User user = null;
+		try {
+			user = (User) objectMapper.readValue(jsonObject.toString(), User.class);
+		} catch (IOException e) {
+			throwNotReadableElementException("User mail : ".concat(mail), jsonObject.toString(), e);
+		}
+		return user;
+
+	}
 }

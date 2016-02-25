@@ -10,6 +10,8 @@ public class User {
 
 	private UUID id;
 	private String firstName;
+	private String mail;
+	private String password;
 	private String lastName;
 	private String picUrl;
 	private List<String> goalIDs;
@@ -18,13 +20,16 @@ public class User {
 
 	@JsonCreator
 	public User(@JsonProperty(value = "id", required = false) String ID,
+				@JsonProperty(value = "mail", required=true) String mail,
+				@JsonProperty(value = "password", required=true) String password,
 				@JsonProperty(value = "firstName", required = true) String firstName,
 				@JsonProperty(value = "lastName", required = true) String lastName,
 				@JsonProperty(value = "profilePic", required = false) String picUrl,
 				@JsonProperty(value = "goals", required = false) List<String> goalIDs,
 				@JsonProperty(value = "badges", required = false) List<Badge> badges,
 				@JsonProperty(value = "symbolicNameToSensorNameMap", required = true) Map<String, String> symbolicNameToSensorNameMap) {
-
+		this.mail = mail;
+		this.password = password;
 		this.id = (ID != null && !ID.isEmpty()) ? UUID.fromString(ID) : UUID.randomUUID();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -82,6 +87,22 @@ public class User {
 		this.picUrl = picUrl;
 	}
 
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof User)) {
@@ -90,7 +111,7 @@ public class User {
 
 		User user = (User) obj;
 
-		return user.firstName.equals(firstName) && user.lastName.equals(lastName)
+		return user.mail.equals(mail)
 				&& user.symbolicNameToSensorNameMap.equals(symbolicNameToSensorNameMap);
 	}
 

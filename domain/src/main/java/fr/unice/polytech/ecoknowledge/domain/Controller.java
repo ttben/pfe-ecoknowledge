@@ -5,8 +5,6 @@ import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
-import fr.unice.polytech.ecoknowledge.domain.model.SensorExtractor;
-import fr.unice.polytech.ecoknowledge.domain.model.SensorNeeds;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
@@ -16,7 +14,6 @@ import fr.unice.polytech.ecoknowledge.domain.views.users.UserView;
 import fr.unice.polytech.ecoknowledge.domain.views.users.UserViewList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sun.management.Sensor;
 
 import java.io.IOException;
 import java.util.List;
@@ -134,4 +131,10 @@ public class Controller {
 		MongoDBHandler.getInstance().dropCollection(dbName);
 	}
 
+	public JsonObject getUserId(String mail, String password) throws UserNotFoundException, NotReadableElementException, UserBadPasswordException {
+		User user = MongoDBHandler.getInstance().readUserByLogging(mail, password);
+		JsonObject idJsonObject = new JsonObject();
+		idJsonObject.addProperty("id", user.getId().toString());
+		return idJsonObject;
+	}
 }

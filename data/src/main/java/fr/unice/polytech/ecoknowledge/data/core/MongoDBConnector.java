@@ -13,6 +13,7 @@ import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.UpdateOptions;
 import fr.unice.polytech.ecoknowledge.data.exceptions.ChallengeNotFoundException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.GoalNotFoundException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.UserBadPasswordException;
 import fr.unice.polytech.ecoknowledge.data.exceptions.UserNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -370,5 +371,16 @@ public class MongoDBConnector implements DocumentBDDConnector {
 		result.add("values", remainingDataValues);
 
 		return result;
+	}
+
+	public JsonObject findUserByLogging(String mail, String password) throws UserBadPasswordException {
+
+		JsonArray users = findAllMatchingKeyValue(USERS_COLLECTION, "mail", mail);
+		if(users == null || users.size() == 0) return null;
+
+		if(!users.get(0).getAsJsonObject().get("password").getAsString().equals(password))
+			throw new UserBadPasswordException("User with mail ".concat(mail).concat(" didn't match this password ... -> ").concat(users.get(0).getAsJsonObject().toString()));
+
+		return users.get(0).getAsJsonObject();
 	}
 }
