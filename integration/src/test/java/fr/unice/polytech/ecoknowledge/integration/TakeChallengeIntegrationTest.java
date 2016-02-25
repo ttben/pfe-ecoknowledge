@@ -4,12 +4,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.calculator.producer.CalculatorProducer;
 import fr.unice.polytech.ecoknowledge.calculator.worker.CalculatorWorker;
+import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.model.time.*;
 import fr.unice.polytech.ecoknowledge.feeder.producer.FeederProducer;
 import fr.unice.polytech.ecoknowledge.feeder.worker.FeederWorker;
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
@@ -19,6 +19,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This test assumes that mongodb, activeMQ, and Ecoknowledge
@@ -34,23 +36,28 @@ public class TakeChallengeIntegrationTest {
 	public static final String NAME_OF_CALCULATOR_WORKER = "calculator1";
 	public static final int CALCULATOR_REFRESHING_FREQUENCY = 2500;
 
-	public static final String URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER = "";
+	public static final String URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER = "http://localhost:8081/Ecoknowledge/";
 	private static final String SERVICE_NAME_TO_POST_A_CHALLENGE = "challenges";
 
 	private JsonObject fakePostChallengePayload;
 
+	private List<Thread> listOfThread = new ArrayList<>();
+
 	@Before
 	public void setUp() throws IOException {
+		MongoDBHandler.getInstance().getBddConnector().DB_NAME = "test";
 		loadChallengeJsonDescription();
 		setUpCalculator();
 		setUpFeeder();
 	}
 
-	@Test
-	public void postChallenge() {
-		Response response = POST(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_CHALLENGE, fakePostChallengePayload);
 
-		Response.StatusType statusInfo = response.getStatusInfo();
+	@Test
+	public void postChallenge() throws InterruptedException {
+		Thread.sleep(2500);
+		//Response response = POST(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_CHALLENGE, fakePostChallengePayload);
+
+		//Response.StatusType statusInfo = response.getStatusInfo();
 	}
 
 	private JsonObject loadChallengeJsonDescription() throws IOException {
@@ -81,6 +88,8 @@ public class TakeChallengeIntegrationTest {
 	private void generateLifeSpan(JsonObject jsonObject) {
 		JsonObject generatedLifeSpan = new JsonObject();
 
+		Clock.getClock().setFakeTime(new DateTime(2016,2,23,12,0,0));
+
 		TimeBox generatedTimeBox = TimeSpanGenerator.generateTimeSpan(new Recurrence(RecurrenceType.WEEK, 1), Clock.getClock());
 		DateTime startDate = generatedTimeBox.getStart();
 		DateTime endDate = generatedTimeBox.getEnd();
@@ -92,6 +101,8 @@ public class TakeChallengeIntegrationTest {
 		generatedLifeSpan.addProperty("end", endDateStr);
 
 		jsonObject.remove("lifeSpan");
+		System.out.println("Fake lifeSpan : " + generatedLifeSpan);
+
 		jsonObject.add("lifeSpan", generatedLifeSpan);
 	}
 
@@ -104,6 +115,7 @@ public class TakeChallengeIntegrationTest {
 	}
 
 	private void setUpCalculator() {
+		System.out.println("BEgOEZHGFUOZUOGHZRUOGUOZRHG");
 		CalculatorWorker calculatorWorker = new CalculatorWorker(NAME_OF_CALCULATOR_WORKER, 0);
 		CalculatorProducer calculatorProducer = new CalculatorProducer(CALCULATOR_REFRESHING_FREQUENCY, -1);
 
