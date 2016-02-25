@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
 
 /**
@@ -89,33 +90,25 @@ public class TakeChallengeIntegrationTest {
 		takeChallengePayload.addProperty("challenge", challengeID);
 		takeChallengePayload.addProperty("user", userID);
 
-		Response goalPostResponse = POST(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_TAKE_A_CHALLENGE, takeChallengePayload);
-		Thread.sleep(500);
-
-		assertEquals(200, goalPostResponse.getStatus());
-
-		Object goalPostEntity = goalPostResponse.readEntity(String.class);
-		return goalPostEntity.toString();
+		return postRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_TAKE_A_CHALLENGE, takeChallengePayload);
 	}
 
 	private String postAUser() throws InterruptedException {
-		Response userPostResponse = POST(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_USER, fakePostUserPayload);
-		Thread.sleep(500);
-
-		assertEquals(200, userPostResponse.getStatus());
-
-		Object userPostEntity = userPostResponse.readEntity(String.class);
-		return userPostEntity.toString();
+		return postRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_USER, fakePostUserPayload);
 	}
 
 	private String postChallenge() throws InterruptedException {
-		Response challengePostResponse = POST(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_CHALLENGE, fakePostChallengePayload);
+		return postRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_CHALLENGE, fakePostChallengePayload);
+	}
+
+	private String postRequest(String url, String service, JsonObject payload) throws InterruptedException {
+		Response statusPostResponse = POST(url, service, payload);
 		Thread.sleep(500);
 
-		assertEquals(200, challengePostResponse.getStatus());
+		assertEquals(200, statusPostResponse.getStatus());
 
-		Object challengeEntity = challengePostResponse.readEntity(String.class);
-		return challengeEntity.toString();
+		Object entity = statusPostResponse.readEntity(String.class);
+		return entity.toString();
 	}
 
 
