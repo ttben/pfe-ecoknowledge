@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.model.SensorExtractor;
+import fr.unice.polytech.ecoknowledge.domain.model.SensorNeeds;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
@@ -15,6 +17,10 @@ import fr.unice.polytech.ecoknowledge.domain.views.users.UserViewList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
+import javax.ws.rs.client.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.List;
 
@@ -36,15 +42,14 @@ public class Controller {
 	public JsonObject takeChallenge(JsonObject description) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {
 		Goal goal = Model.getInstance().takeChallenge(description);
 
-		/*
 		SensorExtractor sensorExtractor = new SensorExtractor(goal);
 		goal.accept(sensorExtractor);
 
 		List<SensorNeeds> listOfSensorNeeds = sensorExtractor.getSensorNeedsList();
 		for(SensorNeeds sensorNeeds : listOfSensorNeeds) {
 			System.out.println("Needs :  " + sensorNeeds.getTargetSensor() + " from " + sensorNeeds.getDateStart() + " to " + sensorNeeds.getDateEnd());
+			TrackingRequestSender.POST(sensorNeeds);
 		}
-		*/
 
 		JsonObject result = new JsonObject();
 		result.addProperty("id", goal.getId().toString());
