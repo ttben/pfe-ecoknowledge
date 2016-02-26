@@ -48,7 +48,8 @@ public class Controller {
 		List<SensorNeeds> listOfSensorNeeds = sensorExtractor.getSensorNeedsList();
 		for(SensorNeeds sensorNeeds : listOfSensorNeeds) {
 			System.out.println("Needs :  " + sensorNeeds.getTargetSensor() + " from " + sensorNeeds.getDateStart() + " to " + sensorNeeds.getDateEnd());
-			TrackingRequestSender.POST(sensorNeeds);
+			Response response = TrackingRequestSender.POST(sensorNeeds);
+			System.out.println("Response received when asked to track " + sensorNeeds.getTargetSensor() + " : " + response);
 		}
 
 		JsonObject result = new JsonObject();
