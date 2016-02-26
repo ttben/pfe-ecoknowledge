@@ -52,7 +52,7 @@ public class TakeChallengeIntegrationTest {
 	private static final String SERVICE_NAME_TO_POST_A_CHALLENGE = "challenges";
 	private static final String SERVICE_NAME_TO_POST_A_USER = "users";
 	private static final String SERVICE_NAME_TO_TAKE_A_CHALLENGE = "goals";
-	public static final int WAITING_TIME_BETWEEN_REQUESTS = 500;
+	public static final int WAITING_TIME_BETWEEN_REQUESTS = 1500;
 	public static final int INITIAL_WAITING_TIME = 1500;
 	private static final String SERVICE_NAME_TO_GET_GOALS_RESULT = "goals";
 	public static final int WAITING_TIME_AFTER_GET = 500;
@@ -161,7 +161,11 @@ public class TakeChallengeIntegrationTest {
 	}
 
 	private String postAUser() throws InterruptedException {
-		return postRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_USER, fakePostUserPayload);
+
+		String userIdResponse = postRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_USER, fakePostUserPayload);
+
+		JsonObject responsePayload = new JsonParser().parse(userIdResponse).getAsJsonObject();
+		return responsePayload.get("id").getAsString();
 	}
 
 	private String postChallenge() throws InterruptedException {
@@ -172,9 +176,11 @@ public class TakeChallengeIntegrationTest {
 		Response statusPostResponse = POST(url, service, payload);
 		Thread.sleep(WAITING_TIME_AFTER_POST);
 
+		Object entity = statusPostResponse.readEntity(String.class);
+		System.out.println("Receiving response : " + statusPostResponse + " containing : " + entity);
+
 		assertEquals(200, statusPostResponse.getStatus());
 
-		Object entity = statusPostResponse.readEntity(String.class);
 		return entity.toString();
 	}
 
