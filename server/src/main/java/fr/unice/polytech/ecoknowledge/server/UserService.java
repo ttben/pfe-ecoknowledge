@@ -21,7 +21,8 @@ public class UserService {
 		JsonObject response = new JsonObject();
 		try {
 			String id = Controller.getInstance().registerUser(jsonObject);
-			return Response.ok().entity(id.toString())
+			response.addProperty("id", id);
+			return Response.ok().entity(response.toString())
 					.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
 					.header("Access-Control-Allow-Credentials", "true")
 					.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
