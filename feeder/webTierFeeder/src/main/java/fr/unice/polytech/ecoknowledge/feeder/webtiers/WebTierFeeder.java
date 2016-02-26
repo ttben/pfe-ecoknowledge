@@ -35,7 +35,6 @@ public class WebTierFeeder {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public Response addNewTrackingRequest(String trackingRequestDescription) throws IOException {
-		JsonObject trackingRequestJsonDescription = new JsonParser().parse(trackingRequestDescription).getAsJsonObject();
 
 		TrackRequestPOJO newTrackingRequest = new ObjectMapper().readValue(trackingRequestDescription.toString(), TrackRequestPOJO.class);
 		List<TrackRequestPOJO> trackRequestPOJOList = DBFeederLayer.getAllTrackingRequests();
