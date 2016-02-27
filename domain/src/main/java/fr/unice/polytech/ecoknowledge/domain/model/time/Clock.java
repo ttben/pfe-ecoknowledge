@@ -17,7 +17,7 @@ public class Clock {
 
 	private static Clock instance;
 
-	public Clock() {
+	private Clock() {
 	}
 
 	public static Clock getClock() {

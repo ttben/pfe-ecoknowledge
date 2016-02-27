@@ -17,7 +17,7 @@ public class ClockTest {
 	@Test
 	public void checkDateCreationEurope() {
 
-		Clock c = new Clock();
+		Clock c = Clock.getClock();
 		DateTime withEurope = c.parseDate("2015-12-01T18:00:00Z");
 
 		assertEquals("Europe/Paris", withEurope.getZone().getID());
@@ -28,7 +28,7 @@ public class ClockTest {
 	@Test
 	public void checkDateCreationAmerica() {
 
-		Clock c = new Clock();
+		Clock c = Clock.getClock();
 		c.setMiddleWareTZ(TimeZone.getTimeZone("America/Los_Angeles"));
 		DateTime withAmerica = c.parseDate("2015-12-01T18:00:00Z");
 
