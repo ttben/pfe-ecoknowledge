@@ -12,7 +12,6 @@ import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
 import fr.unice.polytech.ecoknowledge.domain.model.time.*;
 import fr.unice.polytech.ecoknowledge.feeder.producer.FeederProducer;
 import fr.unice.polytech.ecoknowledge.feeder.worker.FeederWorker;
-import org.glassfish.jersey.client.ClientResponse;
 import org.joda.time.DateTime;
 import org.junit.*;
 
@@ -49,6 +48,8 @@ public class TakeChallengeIntegrationTest {
 	public static final int CALCULATOR_REFRESHING_FREQUENCY = 2500;
 
 	public static final String URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER = "http://localhost:8081/Ecoknowledge/";
+	public static final String URL_OF_FAKE_DATA_SERVICE = "http://localhost:8081/fakeDataSource/";
+
 	private static final String SERVICE_NAME_TO_POST_A_CHALLENGE = "challenges";
 	private static final String SERVICE_NAME_TO_POST_A_USER = "users";
 	private static final String SERVICE_NAME_TO_TAKE_A_CHALLENGE = "goals";
@@ -57,6 +58,7 @@ public class TakeChallengeIntegrationTest {
 	private static final String SERVICE_NAME_TO_GET_GOALS_RESULT = "goals";
 	public static final int WAITING_TIME_AFTER_GET = 500;
 	public static final int WAITING_TIME_AFTER_POST = 500;
+	public static final DateTime NOW_FAKE_TIME = new DateTime(2016, 2, 23, 12, 0, 0);
 
 	private JsonObject fakePostChallengePayload;
 	private JsonObject fakePostUserPayload;
@@ -74,7 +76,7 @@ public class TakeChallengeIntegrationTest {
 		loadUserJsonDescription();
 
 		setUpCalculator();
-		//setUpFeeder();
+		setUpFeeder();
 
 	}
 
@@ -139,14 +141,18 @@ public class TakeChallengeIntegrationTest {
 		int actualTimePercent = goalResult.get("timePercent").getAsInt();
 		assertEquals(expectedTimePercent, actualTimePercent);
 
-		//	Send fake data
 
+		//	Send fake data
+		sendFakeData();
 
 		//	Wait for computation
+		Thread.sleep((CALCULATOR_REFRESHING_FREQUENCY + FEEDER_REFRESHING_FREQUENCY)*2);
 
 		//	Retrieve result
+		allGoalResult = getGoalResult();
 
 		//	See if it match
+		System.out.println(allGoalResult);
 
 		//	Make goal success (with other fake data)
 
@@ -158,6 +164,26 @@ public class TakeChallengeIntegrationTest {
 
 		//Thread.sleep(CALCULATOR_REFRESHING_FREQUENCY*20);
 
+	}
+
+	private String sendFakeData() throws InterruptedException {
+		sendFakeData("aTestSymbolicName1",NOW_FAKE_TIME.minusDays(1), 30);	//	Must be > 27 at least 50% of times
+		sendFakeData("aTestSymbolicName2",NOW_FAKE_TIME.minusDays(1), 30);	//	Must be < 44 at least 2 times
+		return "sendFakeData";
+	}
+
+	private String sendFakeData(String sensorName, DateTime date, double value) throws InterruptedException {
+		String aSensorName = sensorName;	//	Must be > 27 at least 50% of times
+
+		JsonObject firstPayloadValue = new JsonObject();
+		firstPayloadValue.addProperty("date", date.getMillis());
+		firstPayloadValue.addProperty("value", value);
+
+		JsonObject payload = new JsonObject();
+		payload.addProperty("targetSensor", aSensorName);
+		payload.add("value", firstPayloadValue);
+
+		return postRequest(URL_OF_FAKE_DATA_SERVICE, "fakeData", payload);
 	}
 
 	private JsonArray getGoalResult() throws InterruptedException {
@@ -187,6 +213,8 @@ public class TakeChallengeIntegrationTest {
 	private String postAUser() throws InterruptedException {
 
 		String userIdResponse = postRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_POST_A_USER, fakePostUserPayload);
+
+		System.out.println("USER ID RESPONSE : " + userIdResponse);
 
 		JsonObject responsePayload = new JsonParser().parse(userIdResponse).getAsJsonObject();
 		return responsePayload.get("id").getAsString();
@@ -244,7 +272,7 @@ public class TakeChallengeIntegrationTest {
 	private void generateLifeSpan(JsonObject jsonObject) throws InterruptedException {
 		JsonObject generatedLifeSpan = new JsonObject();
 
-		Clock.getClock().setFakeTime(new DateTime(2016,2,23,12,0,0));
+		Clock.getClock().setFakeTime(NOW_FAKE_TIME);
 
 
 		//	Set time of distant domain server

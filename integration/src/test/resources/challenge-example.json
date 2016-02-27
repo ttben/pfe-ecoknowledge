@@ -23,7 +23,7 @@
           "type":"standard",
           "expression":   {
             "leftOperand": {
-              "symbolicName":"TMP_CLI"
+              "symbolicName":"aTestSymbolicName1"
             },
             "rightOperand": {
               "value":27
@@ -45,7 +45,7 @@
           "type":"standard",
           "expression":   {
             "leftOperand": {
-              "symbolicName":"TMP_AMB"
+              "symbolicName":"aTestSymbolicName2"
             },
             "rightOperand": {
               "value":44
@@ -78,7 +78,7 @@
           "type":"standard",
           "expression":   {
             "leftOperand": {
-              "symbolicName":"TMP_CLI"
+              "symbolicName":"aTestSymbolicName1"
             },
             "rightOperand": {
               "value":27
@@ -100,7 +100,7 @@
           "type":"standard",
           "expression":   {
             "leftOperand": {
-              "symbolicName":"TMP_AMB"
+              "symbolicName":"aTestSymbolicName2"
             },
             "rightOperand": {
               "value":44
