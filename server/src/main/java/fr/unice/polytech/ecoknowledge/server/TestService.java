@@ -2,17 +2,30 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sun.org.apache.regexp.internal.RE;
 import fr.unice.polytech.ecoknowledge.data.core.MongoDBConnector;
 import fr.unice.polytech.ecoknowledge.data.core.Utils;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
+import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/test")
 public class TestService {
+
+	@POST
+	@Path("/clock")
+	public Response setFakeTime(String payload) {
+		JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
+
+		long newTime = jsonObject.get("newTime").getAsLong();
+		Clock.getClock().setFakeTime(Clock.getClock().createDate(new DateTime(newTime)));
+		return Response.ok().entity(Clock.getClock().getTime().getMillis()/1000).build();
+	}
 
 	@GET
 	@Path("/db/names")
