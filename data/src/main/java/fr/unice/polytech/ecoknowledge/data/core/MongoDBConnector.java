@@ -73,11 +73,9 @@ public class MongoDBConnector implements DocumentBDDConnector {
 
 	@Override
 	public void storeChallenge(JsonObject challengeJsonDescription) {
-		System.out.println("\n\nCHALLENGE\n\n" + challengeJsonDescription);
-
 		MongoCollection<Document> collection = getCollection(CHALLENGES_COLLECTION);
 		collection.insertOne(Document.parse(challengeJsonDescription.toString()));
-		logger.info("\n\t+ Just inserted challenge :\n" + challengeJsonDescription
+		logger.info("\n\t+ Just inserted challenge :\n" + challengeJsonDescription.get("id")
 				+ " into " + collection.getNamespace().getDatabaseName() + "/" + collection.getNamespace().getCollectionName());
 	}
 
@@ -85,7 +83,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public void storeGoal(JsonObject goalJsonDescription) {
 		MongoCollection<Document> collection = getCollection(GOALS_COLLECTION);
 		collection.insertOne(Document.parse(goalJsonDescription.toString()));
-		logger.info("\n\t+ Just inserted goal :\n" + goalJsonDescription
+		logger.info("\n\t+ Just inserted goal :\n" + goalJsonDescription.get("id")
 				+ " into " + collection.getNamespace().getDatabaseName() + "/" + collection.getNamespace().getCollectionName());
 	}
 
@@ -93,7 +91,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public void storeResult(JsonObject goalResultJsonDescription) {
 		MongoCollection<Document> collection = getCollection(RESULTS_COLLECTION);
 		collection.insertOne(Document.parse(goalResultJsonDescription.toString()));
-		logger.info("\n\t+ Just inserted result :\n" + goalResultJsonDescription
+		logger.info("\n\t+ Just inserted result :\n" + goalResultJsonDescription.get("id")
 				+ " into " + collection.getNamespace().getDatabaseName() + "/" + collection.getNamespace().getCollectionName());
 	}
 
@@ -101,7 +99,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public void storeUser(JsonObject userJsonDescription) {
 		MongoCollection<Document> collection = getCollection(USERS_COLLECTION);
 		collection.insertOne(Document.parse(userJsonDescription.toString()));
-		logger.info("\n\t+ Just inserted user :\n" + userJsonDescription
+		logger.info("\n\t+ Just inserted user :\n" + userJsonDescription.get("id")
 				+ " into " + collection.getNamespace().getDatabaseName() + "/" + collection.getNamespace().getCollectionName());
 	}
 
