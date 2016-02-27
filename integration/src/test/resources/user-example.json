@@ -4,7 +4,7 @@
   "mail":"johnny@cash.com",
   "password":"pwd",
   "symbolicNameToSensorNameMap" : {
-    "TMP_CLI" : "TEMP_443V",
-    "TMP_AMB" : "TEMP_555"
+    "aTestSymbolicName1" : "TEMP_443V",
+    "aTestSymbolicName2" : "TEMP_555"
   }
 }

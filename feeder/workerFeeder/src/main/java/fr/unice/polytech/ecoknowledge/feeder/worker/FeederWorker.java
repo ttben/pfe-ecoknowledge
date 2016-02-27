@@ -28,8 +28,10 @@ public class FeederWorker extends Worker {
 				String text = textMessage.getText();
 				System.out.println(name + " received: " + text + ".");
 
-				JsonObject trackingRequestionJsonObject = new JsonParser().parse(text).getAsJsonObject();
-				String sensorName = trackingRequestionJsonObject.get("targetSensor").getAsString();
+				JsonObject trackingRequestJsonObject = new JsonParser().parse(text).getAsJsonObject();
+				logger.debug(name + " received tracking request : " + trackingRequestJsonObject);
+
+				String sensorName = trackingRequestJsonObject.get("targetSensor").getAsString();
 
 				String result = new HTTPCaller().sendGet(sensorName);
 
@@ -37,6 +39,7 @@ public class FeederWorker extends Worker {
 				MongoDBConnector.getInstance().storeData(dataJsonObject);
 
 				Thread.sleep(fakeProcessingTime);
+
 
 			} else {
 				System.out.println("OTHER Received: " + message);

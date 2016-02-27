@@ -69,11 +69,11 @@ public class CalculatorProducer extends Producer {
 		List<Goal> goalList = db.readAllGoals();
 
 		if (goalList.size() == 0) {
-			System.out.println("Nothing to do here, lets sleep for a while ...");
+			logger.debug("Nothing to do here, lets sleep for a while ...");
 		} else {
 
 			for (Goal currentGoalDescription : goalList) {
-				System.out.println("Calculator producer sending goal to handle ...");
+				logger.debug("Calculator producer sending goal to handle ...");
 				TextMessage message = session.createTextMessage();
 
 				ObjectMapper mapper = new ObjectMapper();

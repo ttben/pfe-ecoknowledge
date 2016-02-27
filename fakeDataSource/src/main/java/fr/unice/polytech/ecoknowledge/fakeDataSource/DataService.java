@@ -1,6 +1,7 @@
 package fr.unice.polytech.ecoknowledge.fakeDataSource;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -9,7 +10,6 @@ import javax.ws.rs.core.Response;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Path("/")
@@ -40,6 +40,10 @@ public class DataService {
 		String newSensorName = newFakeData.get("targetSensor").getAsString();
 		JsonObject newDateAndValuePair = newFakeData.get("value").getAsJsonObject();
 
+		//	Convert date in millis into date in seconds
+		long dateInMillis = newDateAndValuePair.get("date").getAsLong();
+		newDateAndValuePair.remove("date");
+		newDateAndValuePair.addProperty("date", dateInMillis/1000);
 
 		JsonArray newValuesForSensorTarget = new JsonArray();
 		Object oldValuesObj = completeSetOfPreviousFakeData.get(newSensorName);
@@ -84,38 +88,65 @@ public class DataService {
 		URL url = Thread.currentThread().getContextClassLoader().getResource("fakeData.json");
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
 
-		JsonArray oldValues = new JsonParser()
-				.parse(bufferedReader).getAsJsonArray();
+		JsonObject data = new JsonParser()
+				.parse(bufferedReader).getAsJsonObject();
 
-		JsonArray oldValuesClone = oldValues;
+		if (!data.has(sensorName)) {
+			return Response.status(404).entity("Sensor " + sensorName + " not found").build();
+		}
 
-		long dateStart = Long.parseLong(
-				(
-						(oldValues
-								.get(oldValues.size() - 1)
-								.getAsJsonObject()
-						).get("date").toString()
+		String[] dateArray = null;
+		if(date != null && !date.isEmpty()) {
+			date.split("/");
+		}
 
-				).toString()
-		);
-		long dateEnd = new Date().getTime()/1000;
+		String startDateStr = null, endDateStr = null;
+		Long startDate = null, endDate = null;
 
-		System.out.println("DATE START : " + dateStart);
-		System.out.println("DATE END : " + dateEnd);
+		if(dateArray != null && dateArray.length == 1) {
+			startDateStr = dateArray[0];
+			startDate = Long.parseLong(startDateStr);
 
-		JsonArray newValues = generateRandomValuesBetweenDateWithSpecificJump(5 * 60, 10, 30, dateStart, dateEnd);
+		} else if (dateArray != null && dateArray.length >= 2) {
+			startDateStr = dateArray[0];
+			endDateStr = dateArray[1];
+			startDate = Long.parseLong(startDateStr);
+			endDate = Long.parseLong(endDateStr);
+		}
 
-		System.out.println("NEW VALUES \n\n " + newValues);
-		System.out.println("OLD VALUES \n\n " + oldValues);
+		JsonArray pairOfDateAndValuesArray = data.getAsJsonArray(sensorName);
+		JsonArray resultValues = new JsonArray();
+		for(JsonElement currentElement : pairOfDateAndValuesArray) {
+			JsonObject currentPairOfDateAndValue = currentElement.getAsJsonObject();
+			long currentDate = currentPairOfDateAndValue.get("date").getAsLong();
+			if(isKept(currentDate, startDate, endDate)) {
+				resultValues.add(currentPairOfDateAndValue);
+			}
+		}
 
-		oldValuesClone.addAll(newValues);
+		JsonObject result = new JsonObject();
+		result.addProperty("id", sensorName);
+		result.add("values", resultValues);
 
+		return Response.ok().entity(result.toString()).build();
+	}
 
-		JsonObject res = new JsonObject();
-		res.addProperty("id", sensorName);
-		res.add("values", oldValues);
+	/**
+	 *
+	 * @param date
+	 * @param startDate
+	 * @param endDate
+	 * @return true if date given is between startDate and endDate
+	 */
+	private boolean isKept(long date, Long startDate, Long endDate) {
+		if (startDate != null) {
+			if(endDate != null) {
+				return date >= startDate && date <= endDate;
+			}
+			return date >= startDate;
+		}
 
-		return Response.ok().entity(res.toString()).build();
+		return true;
 	}
 
 	public static void main(String[] args) {

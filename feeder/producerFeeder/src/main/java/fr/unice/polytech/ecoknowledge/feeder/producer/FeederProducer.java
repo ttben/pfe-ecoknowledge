@@ -48,12 +48,12 @@ public class FeederProducer extends Producer {
 		JsonArray trackingRequests = dbConnector.findAllTrackingRequest();
 
 		if (trackingRequests.size() == 0) {
-			System.out.println("Nothing to do here, lets sleep for a while ...");
+			logger.debug("Nothing to do here, lets sleep for a while ...");
 		} else {
 			for (JsonElement currentTrackingRequest : trackingRequests) {
 				String text = currentTrackingRequest.toString();
 				TextMessage message = session.createTextMessage(text);
-				System.out.println("Sending tracking request : " + text);
+				logger.debug("Sending tracking request : " + text);
 				producer.send(message);
 			}
 		}

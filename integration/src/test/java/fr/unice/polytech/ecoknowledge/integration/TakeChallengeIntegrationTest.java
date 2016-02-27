@@ -82,10 +82,12 @@ public class TakeChallengeIntegrationTest {
 
 	@After
 	public void tearDown() throws GoalNotFoundException, ChallengeNotFoundException, UserNotFoundException {
+
 		MongoDBHandler.getInstance().getBddConnector().deleteGoalByID(goalID);
 		MongoDBHandler.getInstance().getBddConnector().deleteChallengeByID(challengeID);
 		MongoDBHandler.getInstance().getBddConnector().deleteUserByID(userID);
 		MongoDBHandler.getInstance().getBddConnector().deleteGoalResultByID(goalResultID);
+
 	}
 
 
@@ -146,10 +148,14 @@ public class TakeChallengeIntegrationTest {
 		sendFakeData();
 
 		//	Wait for computation
-		Thread.sleep((CALCULATOR_REFRESHING_FREQUENCY + FEEDER_REFRESHING_FREQUENCY)*2);
+		int waitingTime = (CALCULATOR_REFRESHING_FREQUENCY + FEEDER_REFRESHING_FREQUENCY)*2;
+		System.out.println("Waiting for computation for " + waitingTime + " millis");
+		Thread.sleep(waitingTime);
 
 		//	Retrieve result
 		allGoalResult = getGoalResult();
+
+		Thread.sleep(WAITING_TIME_AFTER_GET);
 
 		//	See if it match
 		System.out.println(allGoalResult);
@@ -167,8 +173,8 @@ public class TakeChallengeIntegrationTest {
 	}
 
 	private String sendFakeData() throws InterruptedException {
-		sendFakeData("aTestSymbolicName1",NOW_FAKE_TIME.minusDays(1), 30);	//	Must be > 27 at least 50% of times
-		sendFakeData("aTestSymbolicName2",NOW_FAKE_TIME.minusDays(1), 30);	//	Must be < 44 at least 2 times
+		sendFakeData("TEMP_443V",NOW_FAKE_TIME.minusDays(1), 30);	//	Must be > 27 at least 50% of times
+		sendFakeData("TEMP_555",NOW_FAKE_TIME.minusDays(1), 30);	//	Must be < 44 at least 2 times
 		return "sendFakeData";
 	}
 
