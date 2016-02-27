@@ -4,20 +4,70 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Path("/")
 public class DataService {
+
+	@POST
+	@Path("fakeData")
+	public Response addFakeData(String payload) throws IOException, URISyntaxException {
+
+		JsonObject newFakeData = new JsonParser().parse(payload).getAsJsonObject();
+
+		URL url = Thread.currentThread().getContextClassLoader().getResource("fakeData.json");
+
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+
+
+		String sCurrentLine = "";
+		String jsonDesc = "";
+		while ((sCurrentLine = bufferedReader.readLine()) != null) {
+			jsonDesc = jsonDesc.concat(sCurrentLine);
+		}
+
+		JsonObject completeSetOfPreviousFakeData =  new JsonParser()
+				.parse(jsonDesc).getAsJsonObject();
+
+		bufferedReader.close();
+
+		String newSensorName = newFakeData.get("targetSensor").getAsString();
+		JsonObject newDateAndValuePair = newFakeData.get("value").getAsJsonObject();
+
+
+		JsonArray newValuesForSensorTarget = new JsonArray();
+		Object oldValuesObj = completeSetOfPreviousFakeData.get(newSensorName);
+		if(oldValuesObj != null) {
+			newValuesForSensorTarget = completeSetOfPreviousFakeData.get(newSensorName).getAsJsonArray();
+		}
+
+		newValuesForSensorTarget.add(newDateAndValuePair);
+
+		completeSetOfPreviousFakeData.remove(newSensorName);
+		completeSetOfPreviousFakeData.add(newSensorName, newValuesForSensorTarget);
+
+
+		File f = new File(url.toURI());
+		if(!f.exists()) {
+			f.createNewFile();
+		}
+
+		FileWriter fw = new FileWriter(f);
+
+		BufferedWriter bufferedWriter = new BufferedWriter(fw);
+		bufferedWriter.write(completeSetOfPreviousFakeData.toString());
+
+		bufferedWriter.close();
+
+		return Response.ok().entity(completeSetOfPreviousFakeData.toString()).build();
+	}
+
 
 	@GET
 	public Response getTest() {
