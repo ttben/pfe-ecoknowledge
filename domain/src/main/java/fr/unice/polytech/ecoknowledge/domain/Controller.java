@@ -55,6 +55,8 @@ public class Controller {
 		JsonObject result = new JsonObject();
 		result.addProperty("id", goal.getId().toString());
 
+		logger.info("" + goal.getUser().getId() + " has taken challenge " + goal.getChallengeDefinition().getId() + " and that has created goal " + goal.getId());
+
 		return result;
 	}
 

@@ -24,6 +24,8 @@ public class Challenge implements VisitableComponent {
 	private TimeBox lifeSpan;
 	private Recurrence recurrence;
 
+
+
 	@JsonCreator
 	public Challenge(@JsonProperty(value = "id", required = false) String id,
 					 @JsonProperty(value = "name", required = true) String name,
@@ -89,7 +91,7 @@ public class Challenge implements VisitableComponent {
 	}
 
 	public boolean canTake() {
-
+		System.out.println("Checking if can take a challenge ... Current time :  " + Clock.getClock().getTime() + " Lifespan of challenge :  " + lifeSpan);
 
 		// If we are not in the lifespan yet
 

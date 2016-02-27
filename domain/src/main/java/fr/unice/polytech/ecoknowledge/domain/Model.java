@@ -13,6 +13,8 @@ import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.InvalidGoalTimespanOverChallengeException;
 import fr.unice.polytech.ecoknowledge.domain.model.time.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
@@ -23,6 +25,7 @@ import java.util.List;
 public class Model {
 
 	private static Model instance;
+	final Logger logger = LogManager.getLogger(Model.class);
 
 	public static Model getInstance() {
 		if (instance == null) {
@@ -71,13 +74,18 @@ public class Model {
 	}
 
 	public Goal takeChallenge(JsonObject jsonObject, TimeBox next) throws IOException, JsonParseException, JsonMappingException, GoalNotFoundException, NotSavableElementException, UserNotFoundException, NotReadableElementException, InvalidGoalTimespanOverChallengeException {
+		System.out.println("Taking a challenge");
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		//	Build goal with custom deserializer
 		Goal goal = (Goal) objectMapper.readValue(jsonObject.toString(), Goal.class);
 
+		System.out.println("Goal wanted : " + goal);
+
 		Recurrence goalRecurrence = goal.getChallengeDefinition().getRecurrence();
+
 		if (!goal.getChallengeDefinition().canTake()) {
+			System.out.println("Specified Goal can not be taken");
 			if (next != null) {
 				throw new InvalidGoalTimespanOverChallengeException("Cannot take a goal until " + next.getEnd()
 						+ " when the challenge ends the " + goal.getChallengeDefinition().getLifeSpan().getEnd());
@@ -88,16 +96,20 @@ public class Model {
 		}
 
 		Clock clock = Clock.getClock();
+		System.out.println("Current Clock : " + clock.getTime());
 
 		//	Generate a timeSpan and set it into the goal
 		TimeBox timeSpan;
 		if (next != null) {
 			timeSpan = TimeSpanGenerator.generateNextTimeSpan(goalRecurrence, clock, next);
+			System.out.println("'next' is not null and this is new goal's timespan : " + timeSpan);
 		} else {
 			if (goal.getChallengeDefinition().getRecurrence().getRecurrenceType().equals(RecurrenceType.NONE)) {
 				timeSpan = goal.getChallengeDefinition().getLifeSpan();
+				System.out.println("'next' is null and recurrence type is 'none' and this is new goal's timespan : " + timeSpan);
 			} else {
 				timeSpan = TimeSpanGenerator.generateTimeSpan(goalRecurrence, clock);
+				System.out.println("'next' is null and recurrence type is not 'none' and this is new goal's timespan : " + timeSpan);
 			}
 		}
 

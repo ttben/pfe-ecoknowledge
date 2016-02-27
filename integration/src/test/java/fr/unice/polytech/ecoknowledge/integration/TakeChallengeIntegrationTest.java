@@ -52,7 +52,7 @@ public class TakeChallengeIntegrationTest {
 	private static final String SERVICE_NAME_TO_POST_A_CHALLENGE = "challenges";
 	private static final String SERVICE_NAME_TO_POST_A_USER = "users";
 	private static final String SERVICE_NAME_TO_TAKE_A_CHALLENGE = "goals";
-	public static final int WAITING_TIME_BETWEEN_REQUESTS = 500;
+	public static final int WAITING_TIME_BETWEEN_REQUESTS = 1500;
 	public static final int INITIAL_WAITING_TIME = 1500;
 	private static final String SERVICE_NAME_TO_GET_GOALS_RESULT = "goals";
 	public static final int WAITING_TIME_AFTER_GET = 500;
@@ -91,14 +91,17 @@ public class TakeChallengeIntegrationTest {
 	public void testWhenUserTakeGoal() throws InterruptedException {
 		Thread.sleep(INITIAL_WAITING_TIME);
 
+		System.out.println("Posting a challenge ...");
 		challengeID = postChallenge();
 		assertNotNull(challengeID);
 		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
 
+		System.out.println("Posting a  user ...");
 		userID = postAUser();
 		assertNotNull(userID);
 		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
 
+		System.out.println("Taking a challenge  ...");
 		goalID = takeAChallenge(challengeID, userID);
 		assertNotNull(goalID);
 		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
@@ -107,6 +110,7 @@ public class TakeChallengeIntegrationTest {
 
 		Thread.sleep(CALCULATOR_REFRESHING_FREQUENCY*2);
 
+		System.out.println("Getting goal result  ...");
 		JsonArray allGoalResult = getGoalResult();
 		assertNotNull(allGoalResult);
 
@@ -134,6 +138,9 @@ public class TakeChallengeIntegrationTest {
 		int expectedTimePercent = 20;
 		int actualTimePercent = goalResult.get("timePercent").getAsInt();
 		assertEquals(expectedTimePercent, actualTimePercent);
+
+		//Thread.sleep(CALCULATOR_REFRESHING_FREQUENCY*20);
+
 	}
 
 	private JsonArray getGoalResult() throws InterruptedException {
@@ -184,7 +191,7 @@ public class TakeChallengeIntegrationTest {
 		return fakePostUserPayload;
 	}
 
-	private JsonObject loadChallengeJsonDescription() throws IOException {
+	private JsonObject loadChallengeJsonDescription() throws IOException, InterruptedException {
 		fakePostChallengePayload = loadResource(RESOURCE_NAME_CHALLENGE_EXAMPLE_JSON);
 		generateLifeSpan(fakePostChallengePayload);
 		return fakePostChallengePayload;
@@ -211,10 +218,17 @@ public class TakeChallengeIntegrationTest {
 	 *
 	 * @param jsonObject Full challenge json description
 	 */
-	private void generateLifeSpan(JsonObject jsonObject) {
+	private void generateLifeSpan(JsonObject jsonObject) throws InterruptedException {
 		JsonObject generatedLifeSpan = new JsonObject();
 
 		Clock.getClock().setFakeTime(new DateTime(2016,2,23,12,0,0));
+
+
+		//	Set time of distant domain server
+		JsonObject newTimeInJson = new JsonObject();
+		newTimeInJson.addProperty("newTime", Clock.getClock().getTime().getMillis());
+		postRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, "test/clock", newTimeInJson);
+
 
 		TimeBox generatedTimeBox = TimeSpanGenerator.generateTimeSpan(new Recurrence(RecurrenceType.WEEK, 1), Clock.getClock());
 		DateTime startDate = generatedTimeBox.getStart();
@@ -227,7 +241,6 @@ public class TakeChallengeIntegrationTest {
 		generatedLifeSpan.addProperty("end", endDateStr);
 
 		jsonObject.remove("lifeSpan");
-		System.out.println("Fake lifeSpan : " + generatedLifeSpan);
 
 		jsonObject.add("lifeSpan", generatedLifeSpan);
 	}
