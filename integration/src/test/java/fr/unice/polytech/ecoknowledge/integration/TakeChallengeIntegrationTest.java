@@ -139,6 +139,23 @@ public class TakeChallengeIntegrationTest {
 		int actualTimePercent = goalResult.get("timePercent").getAsInt();
 		assertEquals(expectedTimePercent, actualTimePercent);
 
+		//	Send fake data
+
+
+		//	Wait for computation
+
+		//	Retrieve result
+
+		//	See if it match
+
+		//	Make goal success (with other fake data)
+
+		//	Set fake time to after goal timespan.end
+
+		//	Get badges of user
+
+		//	Check that badge has been earned
+
 		//Thread.sleep(CALCULATOR_REFRESHING_FREQUENCY*20);
 
 	}
