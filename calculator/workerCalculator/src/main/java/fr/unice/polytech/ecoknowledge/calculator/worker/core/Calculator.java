@@ -26,7 +26,7 @@ public class Calculator {
 	private static Clock clock;
 
 	public Calculator() {
-		this.clock = new Clock();
+		this.clock = Clock.getClock();
 	}
 
 	public GoalResult evaluate(Goal goal) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException {
