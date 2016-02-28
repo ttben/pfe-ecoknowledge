@@ -31,6 +31,7 @@ import java.util.Map;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * This test assumes that mongodb, activeMQ, and Ecoknowledge
@@ -59,6 +60,8 @@ public class TakeChallengeIntegrationTest {
 	public static final int WAITING_TIME_AFTER_GET = 1500;
 	public static final int WAITING_TIME_AFTER_POST = 1500;
 	public static final DateTime NOW_FAKE_TIME = new DateTime(2016, 2, 23, 12, 0, 0);
+	private static final String SERVICE_NAME_TO_GET_BADGES = "badges";
+	private static final String SERVICE_NAME_TO_GET_GOALS = "goals";
 
 	private JsonObject fakePostChallengePayload;
 	private JsonObject fakePostUserPayload;
@@ -84,10 +87,12 @@ public class TakeChallengeIntegrationTest {
 
 	@After
 	public void tearDown() throws GoalNotFoundException, ChallengeNotFoundException, UserNotFoundException {
+		/*
 		MongoDBHandler.getInstance().getBddConnector().deleteGoalByID(goalID);
 		MongoDBHandler.getInstance().getBddConnector().deleteChallengeByID(challengeID);
 		MongoDBHandler.getInstance().getBddConnector().deleteUserByID(userID);
 		MongoDBHandler.getInstance().getBddConnector().deleteGoalResultByID(goalResultID);
+		*/
 	}
 
 
@@ -200,12 +205,89 @@ public class TakeChallengeIntegrationTest {
 		assertEquals(expectedProgressPercent, actualProgressPercent);
 
 		//	Set fake time to after goal timespan.end
+		DateTime endOfTheWeek = new DateTime(2016,2,27,12,0,0);
+		setFakeTime(endOfTheWeek);
 
 		//	Get badges of user
+		JsonArray badges = getBadgesOfUser();
+		assertNotNull(badges);
 
 		//	Check that badge has been earned
+		int expectedNumberOfBadges = 1;
+		int actualNumberOfBadges = badges.size();
+		assertEquals(expectedNumberOfBadges, actualNumberOfBadges);
 
-		Thread.sleep(5000);
+		JsonObject badgeEarned = badges.get(0).getAsJsonObject();
+		assertNotNull(badgeEarned);
+
+		// FIXME: 28/02/2016 not correct du to a TODO in badgeView
+		String expectedChallengeName = "Olaf powa";
+		String actualChallengeName = badgeEarned.get("nameChallenge").getAsString();
+		assertEquals(expectedChallengeName, actualChallengeName);
+
+		String expectedLevelName = "Olaf powa";
+		String actualLevelName = badgeEarned.get("nameLevel").getAsString();
+		assertEquals(expectedLevelName, actualLevelName);
+
+		int expectedPoints = 200;
+		int actualPointsEarned = badgeEarned.get("points").getAsInt();
+		assertEquals(expectedPoints, actualPointsEarned);
+
+		int expectedNumberPossessedExpected = 1;
+		int actualNumberPossessed = badgeEarned.get("numberPossessed").getAsInt();
+		assertEquals(expectedNumberPossessedExpected, actualNumberPossessed);
+
+		//	Check that another goal has been created
+		JsonArray goals = getGoalsOfUser();
+		assertNotNull(goals);
+
+		int expectedNumberOfGoals = 1;
+		int actualNumberOfGoals = goals.size();
+		assertEquals(expectedNumberOfGoals, actualNumberOfGoals);
+
+		JsonObject newGoal = goals.get(0).getAsJsonObject();
+		assertNotNull(newGoal);
+
+		System.out.println("NEW GOAL: " + newGoal);
+
+		String expectedChallengeID = challengeID;
+		String challengeOfNewGoal = newGoal.get("challenge").getAsString();
+		assertEquals(expectedChallengeID, challengeOfNewGoal);
+
+		String expectedUserID = userID;
+		String userOfNewGoal = newGoal.get("user").getAsString();
+		assertEquals(expectedUserID, userOfNewGoal);
+
+		String idOfNewGoal = newGoal.get("id").getAsString();
+		assertFalse(goalID.equals(idOfNewGoal));
+
+		Thread.sleep(2500);
+	}
+
+	private JsonArray getBadgesOfUser() throws InterruptedException {
+		Map<String, Object> urlParameters = new HashMap<>();
+		urlParameters.put("userID", userID);
+
+		String resultGet = getRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_GET_BADGES, urlParameters);
+
+		return new JsonParser().parse(resultGet).getAsJsonArray();
+	}
+
+	private JsonArray getGoalsOfUser() throws InterruptedException {
+		String resultGet = getRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, SERVICE_NAME_TO_GET_GOALS, null);
+
+		return new JsonParser().parse(resultGet).getAsJsonArray();
+	}
+
+	private String getRequest(String urlOfFrontendServer, String serviceName, Map<String, Object> urlParameters) throws InterruptedException {
+		Response response = GET(urlOfFrontendServer, serviceName,urlParameters);
+		Thread.sleep(WAITING_TIME_AFTER_GET);
+
+		assertEquals(200, response.getStatus());
+
+		String entity = response.readEntity(String.class).toString();
+
+		return entity;
 	}
 
 	private String sendFakeData() throws InterruptedException {
@@ -314,18 +396,11 @@ public class TakeChallengeIntegrationTest {
 	private void generateLifeSpan(JsonObject jsonObject) throws InterruptedException {
 		JsonObject generatedLifeSpan = new JsonObject();
 
-		Clock.getClock().setFakeTime(NOW_FAKE_TIME);
-
-
-		//	Set time of distant domain server
-		JsonObject newTimeInJson = new JsonObject();
-		newTimeInJson.addProperty("newTime", Clock.getClock().getTime().getMillis());
-		postRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, "test/clock", newTimeInJson);
-
+		setFakeTime(NOW_FAKE_TIME);
 
 		TimeBox generatedTimeBox = TimeSpanGenerator.generateTimeSpan(new Recurrence(RecurrenceType.WEEK, 1), Clock.getClock());
 		DateTime startDate = generatedTimeBox.getStart();
-		DateTime endDate = generatedTimeBox.getEnd();
+		DateTime endDate = generatedTimeBox.getEnd().plusWeeks(1);
 
 		String startDateStr = startDate.toString();
 		String endDateStr = endDate.toString();
@@ -336,6 +411,16 @@ public class TakeChallengeIntegrationTest {
 		jsonObject.remove("lifeSpan");
 
 		jsonObject.add("lifeSpan", generatedLifeSpan);
+	}
+
+	private void setFakeTime(DateTime newNow) throws InterruptedException {
+		Clock.getClock().setFakeTime(newNow);
+
+		//	Set time of distant domain server
+		JsonObject newTimeInJson = new JsonObject();
+		newTimeInJson.addProperty("newTime", Clock.getClock().getTime().getMillis());
+		postRequest(URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER, "test/clock", newTimeInJson);
+		Thread.sleep(WAITING_TIME_AFTER_POST);
 	}
 
 	private void setUpFeeder() {
@@ -364,7 +449,10 @@ public class TakeChallengeIntegrationTest {
 
 		Client client = ClientBuilder.newClient();
 
-		WebTarget resource = client.target(ipAddress + service).queryParam("userID",urlParameters.get("userID").toString());
+		WebTarget resource = client.target(ipAddress + service);
+		if(urlParameters != null) {
+			resource = resource.queryParam("userID", urlParameters.get("userID").toString());
+		}
 
 		Invocation.Builder b = resource.request();
 

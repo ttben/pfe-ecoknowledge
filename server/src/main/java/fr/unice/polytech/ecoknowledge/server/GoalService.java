@@ -2,6 +2,7 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.data.core.MongoDBConnector;
@@ -72,7 +73,8 @@ public class GoalService {
 				System.out.println("User ID specified (" + userID + "). Displaying goals for user ...");
 				return Response.ok().entity(Controller.getInstance().getGoalsResultOfUser(userID).toString()).build();
 			} else {
-				return Response.ok().entity(MongoDBConnector.getInstance().findAllGoals().toString()).build();
+				JsonArray result = new JsonParser().parse(MongoDBConnector.getInstance().findAllGoals().toString()).getAsJsonArray();
+				return Response.ok().entity(result.toString()).build();
 				// return Response.status(403).build();
 			}
 		} catch (GoalNotFoundException e) {
