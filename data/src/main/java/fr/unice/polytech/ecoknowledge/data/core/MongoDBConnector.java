@@ -63,7 +63,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public void storeTrackingRequest(JsonObject trackingRequestsDescription) {
 		MongoCollection<Document> collection = getCollection(TRACKING_REQUESTS_COLLECTION);
 		collection.insertOne(Document.parse(trackingRequestsDescription.toString()));
-		logger.info("\n\t+ Saved new tracking request :\n" + trackingRequestsDescription);
+		logger.info("Saved new tracking request : " + trackingRequestsDescription);
 	}
 
 	public JsonArray findAllTrackingRequest() {
@@ -75,7 +75,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public void storeChallenge(JsonObject challengeJsonDescription) {
 		MongoCollection<Document> collection = getCollection(CHALLENGES_COLLECTION);
 		collection.insertOne(Document.parse(challengeJsonDescription.toString()));
-		logger.info("\n\t+ Just inserted challenge :\n" + challengeJsonDescription.get("id")
+		logger.info("Just inserted challenge : " + challengeJsonDescription.get("id")
 				+ " into " + collection.getNamespace().getDatabaseName() + "/" + collection.getNamespace().getCollectionName());
 	}
 
@@ -83,7 +83,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public void storeGoal(JsonObject goalJsonDescription) {
 		MongoCollection<Document> collection = getCollection(GOALS_COLLECTION);
 		collection.insertOne(Document.parse(goalJsonDescription.toString()));
-		logger.info("\n\t+ Just inserted goal :\n" + goalJsonDescription.get("id")
+		logger.info("Just inserted goal : " + goalJsonDescription.get("id")
 				+ " into " + collection.getNamespace().getDatabaseName() + "/" + collection.getNamespace().getCollectionName());
 	}
 
@@ -91,7 +91,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public void storeResult(JsonObject goalResultJsonDescription) {
 		MongoCollection<Document> collection = getCollection(RESULTS_COLLECTION);
 		collection.insertOne(Document.parse(goalResultJsonDescription.toString()));
-		logger.info("\n\t+ Just inserted result :\n" + goalResultJsonDescription.get("id")
+		logger.info("Just inserted result : " + goalResultJsonDescription.get("id")
 				+ " into " + collection.getNamespace().getDatabaseName() + "/" + collection.getNamespace().getCollectionName());
 	}
 
@@ -99,7 +99,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 	public void storeUser(JsonObject userJsonDescription) {
 		MongoCollection<Document> collection = getCollection(USERS_COLLECTION);
 		collection.insertOne(Document.parse(userJsonDescription.toString()));
-		logger.info("\n\t+ Just inserted user :\n" + userJsonDescription.get("id")
+		logger.info("Just inserted user : " + userJsonDescription.get("id")
 				+ " into " + collection.getNamespace().getDatabaseName() + "/" + collection.getNamespace().getCollectionName());
 	}
 
@@ -194,12 +194,7 @@ public class MongoDBConnector implements DocumentBDDConnector {
 			res += findIterable.next().toJson().toString() + "\n";
 		}
 
-		logger.info("DB CONTENT : " + res);
-		logger.info("Searched id : " + goalResultID);
-
 		Document result = collection.find(Filters.eq("id", goalResultID)).projection(Projections.exclude("_id")).first();
-
-		logger.info("Document found : " + result);
 
 		JsonParser parser = new JsonParser();
 
@@ -358,9 +353,9 @@ public class MongoDBConnector implements DocumentBDDConnector {
 
 		String id = newDocumentJsonDescription.get("id").getAsString();
 
-		collection.updateOne(Filters.eq("id", id), new Document("$set", newDocument));
+		collection.updateOne(Filters.eq("id", id), new Document("$set", newDocument), new UpdateOptions().upsert(true));
 
-		logger.info("\n\t+ Saved new sensor data :\n" + newDocumentJsonDescription);
+		logger.info("Saved new sensor data : " + newDocumentJsonDescription);
 	}
 
 	public JsonObject getSensorData(String sensorName) {
@@ -369,6 +364,8 @@ public class MongoDBConnector implements DocumentBDDConnector {
 
 	public JsonObject getSensorDataBetweenDates(String sensorName, long dateStart, long dateEnd) {
 		JsonObject allSensorData = getSensorData(sensorName);
+
+		logger.debug("All data in DB for sensor " + sensorName + " : " + allSensorData);
 
 		JsonArray remainingDataValues = new JsonArray();
 

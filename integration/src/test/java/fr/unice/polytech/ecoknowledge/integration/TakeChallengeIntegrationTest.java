@@ -53,11 +53,11 @@ public class TakeChallengeIntegrationTest {
 	private static final String SERVICE_NAME_TO_POST_A_CHALLENGE = "challenges";
 	private static final String SERVICE_NAME_TO_POST_A_USER = "users";
 	private static final String SERVICE_NAME_TO_TAKE_A_CHALLENGE = "goals";
-	public static final int WAITING_TIME_BETWEEN_REQUESTS = 1500;
+	public static final int WAITING_TIME_BETWEEN_REQUESTS = 5500;
 	public static final int INITIAL_WAITING_TIME = 1500;
 	private static final String SERVICE_NAME_TO_GET_GOALS_RESULT = "goals";
-	public static final int WAITING_TIME_AFTER_GET = 500;
-	public static final int WAITING_TIME_AFTER_POST = 500;
+	public static final int WAITING_TIME_AFTER_GET = 1500;
+	public static final int WAITING_TIME_AFTER_POST = 1500;
 	public static final DateTime NOW_FAKE_TIME = new DateTime(2016, 2, 23, 12, 0, 0);
 
 	private JsonObject fakePostChallengePayload;
@@ -76,18 +76,21 @@ public class TakeChallengeIntegrationTest {
 		loadUserJsonDescription();
 
 		setUpCalculator();
-		setUpFeeder();
+		Thread.sleep(250);
 
+		setUpFeeder();
+		Thread.sleep(250);
 	}
 
 	@After
 	public void tearDown() throws GoalNotFoundException, ChallengeNotFoundException, UserNotFoundException {
 
+		/*
 		MongoDBHandler.getInstance().getBddConnector().deleteGoalByID(goalID);
 		MongoDBHandler.getInstance().getBddConnector().deleteChallengeByID(challengeID);
 		MongoDBHandler.getInstance().getBddConnector().deleteUserByID(userID);
 		MongoDBHandler.getInstance().getBddConnector().deleteGoalResultByID(goalResultID);
-
+		*/
 	}
 
 
@@ -95,16 +98,21 @@ public class TakeChallengeIntegrationTest {
 	public void testWhenUserTakeGoal() throws InterruptedException {
 		Thread.sleep(INITIAL_WAITING_TIME);
 
+		//	Posting a challenge
 		System.out.println("Posting a challenge ...");
 		challengeID = postChallenge();
 		assertNotNull(challengeID);
 		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
 
+
+		//	Posting a user
 		System.out.println("Posting a  user ...");
 		userID = postAUser();
 		assertNotNull(userID);
 		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
 
+
+		//	Posting a challenge
 		System.out.println("Taking a challenge  ...");
 		goalID = takeAChallenge(challengeID, userID);
 		assertNotNull(goalID);
@@ -114,10 +122,13 @@ public class TakeChallengeIntegrationTest {
 
 		Thread.sleep(CALCULATOR_REFRESHING_FREQUENCY*2);
 
+
+		//	Retrieving calculator output
 		System.out.println("Getting goal result  ...");
 		JsonArray allGoalResult = getGoalResult();
 		assertNotNull(allGoalResult);
 
+		//	Check if there is exactly one result
 		int expectedNumberOfGoalsResult = 1;
 		int actualNumberOfGoalsResult = allGoalResult.size();
 		assertEquals(expectedNumberOfGoalsResult, actualNumberOfGoalsResult);
@@ -125,12 +136,16 @@ public class TakeChallengeIntegrationTest {
 		JsonObject goalResult = allGoalResult.get(0).getAsJsonObject();
 		assertNotNull(goalResult);
 
+
+		//	Check that this goal result has same id than goal
 		String expectedGoalResultID = goalID;
 		String actualGoalResultID = goalResult.get("id").getAsString();
 		assertEquals(expectedGoalResultID, actualGoalResultID);
 
 		goalResultID = goalID;
 
+
+		//	Check goal result's content
 		int expectedNumberOfLevels = fakePostChallengePayload.get("levels").getAsJsonArray().size();
 		int actualNumberOfLevels = goalResult.get("levels").getAsJsonArray().size();
 		assertEquals(expectedNumberOfLevels, actualNumberOfLevels);
@@ -143,7 +158,6 @@ public class TakeChallengeIntegrationTest {
 		int actualTimePercent = goalResult.get("timePercent").getAsInt();
 		assertEquals(expectedTimePercent, actualTimePercent);
 
-
 		//	Send fake data
 		sendFakeData();
 
@@ -154,13 +168,39 @@ public class TakeChallengeIntegrationTest {
 
 		//	Retrieve result
 		allGoalResult = getGoalResult();
-
 		Thread.sleep(WAITING_TIME_AFTER_GET);
 
 		//	See if it match
-		System.out.println(allGoalResult);
+		assertEquals(1, allGoalResult.size());
+		goalResult = allGoalResult.get(0).getAsJsonObject();
+
+		System.out.println("GOAL RESULT : " + goalResult);
+
+		double expectedProgressPercent = 75.0;
+		double actualProgressPercent = goalResult.get("progressPercent").getAsDouble();
+		assertEquals(expectedProgressPercent, actualProgressPercent);
+
 
 		//	Make goal success (with other fake data)
+		sendFakeData("TEMP_555",NOW_FAKE_TIME.minusHours(2), 42);	//	Must be < 44 at least 2 times
+
+
+		//	Wait for computation
+		waitingTime = (CALCULATOR_REFRESHING_FREQUENCY + FEEDER_REFRESHING_FREQUENCY)*2;
+		System.out.println("Waiting for computation for " + waitingTime + " millis");
+		Thread.sleep(waitingTime);
+
+		//	Retrieve new result
+		allGoalResult = getGoalResult();
+		Thread.sleep(WAITING_TIME_AFTER_GET);
+
+		//	See if it match
+		assertEquals(1, allGoalResult.size());
+		goalResult = allGoalResult.get(0).getAsJsonObject();
+
+		expectedProgressPercent = 100.0;
+		actualProgressPercent = goalResult.get("progressPercent").getAsDouble();
+		assertEquals(expectedProgressPercent, actualProgressPercent);
 
 		//	Set fake time to after goal timespan.end
 
@@ -168,8 +208,7 @@ public class TakeChallengeIntegrationTest {
 
 		//	Check that badge has been earned
 
-		//Thread.sleep(CALCULATOR_REFRESHING_FREQUENCY*20);
-
+		Thread.sleep(5000);
 	}
 
 	private String sendFakeData() throws InterruptedException {

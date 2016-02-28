@@ -31,7 +31,7 @@ public class Calculator {
 
 	public GoalResult evaluate(Goal goal) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException {
 
-		//logger.info("Ask evaluating goal " + goal);
+		logger.info("Ask evaluating goal " + goal);
 
 		// Creating processor to evaluate
 		AchievementProcessor achievementProcessor = new AchievementProcessor(goal, new Cache(goal));
@@ -39,7 +39,7 @@ public class Calculator {
 		// Ask evaluation
 		goal.accept(achievementProcessor);
 
-		//logger.info("Evaluating goal " + goal + " ended");
+		logger.info("Evaluating goal " + goal + " ended");
 
 
 		// Get results
@@ -48,7 +48,7 @@ public class Calculator {
 		// Look for the best badge
 		Badge bestBadge = getBestBadge(goalResult.getLevelResultList());
 
-		//logger.info("Finding best badge");
+		logger.info("Finding best badge");
 
 
 		boolean isOver;
@@ -62,20 +62,20 @@ public class Calculator {
 
 		if (isOver) {
 			if (bestBadge != null) {
-				//logger.warn("Goal is over. Badge won !");
+				logger.warn("Goal is over. Badge won !");
 				// Give the badge
 				Model.getInstance().giveBadge(bestBadge, goal.getUser().getId().toString());
 			} else {
-				//logger.warn("Goal is over. Badge lost ...");
+				logger.warn("Goal is over. Badge lost ...");
 			}
 
-			//logger.warn("Goal is over. Deleting goal : " + goal.getId());
+			logger.warn("Goal is over. Deleting goal : " + goal.getId());
 
 			// Delete the goal
 			Model.getInstance().deleteGoal(goal);
 
 			try {
-				//logger.info("Giving a new goal ...");
+				logger.info("Giving a new goal ...");
 				// Give a new goal
 				JsonObject json = new JsonObject();
 				json.addProperty("user", goal.getUser().getId().toString());
@@ -83,8 +83,8 @@ public class Calculator {
 
 				Model.getInstance().takeChallenge(json, goal.getTimeSpan());
 			} catch (InvalidGoalTimespanOverChallengeException itoce) {
-				//logger.error("Can't take challenge again :");
-				//logger.error(itoce.getMessage());
+				logger.error("Can't take challenge again :");
+				logger.error(itoce.getMessage());
 			}
 		}
 

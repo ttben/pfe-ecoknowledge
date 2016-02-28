@@ -69,7 +69,7 @@ public class CalculatorProducer extends Producer {
 		List<Goal> goalList = db.readAllGoals();
 
 		if (goalList.size() == 0) {
-			logger.debug("Nothing to do here, lets sleep for a while ...");
+			logger.debug(getClass().getSimpleName() + " Nothing to do here, lets sleep for a while ...");
 		} else {
 
 			for (Goal currentGoalDescription : goalList) {

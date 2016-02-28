@@ -64,11 +64,13 @@ public abstract class Worker implements Runnable, ExceptionListener, MessageList
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerURL);
 
 		// Create a Connection
+		//connectionFactory.setMaxThreadPoolSize(1);
+
+		//connectionFactory.setUseAsyncSend(true);	//	Dont wait for acknowledge when pushing into the queue
 		connection = connectionFactory.createConnection();
 		connection.start();
 
 		connection.setExceptionListener(this);
-
 		logger.info("Create a session and a queue named " + nameOfCalculatorQueue);
 
 		// Create a Session

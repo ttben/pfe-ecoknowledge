@@ -54,7 +54,7 @@ public abstract class Producer implements Runnable {
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerURL);
 
 		// Create a Connection
-		connection = connectionFactory.createConnection();
+		connection = connectionFactory.createQueueConnection();
 		connection.start();
 
 		logger.info("Create a session and a queue named " + nameOfCalculatorQueue);

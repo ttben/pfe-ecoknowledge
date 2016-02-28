@@ -8,7 +8,11 @@ import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.SensorExtractor;
 import fr.unice.polytech.ecoknowledge.domain.model.SensorNeeds;
 import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.*;
 
@@ -16,6 +20,8 @@ import java.util.*;
  * Created by Benjamin on 26/11/2015.
  */
 public class Cache {
+
+	private final Logger logger = LogManager.getLogger(Cache.class);
 
 	private static Cache fakeCacheInstance;
 	private Map<String, List<Data>> data = new HashMap<>();
@@ -28,9 +34,6 @@ public class Cache {
 		List<SensorNeeds> listOfSensorNeeds = sensorExtractor.getSensorNeedsList();
 		for(SensorNeeds sensorNeeds : listOfSensorNeeds) {
 			List<Data> currentData = getDataOf(sensorNeeds);
-
-			//System.out.println("Needs :  " + sensorNeeds.getTargetSensor() + " from " + sensorNeeds.getDateStart() + " to " + sensorNeeds.getDateEnd());
-
 			data.put(sensorNeeds.getTargetSensor(), currentData);
 		}
 	}
@@ -41,10 +44,9 @@ public class Cache {
 
 		List<Data> result = new ArrayList<>();
 
-
 		List<Data> listOfDataForGivenSensor = this.getData().get(sensorName);
+		logger.debug("Getting data of sensor " + sensorName + ". Current data : " + getData());
 		if(listOfDataForGivenSensor.size() == 0) {
-			//System.out.println("THERES NO DATA FOR SPECIFIC SENSOR : " + sensorName);
 			return result;
 		}
 
@@ -53,6 +55,8 @@ public class Cache {
 				result.add(currentData);
 			}
 		}
+
+		logger.debug("Returning data for " + sensorName + " : " + result);
 
 		return result;
 	}
@@ -70,9 +74,7 @@ public class Cache {
 	public List<Data> readDataOfSensorBetweenDateFromDB(String sensorName,
 														 DateTime start, DateTime end) {
 
-		//System.out.println("GETTING DATA OF SENSOR " + sensorName + " BETWEEN DATES " + start.getMillis() + " and " + end.getMillis());
-
-		JsonObject sensorData = MongoDBHandler.getInstance().getBddConnector().getSensorDataBetweenDates(sensorName, start.getMillis()/1000, end.getMillis()/1000);
+		JsonObject sensorData = MongoDBHandler.getInstance().getBddConnector().getSensorDataBetweenDates(sensorName, start.getMillis(), end.getMillis());
 		JsonArray sensorDataValues = sensorData.getAsJsonArray("values");
 
 		List<Data> result = new ArrayList<>();
@@ -82,7 +84,16 @@ public class Cache {
 			double value = sensorDataValuesObject.get("value").getAsDouble();
 			String date = sensorDataValuesObject.get("date").getAsLong() + "";
 
-			Data currentData = new Data(value, Clock.getClock().parseDate(date));
+			Long dateLong = Long.parseLong(date);
+			dateLong = dateLong * 1000; 	//	Convert epoch time in seconds into epoch time in millis
+
+			date = "" + dateLong;
+
+			DateTimeFormatter dtf = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss'Z'");
+			DateTime dateTimeInClockRepresentation = new DateTime(dateLong);
+			String dateStrForClockAPI = dateTimeInClockRepresentation.toString(dtf);
+
+			Data currentData = new Data(value, Clock.getClock().parseDate(dateStrForClockAPI));
 			result.add(currentData);
 		}
 

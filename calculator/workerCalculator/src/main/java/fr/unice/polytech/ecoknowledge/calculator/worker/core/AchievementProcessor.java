@@ -10,6 +10,8 @@ import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCon
 import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.ConditionResult;
 import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.GoalResult;
 import fr.unice.polytech.ecoknowledge.calculator.worker.core.views.goals.LevelResult;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,6 +21,8 @@ import java.util.List;
  * Created by Benjamin on 26/11/2015.
  */
 public class AchievementProcessor implements GoalVisitor {
+
+	private final Logger logger = LogManager.getLogger(AchievementProcessor.class);
 
 	private final Cache cache;
 	private Goal goal;
@@ -100,14 +104,16 @@ public class AchievementProcessor implements GoalVisitor {
 		//	Retrieves values of sensors
 		List<Data> data = this.cache.getDataOfSensorBetweenDates(sensorBound, goal.getStart(), goal.getEnd());
 
-		//System.out.println("data :" + data);
+		logger.info("Visiting STD CDT " + condition.describe() + ", based on " + data);
 
 		//	Compute evaluation of condition
 		int numberOfCorrectValues = 0;
 
 		//	For each data retrieved, do the comparison
 		for (Data currentData : data) {
+			logger.info("Evaluating with data " + data);
 			if (condition.compareWith(currentData.getValue())) {
+				logger.info("Data correct");
 				numberOfCorrectValues++;
 			}
 		}
@@ -129,6 +135,8 @@ public class AchievementProcessor implements GoalVisitor {
 		}
 
 		boolean achieved = achievedRate >= 100.0;
+
+		achievedRate = (achievedRate > 100)?100:achievedRate;
 
 		//	Build conditionResult
 		ConditionResult conditionResult = new ConditionResult(achieved, achievedRate, condition);

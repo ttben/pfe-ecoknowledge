@@ -25,6 +25,8 @@ public class CalculatorWorker extends Worker {
 
 	public void onMessage(Message message) {
 
+
+
 		try {
 			if (message instanceof TextMessage) {
 				TextMessage objectMessage = (TextMessage) message;
@@ -35,7 +37,6 @@ public class CalculatorWorker extends Worker {
 
 				String logs = getClass().getSimpleName() + " " + name + " received goal (" + goal.getId() + ") user (" + goal.getUser().getId() + ")";
 				logger.warn(logs);
-
 
 				Calculator calculator = new Calculator();
 				GoalResult currentGoalResult = calculator.evaluate(goal);
@@ -61,23 +62,24 @@ public class CalculatorWorker extends Worker {
 			} else {
 				//System.out.println("OTHER Received: " + message);
 			}
-		} catch (JMSException | IOException | GoalNotFoundException
-				| UserNotFoundException | NotSavableElementException | NotReadableElementException e) {
+		} catch (Throwable e) {
 
 			String errorDescription = "A calculator worker just raised an error ";
 			errorDescription = errorDescription.concat(e.getMessage());
 			errorDescription = errorDescription.concat("Caused by");
 			errorDescription = errorDescription.concat(e.getMessage());
 
-			//logger.fatal(errorDescription);
+			logger.fatal(errorDescription);
 			e.printStackTrace();
 
 			throw new IllegalArgumentException(errorDescription);
 		}
 
 
+
 		String logs = name + " has finished processing";
 		//logger.warn(logs);
+
 	}
 
 	protected URL getURLProperties() {
