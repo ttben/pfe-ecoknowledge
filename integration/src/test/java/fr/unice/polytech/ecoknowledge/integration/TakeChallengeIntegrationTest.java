@@ -84,13 +84,10 @@ public class TakeChallengeIntegrationTest {
 
 	@After
 	public void tearDown() throws GoalNotFoundException, ChallengeNotFoundException, UserNotFoundException {
-
-		/*
 		MongoDBHandler.getInstance().getBddConnector().deleteGoalByID(goalID);
 		MongoDBHandler.getInstance().getBddConnector().deleteChallengeByID(challengeID);
 		MongoDBHandler.getInstance().getBddConnector().deleteUserByID(userID);
 		MongoDBHandler.getInstance().getBddConnector().deleteGoalResultByID(goalResultID);
-		*/
 	}
 
 
