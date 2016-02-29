@@ -264,6 +264,8 @@ public class TakeChallengeIntegrationTest {
 
 		assertFalse("Checking that old goal and new goal do not have the same ID", goalID.equals(idOfNewGoal));
 
+		goalID = idOfNewGoal;	// Set this for teardown
+
 		Thread.sleep(2500);
 	}
 
