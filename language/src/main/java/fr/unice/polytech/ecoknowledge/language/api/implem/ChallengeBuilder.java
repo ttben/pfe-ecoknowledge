@@ -1,14 +1,10 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
-import fr.unice.polytech.ecoknowledge.language.api.config.AddressReacher;
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IChallengeable;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IChallengeableIcon;
 import fr.unice.polytech.ecoknowledge.language.api.interfaces.IDurationnable;
-import fr.unice.polytech.ecoknowledge.language.api.util.HTTPCall;
-import org.json.JSONObject;
 
-import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,20 +70,20 @@ public class ChallengeBuilder implements IChallengeableIcon {
 		return time;
 	}
 
-	DURATION_TYPE getType() {
-		return type;
-	}
-
-	String getName() {
-		return name;
-	}
-
 	void setTime(Integer time) {
 		this.time = time;
 	}
 
+	DURATION_TYPE getType() {
+		return type;
+	}
+
 	void setType(DURATION_TYPE type) {
 		this.type = type;
+	}
+
+	String getName() {
+		return name;
 	}
 
 	String getIcon() {

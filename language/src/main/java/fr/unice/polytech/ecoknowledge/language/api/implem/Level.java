@@ -37,10 +37,6 @@ public class Level implements ILevelable {
 		return r;
 	}
 
-	void setPoints(Integer points) {
-		this.points = points;
-	}
-
 	void addCondition(Condition c) {
 		conditions.add(c);
 	}
@@ -68,6 +64,10 @@ public class Level implements ILevelable {
 
 	Integer getPoints() {
 		return points;
+	}
+
+	void setPoints(Integer points) {
+		this.points = points;
 	}
 
 	String getImage() {

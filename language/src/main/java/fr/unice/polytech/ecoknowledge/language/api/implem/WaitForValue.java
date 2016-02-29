@@ -90,20 +90,20 @@ public class WaitForValue extends LevelBuilderGettable implements IActiveDuratio
 		return new ConditionLeast(this);
 	}
 
-	void setAtLeast(Integer atLeast) {
-		this.atLeast = atLeast;
-	}
-
-	void setType(AT_LEAST_TYPE type) {
-		this.type = type;
-	}
-
 	Integer getAtLeast() {
 		return atLeast;
 	}
 
+	void setAtLeast(Integer atLeast) {
+		this.atLeast = atLeast;
+	}
+
 	AT_LEAST_TYPE getType() {
 		return type;
+	}
+
+	void setType(AT_LEAST_TYPE type) {
+		this.type = type;
 	}
 
 	WEEK_PERIOD getPeriod() {

@@ -12,11 +12,7 @@ public enum RecurrenceType {
 
 	private String recurrenceType;
 
-	public String getRecurrenceType() {
-		return recurrenceType;
-	}
-
-	public void setRecurrenceType(String recurrenceType) {
+	RecurrenceType(String recurrenceType) {
 		this.recurrenceType = recurrenceType;
 	}
 
@@ -31,7 +27,11 @@ public enum RecurrenceType {
 		throw new IllegalArgumentException("Field " + text + " does not exist on counter object");
 	}
 
-	RecurrenceType(String recurrenceType) {
+	public String getRecurrenceType() {
+		return recurrenceType;
+	}
+
+	public void setRecurrenceType(String recurrenceType) {
 		this.recurrenceType = recurrenceType;
 	}
 }

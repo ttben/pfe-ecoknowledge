@@ -2,56 +2,29 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sun.org.apache.regexp.internal.RE;
+import fr.unice.polytech.ecoknowledge.data.core.MongoDBConnector;
+import fr.unice.polytech.ecoknowledge.data.core.Utils;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
-import fr.unice.polytech.ecoknowledge.domain.data.GoalNotFoundException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.utils.MongoDBConnector;
-import fr.unice.polytech.ecoknowledge.domain.data.utils.Utils;
-import fr.unice.polytech.ecoknowledge.domain.Model;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
-import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
+import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
+import fr.unice.polytech.ecoknowledge.domain.model.time.Clock;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.util.logging.LogManager;
 
 @Path("/test")
 public class TestService {
 
 	@POST
-	@Path("/evaluate")
-	@Consumes("application/json")
-	public Response evaluate(String object) {
-		JsonObject json = new JsonParser().parse(object).getAsJsonObject();
-		try {
-			Model.getInstance().evaluate(
-					json.get("userId").getAsString(),
-					json.get("challengeId").getAsString());
-		} catch (IOException e) {
-			return Response.status(500).entity(e.getMessage()).build();
-		} catch (GoalNotFoundException e) {
-			e.printStackTrace();
-			return Response.status(403).entity(e.getMessage()).build();
-		} catch (UserNotFoundException e) {
-			e.printStackTrace();
-			return Response.status(403).entity(e.getMessage()).build();
-		} catch (IncoherentDBContentException e) {
-			e.printStackTrace();
-			return Response.status(500).entity(e.getMessage()).build();
-		} catch (NotSavableElementException e) {
-			e.printStackTrace();
-			return Response.status(500).entity(e.getMessage()).build();
-		} catch (NotReadableElementException e) {
-			e.printStackTrace();
-			return Response.status(500).entity(e.getMessage()).build();
-		}
-		return Response.ok().build();
+	@Path("/clock")
+	public Response setFakeTime(String payload) {
+		JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
+
+		long newTime = jsonObject.get("newTime").getAsLong();
+		Clock.getClock().setFakeTime(Clock.getClock().createDate(new DateTime(newTime)));
+		return Response.ok().entity(Clock.getClock().getTime().getMillis()/1000).build();
 	}
 
 	@GET
@@ -87,23 +60,4 @@ public class TestService {
 		return Response.ok().build();
 	}
 
-	@POST
-	@Path("/stub")
-	@Consumes("application/json")
-	public Response addFakeData(String obj) {
-		JsonObject object = new JsonParser().parse(obj).getAsJsonObject();
-		Cache.getFakeCache().addData(object);
-		return Response.ok().entity(Cache.getFakeCache().getData().toString()).build();
-	}
-
-	@POST
-	@Path("/clock")
-	@Consumes("application/json")
-	public Response setClock(String obj) {
-		JsonObject object = new JsonParser().parse(obj).getAsJsonObject();
-		String newDate = object.get("date").getAsString();
-		DateTime newDateTime = DateTime.parse(newDate);
-		Model.getInstance().setTime(newDateTime);
-		return Response.ok().entity(Model.getInstance().getTimeDescription()).build();
-	}
 }

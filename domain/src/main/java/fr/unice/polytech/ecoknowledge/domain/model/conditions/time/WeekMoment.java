@@ -11,6 +11,10 @@ public enum WeekMoment {
 	private String days;
 
 
+	WeekMoment(String days) {
+		this.days = days;
+	}
+
 	public static WeekMoment fromString(String text) {
 		if (text != null) {
 			for (WeekMoment w : WeekMoment.values()) {
@@ -20,10 +24,6 @@ public enum WeekMoment {
 			}
 		}
 		throw new IllegalArgumentException("Field " + text + " does not exist on weekmoment object");
-	}
-
-	WeekMoment(String days) {
-		this.days = days;
 	}
 
 	public AbstractMap.SimpleEntry<Integer, Integer> getDays() {

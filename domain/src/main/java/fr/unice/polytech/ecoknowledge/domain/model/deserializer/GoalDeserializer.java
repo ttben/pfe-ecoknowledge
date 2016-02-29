@@ -6,13 +6,13 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.unice.polytech.ecoknowledge.data.exceptions.ChallengeNotFoundException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.ChallengeNotFoundException;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 
 import java.io.IOException;

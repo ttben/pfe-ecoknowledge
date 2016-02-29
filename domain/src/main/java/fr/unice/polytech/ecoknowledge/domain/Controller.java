@@ -2,31 +2,31 @@ package fr.unice.polytech.ecoknowledge.domain;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.data.GoalNotFoundException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
+import fr.unice.polytech.ecoknowledge.domain.model.SensorExtractor;
+import fr.unice.polytech.ecoknowledge.domain.model.SensorNeeds;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.InvalidGoalTimespanOverChallengeException;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.views.challenges.ChallengeViewList;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 import fr.unice.polytech.ecoknowledge.domain.views.users.UserView;
 import fr.unice.polytech.ecoknowledge.domain.views.users.UserViewList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
+import javax.ws.rs.client.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.List;
 
 public class Controller {
-	final Logger logger = LogManager.getLogger(Controller.class);
-
 	private static Controller instance;
+	final Logger logger = LogManager.getLogger(Controller.class);
 
 	public static Controller getInstance() {
 		if (instance == null) {
@@ -40,8 +40,24 @@ public class Controller {
 	}
 
 	public JsonObject takeChallenge(JsonObject description) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {
-		GoalResult goalResult = Model.getInstance().takeChallenge(description);
-		return goalResult.toJsonForClient();
+		Goal goal = Model.getInstance().takeChallenge(description);
+
+		SensorExtractor sensorExtractor = new SensorExtractor(goal);
+		goal.accept(sensorExtractor);
+
+		List<SensorNeeds> listOfSensorNeeds = sensorExtractor.getSensorNeedsList();
+		for(SensorNeeds sensorNeeds : listOfSensorNeeds) {
+			System.out.println("Needs :  " + sensorNeeds.getTargetSensor() + " from " + sensorNeeds.getDateStart() + " to " + sensorNeeds.getDateEnd());
+			Response response = TrackingRequestSender.POST(sensorNeeds);
+			System.out.println("Response received when asked to track " + sensorNeeds.getTargetSensor() + " : " + response);
+		}
+
+		JsonObject result = new JsonObject();
+		result.addProperty("id", goal.getId().toString());
+
+		logger.info("" + goal.getUser().getId() + " has taken challenge " + goal.getChallengeDefinition().getId() + " and that has created goal " + goal.getId());
+
+		return result;
 	}
 
 	public JsonArray getGoalsResultOfUser(String userID) throws IncoherentDBContentException, NotReadableElementException, GoalNotFoundException {
@@ -52,6 +68,13 @@ public class Controller {
 
 		JsonArray result = new JsonArray();
 		for (Goal currentGoal : goalList) {
+			//	Handling case when current goal has never been
+			//	evaluated by calculator (happens once it its lifetime)
+			if(currentGoal.getGoalResultID() == null) {
+				logger.warn("No goal result for goal " + currentGoal.getId() + " skipping it ...");
+				continue;
+			}
+
 			String goalResultStrID = currentGoal.getGoalResultID().toString();
 
 			logger.info("Try to retrieve goal result with ID " + goalResultStrID);
@@ -74,9 +97,9 @@ public class Controller {
 		return null;
 	}
 
-	public void createChallenge(JsonObject challengeJsonDescription) throws IOException, NotSavableElementException {
+	public Challenge createChallenge(JsonObject challengeJsonDescription) throws IOException, NotSavableElementException {
 		System.out.println("\nCreating challenge with json : " + challengeJsonDescription);
-		Model.getInstance().createChallenge(challengeJsonDescription);
+		return Model.getInstance().createChallenge(challengeJsonDescription);
 	}
 
 	public JsonArray getTakenChallengesOfUser(String userID) throws IOException, IncoherentDBContentException, NotReadableElementException {
@@ -119,4 +142,10 @@ public class Controller {
 		MongoDBHandler.getInstance().dropCollection(dbName);
 	}
 
+	public JsonObject getUserId(String mail, String password) throws UserNotFoundException, NotReadableElementException, UserBadPasswordException {
+		User user = MongoDBHandler.getInstance().readUserByLogging(mail, password);
+		JsonObject idJsonObject = new JsonObject();
+		idJsonObject.addProperty("id", user.getId().toString());
+		return idJsonObject;
+	}
 }

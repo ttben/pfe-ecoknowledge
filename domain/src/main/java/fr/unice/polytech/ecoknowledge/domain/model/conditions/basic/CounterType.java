@@ -1,7 +1,5 @@
 package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 public enum CounterType {
 
 	TIMES("times"),
@@ -9,14 +7,9 @@ public enum CounterType {
 
 	private String counterType;
 
-	public String getCounterType() {
-		return counterType;
-	}
-
-	public void setCounterType(String counterType) {
+	CounterType(String counterType) {
 		this.counterType = counterType;
 	}
-
 
 	public static CounterType fromString(String text) {
 		if (text != null) {
@@ -29,7 +22,11 @@ public enum CounterType {
 		throw new IllegalArgumentException("Field " + text + " does not exist on counter object");
 	}
 
-	CounterType(String counterType) {
+	public String getCounterType() {
+		return counterType;
+	}
+
+	public void setCounterType(String counterType) {
 		this.counterType = counterType;
 	}
 }

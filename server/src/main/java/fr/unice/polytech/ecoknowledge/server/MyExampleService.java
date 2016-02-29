@@ -8,12 +8,12 @@ import javax.ws.rs.core.Response;
  * Created by Sébastien on 22/11/2015.
  */
 
-@Path("/example")
+@Path("/")
 public class MyExampleService {
 
 	@GET
 	public Response getResponse() {
-		return Response.ok().build();
+		return Response.ok().entity("c'est ok !").build();
 	}
 
 }

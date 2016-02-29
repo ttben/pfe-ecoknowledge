@@ -1,0 +1,10 @@
+{
+  "firstName" : "johnny",
+  "lastName":"cash",
+  "mail":"johnny@cash.com",
+  "password":"pwd",
+  "symbolicNameToSensorNameMap" : {
+    "aTestSymbolicName1" : "TEMP_443V",
+    "aTestSymbolicName2" : "TEMP_555"
+  }
+}

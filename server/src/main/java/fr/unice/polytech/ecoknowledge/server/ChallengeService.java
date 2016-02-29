@@ -2,10 +2,11 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fr.unice.polytech.ecoknowledge.data.exceptions.IncoherentDBContentException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
+import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +18,7 @@ import java.io.IOException;
 @Path("/challenges")
 public class ChallengeService {
 
-    final Logger logger = LogManager.getLogger(ChallengeService.class);
+	final Logger logger = LogManager.getLogger(ChallengeService.class);
 
 	@POST
 	@Consumes("application/json")
@@ -25,8 +26,9 @@ public class ChallengeService {
 		JsonObject json = new JsonParser().parse(object).getAsJsonObject();
 
 		try {
-			Controller.getInstance().createChallenge(json);
-			return Response.ok().build();
+			Challenge challenge = Controller.getInstance().createChallenge(json);
+			String challengeID = challenge.getId().toString();
+			return Response.ok(challengeID).entity(challengeID).build();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
@@ -39,6 +41,7 @@ public class ChallengeService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Deprecated
 	public Response getAllChallenges(@QueryParam("type") String typeOfChallenges, @QueryParam("userID") String userID) {
 		try {
 			//	If user field is set
@@ -60,10 +63,10 @@ public class ChallengeService {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-            logger.catching(e);
+			logger.catching(e);
 			return Response.status(500).entity(e.getMessage()).build();
 		} catch (IncoherentDBContentException e) {
-            logger.catching(e);
+			logger.catching(e);
 			e.printStackTrace();
 			return Response.status(500).build();
 		} catch (NotReadableElementException e) {

@@ -3,7 +3,6 @@ package fr.unice.polytech.ecoknowledge.domain.views.challenges.conditions;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.Condition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.StandardCondition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCondition;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public abstract class ConditionViewFactory {
 
@@ -15,6 +14,6 @@ public abstract class ConditionViewFactory {
 			return new ImproveConditionView((ImproveCondition) condition);
 		}
 
-		throw new NotImplementedException();
+		throw new IllegalArgumentException();
 	}
 }

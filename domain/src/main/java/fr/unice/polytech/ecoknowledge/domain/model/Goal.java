@@ -4,18 +4,18 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.deserializer.GoalDeserializer;
 import fr.unice.polytech.ecoknowledge.domain.model.serializer.GoalSerializer;
 import fr.unice.polytech.ecoknowledge.domain.model.time.TimeBox;
 import org.joda.time.DateTime;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @JsonSerialize(using = GoalSerializer.class)
 @JsonDeserialize(using = GoalDeserializer.class)
-public class Goal implements VisitableComponent {
+public class Goal implements VisitableComponent, Serializable {
 
 	private UUID id;
 	private Challenge challengeDefinition;
@@ -30,11 +30,11 @@ public class Goal implements VisitableComponent {
 				User user,
 				String goalResultID) {
 
-		if(user == null) {
+		if (user == null) {
 			throw new NullPointerException("User specified is null");
 		}
 
-		if(definition == null) {
+		if (definition == null) {
 			throw new NullPointerException("Challenge specified is null");
 		}
 
@@ -42,7 +42,7 @@ public class Goal implements VisitableComponent {
 		this.challengeDefinition = definition;
 		this.timeSpan = timeSpan;
 		this.user = user;
-		if(goalResultID != null && !goalResultID.isEmpty()) {
+		if (goalResultID != null && !goalResultID.isEmpty()) {
 			this.goalResultID = UUID.fromString(goalResultID);
 		} else {
 			this.goalResultID = null;
@@ -106,4 +106,19 @@ public class Goal implements VisitableComponent {
 	public void setGoalResultID(UUID goalResultID) {
 		this.goalResultID = goalResultID;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder();
+
+		stringBuilder.append("( Goal [");
+		stringBuilder.append(id.toString());
+		stringBuilder.append("] ");
+		stringBuilder.append(challengeDefinition.getName());
+		stringBuilder.append(" taken by ");
+		stringBuilder.append(user.getFirstName());
+
+		return stringBuilder.toString();
+	}
+
 }

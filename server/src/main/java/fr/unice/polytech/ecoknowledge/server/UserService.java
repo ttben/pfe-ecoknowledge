@@ -2,22 +2,17 @@ package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.Controller;
-import fr.unice.polytech.ecoknowledge.domain.Model;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 
 @Path("/users")
+@Produces(MediaType.APPLICATION_JSON)
 public class UserService {
 
 	@POST
@@ -27,6 +22,12 @@ public class UserService {
 		try {
 			String id = Controller.getInstance().registerUser(jsonObject);
 			response.addProperty("id", id);
+			return Response.ok().entity(response.toString())
+					.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+					.header("Access-Control-Allow-Credentials", "true")
+					.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+					.header("Access-Control-Max-Age", "1209600")
+					.build();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(403).entity(e.getStackTrace()).build();
@@ -34,11 +35,28 @@ public class UserService {
 			e.printStackTrace();
 			return Response.status(500).entity(e.getMessage()).build();
 		}
-		return Response.ok().entity(response.toString()).build();
+	}
+
+	@GET
+	@Path("/{mail}")
+	public Response getUserId(@PathParam("mail") String mail, @QueryParam("password") String password){
+		try{
+			return Response.ok().entity(Controller.getInstance().getUserId(mail, password).toString()).build();
+		} catch (NotReadableElementException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(e.getMessage()).build();
+		} catch (UserNotFoundException e) {
+			e.printStackTrace();
+			return Response.status(404).entity(e.getMessage()).build();
+		} catch (UserBadPasswordException e) {
+			e.printStackTrace();
+			return Response.status(403).entity(e.getMessage()).build();
+		}
 	}
 
 	@GET
 	@Path("/{id}/profile")
+	@Deprecated
 	public Response getUser(@PathParam("id") String id) {
 		try {
 			return Response.ok().entity(Controller.getInstance().getUserProfile(id).toString()).build();
@@ -55,6 +73,7 @@ public class UserService {
 	}
 
 	@GET
+	@Deprecated
 	public Response getAllUsers() {
 		try {
 			return Response.ok().entity(Controller.getInstance().getAllUserProfiles().toString()).build();

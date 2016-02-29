@@ -81,7 +81,7 @@ public class TimeSpanGenerator {
 		DateTime end;
 
 		int nextDay = clock.createDate(next.getEnd()).getDayOfWeek();
-		if(nextDay > 5)
+		if (nextDay > 5)
 			start = clock.createDate(next.getEnd().plusWeeks(1).withDayOfWeek(1)
 					.withTime(0, 0, 0, 0));
 		else
@@ -117,8 +117,8 @@ public class TimeSpanGenerator {
 		start = clock.createDate(next.getEnd().plusWeeks(1).withDayOfWeek(1)
 				.withTime(0, 0, 0, 0));
 
-        end = clock.createDate(start.plusMonths(unit).withDayOfWeek(1).minusDays(3)
-                .withTime(23, 59, 59, 99));
+		end = clock.createDate(start.plusMonths(unit).withDayOfWeek(1).minusDays(3)
+				.withTime(23, 59, 59, 99));
 
 		return new TimeBox(start, end);
 	}

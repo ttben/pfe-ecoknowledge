@@ -28,7 +28,7 @@ public class Challenge {
 		return new ChallengeBuilder(name);
 	}
 
-	void send(){
+	void send() {
 		String IPAddress = AddressReacher.getAddress();
 		System.out.println("/----- Generating description -----/");
 		description = JSONBuilder.parse(cb);

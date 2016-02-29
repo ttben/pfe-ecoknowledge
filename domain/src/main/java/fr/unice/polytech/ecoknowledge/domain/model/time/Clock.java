@@ -13,17 +13,26 @@ import java.util.TimeZone;
 public class Clock {
 
 	private DateTime fakeTime = null;
+	private TimeZone middleWareTZ = TimeZone.getTimeZone("Europe/Paris");
 
-	public Clock() {
+	private static Clock instance;
+
+	private Clock() {
 	}
 
-	public DateTime getTime(){
-		if(fakeTime == null)
+	public static Clock getClock() {
+		if(instance == null) {
+			instance = new Clock();
+		}
+
+		return instance;
+	}
+
+	public DateTime getTime() {
+		if (fakeTime == null)
 			return createDate(DateTime.now());
 		return fakeTime;
 	}
-
-	private TimeZone middleWareTZ = TimeZone.getTimeZone("Europe/Paris");
 
 	public DateTime parseDate(String date) {
 
@@ -47,11 +56,11 @@ public class Clock {
 		return date;
 	}
 
-	public void setFakeTime(DateTime time){
-		System.out.println("\n+ Setting fake time ... ");
-		System.out.println("\n+ Time before setting : " + this.getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")));
+	public void setFakeTime(DateTime time) {
+		System.out.println("+ Setting fake time ... ");
+		System.out.println("+ Time before setting : " + this.getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")));
 		this.fakeTime = createDate(time);
-		System.out.println("\n\n+ Time after setting : " + this.getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")));
+		System.out.println("+ Time after setting : " + this.getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")));
 	}
 
 	public void setMiddleWareTZ(TimeZone middleWareTZ) {

@@ -1,0 +1,2 @@
+2016-02-25 16:54:06.664 [http-nio-8080-exec-4] INFO  fr.unice.polytech.ecoknowledge.domain.Controller - Getting goals result of user 620643fd-c7a4-4d41-aed9-bfe0f7a914b1
+2016-02-25 16:54:06.667 [http-nio-8080-exec-4] INFO  fr.unice.polytech.ecoknowledge.domain.Controller - Goals : []

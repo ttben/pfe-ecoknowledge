@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 
 import java.io.IOException;
@@ -22,14 +24,15 @@ public class GoalSerializer extends JsonSerializer<Goal> {
 		jgen.writeStringField("user", value.getUser().getId().toString());
 		jgen.writeStringField("id", value.getId().toString());
 
-		if(value.getGoalResultID() != null) {
+		if (value.getGoalResultID() != null) {
 			jgen.writeStringField("resultID", value.getGoalResultID().toString());
 		}
 
 		if (value.getTimeSpan() != null) {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String timeSpanDescription = objectMapper.writeValueAsString(value.getTimeSpan());
-			jgen.writeStringField("timeSpan", timeSpanDescription);
+			JsonObject timeSpanJsonDesc = new JsonParser().parse(timeSpanDescription).getAsJsonObject();
+			jgen.writeStringField("timeSpan", timeSpanJsonDesc.toString());
 		}
 
 		jgen.writeEndObject();

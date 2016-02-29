@@ -6,16 +6,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.utils.MongoDBConnector;
+import fr.unice.polytech.ecoknowledge.data.core.MongoDBConnector;
+import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.ChallengeNotFoundException;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,19 +21,29 @@ import java.util.List;
 public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 	private static MongoDBHandler instance;
-	private MongoDBConnector bddConnector;
-
 	final Logger logger = LogManager.getLogger(MongoDBHandler.class);
+	private MongoDBConnector bddConnector;
 
 	private MongoDBHandler() {
 		bddConnector = MongoDBConnector.getInstance();
 	}
 
 	public static MongoDBHandler getInstance() {
-		if (instance == null) {
-			instance = new MongoDBHandler();
+
+		//Le "Double-Checked Singleton"/"Singleton doublement vérifié" permet
+		//d'éviter un appel coûteux à synchronized,
+		//une fois que l'instanciation est faite.
+		if (MongoDBHandler.instance == null) {
+			// Le mot-clé synchronized sur ce bloc empêche toute instanciation
+			// multiple même par différents "threads".
+			// Il est TRES important.
+			synchronized(MongoDBHandler.class) {
+				if (MongoDBHandler.instance == null) {
+					MongoDBHandler.instance = new MongoDBHandler();
+				}
+			}
 		}
-		return instance;
+		return MongoDBHandler.instance;
 	}
 
 	@Override
@@ -86,12 +91,6 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 		}
 	}
 
-	@Override
-	public void store(GoalResult goalResult) {
-
-		JsonObject goalResultJsonDescription = goalResult.toJsonForClient();
-		bddConnector.storeResult(goalResultJsonDescription);
-	}
 
 	@Override
 	public List<Challenge> readAllChallenges() throws IncoherentDBContentException, NotReadableElementException {
@@ -236,10 +235,10 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	public Goal readGoalByUserAndChallengeIDs(String userID, String challengeID) throws IncoherentDBContentException, NotReadableElementException, GoalNotFoundException {
 		List<Goal> goalList = readAllGoalsOfUser(userID);
 
-		System.out.println("\n+ALL GOALS FOR USER:"+userID+" :\n" +goalList);
+		System.out.println("\n+ALL GOALS FOR USER:" + userID + " :\n" + goalList);
 
-		for(Goal currentGoal : goalList) {
-			if(currentGoal.getChallengeDefinition().getId().toString().equals(challengeID)) {
+		for (Goal currentGoal : goalList) {
+			if (currentGoal.getChallengeDefinition().getId().toString().equals(challengeID)) {
 				return currentGoal;
 			}
 		}
@@ -249,7 +248,7 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 		description = description.concat(" and challenge:");
 		description = description.concat(challengeID);
 
-	 	throw new GoalNotFoundException(description);
+		throw new GoalNotFoundException(description);
 	}
 
 	@Override
@@ -279,8 +278,8 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	public boolean userHasGoal(String userID, String goalID) throws IncoherentDBContentException, NotReadableElementException {
 		List<Goal> goalList = this.readAllGoalsOfUser(userID);
 
-		for(Goal currentGoal : goalList) {
-			if(currentGoal.getId().equals(goalID)) {
+		for (Goal currentGoal : goalList) {
+			if (currentGoal.getId().equals(goalID)) {
 				return true;
 			}
 		}
@@ -292,8 +291,8 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 	public boolean userHasTakenChallenge(String userID, String challengeID) throws IncoherentDBContentException, NotReadableElementException {
 		List<Goal> goalList = this.readAllGoalsOfUser(userID);
 
-		for(Goal currentGoal : goalList) {
-			if(currentGoal.getChallengeDefinition().getId().equals(challengeID)) {
+		for (Goal currentGoal : goalList) {
+			if (currentGoal.getChallengeDefinition().getId().equals(challengeID)) {
 				return true;
 			}
 		}
@@ -321,10 +320,18 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 		try {
 			String goalStrDescription = objectMapper.writeValueAsString(goal);
 			JsonObject goalJsonDescription = new JsonParser().parse(goalStrDescription).getAsJsonObject();
+
+			//logger.warn("Updating goal : " + goal + " goalResult: " + goal.getGoalResultID().toString());
 			this.bddConnector.updateGoal(goalJsonDescription);
 		} catch (JsonProcessingException e) {
 			throwNotSavableElementException("Goal", goal.getId().toString(), e);
 		}
+	}
+
+	@Override
+	public JsonArray readAllSensorData() {
+		// TODO: 18/02/2016 IMPLEMENTS IT 
+		return new JsonArray();
 	}
 
 	private List<Goal> convertGoalsJsonArrayIntoGoalsList(JsonArray goalsJsonArray) throws IncoherentDBContentException, NotReadableElementException {
@@ -369,11 +376,30 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 		throw new NotReadableElementException(exceptionDescription, motherCause);
 	}
 
+	public MongoDBConnector getBddConnector() {
+		return bddConnector;
+	}
+
 	public void dropCollection(String dbName) {
 		bddConnector.drop(dbName);
 	}
 
-	public void updateGoalResult(GoalResult goalResult) throws NotSavableElementException {
-		bddConnector.updateGoalResult(goalResult.toJsonForClient());
+	public User readUserByLogging(String mail, String password) throws UserNotFoundException, NotReadableElementException, UserBadPasswordException {
+		JsonObject jsonObject =	bddConnector.findUserByLogging(mail, password);
+
+		if (jsonObject == null) {
+			String description = "user with loggin ".concat(mail).concat(" and this password").concat(" not found");
+			throw new UserNotFoundException(description);
+		}
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		User user = null;
+		try {
+			user = (User) objectMapper.readValue(jsonObject.toString(), User.class);
+		} catch (IOException e) {
+			throwNotReadableElementException("User mail : ".concat(mail), jsonObject.toString(), e);
+		}
+		return user;
+
 	}
 }

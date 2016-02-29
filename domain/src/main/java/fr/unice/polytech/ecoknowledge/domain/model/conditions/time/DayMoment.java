@@ -12,6 +12,10 @@ public enum DayMoment {
 
 	private String hours;
 
+	DayMoment(String hours) {
+		this.hours = hours;
+	}
+
 	public static DayMoment fromString(String text) {
 		if (text != null) {
 			for (DayMoment d : DayMoment.values()) {
@@ -21,10 +25,6 @@ public enum DayMoment {
 			}
 		}
 		throw new IllegalArgumentException("Field " + text + " does not exist on daymoment object");
-	}
-
-	DayMoment(String hours) {
-		this.hours = hours;
 	}
 
 	public List<AbstractMap.SimpleEntry<Integer, Integer>> getHours() {

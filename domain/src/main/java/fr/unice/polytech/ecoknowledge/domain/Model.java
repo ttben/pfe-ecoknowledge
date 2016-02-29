@@ -1,43 +1,31 @@
 package fr.unice.polytech.ecoknowledge.domain;
 
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Cache;
-import fr.unice.polytech.ecoknowledge.domain.calculator.Calculator;
-import fr.unice.polytech.ecoknowledge.domain.data.GoalNotFoundException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.*;
 import fr.unice.polytech.ecoknowledge.domain.data.MongoDBHandler;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.IncoherentDBContentException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotSavableElementException;
 import fr.unice.polytech.ecoknowledge.domain.model.Goal;
 import fr.unice.polytech.ecoknowledge.domain.model.User;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Badge;
 import fr.unice.polytech.ecoknowledge.domain.model.challenges.Challenge;
 import fr.unice.polytech.ecoknowledge.domain.model.exceptions.InvalidGoalTimespanOverChallengeException;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.model.time.*;
-import fr.unice.polytech.ecoknowledge.domain.views.goals.GoalResult;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
 import java.io.IOException;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
 
 	private static Model instance;
-
-	private Calculator calculator;
-
-	public Model() {
-		this.calculator = new Calculator(Cache.getFakeCache());
-	}
+	final Logger logger = LogManager.getLogger(Model.class);
 
 	public static Model getInstance() {
 		if (instance == null) {
@@ -51,7 +39,7 @@ public class Model {
 		List<Challenge> challenges = MongoDBHandler.getInstance().readAllChallenges();
 		List<Challenge> takenChallenges = getTakenChallenges(userID);
 
-        challenges.removeAll(takenChallenges);
+		challenges.removeAll(takenChallenges);
 
 		return challenges;
 	}
@@ -60,8 +48,8 @@ public class Model {
 		List<Goal> goals = MongoDBHandler.getInstance().readAllGoalsOfUser(userID);
 		List<Challenge> challenges = new ArrayList<>();
 
-        for (Goal currentGoal : goals) {
-            challenges.add(currentGoal.getChallengeDefinition());
+		for (Goal currentGoal : goals) {
+			challenges.add(currentGoal.getChallengeDefinition());
 		}
 
 		return challenges;
@@ -74,59 +62,61 @@ public class Model {
 		return user.getId().toString();
 	}
 
-	public void createChallenge(JsonObject jsonObject) throws IOException, NotSavableElementException {
+	public Challenge createChallenge(JsonObject jsonObject) throws IOException, NotSavableElementException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Challenge challenge = (Challenge) objectMapper.readValue(jsonObject.toString(), Challenge.class);
 		MongoDBHandler.getInstance().store(challenge);
+		return challenge;
 	}
 
-	public GoalResult takeChallenge(JsonObject goalJsonDescription) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {
+	public Goal takeChallenge(JsonObject goalJsonDescription) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {
 		return this.takeChallenge(goalJsonDescription, null);
 	}
 
-	public GoalResult takeChallenge(JsonObject jsonObject, TimeBox next) throws IOException, JsonParseException, JsonMappingException, GoalNotFoundException, NotSavableElementException, UserNotFoundException, NotReadableElementException, InvalidGoalTimespanOverChallengeException {
+	public Goal takeChallenge(JsonObject jsonObject, TimeBox next) throws IOException, JsonParseException, JsonMappingException, GoalNotFoundException, NotSavableElementException, UserNotFoundException, NotReadableElementException, InvalidGoalTimespanOverChallengeException {
+		System.out.println("Taking a challenge");
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		//	Build goal with custom deserializer
 		Goal goal = (Goal) objectMapper.readValue(jsonObject.toString(), Goal.class);
 
-		System.out.println("GOAL???" + goal);
+		System.out.println("Goal wanted : " + goal);
 
 		Recurrence goalRecurrence = goal.getChallengeDefinition().getRecurrence();
-		if(!goal.getChallengeDefinition().canTake()){
-            if(next != null){
-                throw new InvalidGoalTimespanOverChallengeException("Cannot take a goal until " + next.getEnd()
-                        + " when the challenge ends the " + goal.getChallengeDefinition().getLifeSpan().getEnd());
-            } else {
-                throw new InvalidGoalTimespanOverChallengeException("Cannot take a goal when the challenge ends the " +
-                        goal.getChallengeDefinition().getLifeSpan().getEnd());
-            }
+
+		if (!goal.getChallengeDefinition().canTake()) {
+			System.out.println("Specified Goal can not be taken");
+			if (next != null) {
+				throw new InvalidGoalTimespanOverChallengeException("Cannot take a goal until " + next.getEnd()
+						+ " when the challenge ends the " + goal.getChallengeDefinition().getLifeSpan().getEnd());
+			} else {
+				throw new InvalidGoalTimespanOverChallengeException("Cannot take a goal when the challenge ends the " +
+						goal.getChallengeDefinition().getLifeSpan().getEnd());
+			}
 		}
 
-		Clock clock = calculator.getClock();
+		Clock clock = Clock.getClock();
+		System.out.println("Current Clock : " + clock.getTime());
 
 		//	Generate a timeSpan and set it into the goal
 		TimeBox timeSpan;
 		if (next != null) {
 			timeSpan = TimeSpanGenerator.generateNextTimeSpan(goalRecurrence, clock, next);
+			System.out.println("'next' is not null and this is new goal's timespan : " + timeSpan);
 		} else {
-			if(goal.getChallengeDefinition().getRecurrence().getRecurrenceType().equals(RecurrenceType.NONE)){
+			if (goal.getChallengeDefinition().getRecurrence().getRecurrenceType().equals(RecurrenceType.NONE)) {
 				timeSpan = goal.getChallengeDefinition().getLifeSpan();
+				System.out.println("'next' is null and recurrence type is 'none' and this is new goal's timespan : " + timeSpan);
 			} else {
 				timeSpan = TimeSpanGenerator.generateTimeSpan(goalRecurrence, clock);
+				System.out.println("'next' is null and recurrence type is not 'none' and this is new goal's timespan : " + timeSpan);
 			}
 		}
 
 		goal.setTimeSpan(timeSpan);
 
-		GoalResult result = calculator.evaluate(goal);
-
-		MongoDBHandler.getInstance().store(result);
-		goal.setGoalResultID(result.getId());
-
 		MongoDBHandler.getInstance().store(goal);
-
-		return result;
+		return goal;
 	}
 
 	// TODO: 06/12/2015
@@ -142,12 +132,13 @@ public class Model {
 			badges.addAll(user.getBadges());
 		}
 
+		// FIXME: 04/12/2015 delete hardcoded information
 		for (Badge badge : badges) {
 			JsonObject badgeJsonDescription = new JsonObject();
-			badgeJsonDescription.addProperty("nameChallenge", badge.getName()); // FIXME: 04/12/2015
-			badgeJsonDescription.addProperty("nameLevel", badge.getName()); // FIXME: 04/12/2015
+			badgeJsonDescription.addProperty("nameChallenge", badge.getName());
+			badgeJsonDescription.addProperty("nameLevel", badge.getName());
 			badgeJsonDescription.addProperty("points", badge.getReward());
-			badgeJsonDescription.addProperty("numberPossessed", 1); // FIXME: 04/12/2015
+			badgeJsonDescription.addProperty("numberPossessed", 1);
 
 			result.add(badgeJsonDescription);
 
@@ -167,26 +158,29 @@ public class Model {
 		MongoDBHandler.getInstance().deleteGoal(goal);
 	}
 
+
 	public void setTime(DateTime time) {
-		this.calculator.getClock().setFakeTime(time);
+		Clock.getClock().setFakeTime(time);
 	}
+
 
 	public String getTimeDescription() {
-		return this.calculator.getClock().getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"));
+		return Clock.getClock().getTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"));
 	}
 
+
+	/*
+	TODO relocate code
+	@Deprecated
 	public GoalResult evaluate(String userId, String challengeId) throws IOException, InvalidParameterException, IncoherentDBContentException,
 			NotReadableElementException, GoalNotFoundException, UserNotFoundException, NotSavableElementException {
 
 		Goal goal = MongoDBHandler.getInstance().readGoalByUserAndChallengeIDs(userId, challengeId);
 		GoalResult result = this.calculator.evaluate(goal);
 
-        MongoDBHandler.getInstance().updateGoalResult(result);
+		MongoDBHandler.getInstance().updateGoalResult(result);
 
 		return result;
 	}
-
-    public Clock getCalculatorClock(){ // FIXME: 09/12/2015 Pas tres beau
-        return calculator.getClock();
-    }
+	*/
 }

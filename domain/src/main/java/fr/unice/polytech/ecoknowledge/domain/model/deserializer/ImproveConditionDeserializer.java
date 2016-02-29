@@ -19,36 +19,34 @@ import java.io.IOException;
  * Created by Sébastien on 06/12/2015.
  */
 public class ImproveConditionDeserializer extends JsonDeserializer<Condition> {
-    @Override
-    public Condition deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+	@Override
+	public Condition deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
 
-        JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-        String referencePeriodString = null;
-        try {
-            referencePeriodString = (node.get("referencePeriod").asText());
-        } catch (Throwable t){}
+		JsonNode node = jsonParser.getCodec().readTree(jsonParser);
+		String referencePeriodString = null;
+		try {
+			referencePeriodString = (node.get("referencePeriod").asText());
+		} catch (Throwable t) {
+		}
 
-        TimeBox tb;
-        if(referencePeriodString != null
-            && (referencePeriodString.equals("week") || referencePeriodString.equals("month"))) {
-            if (referencePeriodString.equals("week")) {
-                // FIXME: 06/12/2015
-                tb = TimeSpanGenerator.generateLastWeek(new Clock());
-            } else {
-                // FIXME: 06/12/2015
-                tb = TimeSpanGenerator.generateLastMonth(new Clock());
-            }
-        }
-        else {
-            ObjectMapper mapper = new ObjectMapper();
-            tb = mapper.readValue(node.get("referencePeriod").toString(), TimeBox.class);
-        }
+		TimeBox tb;
+		if (referencePeriodString != null
+				&& (referencePeriodString.equals("week") || referencePeriodString.equals("month"))) {
+			if (referencePeriodString.equals("week")) {
+				tb = TimeSpanGenerator.generateLastWeek(Clock.getClock());
+			} else {
+				tb = TimeSpanGenerator.generateLastMonth(Clock.getClock());
+			}
+		} else {
+			ObjectMapper mapper = new ObjectMapper();
+			tb = mapper.readValue(node.get("referencePeriod").toString(), TimeBox.class);
+		}
 
-        Double threshold = (node.get("threshold")).asDouble();
-        String improvementType = (node.get("improvementType")).asText();
-        String symbolicName = (node.get("symbolicName")).asText();
+		Double threshold = (node.get("threshold")).asDouble();
+		String improvementType = (node.get("improvementType")).asText();
+		String symbolicName = (node.get("symbolicName")).asText();
 
-        return new ImproveCondition(tb, threshold, improvementType, symbolicName);
+		return new ImproveCondition(tb, threshold, improvementType, symbolicName);
 
-    }
+	}
 }

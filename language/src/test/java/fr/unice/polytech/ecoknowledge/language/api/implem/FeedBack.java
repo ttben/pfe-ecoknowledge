@@ -1,9 +1,6 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
-import fr.unice.polytech.ecoknowledge.language.api.implem.enums.OLD_PERIOD;
 import org.junit.Test;
-
-import static fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE.WEEK;
 
 /**
  * Created by Sébastien on 30/11/2015.

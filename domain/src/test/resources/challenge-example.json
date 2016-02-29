@@ -1,0 +1,124 @@
+{
+  "name":"Baisser la clim voyons !",
+  "image":"http://static.cotemaison.fr/medias_8904/w_1024,h_445,c_crop,x_0,y_167/w_1520,h_855,c_fill,g_north/v1393340192/climatisation-nos-astuces-pour-une-maison-fraiche_4559310.jpg",
+  "lifeSpan":{
+    "start" :"2015-11-30T00:00:00Z",
+    "end":"2015-12-11T23:59:59Z"
+  },
+  "recurrence": {
+    "type":"week",
+    "unit":1
+  },
+  "levels": [
+    {
+      "name":"Sven",
+      "badge":{
+        "name":"you're too good for me",
+        "reward" : 100,
+        "image" : "http://media.melty.fr/article-2414899-ajust_930/sven-est-deja-tout-content-a-cette-idee.jpg"
+      },
+      "conditions":
+      [
+        {
+          "type":"standard",
+          "expression":   {
+            "leftOperand": {
+              "symbolicName":"TMP_CLI"
+            },
+            "rightOperand": {
+              "value":27
+            },
+            "comparator": {
+              "type":">"
+            }
+          },
+          "counter": {
+            "threshold":50,
+            "type":"percent-of-time"
+          },
+          "targetTime": {
+            "days": "all",
+            "hours": "all"
+          }
+        },
+        {
+          "type":"standard",
+          "expression":   {
+            "leftOperand": {
+              "symbolicName":"TMP_AMB"
+            },
+            "rightOperand": {
+              "value":44
+            },
+            "comparator": {
+              "type":"<"
+            }
+          },
+          "counter": {
+            "threshold":2,
+            "type":"times"
+          },
+          "targetTime": {
+            "days": "all",
+            "hours": "all"
+          }
+        }
+      ]
+    },
+    {
+      "name":"Olaf le petit bonhomme de neige",
+      "badge":{
+        "name":"Olaf powa",
+        "reward" : 200,
+        "image" : "http://www.tvhland.com/vignette/image/201312/52becf9e1fd16.jpg"
+      },
+      "conditions":
+      [
+        {
+          "type":"standard",
+          "expression":   {
+            "leftOperand": {
+              "symbolicName":"TMP_CLI"
+            },
+            "rightOperand": {
+              "value":27
+            },
+            "comparator": {
+              "type":">"
+            }
+          },
+          "counter": {
+            "threshold":50,
+            "type":"percent-of-time"
+          },
+          "targetTime": {
+            "days": "all",
+            "hours": "all"
+          }
+        },
+        {
+          "type":"standard",
+          "expression":   {
+            "leftOperand": {
+              "symbolicName":"TMP_AMB"
+            },
+            "rightOperand": {
+              "value":44
+            },
+            "comparator": {
+              "type":"<"
+            }
+          },
+          "counter": {
+            "threshold":2,
+            "type":"times"
+          },
+          "targetTime": {
+            "days": "all",
+            "hours": "all"
+          }
+        }
+      ]
+    }
+  ]
+}

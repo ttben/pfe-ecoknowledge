@@ -1,9 +1,9 @@
 package fr.unice.polytech.ecoknowledge.server;
 
 import com.google.gson.JsonArray;
+import fr.unice.polytech.ecoknowledge.data.exceptions.NotReadableElementException;
+import fr.unice.polytech.ecoknowledge.data.exceptions.UserNotFoundException;
 import fr.unice.polytech.ecoknowledge.domain.Model;
-import fr.unice.polytech.ecoknowledge.domain.data.exceptions.NotReadableElementException;
-import fr.unice.polytech.ecoknowledge.domain.model.exceptions.UserNotFoundException;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -16,6 +16,7 @@ import java.io.IOException;
 public class BadgeService {
 	@GET
 	@Produces("application/json")
+	@Deprecated
 	public Response getBadges(@QueryParam("userID") String userID) {
 		try {
 			if (userID != null && !userID.isEmpty() && !userID.equalsIgnoreCase("undefined")) {

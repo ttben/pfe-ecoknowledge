@@ -2,16 +2,15 @@ package fr.unice.polytech.ecoknowledge.domain.model.conditions.basic;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.unice.polytech.ecoknowledge.domain.calculator.GoalVisitor;
+import fr.unice.polytech.ecoknowledge.domain.model.GoalVisitor;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.Expression;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.SymbolicName;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.time.TimeFilter;
 
 /**
  * a < b, 		week days		80% of time
- * expression		targetDays		thresholdRate
+ * expression		targetTime		thresholdRate
  */
 public class StandardCondition extends BasicCondition {
 
@@ -19,10 +18,10 @@ public class StandardCondition extends BasicCondition {
 
 	@JsonCreator
 	public StandardCondition(@JsonProperty(value = "expression", required = true) Expression expression,
-							 @JsonProperty(value = "targetTime", required = false) TimeFilter targetDays,    // FIXME: 25/11/2015 required must be true
+							 @JsonProperty(value = "targetTime", required = true) TimeFilter targetTime,
 							 @JsonProperty(value = "counter", required = true) Counter counter) {
 
-		super(expression, targetDays);
+		super(expression, targetTime);
 		this.counter = counter;
 	}
 
