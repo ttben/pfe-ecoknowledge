@@ -259,6 +259,9 @@ public class TakeChallengeIntegrationTest {
 		assertEquals(expectedUserID, userOfNewGoal);
 
 		String idOfNewGoal = newGoal.get("id").getAsString();
+
+		System.out.println("Id of new goal : " + idOfNewGoal + " old id : " + goalID);
+
 		assertFalse(goalID.equals(idOfNewGoal));
 
 		Thread.sleep(2500);
