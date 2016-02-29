@@ -156,7 +156,7 @@ public class TakeChallengeIntegrationTest {
 		String actualGoalName = goalResult.get("name").getAsString();
 		assertEquals(expectedGoalName, actualGoalName);
 
-		int expectedTimePercent = 20;
+		int expectedTimePercent = 30;
 		int actualTimePercent = goalResult.get("timePercent").getAsInt();
 		assertEquals(expectedTimePercent, actualTimePercent);
 
