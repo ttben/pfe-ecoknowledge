@@ -103,21 +103,21 @@ public class TakeChallengeIntegrationTest {
 		//	Posting a challenge
 		System.out.println("Posting a challenge ...");
 		challengeID = postChallenge();
-		assertNotNull(challengeID);
+		assertNotNull("Checking that challengeID is not null", challengeID);
 		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
 
 
 		//	Posting a user
 		System.out.println("Posting a  user ...");
 		userID = postAUser();
-		assertNotNull(userID);
+		assertNotNull("Checking that userID is not null",userID);
 		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
 
 
 		//	Posting a challenge
 		System.out.println("Taking a challenge  ...");
 		goalID = takeAChallenge(challengeID, userID);
-		assertNotNull(goalID);
+		assertNotNull("Checking that goalID is not null",goalID);
 		Thread.sleep(WAITING_TIME_BETWEEN_REQUESTS);
 
 		System.out.printf("challengeID %s, UserID %s, GoalID %s\n", challengeID, userID, goalID);
@@ -128,21 +128,21 @@ public class TakeChallengeIntegrationTest {
 		//	Retrieving calculator output
 		System.out.println("Getting goal result  ...");
 		JsonArray allGoalResult = getGoalResult();
-		assertNotNull(allGoalResult);
+		assertNotNull("Checking that goal result array is not null", allGoalResult);
 
 		//	Check if there is exactly one result
 		int expectedNumberOfGoalsResult = 1;
 		int actualNumberOfGoalsResult = allGoalResult.size();
-		assertEquals(expectedNumberOfGoalsResult, actualNumberOfGoalsResult);
+		assertEquals("Checking that there is exactly one result", expectedNumberOfGoalsResult, actualNumberOfGoalsResult);
 
 		JsonObject goalResult = allGoalResult.get(0).getAsJsonObject();
-		assertNotNull(goalResult);
+		assertNotNull("Checking that the goal result is not null", goalResult);
 
 
 		//	Check that this goal result has same id than goal
 		String expectedGoalResultID = goalID;
 		String actualGoalResultID = goalResult.get("id").getAsString();
-		assertEquals(expectedGoalResultID, actualGoalResultID);
+		assertEquals("Checking that the goal result ID is equals to the goal ID", expectedGoalResultID, actualGoalResultID);
 
 		goalResultID = goalID;
 
@@ -150,15 +150,15 @@ public class TakeChallengeIntegrationTest {
 		//	Check goal result's content
 		int expectedNumberOfLevels = fakePostChallengePayload.get("levels").getAsJsonArray().size();
 		int actualNumberOfLevels = goalResult.get("levels").getAsJsonArray().size();
-		assertEquals(expectedNumberOfLevels, actualNumberOfLevels);
+		assertEquals("Checking that there is same number of levels between challenge and goal result", expectedNumberOfLevels, actualNumberOfLevels);
 
 		String expectedGoalName = fakePostChallengePayload.get("name").getAsString();
 		String actualGoalName = goalResult.get("name").getAsString();
-		assertEquals(expectedGoalName, actualGoalName);
+		assertEquals("Checking that goal result and challenge have the same name", expectedGoalName, actualGoalName);
 
 		int expectedTimePercent = 30;
 		int actualTimePercent = goalResult.get("timePercent").getAsInt();
-		assertEquals(expectedTimePercent, actualTimePercent);
+		assertEquals("Checking the elapsed time percentage", expectedTimePercent, actualTimePercent);
 
 		//	Send fake data
 		sendFakeData();
@@ -173,14 +173,14 @@ public class TakeChallengeIntegrationTest {
 		Thread.sleep(WAITING_TIME_AFTER_GET);
 
 		//	See if it match
-		assertEquals(1, allGoalResult.size());
+		assertEquals("Checking that there is exactly one result",1, allGoalResult.size());
 		goalResult = allGoalResult.get(0).getAsJsonObject();
 
 		System.out.println("GOAL RESULT : " + goalResult);
 
 		double expectedProgressPercent = 75.0;
 		double actualProgressPercent = goalResult.get("progressPercent").getAsDouble();
-		assertEquals(expectedProgressPercent, actualProgressPercent);
+		assertEquals("Checking progression of goal result", expectedProgressPercent, actualProgressPercent);
 
 
 		//	Make goal success (with other fake data)
@@ -202,7 +202,7 @@ public class TakeChallengeIntegrationTest {
 
 		expectedProgressPercent = 100.0;
 		actualProgressPercent = goalResult.get("progressPercent").getAsDouble();
-		assertEquals(expectedProgressPercent, actualProgressPercent);
+		assertEquals("Checking progression of goal result",expectedProgressPercent, actualProgressPercent);
 
 		//	Set fake time to after goal timespan.end
 		DateTime endOfTheWeek = new DateTime(2016,2,27,12,0,0);
@@ -215,54 +215,54 @@ public class TakeChallengeIntegrationTest {
 		//	Check that badge has been earned
 		int expectedNumberOfBadges = 1;
 		int actualNumberOfBadges = badges.size();
-		assertEquals(expectedNumberOfBadges, actualNumberOfBadges);
+		assertEquals("Checking user's number of badges", expectedNumberOfBadges, actualNumberOfBadges);
 
 		JsonObject badgeEarned = badges.get(0).getAsJsonObject();
-		assertNotNull(badgeEarned);
+		assertNotNull("Checking that badge earned is not null", badgeEarned);
 
 		// FIXME: 28/02/2016 not correct du to a TODO in badgeView
 		String expectedChallengeName = "Olaf powa";
 		String actualChallengeName = badgeEarned.get("nameChallenge").getAsString();
-		assertEquals(expectedChallengeName, actualChallengeName);
+		assertEquals("Checking that badge's name is the same than challenge's name", expectedChallengeName, actualChallengeName);
 
 		String expectedLevelName = "Olaf powa";
 		String actualLevelName = badgeEarned.get("nameLevel").getAsString();
-		assertEquals(expectedLevelName, actualLevelName);
+		assertEquals("Checking that badge's level name is the same than challenge's level name",expectedLevelName, actualLevelName);
 
 		int expectedPoints = 200;
 		int actualPointsEarned = badgeEarned.get("points").getAsInt();
-		assertEquals(expectedPoints, actualPointsEarned);
+		assertEquals("Checking badge reward",expectedPoints, actualPointsEarned);
 
 		int expectedNumberPossessedExpected = 1;
 		int actualNumberPossessed = badgeEarned.get("numberPossessed").getAsInt();
-		assertEquals(expectedNumberPossessedExpected, actualNumberPossessed);
+		assertEquals("Checking number of badge possessed",expectedNumberPossessedExpected, actualNumberPossessed);
 
 		//	Check that another goal has been created
 		JsonArray goals = getGoalsOfUser();
-		assertNotNull(goals);
+		assertNotNull("Checking that goals of user are not null",goals);
 
 		int expectedNumberOfGoals = 1;
 		int actualNumberOfGoals = goals.size();
-		assertEquals(expectedNumberOfGoals, actualNumberOfGoals);
+		assertEquals("Checking that there is exactly one goal left", expectedNumberOfGoals, actualNumberOfGoals);
 
 		JsonObject newGoal = goals.get(0).getAsJsonObject();
-		assertNotNull(newGoal);
+		assertNotNull("Checking that new goal is not null",newGoal);
 
 		System.out.println("NEW GOAL: " + newGoal);
 
 		String expectedChallengeID = challengeID;
 		String challengeOfNewGoal = newGoal.get("challenge").getAsString();
-		assertEquals(expectedChallengeID, challengeOfNewGoal);
+		assertEquals("Checking that the new goal is on the same challenge", expectedChallengeID, challengeOfNewGoal);
 
 		String expectedUserID = userID;
 		String userOfNewGoal = newGoal.get("user").getAsString();
-		assertEquals(expectedUserID, userOfNewGoal);
+		assertEquals("Checking that the new goal is on the same user",expectedUserID, userOfNewGoal);
 
 		String idOfNewGoal = newGoal.get("id").getAsString();
 
 		System.out.println("Id of new goal : " + idOfNewGoal + " old id : " + goalID);
 
-		assertFalse(goalID.equals(idOfNewGoal));
+		assertFalse("Checking that old goal and new goal do not have the same ID", goalID.equals(idOfNewGoal));
 
 		Thread.sleep(2500);
 	}
