@@ -102,11 +102,11 @@ public class GoalResult implements ViewForClient {
 		}
 		Long remaining = computeRemainingTime(box);
 
-		result.addProperty("remaining", remaining + " jours");
+		result.addProperty("remaining", remaining);
 		result.addProperty("timePercent", computePercent(box));
 
-		result.addProperty("startTime", this.goal.getChallengeDefinition().getLifeSpan().getStart().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
-		result.addProperty("endTime", this.goal.getChallengeDefinition().getLifeSpan().getEnd().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
+		result.addProperty("startTime", this.goal.getTimeSpan().getStart().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
+		result.addProperty("endTime", this.goal.getTimeSpan().getEnd().toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
 
 		RecurrenceType recurrenceType = this.goal.getChallengeDefinition().getRecurrence().getRecurrenceType();
 		result.addProperty("length", recurrenceType.toString());
@@ -135,30 +135,29 @@ public class GoalResult implements ViewForClient {
 
 	private Double computePercent(TimeBox timeSpan) {
 
-		if (timeSpan.getEnd().isBefore(Clock.getClock().getTime()))
+		if (timeSpan.getEnd().isBefore(Clock.getClock().getTime())) {
 			return 100.0;
+		}
+
 		Interval between = new Interval(Clock.getClock().getTime(), timeSpan.getEnd());
-		long days = between.toDuration().getStandardDays() + 1;
+		long remainingTimeTilTheEnd = between.toDuration().getMillis();
 
 		Interval totalInterval = new Interval(timeSpan.getStart(), timeSpan.getEnd());
-		long totalDays = totalInterval.toDuration().getStandardDays() + 1;
+		long totalDays = totalInterval.toDuration().getMillis();
 
-		return 100. * (totalDays - days) / totalDays;
+		return 100. * (totalDays - remainingTimeTilTheEnd) / totalDays;
 	}
 
 	private Long computeRemainingTime(TimeBox lifeSpan) {
 
-		return Clock.getClock().getTime().getMillis() - lifeSpan.getStart().getMillis();
-		/*
-		#146
 		Interval between;
 		try {
 			between = new Interval(Clock.getClock().getTime(), lifeSpan.getEnd());
 		} catch (Throwable t) {
 			return null;
 		}
-		return between.toDuration().getStandardDays();
-		*/
+		return between.toDuration().getMillis();
+
 	}
 
 	public Goal getGoal() {

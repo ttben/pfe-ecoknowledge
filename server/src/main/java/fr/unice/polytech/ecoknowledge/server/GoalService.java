@@ -29,6 +29,14 @@ public class GoalService {
 		logger.info("POST goal service with payload : ");
 		logger.info(jsonObject.toString());
 
+		if(!jsonObject.has("challenge")) {
+			return Response.status(400).entity("'challenge' field not specified").build();
+		}
+
+		if(!jsonObject.has("user")) {
+			return Response.status(400).entity("'user' field not specified").build();
+		}
+
 		try {
 			JsonObject result = Controller.getInstance().takeChallenge(jsonObject);
 			return Response.ok().entity(result.toString())
