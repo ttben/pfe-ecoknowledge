@@ -1,6 +1,7 @@
 package fr.unice.polytech.ecoknowledge.language.api.implem;
 
 import fr.unice.polytech.ecoknowledge.language.api.implem.enums.DURATION_TYPE;
+import fr.unice.polytech.ecoknowledge.language.api.implem.enums.OLD_PERIOD;
 import org.json.JSONObject;
 
 import javax.ws.rs.client.*;
@@ -23,11 +24,48 @@ public class SandBox {
 		JSONObject generateHelios = generateHelios();
 		JSONObject generateNoisy = generateNoisy();
 		JSONObject generateQuiet = generateQuiet();
+		JSONObject generateHeat = generateHeat();
 
 		postChallenge(generateFrozenQueen);
 		postChallenge(generateHelios);
 		postChallenge(generateNoisy);
 		postChallenge(generateQuiet);
+		postChallenge(generateHeat);
+	}
+	
+	private static JSONObject generateHeat() {
+		Challenge c = Challenge.create("Magmar")
+				.withIcon("http://guidesmedia.ign.com/guides/059687/images/blackwhite/pokemans_126.gif")
+				.availableFrom(1, 1, 2016).to(30, 3, 2016)
+				.repeatEvery(1, DURATION_TYPE.WEEK)
+
+				.addLevel("Magby")
+					.withImage("http://www.pokepedia.fr/images/thumb/3/33/Magby-HGSS.png/250px-Magby-HGSS.png")
+					.rewards(100)
+					.withConditions()
+						.increase("TMP_CLIM").by(10).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
+					.and()
+						.increase("TMP_AMB").by(10).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
+
+				.addLevel("Magmar")
+					.withImage("http://guidesmedia.ign.com/guides/059687/images/blackwhite/pokemans_126.gif")
+					.rewards(100)
+					.withConditions()
+						.increase("TMP_CLIM").by(20).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
+					.and()
+						.increase("TMP_AMB").by(20).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
+
+				.addLevel("Magmortar")
+					.withImage("http://cdn.bulbagarden.net/upload/thumb/6/60/467Magmortar.png/250px-467Magmortar.png")
+					.rewards(100)
+					.withConditions()
+						.increase("TMP_CLIM").by(25).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
+					.and()
+						.increase("TMP_AMB").by(25).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
+
+				.endChallenge();
+
+		return c.getDescription();
 	}
 
 	private static JSONObject generateQuiet() {
