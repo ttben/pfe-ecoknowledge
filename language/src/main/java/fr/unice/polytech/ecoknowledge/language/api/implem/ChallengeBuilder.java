@@ -34,20 +34,6 @@ public class ChallengeBuilder implements IChallengeableIcon {
 	// ------- API Methods ------- //
 
 	@Override
-	public IDurationnable availableFrom(int day) {
-		reinit();
-		Period p = new Period(this, day);
-		return p;
-	}
-
-	@Override
-	public IDurationnable availableFrom(int day, int month) {
-		reinit();
-		Period p = new Period(this, day, month);
-		return p;
-	}
-
-	@Override
 	public IDurationnable availableFrom(int day, int month, int year) {
 		reinit();
 		Period p = new Period(this, day, month, year);

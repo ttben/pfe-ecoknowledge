@@ -21,7 +21,7 @@ public class GEN_ComparatorsTest {
 	public void comparatorLowerThan() {
 
 		Challenge c = Challenge.create("comparatorLT")
-				.availableFrom(1).to(2)
+				.availableFrom(1, 10, 2020).to(2, 10, 2020)
 				.repeatEvery(2, WEEK)
 				.addLevel("level")
 				.rewards(2)
@@ -38,7 +38,7 @@ public class GEN_ComparatorsTest {
 	public void comparatorGreaterThan() {
 
 		Challenge c = Challenge.create("comparatorGT")
-				.availableFrom(1).to(2)
+				.availableFrom(1, 1, 2016).to(2, 2, 2016)
 				.repeatEvery(2, WEEK)
 				.addLevel("level")
 				.rewards(2)
@@ -55,7 +55,7 @@ public class GEN_ComparatorsTest {
 	public void comparatorEqualsTo() {
 
 		Challenge c = Challenge.create("comparatorLT")
-				.availableFrom(1).to(2)
+				.availableFrom(1, 10, 2020).to(2, 10, 2020)
 				.repeatEvery(2, WEEK)
 				.addLevel("level")
 				.rewards(2)
@@ -72,7 +72,7 @@ public class GEN_ComparatorsTest {
 	public void comparatorDifferentFrom() {
 
 		Challenge c = Challenge.create("comparatorDF")
-				.availableFrom(1).to(2)
+				.availableFrom(1, 10, 2020).to(2, 10, 2020)
 				.repeatEvery(2, WEEK)
 				.addLevel("level")
 				.rewards(2)

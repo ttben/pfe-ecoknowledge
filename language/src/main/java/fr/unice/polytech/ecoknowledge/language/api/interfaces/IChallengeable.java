@@ -5,10 +5,6 @@ package fr.unice.polytech.ecoknowledge.language.api.interfaces;
  */
 public interface IChallengeable {
 
-	public IDurationnable availableFrom(int day);
-
-	public IDurationnable availableFrom(int day, int month);
-
 	public IDurationnable availableFrom(int day, int month, int year);
 
 }

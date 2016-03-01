@@ -19,7 +19,7 @@ public class FAIL_DateTest {
 
 		try {
 			Challenge.create("cb")
-					.availableFrom(48).to(2, 899, 2)
+					.availableFrom(48, 24, 3).to(2, 899, 2)
 					.repeatEvery(3, DAY)
 					.addLevel("level")
 					.rewards(10)
@@ -41,7 +41,7 @@ public class FAIL_DateTest {
 
 		try {
 			Challenge.create("cb")
-					.availableFrom(23).to(2)
+					.availableFrom(23, 5, 2010).to(2, 2, 2002)
 					.repeatEvery(2, WEEK)
 					.addLevel("level")
 					.rewards(20)

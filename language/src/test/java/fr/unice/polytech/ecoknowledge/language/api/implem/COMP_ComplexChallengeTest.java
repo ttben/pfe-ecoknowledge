@@ -34,7 +34,7 @@ public class COMP_ComplexChallengeTest {
 	public void atLeastAfterCompare() {
 
 		Challenge.create("lowerThan().atLeast()")
-				.availableFrom(3).to(4)
+				.availableFrom(3, 5, 2014).to(4, 5, 2014)
 				.repeatEvery(1, DAY)
 				.addLevel("level")
 				.rewards(2)
