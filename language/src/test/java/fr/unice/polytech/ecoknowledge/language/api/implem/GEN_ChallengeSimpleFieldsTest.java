@@ -23,7 +23,7 @@ public class GEN_ChallengeSimpleFieldsTest {
 	public void createChallenge() {
 
 		Challenge c = Challenge.create("DSL done")
-				.availableFrom(23, 11, 2015).to(7, 3, 2016)
+				.availableFrom(1, 1, 2016).to(7, 3, 2016)
 				.repeatEvery(1, WEEK)
 				.addLevel("level")
 				.rewards(2)
@@ -55,7 +55,8 @@ public class GEN_ChallengeSimpleFieldsTest {
 
 		Object d = JsonSearcher.lookFor(description, wanted);
 		String date = (String) d;
-		assertEquals("2015-11-23T00:00:00Z", date);
+		assertEquals("2016-01-01T00:00:00Z", date);
+		System.out.println(description);
 	}
 
 	@Test
