@@ -1,4 +1,9 @@
 {
   "TEMP_555":[],
-  "TEMP_443V":[]
+  "TEMP_443V":[],
+  "TMP_CLIM":[],
+  "TMP_AMB":[],
+  "DOOR_OPEN":[],
+  "WINDOW_OPEN":[],
+  "SOUND":[]
 }

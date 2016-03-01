@@ -14,7 +14,7 @@ import static junit.framework.TestCase.assertEquals;
  * Created by Benjamin on 01/03/2016.
  */
 public class SandBox {
-	public static final String URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER = "http://localhost:8081/Ecoknowledge/";
+	public static final String URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER = "http://localhost:8080/Ecoknowledge/";
 	private static final String SERVICE_NAME_TO_POST_A_CHALLENGE = "challenges";
 	public static final int WAITING_TIME_AFTER_POST = 1500;
 

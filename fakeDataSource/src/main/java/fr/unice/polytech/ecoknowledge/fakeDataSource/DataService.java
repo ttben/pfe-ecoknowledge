@@ -69,7 +69,12 @@ public class DataService {
 
 		bufferedWriter.close();
 
-		return Response.ok().entity(completeSetOfPreviousFakeData.toString()).build();
+		return Response.ok().entity(completeSetOfPreviousFakeData.toString())
+				.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+				.header("Access-Control-Allow-Credentials", "true")
+				.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+				.header("Access-Control-Max-Age", "1209600")
+				.build();
 	}
 
 
@@ -180,7 +185,26 @@ public class DataService {
 		return values;
 	}
 
-	static JsonArray generateSpecificRandomValuesBetweenDate(int nbOfValueToGenerate, int lowerLimit, int upperLimit, long dateStart, long dateEnd) {
+	private static JsonArray generateRandomValuesBetweenDateWithSpecificJump(long jump, double probability, long dateStart, long dateEnd) {
+		JsonArray values = new JsonArray();
+
+		long currentTime = dateStart;
+
+		for (long time = currentTime; time <= dateEnd; time = time + (jump)) {
+
+			Boolean randomValue = ThreadLocalRandom.current().nextDouble(0., 1.) < probability;
+
+			JsonObject jsonValue = new JsonObject();
+			jsonValue.addProperty("date", time);
+			jsonValue.addProperty("value", randomValue?1:0);
+
+			values.add(jsonValue);
+		}
+
+		return values;
+	}
+
+	public static JsonArray generateSpecificRandomValuesBetweenDate(int nbOfValueToGenerate, int lowerLimit, int upperLimit, long dateStart, long dateEnd) {
 		if (dateStart > dateEnd) {
 			throw new IllegalArgumentException("start is after end");
 		}
