@@ -14,10 +14,10 @@ import java.io.File;
  */
 public class IntegrationTest {
     public static final String NAME_OF_FEEDER_WORKER = "feederworker1";
-    public static final int FEEDER_REFRESHING_FREQUENCY = 2500;
+    public static final int FEEDER_REFRESHING_FREQUENCY = 750;
 
     public static final String NAME_OF_CALCULATOR_WORKER = "calculator1";
-    public static final int CALCULATOR_REFRESHING_FREQUENCY = 2500;
+    public static final int CALCULATOR_REFRESHING_FREQUENCY = 1250;
 
     public static void main(String[] args) {
         IntegrationTest lol = new IntegrationTest();

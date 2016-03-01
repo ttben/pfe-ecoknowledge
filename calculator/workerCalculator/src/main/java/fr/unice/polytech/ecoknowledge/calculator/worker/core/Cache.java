@@ -28,14 +28,22 @@ public class Cache {
 
 	public Cache(Goal goal) {
 
+		logger.debug("Building cache for goal " + goal.getId());
 		SensorExtractor sensorExtractor = new SensorExtractor(goal);
+
+		logger.debug("Extracting info from goal");
 		goal.accept(sensorExtractor);
 
 		List<SensorNeeds> listOfSensorNeeds = sensorExtractor.getSensorNeedsList();
+
+		logger.debug("List of sensor needed for goal " + goal.getId() + " : " + listOfSensorNeeds);
+
 		for(SensorNeeds sensorNeeds : listOfSensorNeeds) {
 			List<Data> currentData = getDataOf(sensorNeeds);
 			data.put(sensorNeeds.getTargetSensor(), currentData);
 		}
+
+		logger.debug("Info extraction ended");
 	}
 
 	// TODO: 24/02/2016 ADD FILTER FOR DAY TIMES

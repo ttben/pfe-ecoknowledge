@@ -36,6 +36,8 @@ public class Calculator {
 		// Creating processor to evaluate
 		AchievementProcessor achievementProcessor = new AchievementProcessor(goal, new Cache(goal));
 
+		logger.debug("Starting actual computation");
+
 		// Ask evaluation
 		goal.accept(achievementProcessor);
 

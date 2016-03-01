@@ -1,9 +1,7 @@
 {
   "TEMP_555":[],
   "TEMP_443V":[],
-  "TMP_CLIM":[],
-  "TMP_AMB":[],
-  "DOOR_OPEN":[],
-  "WINDOW_OPEN":[],
-  "SOUND":[]
+  "SOUND_2NDFLOOR":[],
+  "WND_443":[],
+  "DOOR_443":[]
 }

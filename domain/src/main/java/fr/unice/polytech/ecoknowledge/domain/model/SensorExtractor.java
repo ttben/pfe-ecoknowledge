@@ -5,6 +5,8 @@ import fr.unice.polytech.ecoknowledge.domain.model.challenges.Level;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.StandardCondition;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.basic.expression.SymbolicName;
 import fr.unice.polytech.ecoknowledge.domain.model.conditions.improve.ImproveCondition;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,8 @@ import java.util.List;
  * Created by Benjamin on 23/02/2016.
  */
 public class SensorExtractor implements GoalVisitor{
+	private final Logger logger = LogManager.getLogger(SensorExtractor.class);
+
 	List<SensorNeeds> sensorNeedsList = new ArrayList<>();
 
 	private Goal currentGoal;
@@ -36,14 +40,28 @@ public class SensorExtractor implements GoalVisitor{
 
 	@Override
 	public void visit(StandardCondition condition) {
+		logger.debug("Visiting std condition");
 		//	Retrieve symbolic names for condition
 		SymbolicName requiredOperand = condition.getRequiredOperand();
 
 		//	Retrieves sensor bound for symbolic names
 		String symbolicName = requiredOperand.getSymbolicName().toString();
+		logger.debug("Symbolic name needed to evaluate std cdt : " + symbolicName);
+
 		String sensorBound = currentGoal.getSensorNameForGivenSymbolicName(symbolicName);
+		logger.debug("Sensor bound to symbolic name " + symbolicName + " --> " + sensorBound);
+
+		if(sensorBound == null) {
+			throw new IllegalArgumentException("User could not have taken this goal. It contains a condition that required" +
+					" a symbolic name that has no mapping for given user : needed " + symbolicName + " user has : " + currentGoal.getUser().getSymbolicNameToSensorNameMap());
+		}
+
+		logger.debug("User has mapping : " + currentGoal.getUser().getSymbolicNameToSensorNameMap());
 
 		SensorNeeds sensorNeeds = new SensorNeeds(sensorBound, currentGoal.getStart().getMillis()/1000, currentGoal.getEnd().getMillis()/1000);
+
+		logger.debug("New sensor needs : " + sensorNeeds);
+
 		mergeWithExistingNeeds(sensorNeeds);
 	}
 
@@ -58,6 +76,7 @@ public class SensorExtractor implements GoalVisitor{
 	}
 
 	private void mergeWithExistingNeeds(SensorNeeds newSensorNeedsToAdd) {
+		logger.debug("Merging with existing data for sensor needs : " + newSensorNeedsToAdd);
 		for(int i = 0 ; i < this.sensorNeedsList.size() ; i ++) {
 			SensorNeeds currentSensorNeeds = this.sensorNeedsList.get(i);
 

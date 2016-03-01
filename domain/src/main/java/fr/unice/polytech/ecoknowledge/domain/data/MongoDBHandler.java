@@ -107,8 +107,10 @@ public class MongoDBHandler implements EcoknowledgeDataHandler {
 
 			JsonObject currentChallengeJsonDescription = currentChallengeElementDescription.getAsJsonObject();
 
+			/*
 			logger.info("Deserializing all challenges with following JSON");
 			logger.info(currentChallengeJsonDescription.toString());
+			*/
 
 			try {
 				Challenge currentChallenge = (Challenge) objectMapper.readValue(currentChallengeJsonDescription.toString(), Challenge.class);

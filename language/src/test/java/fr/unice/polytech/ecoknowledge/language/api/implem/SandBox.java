@@ -14,7 +14,7 @@ import static junit.framework.TestCase.assertEquals;
  * Created by Benjamin on 01/03/2016.
  */
 public class SandBox {
-	public static final String URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER = "http://localhost:8080/Ecoknowledge/";
+	public static final String URL_OF_ECOKNOWLEDGE_FRONTEND_SERVER = "http://localhost:8081/Ecoknowledge/";
 	private static final String SERVICE_NAME_TO_POST_A_CHALLENGE = "challenges";
 	public static final int WAITING_TIME_AFTER_POST = 1500;
 
@@ -43,7 +43,7 @@ public class SandBox {
 					.withImage("http://www.pokepedia.fr/images/thumb/3/33/Magby-HGSS.png/250px-Magby-HGSS.png")
 					.rewards(100)
 					.withConditions()
-						.increase("TMP_CLIM").by(10).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
+						.increase("TMP_CLI").by(10).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
 					.and()
 						.increase("TMP_AMB").by(10).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
 
@@ -51,7 +51,7 @@ public class SandBox {
 					.withImage("http://guidesmedia.ign.com/guides/059687/images/blackwhite/pokemans_126.gif")
 					.rewards(100)
 					.withConditions()
-						.increase("TMP_CLIM").by(20).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
+						.increase("TMP_CLI").by(20).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
 					.and()
 						.increase("TMP_AMB").by(20).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
 
@@ -59,7 +59,7 @@ public class SandBox {
 					.withImage("http://cdn.bulbagarden.net/upload/thumb/6/60/467Magmortar.png/250px-467Magmortar.png")
 					.rewards(100)
 					.withConditions()
-						.increase("TMP_CLIM").by(25).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
+						.increase("TMP_CLI").by(25).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
 					.and()
 						.increase("TMP_AMB").by(25).percent().comparedTo(OLD_PERIOD.LAST_MONTH)
 
@@ -127,23 +127,23 @@ public class SandBox {
 					.withImage("http://cliparts.co/cliparts/pco/ABX/pcoABXgzi.png")
 					.rewards(100)
 					.withConditions()
-						.valueOf("DOOR_OPEN").equalsTo(0).atLeast(50).percentOfTime()
+						.valueOf("DOOR_STATE").equalsTo(0).atLeast(50).percentOfTime()
 					.and()
-						.valueOf("WINDOW_OPEN").equalsTo(0).atLeast(50).percentOfTime()
+						.valueOf("WINDOW_STATE").equalsTo(0).atLeast(50).percentOfTime()
 				.addLevel("Tornado")
 					.withImage("http://www.crh.noaa.gov/Image/dmx/IowaTors/tornado-icon-EF2.png")
 					.rewards(150)
 					.withConditions()
-						.valueOf("DOOR_OPEN").equalsTo(0).atLeast(70).percentOfTime()
+						.valueOf("DOOR_STATE").equalsTo(0).atLeast(70).percentOfTime()
 					.and()
-						.valueOf("WINDOW_OPEN").equalsTo(0).atLeast(70).percentOfTime()
+						.valueOf("WINDOW_STATE").equalsTo(0).atLeast(70).percentOfTime()
 				.addLevel("Helios")
 					.withImage("http://orig05.deviantart.net/558c/f/2012/002/b/5/helios___greek_god_of_the_sun_by_urbandesing-d4l0voa.jpg")
 					.rewards(200)
 					.withConditions()
-						.valueOf("DOOR_OPEN").equalsTo(0).atLeast(85).percentOfTime()
+						.valueOf("DOOR_STATE").equalsTo(0).atLeast(85).percentOfTime()
 					.and()
-						.valueOf("WINDOW_OPEN").equalsTo(0).atLeast(85).percentOfTime()
+						.valueOf("WINDOW_STATE").equalsTo(0).atLeast(85).percentOfTime()
 		.endChallenge();
 
 		return c.getDescription();
@@ -158,21 +158,21 @@ public class SandBox {
 					.withImage("http://media.melty.fr/article-2414899-ajust_930/sven-est-deja-tout-content-a-cette-idee.jpg")
 					.rewards(100)
 					.withConditions()
-						.valueOf("TMP_CLIM").lowerThan(27).atLeast(50).percentOfTime()
+						.valueOf("TMP_CLI").lowerThan(27).atLeast(50).percentOfTime()
 					.and()
 						.valueOf("TMP_AMB").lowerThan(25).atLeast(2).times()
 				.addLevel("Olaf")
 					.withImage("http://www.tvhland.com/vignette/image/201312/52becf9e1fd16.jpg")
 					.rewards(150)
 					.withConditions()
-						.valueOf("TMP_CLIM").lowerThan(20).atLeast(70).percentOfTime()
+						.valueOf("TMP_CLI").lowerThan(20).atLeast(70).percentOfTime()
 					.and()
 						.valueOf("TMP_AMB").lowerThan(18).atLeast(2).times()
 				.addLevel("Anna")
 					.withImage("http://emea.lum.dolimg.com/v1/images/b5da8e4c0046a83b81dbd945719f6b354edd764b.jpeg")
 					.rewards(200)
 					.withConditions()
-						.valueOf("TMP_CLIM").lowerThan(18).atLeast(75).percentOfTime()
+						.valueOf("TMP_CLI").lowerThan(18).atLeast(75).percentOfTime()
 					.and()
 						.valueOf("TMP_AMB").lowerThan(17).atLeast(4).times()
 			.endChallenge();

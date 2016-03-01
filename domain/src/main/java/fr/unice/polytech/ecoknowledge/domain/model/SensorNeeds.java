@@ -37,4 +37,9 @@ public class SensorNeeds {
 	public void setDateEnd(long dateEnd) {
 		this.dateEnd = dateEnd;
 	}
+
+	@Override
+	public String toString() {
+		return "[ " + getTargetSensor() + " from " + getDateStart() + " to " + getDateEnd() + "] ";
+	}
 }

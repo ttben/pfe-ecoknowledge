@@ -30,10 +30,12 @@ public class GoalService {
 		logger.info(jsonObject.toString());
 
 		if(!jsonObject.has("challenge")) {
+			logger.fatal("Abort request. Challenge field not specified.");
 			return Response.status(400).entity("'challenge' field not specified").build();
 		}
 
 		if(!jsonObject.has("user")) {
+			logger.fatal("Abort request. User field not specified.");
 			return Response.status(400).entity("'user' field not specified").build();
 		}
 

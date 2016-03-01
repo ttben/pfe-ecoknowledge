@@ -40,22 +40,24 @@ public class Controller {
 	}
 
 	public JsonObject takeChallenge(JsonObject description) throws IOException, GoalNotFoundException, UserNotFoundException, NotReadableElementException, NotSavableElementException, InvalidGoalTimespanOverChallengeException {
+		logger.debug("Deserializing goal to take challenge");
 		Goal goal = Model.getInstance().takeChallenge(description);
 
+		logger.debug("Extract information to send tracking request");
 		SensorExtractor sensorExtractor = new SensorExtractor(goal);
 		goal.accept(sensorExtractor);
 
 		List<SensorNeeds> listOfSensorNeeds = sensorExtractor.getSensorNeedsList();
 		for(SensorNeeds sensorNeeds : listOfSensorNeeds) {
-			System.out.println("Needs :  " + sensorNeeds.getTargetSensor() + " from " + sensorNeeds.getDateStart() + " to " + sensorNeeds.getDateEnd());
+			logger.debug("Needs :  " + sensorNeeds.getTargetSensor() + " from " + sensorNeeds.getDateStart() + " to " + sensorNeeds.getDateEnd());
 			Response response = TrackingRequestSender.POST(sensorNeeds);
-			System.out.println("Response received when asked to track " + sensorNeeds.getTargetSensor() + " : " + response);
+			logger.debug("Response received when asked to track " + sensorNeeds.getTargetSensor() + " : " + response);
 		}
 
 		JsonObject result = new JsonObject();
 		result.addProperty("id", goal.getId().toString());
 
-		logger.info("" + goal.getUser().getId() + " has taken challenge " + goal.getChallengeDefinition().getId() + " and that has created goal " + goal.getId());
+		logger.warn("" + goal.getUser().getId() + " has taken challenge " + goal.getChallengeDefinition().getId() + " and that has created goal " + goal.getId());
 
 		return result;
 	}

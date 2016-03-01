@@ -2,6 +2,7 @@ package fr.unice.polytech.ecoknowledge.integration;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.joda.time.DateTime;
 
 import javax.ws.rs.client.*;
@@ -16,11 +17,15 @@ import java.util.concurrent.ThreadLocalRandom;
 public class FeedScenario {
 
     private final static int ITERATIONS = 20;
-    private final static int TIME_BETWEEN_ITERATIONS = 1000;
-    private static final String URL_OF_ECOKNOWLEDGE_BACKEND_SERVER = "http://localhost:8080/fakeDataSource/";
+    private final static int TIME_BETWEEN_ITERATIONS = 2500;
+
+    private final static int TIME_OF_XP_IN_MINUTES = ITERATIONS * TIME_BETWEEN_ITERATIONS / 6000;
+
+    private static final String URL_OF_ECOKNOWLEDGE_BACKEND_SERVER = "http://localhost:8081/fakeDataSource/";
     private static final String SERVICE = "fakeData/";
     private HashMap<String, JsonArray> values;
 
+    private DateTime startOfGoalXP = new DateTime(2016, 2, 29, 0, 0, 0);
 
     public FeedScenario() throws InterruptedException {
 
@@ -43,39 +48,44 @@ public class FeedScenario {
         values = new HashMap<>();
 
         // TMP_CLIM
-        JsonArray tmpValues = generateSpecificRandomValuesBetweenDate(ITERATIONS, 16, 26,
-                new DateTime(2016, 1, 1, 0, 0, 0).getMillis(),
-                new DateTime(2016, 3, 30, 0, 0, 0).getMillis());
-
+        JsonArray tmpValues = generateSpecificRandomValuesBetweenDate(ITERATIONS, 14, 31,
+                startOfGoalXP.getMillis(), DateTime.now().plusMinutes(TIME_OF_XP_IN_MINUTES).getMillis());
+        /*
         tmpValues.addAll(generateSpecificRandomValuesBetweenDate(ITERATIONS, 13, 22,
                 new DateTime(2015, 12, 1, 0, 0, 0).getMillis(),
                 new DateTime(2015, 12, 31, 0, 0, 0).getMillis()));
-        values.put("TMP_CLIM", tmpValues);
+                */
+
+        values.put("TEMP_443V", tmpValues);
 
         // TMP_AMB
-        JsonArray tmpAValues = generateSpecificRandomValuesBetweenDate(ITERATIONS, 15, 25,
-                new DateTime(2016, 1, 1, 0, 0, 0).getMillis(),
-                new DateTime(2016, 3, 30, 0, 0, 0).getMillis());
+        JsonArray tmpAValues = generateSpecificRandomValuesBetweenDate(ITERATIONS, 16, 28,
+                startOfGoalXP.getMillis(), DateTime.now().plusMinutes(TIME_OF_XP_IN_MINUTES).getMillis());
 
+        /*
         tmpAValues.addAll(generateSpecificRandomValuesBetweenDate(ITERATIONS, 12, 20,
                 new DateTime(2015, 12, 1, 0, 0, 0).getMillis(),
                 new DateTime(2015, 12, 31, 0, 0, 0).getMillis()));
-        values.put("TMP_AMB", tmpAValues);
+                */
+
+        values.put("TEMP_555", tmpAValues);
+
 
         // DOOR_OPEN
-        values.put("DOOR_OPEN", generateSpecificRandomBitBetweenDate(ITERATIONS, 0.2,
-                new DateTime(2016, 1, 1, 0, 0, 0).getMillis(),
-                new DateTime(2016, 3, 30, 0, 0, 0).getMillis()));
+        values.put("DOOR_443", generateSpecificRandomBitBetweenDate(ITERATIONS, 0.2,
+                startOfGoalXP.getMillis(), DateTime.now().plusMinutes(TIME_OF_XP_IN_MINUTES).getMillis()));
+
 
         // WINDOW_OPEN
-        values.put("WINDOW_OPEN", generateSpecificRandomBitBetweenDate(ITERATIONS, 0.3,
-                new DateTime(2016, 1, 1, 0, 0, 0).getMillis(),
-                new DateTime(2016, 3, 30, 0, 0, 0).getMillis()));
+        values.put("WND_443", generateSpecificRandomBitBetweenDate(ITERATIONS, 0.3,
+                startOfGoalXP.getMillis(), DateTime.now().plusMinutes(TIME_OF_XP_IN_MINUTES).getMillis()));
+
 
         // SOUND
-        values.put("SOUND", generateSpecificRandomValuesBetweenDate(ITERATIONS, 15, 80,
-                new DateTime(2016, 1, 1, 0, 0, 0).getMillis(),
-                new DateTime(2016, 3, 30, 0, 0, 0).getMillis()));
+        values.put("SOUND_2NDFLOOR", generateSpecificRandomValuesBetweenDate(ITERATIONS, 15, 80,
+                startOfGoalXP.getMillis(), DateTime.now().plusMinutes(TIME_OF_XP_IN_MINUTES).getMillis()));
+
+
     }
 
     private static JsonArray generateRandomValuesBetweenDateWithSpecificJump(long jump, int lowerLimit, int upperLimit, long dateStart, long dateEnd) {
