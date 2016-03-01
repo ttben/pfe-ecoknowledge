@@ -37,7 +37,7 @@ public class GEN_ConditionTest {
 				.on(WEEK_PERIOD.WEEK_DAYS, DAY_MOMENT.MORNING)
 				.atLeast(5).times()
 				.and()
-				.increase("OLD").by(50).percent().comparedTo(LAST_MONTH)
+				.increase("SENSOR").by(50).percent().comparedTo(LAST_MONTH)
 				.endChallenge();
 
 		description = c.getDescription();
@@ -72,7 +72,6 @@ public class GEN_ConditionTest {
 
 		Object e = JsonSearcher.lookFor(description, wanted);
 		JSONObject expression = (JSONObject) e;
-		System.out.println(expression.getJSONObject("comparator").getString("type"));
 		assertNotNull(expression.getJSONObject("comparator").getString("type"));
 		assertNotNull(expression.getJSONObject("leftOperand"));
 		assertNotNull(expression.getJSONObject("leftOperand").getString("symbolicName"));
@@ -91,14 +90,11 @@ public class GEN_ConditionTest {
 
 		Object i = JsonSearcher.lookFor(description, wanted);
 		JSONObject improvement = (JSONObject) i;
-
-		assertEquals("improve", improvement.getString("type"));
+		
 		assertEquals(IMPROVEMENT_TYPE.INCREASE.toString(), improvement.getString("improvementType"));
 		assertEquals(LAST_MONTH.toString(), improvement.getString("referencePeriod"));
-		assertNotNull(improvement.getString("symbolicName"));
+		assertEquals("SENSOR", improvement.getString("symbolicName"));
 		assertEquals(50, improvement.getInt("threshold"));
 
-
-		System.out.println(improvement);
 	}
 }

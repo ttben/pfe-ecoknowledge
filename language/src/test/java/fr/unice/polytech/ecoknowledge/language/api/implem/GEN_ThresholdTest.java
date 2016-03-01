@@ -25,8 +25,8 @@ public class GEN_ThresholdTest {
     @Before
     public void createDescription() {
         Challenge c = Challenge.create("Threshold")
-                .availableFrom(2)
-                .to(4)
+                .availableFrom(2, 11, 2016)
+                .to(4, 11, 2016)
                 .repeatEvery(3, WEEK)
                 .addLevel("level")
                 .rewards(1)
@@ -37,8 +37,8 @@ public class GEN_ThresholdTest {
         description = c.getDescription();
 
         Challenge c2 = Challenge.create("Threshold")
-                .availableFrom(2)
-                .to(4)
+                .availableFrom(2, 11, 2016)
+                .to(4, 11, 2016)
                 .repeatEvery(3, WEEK)
                 .addLevel("level")
                 .rewards(1)

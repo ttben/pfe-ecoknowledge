@@ -56,7 +56,6 @@ public class GEN_ChallengeSimpleFieldsTest {
 		Object d = JsonSearcher.lookFor(description, wanted);
 		String date = (String) d;
 		assertEquals("2016-01-01T00:00:00Z", date);
-		System.out.println(description);
 	}
 
 	@Test
