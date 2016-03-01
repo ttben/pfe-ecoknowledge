@@ -50,13 +50,12 @@ public class JSONBuilder {
 		Date d = time.toDate();
 
 		SimpleDateFormat day =
-				new SimpleDateFormat("YYYY-MM-dd");
+				new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat hour =
 				new SimpleDateFormat("HH:mm:ss");
 
 		String dayS = day.format(d);
 		String hourS = hour.format(d);
-
 		return dayS + "T" + hourS + "Z";
 	}
 
@@ -124,6 +123,8 @@ public class JSONBuilder {
 		condition.put("expression", parseExpression(c));
 		condition.put("targetTime", parseTargetTime(c.getWfv()));
 		condition.put("counter", parseAtLeast(c.getWfv()));
+
+
 
 		return condition;
 	}

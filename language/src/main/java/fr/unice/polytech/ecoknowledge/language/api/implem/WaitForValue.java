@@ -21,6 +21,7 @@ public class WaitForValue extends LevelBuilderGettable implements IActiveDuratio
 
 	public WaitForValue(Condition condition) {
 		this.condition = condition;
+		condition.setWaitForValue(this);
 		period = WEEK_PERIOD.ALWAYS;
 		moment = DAY_MOMENT.ALL;
 	}
